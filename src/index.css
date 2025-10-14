@@ -8,43 +8,40 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 280 40% 8%;
+    --background: 0 0% 6%;
     --foreground: 0 0% 98%;
 
-    --card: 280 35% 12%;
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 280 35% 12%;
+    --popover: 0 0% 9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 280 60% 55%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 10%;
 
-    --secondary: 280 50% 25%;
+    --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 280 30% 18%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 280 60% 55%;
+    --accent: 280 20% 25%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 280 30% 20%;
-    --input: 280 30% 20%;
-    --ring: 280 60% 55%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 40%;
 
     --radius: 0.75rem;
 
-    /* Custom theme tokens - Bull/Bear colors */
+    /* Custom theme tokens - Subtle accents */
     --neon-green: 140 100% 50%;
     --neon-red: 0 100% 60%;
-    --purple-dark: 280 40% 8%;
-    --purple-mid: 280 50% 25%;
-    --gradient-dark-start: 280 45% 6%;
-    --gradient-dark-end: 280 40% 10%;
+    --purple-accent: 280 20% 30%;
   }
 }
 
@@ -56,7 +53,7 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-family: 'Space Grotesk', 'Inter', sans-serif;
-    background: linear-gradient(135deg, hsl(var(--gradient-dark-start)), hsl(var(--gradient-dark-end)));
+    background: #0a0a0a;
     background-attachment: fixed;
     min-height: 100vh;
   }
@@ -64,11 +61,9 @@ All colors MUST be HSL.
   @keyframes glow-pulse {
     0%, 100% {
       opacity: 1;
-      filter: brightness(1);
     }
     50% {
-      opacity: 0.8;
-      filter: brightness(1.2);
+      opacity: 0.6;
     }
   }
 
@@ -90,7 +85,7 @@ All colors MUST be HSL.
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, hsl(var(--neon-green)), hsl(var(--neon-red)));
+    background: linear-gradient(135deg, hsl(var(--foreground)), hsl(var(--muted-foreground)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

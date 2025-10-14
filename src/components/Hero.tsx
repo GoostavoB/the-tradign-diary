@@ -15,12 +15,12 @@ const Hero = () => {
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/85 to-background"></div>
+        <div className="absolute inset-0 bg-background/98"></div>
       </div>
 
       {/* Bull vs Bear Silhouette */}
       <div 
-        className="absolute inset-0 z-0 flex items-center justify-center opacity-20"
+        className="absolute inset-0 z-0 flex items-center justify-center opacity-8"
         style={{
           backgroundImage: `url(${bullBearFight})`,
           backgroundSize: 'contain',
@@ -29,17 +29,16 @@ const Hero = () => {
         }}
       ></div>
 
-      {/* Animated Glow Effects - Red and Green for Bull/Bear */}
-      <div className="absolute top-20 left-20 w-[500px] h-[500px] bg-neon-green/20 rounded-full blur-[150px] animate-float"></div>
-      <div className="absolute bottom-20 right-20 w-[500px] h-[500px] bg-neon-red/20 rounded-full blur-[150px] animate-float" style={{ animationDelay: '3s' }}></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[200px]"></div>
+      {/* Subtle Ambient Glow */}
+      <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-neon-green/5 rounded-full blur-[150px]"></div>
+      <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-neon-red/5 rounded-full blur-[150px]"></div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center">
-        <div className="flex justify-center mb-6 gap-4 animate-glow">
-          <TrendingUp className="text-neon-green" size={48} />
-          <BarChart3 className="text-primary" size={48} />
-          <LineChart className="text-neon-red" size={48} />
+        <div className="flex justify-center mb-6 gap-4">
+          <TrendingUp className="text-foreground/70 hover:text-neon-green transition-colors duration-300" size={48} />
+          <BarChart3 className="text-foreground/70" size={48} />
+          <LineChart className="text-foreground/70 hover:text-neon-red transition-colors duration-300" size={48} />
         </div>
         
         <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
@@ -60,14 +59,15 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Button 
             size="lg" 
-            className="text-lg px-8 py-6 bg-gradient-neon hover:opacity-90 text-primary-foreground font-semibold shadow-lg shadow-neon-green/50"
+            className="text-lg px-8 py-6 bg-foreground text-background hover:bg-foreground/90 font-semibold group relative overflow-hidden"
           >
-            Start Trading Smarter
+            <span className="relative z-10">Start Trading Smarter</span>
+            <div className="absolute inset-0 bg-neon-green opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </Button>
           <Button 
             size="lg" 
             variant="outline"
-            className="text-lg px-8 py-6 border-2 border-primary text-primary hover:bg-primary/10"
+            className="text-lg px-8 py-6 border-2 border-border text-foreground hover:border-foreground/50 hover:bg-foreground/5 transition-all duration-300"
           >
             View Demo
           </Button>

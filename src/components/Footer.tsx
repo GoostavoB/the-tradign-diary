@@ -6,22 +6,26 @@ const Footer = () => {
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
-            <TrendingUp className="text-neon-green" size={32} />
-            <span className="text-2xl font-bold gradient-text">BullBear Journal</span>
+            <TrendingUp className="text-foreground" size={32} />
+            <span className="text-2xl font-bold">BullBear Journal</span>
           </div>
           
           <nav className="flex gap-8">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors relative group">
               Features
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors relative group">
               Pricing
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors relative group">
               Blog
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground group-hover:w-full transition-all duration-300"></span>
             </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors relative group">
               FAQ
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-neon-red group-hover:w-full transition-all duration-300"></span>
             </a>
           </nav>
           

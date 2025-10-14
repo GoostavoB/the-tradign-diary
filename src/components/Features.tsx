@@ -53,17 +53,20 @@ const Features = () => {
             return (
               <Card 
                 key={index}
-                className="p-8 bg-card border-border hover:border-primary/50 transition-all duration-300 group"
+                className="p-8 bg-card border-border hover:border-foreground/20 transition-all duration-300 group relative overflow-hidden"
               >
-                <div className="mb-4 inline-block p-3 bg-gradient-neon rounded-lg">
-                  <Icon className="text-primary-foreground" size={32} />
+                <div className="absolute inset-0 bg-gradient-to-br from-neon-green/0 via-transparent to-neon-red/0 group-hover:from-neon-green/5 group-hover:to-neon-red/5 transition-all duration-500"></div>
+                <div className="relative z-10">
+                  <div className="mb-4 inline-block p-3 bg-foreground/5 group-hover:bg-foreground/10 rounded-lg transition-colors duration-300">
+                    <Icon className="text-foreground" size={32} />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-3 transition-colors duration-300">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground">
-                  {feature.description}
-                </p>
               </Card>
             );
           })}
