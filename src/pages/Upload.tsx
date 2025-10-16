@@ -642,7 +642,9 @@ const Upload = () => {
                               </div>
                               <div>
                                 <span className="text-muted-foreground">Position:</span>
-                                <p className="font-medium capitalize">{trade.position_type}</p>
+                                <p className={`font-medium capitalize ${trade.position_type === 'long' ? 'text-neon-green' : 'text-neon-red'}`}>
+                                  {trade.position_type}
+                                </p>
                               </div>
                               <div>
                                 <span className="text-muted-foreground">Entry:</span>
