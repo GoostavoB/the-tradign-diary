@@ -727,14 +727,9 @@ const Upload = () => {
                             </Button>
 
                             {extracting && (
-                              <div className="mt-6 flex items-center justify-center">
-                                <div className="flex items-center gap-4">
-                                  <div className="h-8 w-8 rounded-full border-2 border-foreground/30 border-t-primary animate-spin" aria-label="Loading" />
-                                  <div className="max-w-2xl text-center">
-                                    <p className="text-sm md:text-base font-medium">"{quotes[quoteIndex].text}"</p>
-                                    <p className="text-xs md:text-sm text-muted-foreground mt-1">— {quotes[quoteIndex].author}</p>
-                                  </div>
-                                </div>
+                              <div className="mt-6 text-center max-w-2xl mx-auto">
+                                <p className="text-sm md:text-base font-medium">"{quotes[quoteIndex].text}"</p>
+                                <p className="text-xs md:text-sm text-muted-foreground mt-1">— {quotes[quoteIndex].author}</p>
                               </div>
                             )}
                           </>
