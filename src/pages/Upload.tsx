@@ -105,6 +105,7 @@ const Upload = () => {
   const [openSetup, setOpenSetup] = useState(false);
   const [openExtractedSetup, setOpenExtractedSetup] = useState<number | null>(null);
   const [setupSearch, setSetupSearch] = useState('');
+  const [extractedSetupSearches, setExtractedSetupSearches] = useState<Record<number, string>>({});
   
   const [formData, setFormData] = useState({
     asset: '',
@@ -958,7 +959,7 @@ const Upload = () => {
                                       <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
                                     </Button>
                                   </PopoverTrigger>
-                                  <PopoverContent className="w-[300px] p-0" align="start">
+                                  <PopoverContent className="w-[300px] p-0 bg-popover z-50" align="start">
                                     <Command>
                                       <CommandInput placeholder="Search broker..." />
                                       <CommandList>
@@ -968,15 +969,14 @@ const Upload = () => {
                                             <CommandItem
                                               key={broker}
                                               value={broker}
-                                              onSelect={(currentValue) => {
-                                                const selectedBroker = BROKERS.find(b => b.toLowerCase() === currentValue);
-                                                if (selectedBroker === "Other") {
+                                              onSelect={() => {
+                                                if (broker === "Other") {
                                                   const custom = prompt("Enter broker name:");
                                                   if (custom && custom.trim()) {
                                                     updateTradeField(index, 'broker', custom.trim());
                                                   }
-                                                } else if (selectedBroker) {
-                                                  updateTradeField(index, 'broker', selectedBroker);
+                                                } else {
+                                                  updateTradeField(index, 'broker', broker);
                                                 }
                                                 setOpenExtractedBroker(null);
                                               }}
@@ -1010,32 +1010,61 @@ const Upload = () => {
                                       <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
                                     </Button>
                                   </PopoverTrigger>
-                                  <PopoverContent className="w-[300px] p-0" align="start">
+                                  <PopoverContent className="w-[300px] p-0 bg-popover z-50" align="start">
                                     <Command shouldFilter={false}>
-                                      <CommandInput placeholder="Search or type new setup..." />
+                                      <CommandInput 
+                                        placeholder="Search or type new setup..." 
+                                        value={extractedSetupSearches[index] || ''}
+                                        onValueChange={(value) => setExtractedSetupSearches(prev => ({ ...prev, [index]: value }))}
+                                      />
                                       <CommandList>
-                                        {userSetups.length === 0 ? (
-                                          <CommandEmpty>Type to create your first setup.</CommandEmpty>
-                                        ) : (
-                                          <CommandGroup>
-                                            {userSetups.map((setup) => (
-                                              <CommandItem
-                                                key={setup.id}
-                                                value={setup.name}
-                                                onSelect={() => {
-                                                  updateTradeField(index, 'setup', setup.name);
-                                                  setOpenExtractedSetup(null);
-                                                }}
-                                              >
-                                                <Check
-                                                  className={cn(
-                                                    "mr-2 h-4 w-4",
-                                                    (edits.setup ?? trade.setup) === setup.name ? "opacity-100" : "opacity-0"
-                                                  )}
-                                                />
-                                                {setup.name}
-                                              </CommandItem>
-                                            ))}
+                                        <CommandEmpty>Type to create your first setup.</CommandEmpty>
+                                        {extractedSetupSearches[index] && !userSetups.some(s => s.name.toLowerCase() === extractedSetupSearches[index].toLowerCase()) && (
+                                          <CommandGroup heading="Create New">
+                                            <CommandItem
+                                              onSelect={async () => {
+                                                const newSetup = await handleCreateSetup(extractedSetupSearches[index]);
+                                                if (newSetup) {
+                                                  updateTradeField(index, 'setup', newSetup.name);
+                                                }
+                                                setExtractedSetupSearches(prev => ({ ...prev, [index]: '' }));
+                                                setOpenExtractedSetup(null);
+                                              }}
+                                            >
+                                              <Plus className="mr-2 h-4 w-4" />
+                                              Add "{extractedSetupSearches[index]}"
+                                            </CommandItem>
+                                          </CommandGroup>
+                                        )}
+                                        {userSetups.filter(setup => 
+                                          !extractedSetupSearches[index] || 
+                                          setup.name.toLowerCase().includes(extractedSetupSearches[index].toLowerCase())
+                                        ).length > 0 && (
+                                          <CommandGroup heading="Existing Setups">
+                                            {userSetups
+                                              .filter(setup => 
+                                                !extractedSetupSearches[index] || 
+                                                setup.name.toLowerCase().includes(extractedSetupSearches[index].toLowerCase())
+                                              )
+                                              .map((setup) => (
+                                                <CommandItem
+                                                  key={setup.id}
+                                                  value={setup.name}
+                                                  onSelect={() => {
+                                                    updateTradeField(index, 'setup', setup.name);
+                                                    setExtractedSetupSearches(prev => ({ ...prev, [index]: '' }));
+                                                    setOpenExtractedSetup(null);
+                                                  }}
+                                                >
+                                                  <Check
+                                                    className={cn(
+                                                      "mr-2 h-4 w-4",
+                                                      (edits.setup ?? trade.setup) === setup.name ? "opacity-100" : "opacity-0"
+                                                    )}
+                                                  />
+                                                  {setup.name}
+                                                </CommandItem>
+                                              ))}
                                           </CommandGroup>
                                         )}
                                       </CommandList>
@@ -1045,12 +1074,28 @@ const Upload = () => {
                               </div>
                               <div>
                                 <Label className="text-xs text-muted-foreground">Emotional Tag</Label>
-                                <Input
-                                  placeholder="Confident, Fearful..."
-                                  value={edits.emotional_tag ?? trade.emotional_tag ?? ''}
-                                  onChange={(e) => updateTradeField(index, 'emotional_tag', e.target.value)}
-                                  className="mt-1 h-8 text-sm"
-                                />
+                                {(edits.emotional_tag ?? trade.emotional_tag) ? (
+                                  <div className="mt-1 flex items-center gap-2">
+                                    <Badge variant="secondary" className="h-8 text-sm">
+                                      {edits.emotional_tag ?? trade.emotional_tag}
+                                      <X 
+                                        className="ml-2 h-3 w-3 cursor-pointer hover:text-destructive" 
+                                        onClick={() => updateTradeField(index, 'emotional_tag', '')}
+                                      />
+                                    </Badge>
+                                  </div>
+                                ) : (
+                                  <Input
+                                    placeholder="Type and press Enter..."
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                                        updateTradeField(index, 'emotional_tag', e.currentTarget.value.trim());
+                                        e.currentTarget.value = '';
+                                      }
+                                    }}
+                                    className="mt-1 h-8 text-sm"
+                                  />
+                                )}
                               </div>
                               <div>
                                 <Label className="text-xs text-muted-foreground">Notes</Label>
