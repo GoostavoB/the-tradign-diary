@@ -30,20 +30,35 @@ export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => 
     localStorage.setItem('crypto-neon-intensity', value.toString());
   };
 
-  // Calculate opacity based on intensity (0-100 -> 0.3-1.0)
+  // Calculate opacity and saturation based on intensity (0-100 -> more range)
   const getOpacity = (baseOpacity: number) => {
-    return baseOpacity * (0.3 + (neonIntensity / 100) * 0.7);
+    // Range from 0.4 to 1.0 (instead of 0.3-1.0)
+    return baseOpacity * (0.4 + (neonIntensity / 100) * 0.6);
+  };
+
+  const getColorClass = (color: string, shade: number) => {
+    // At max intensity, use more saturated colors
+    const actualShade = neonIntensity > 70 ? Math.max(400, shade - 100) : shade;
+    return `text-${color}-${actualShade}`;
   };
 
   const getTickerColor = (symbol: string) => {
     const colorBase = cryptoColors[symbol] || 'gray';
-    const opacity = getOpacity(0.8);
-    return `text-${colorBase}-400`;
+    // Use more saturated base colors
+    return getColorClass(colorBase, 500);
   };
 
   const getPriceColor = (isPositive: boolean) => {
-    const opacity = getOpacity(0.7);
-    return isPositive ? 'text-emerald-500' : 'text-red-500';
+    // Use more vibrant greens and reds
+    return isPositive ? getColorClass('emerald', 500) : getColorClass('red', 500);
+  };
+
+  const getGlowEffect = () => {
+    // Add glow effect at high intensity
+    if (neonIntensity > 70) {
+      return 'drop-shadow-[0_0_8px_currentColor]';
+    }
+    return '';
   };
 
   if (loading) {
@@ -67,30 +82,36 @@ export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => 
           {/* Left side - Ticker prices */}
           <div className="flex items-center gap-6 flex-wrap flex-1">
             <div className="flex items-center gap-3 flex-shrink-0">
-              <TrendingUp className="text-emerald-500" size={24} style={{ opacity: getOpacity(0.6) }} />
+              <TrendingUp 
+                className="text-emerald-500" 
+                size={24} 
+                style={{ opacity: getOpacity(0.8) }}
+              />
               <span className="text-base font-semibold text-muted-foreground">LIVE (24h):</span>
             </div>
             {prices.map((price) => {
               const isPositive = price.priceChangePercent >= 0;
               const priceColor = getPriceColor(isPositive);
               const changeSign = isPositive ? '+' : '';
+              const glowClass = getGlowEffect();
+              
               return (
                 <div key={price.symbol} className="flex items-center gap-2 flex-shrink-0">
                   <span 
-                    className={`text-base font-semibold ${getTickerColor(price.displaySymbol)}`}
-                    style={{ opacity: getOpacity(0.8) }}
+                    className={`text-base font-semibold ${getTickerColor(price.displaySymbol)} ${glowClass}`}
+                    style={{ opacity: getOpacity(1.0) }}
                   >
                     {price.displaySymbol}
                   </span>
                   <span 
-                    className={`text-base font-mono ${priceColor}`}
-                    style={{ opacity: getOpacity(0.7) }}
+                    className={`text-base font-mono ${priceColor} ${glowClass}`}
+                    style={{ opacity: getOpacity(0.9) }}
                   >
                     ${price.price}
                   </span>
                   <span 
                     className={`text-xs font-mono ${priceColor}`}
-                    style={{ opacity: getOpacity(0.5) }}
+                    style={{ opacity: getOpacity(0.7) }}
                   >
                     ({changeSign}{price.priceChangePercent.toFixed(2)}%)
                   </span>
