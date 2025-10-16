@@ -99,6 +99,7 @@ const Upload = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [tradeEdits, setTradeEdits] = useState<Record<number, Partial<ExtractedTrade>>>({});
   const [openBroker, setOpenBroker] = useState(false);
+  const [openExtractedBroker, setOpenExtractedBroker] = useState<number | null>(null);
   
   const [formData, setFormData] = useState({
     asset: '',
@@ -829,12 +830,55 @@ const Upload = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                               <div>
                                 <Label className="text-xs text-muted-foreground">Broker</Label>
-                                <Input
-                                  placeholder="Binance, Bybit..."
-                                  value={edits.broker ?? trade.broker ?? ''}
-                                  onChange={(e) => updateTradeField(index, 'broker', e.target.value)}
-                                  className="mt-1 h-8 text-sm"
-                                />
+                                <Popover open={openExtractedBroker === index} onOpenChange={(open) => setOpenExtractedBroker(open ? index : null)}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      role="combobox"
+                                      aria-expanded={openExtractedBroker === index}
+                                      className="w-full justify-between mt-1 h-8 text-sm"
+                                    >
+                                      {(edits.broker ?? trade.broker) || "Select broker..."}
+                                      <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-[300px] p-0" align="start">
+                                    <Command>
+                                      <CommandInput placeholder="Search broker..." />
+                                      <CommandList>
+                                        <CommandEmpty>No broker found.</CommandEmpty>
+                                        <CommandGroup>
+                                          {BROKERS.map((broker) => (
+                                            <CommandItem
+                                              key={broker}
+                                              value={broker}
+                                              onSelect={(currentValue) => {
+                                                const selectedBroker = BROKERS.find(b => b.toLowerCase() === currentValue);
+                                                if (selectedBroker === "Other") {
+                                                  const custom = prompt("Enter broker name:");
+                                                  if (custom && custom.trim()) {
+                                                    updateTradeField(index, 'broker', custom.trim());
+                                                  }
+                                                } else if (selectedBroker) {
+                                                  updateTradeField(index, 'broker', selectedBroker);
+                                                }
+                                                setOpenExtractedBroker(null);
+                                              }}
+                                            >
+                                              <Check
+                                                className={cn(
+                                                  "mr-2 h-4 w-4",
+                                                  (edits.broker ?? trade.broker) === broker ? "opacity-100" : "opacity-0"
+                                                )}
+                                              />
+                                              {broker}
+                                            </CommandItem>
+                                          ))}
+                                        </CommandGroup>
+                                      </CommandList>
+                                    </Command>
+                                  </PopoverContent>
+                                </Popover>
                               </div>
                               <div>
                                 <Label className="text-xs text-muted-foreground">Setup</Label>
