@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -45,6 +44,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Trade {
   id: string;
@@ -96,7 +96,6 @@ interface TradeHistoryProps {
 
 export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [trades, setTrades] = useState<Trade[]>([]);
   const [filteredTrades, setFilteredTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
@@ -106,6 +105,8 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingTrade, setEditingTrade] = useState<Trade | null>(null);
   const [selectedTradeIds, setSelectedTradeIds] = useState<Set<string>>(new Set());
   const [columns, setColumns] = useState<ColumnConfig[]>(() => {
     const saved = localStorage.getItem('tradeHistoryColumns');
@@ -361,6 +362,53 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
   const handleView = (trade: Trade) => {
     setSelectedTrade(trade);
     setViewDialogOpen(true);
+  };
+
+  const handleEdit = (trade: Trade) => {
+    setEditingTrade({ ...trade });
+    setEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingTrade || !user) return;
+
+    const entry = editingTrade.entry_price;
+    const exit = editingTrade.exit_price;
+    const size = editingTrade.position_size;
+    
+    const pnl = (exit - entry) * size;
+    const roi = ((exit - entry) / entry) * 100;
+
+    const { error } = await supabase
+      .from('trades')
+      .update({
+        asset: editingTrade.asset,
+        entry_price: entry,
+        exit_price: exit,
+        position_size: size,
+        position_type: editingTrade.position_type,
+        leverage: editingTrade.leverage || 1,
+        funding_fee: editingTrade.funding_fee || 0,
+        trading_fee: editingTrade.trading_fee || 0,
+        setup: editingTrade.setup || null,
+        broker: editingTrade.broker || null,
+        emotional_tag: editingTrade.emotional_tag || null,
+        notes: editingTrade.notes || null,
+        pnl,
+        roi,
+        profit_loss: pnl
+      })
+      .eq('id', editingTrade.id);
+
+    if (error) {
+      toast.error('Failed to update trade');
+    } else {
+      toast.success('Trade updated successfully');
+      setEditDialogOpen(false);
+      setEditingTrade(null);
+      fetchTrades();
+      onTradesChange?.();
+    }
   };
 
   const fetchUserSetups = async () => {
@@ -853,7 +901,7 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => navigate(`/upload?edit=${trade.id}`)}
+                            onClick={() => handleEdit(trade)}
                           >
                             <Pencil size={16} />
                           </Button>
@@ -988,6 +1036,161 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
                   />
                 </div>
               )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Trade</DialogTitle>
+            <DialogDescription>
+              Update the trade details below
+            </DialogDescription>
+          </DialogHeader>
+          {editingTrade && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Asset *</Label>
+                  <Input
+                    value={editingTrade.asset}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, asset: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Position Type *</Label>
+                  <Select
+                    value={editingTrade.position_type || 'long'}
+                    onValueChange={(value: 'long' | 'short') => 
+                      setEditingTrade({ ...editingTrade, position_type: value })
+                    }
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border z-50">
+                      <SelectItem value="long">Long</SelectItem>
+                      <SelectItem value="short">Short</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Entry Price *</Label>
+                  <Input
+                    type="number"
+                    step="0.00000001"
+                    value={editingTrade.entry_price}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, entry_price: parseFloat(e.target.value) })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Exit Price *</Label>
+                  <Input
+                    type="number"
+                    step="0.00000001"
+                    value={editingTrade.exit_price}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, exit_price: parseFloat(e.target.value) })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Position Size *</Label>
+                  <Input
+                    type="number"
+                    step="0.00000001"
+                    value={editingTrade.position_size}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, position_size: parseFloat(e.target.value) })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Leverage</Label>
+                  <Input
+                    type="number"
+                    step="1"
+                    value={editingTrade.leverage || 1}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, leverage: parseFloat(e.target.value) })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Funding Fee</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={editingTrade.funding_fee || 0}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, funding_fee: parseFloat(e.target.value) })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Trading Fee</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={editingTrade.trading_fee || 0}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, trading_fee: parseFloat(e.target.value) })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Setup</Label>
+                  <Input
+                    value={editingTrade.setup || ''}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, setup: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Broker</Label>
+                  <Input
+                    value={editingTrade.broker || ''}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, broker: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label>Emotional Tag</Label>
+                  <Input
+                    value={editingTrade.emotional_tag || ''}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, emotional_tag: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Notes</Label>
+                <Textarea
+                  value={editingTrade.notes || ''}
+                  onChange={(e) => setEditingTrade({ ...editingTrade, notes: e.target.value })}
+                  className="mt-1"
+                  rows={3}
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleSaveEdit}>
+                  Save Changes
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>
