@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Pencil, Trash2, Eye, Search } from 'lucide-react';
+import { Pencil, Trash2, Eye, Search, Settings2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import {
@@ -29,6 +29,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
 
 interface Trade {
   id: string;
@@ -50,6 +57,28 @@ interface Trade {
   trading_fee?: number;
 }
 
+type ColumnKey = 'date' | 'asset' | 'setup' | 'type' | 'entry' | 'exit' | 'size' | 'pnl' | 'roi' | 'fundingFee' | 'tradingFee';
+
+interface ColumnConfig {
+  key: ColumnKey;
+  label: string;
+  visible: boolean;
+}
+
+const DEFAULT_COLUMNS: ColumnConfig[] = [
+  { key: 'date', label: 'Date', visible: true },
+  { key: 'asset', label: 'Asset', visible: true },
+  { key: 'setup', label: 'Setup', visible: true },
+  { key: 'type', label: 'Type', visible: true },
+  { key: 'entry', label: 'Entry', visible: true },
+  { key: 'exit', label: 'Exit', visible: true },
+  { key: 'size', label: 'Size', visible: true },
+  { key: 'pnl', label: 'P&L', visible: true },
+  { key: 'roi', label: 'ROI', visible: true },
+  { key: 'fundingFee', label: 'Funding Fee', visible: true },
+  { key: 'tradingFee', label: 'Trading Fee', visible: true },
+];
+
 export const TradeHistory = () => {
   const { user } = useAuth();
   const [trades, setTrades] = useState<Trade[]>([]);
@@ -60,6 +89,11 @@ export const TradeHistory = () => {
   const [filterType, setFilterType] = useState<'all' | 'wins' | 'losses'>('all');
   const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [selectedTradeIds, setSelectedTradeIds] = useState<Set<string>>(new Set());
+  const [columns, setColumns] = useState<ColumnConfig[]>(() => {
+    const saved = localStorage.getItem('tradeHistoryColumns');
+    return saved ? JSON.parse(saved) : DEFAULT_COLUMNS;
+  });
 
   useEffect(() => {
     fetchTrades();
@@ -68,6 +102,61 @@ export const TradeHistory = () => {
   useEffect(() => {
     filterAndSortTrades();
   }, [trades, searchTerm, sortBy, filterType]);
+
+  useEffect(() => {
+    localStorage.setItem('tradeHistoryColumns', JSON.stringify(columns));
+  }, [columns]);
+
+  const toggleColumn = (key: ColumnKey) => {
+    setColumns(cols => cols.map(col => 
+      col.key === key ? { ...col, visible: !col.visible } : col
+    ));
+  };
+
+  const isColumnVisible = (key: ColumnKey) => {
+    return columns.find(col => col.key === key)?.visible ?? true;
+  };
+
+  const toggleTradeSelection = (tradeId: string) => {
+    setSelectedTradeIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(tradeId)) {
+        newSet.delete(tradeId);
+      } else {
+        newSet.add(tradeId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleAllTrades = () => {
+    if (selectedTradeIds.size === filteredTrades.length) {
+      setSelectedTradeIds(new Set());
+    } else {
+      setSelectedTradeIds(new Set(filteredTrades.map(t => t.id)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedTradeIds.size === 0) return;
+
+    if (!confirm(`Are you sure you want to delete ${selectedTradeIds.size} trade(s)?`)) {
+      return;
+    }
+
+    const { error } = await supabase
+      .from('trades')
+      .delete()
+      .in('id', Array.from(selectedTradeIds));
+
+    if (error) {
+      toast.error('Failed to delete trades');
+    } else {
+      toast.success(`${selectedTradeIds.size} trade(s) deleted successfully`);
+      setSelectedTradeIds(new Set());
+      fetchTrades();
+    }
+  };
 
   const fetchTrades = async () => {
     if (!user) return;
@@ -180,7 +269,53 @@ export const TradeHistory = () => {
             <SelectItem value="losses">Losses Only</SelectItem>
           </SelectContent>
         </Select>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Settings2 className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-64 bg-card border-border z-50">
+            <div className="space-y-4">
+              <h4 className="font-medium text-sm">Customize Columns</h4>
+              <div className="space-y-2">
+                {columns.map((column) => (
+                  <div key={column.key} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={column.key}
+                      checked={column.visible}
+                      onCheckedChange={() => toggleColumn(column.key)}
+                    />
+                    <Label
+                      htmlFor={column.key}
+                      className="text-sm font-normal cursor-pointer"
+                    >
+                      {column.label}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
+
+      {selectedTradeIds.size > 0 && (
+        <div className="flex items-center gap-3 p-3 bg-muted rounded-md">
+          <span className="text-sm text-muted-foreground">
+            {selectedTradeIds.size} trade(s) selected
+          </span>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={handleBulkDelete}
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            Delete Selected
+          </Button>
+        </div>
+      )}
 
       {filteredTrades.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
@@ -191,59 +326,93 @@ export const TradeHistory = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Asset</TableHead>
-                <TableHead>Setup</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Entry</TableHead>
-                <TableHead>Exit</TableHead>
-                <TableHead>Size</TableHead>
-                <TableHead>P&L</TableHead>
-                <TableHead>ROI</TableHead>
-                <TableHead>Funding Fee</TableHead>
-                <TableHead>Trading Fee</TableHead>
+                <TableHead className="w-12">
+                  <Checkbox
+                    checked={selectedTradeIds.size === filteredTrades.length && filteredTrades.length > 0}
+                    onCheckedChange={toggleAllTrades}
+                  />
+                </TableHead>
+                {isColumnVisible('date') && <TableHead>Date</TableHead>}
+                {isColumnVisible('asset') && <TableHead>Asset</TableHead>}
+                {isColumnVisible('setup') && <TableHead>Setup</TableHead>}
+                {isColumnVisible('type') && <TableHead>Type</TableHead>}
+                {isColumnVisible('entry') && <TableHead>Entry</TableHead>}
+                {isColumnVisible('exit') && <TableHead>Exit</TableHead>}
+                {isColumnVisible('size') && <TableHead>Size</TableHead>}
+                {isColumnVisible('pnl') && <TableHead>P&L</TableHead>}
+                {isColumnVisible('roi') && <TableHead>ROI</TableHead>}
+                {isColumnVisible('fundingFee') && <TableHead>Funding Fee</TableHead>}
+                {isColumnVisible('tradingFee') && <TableHead>Trading Fee</TableHead>}
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredTrades.map((trade) => (
                 <TableRow key={trade.id}>
-                  <TableCell>{format(new Date(trade.trade_date), 'MMM dd, yyyy')}</TableCell>
-                  <TableCell className="font-medium">{trade.asset}</TableCell>
-                  <TableCell>{trade.setup || '-'}</TableCell>
                   <TableCell>
-                    {trade.position_type ? (
-                      <Badge 
-                        variant="outline" 
-                        className={trade.position_type === 'long' ? 'border-neon-green text-neon-green' : 'border-neon-red text-neon-red'}
-                      >
-                        {trade.position_type.toUpperCase()}
+                    <Checkbox
+                      checked={selectedTradeIds.has(trade.id)}
+                      onCheckedChange={() => toggleTradeSelection(trade.id)}
+                    />
+                  </TableCell>
+                  {isColumnVisible('date') && (
+                    <TableCell>{format(new Date(trade.trade_date), 'MMM dd, yyyy')}</TableCell>
+                  )}
+                  {isColumnVisible('asset') && (
+                    <TableCell className="font-medium">{trade.asset}</TableCell>
+                  )}
+                  {isColumnVisible('setup') && (
+                    <TableCell>{trade.setup || '-'}</TableCell>
+                  )}
+                  {isColumnVisible('type') && (
+                    <TableCell>
+                      {trade.position_type ? (
+                        <Badge 
+                          variant="outline" 
+                          className={trade.position_type === 'long' ? 'border-neon-green text-neon-green' : 'border-neon-red text-neon-red'}
+                        >
+                          {trade.position_type.toUpperCase()}
+                        </Badge>
+                      ) : '-'}
+                    </TableCell>
+                  )}
+                  {isColumnVisible('entry') && (
+                    <TableCell>${trade.entry_price.toFixed(2)}</TableCell>
+                  )}
+                  {isColumnVisible('exit') && (
+                    <TableCell>${trade.exit_price.toFixed(2)}</TableCell>
+                  )}
+                  {isColumnVisible('size') && (
+                    <TableCell>{trade.position_size}</TableCell>
+                  )}
+                  {isColumnVisible('pnl') && (
+                    <TableCell>
+                      <span className={trade.pnl >= 0 ? 'text-neon-green' : 'text-neon-red'}>
+                        ${trade.pnl.toFixed(2)}
+                      </span>
+                    </TableCell>
+                  )}
+                  {isColumnVisible('roi') && (
+                    <TableCell>
+                      <Badge variant={trade.roi >= 0 ? 'default' : 'destructive'}>
+                        {trade.roi.toFixed(2)}%
                       </Badge>
-                    ) : '-'}
-                  </TableCell>
-                  <TableCell>${trade.entry_price.toFixed(2)}</TableCell>
-                  <TableCell>${trade.exit_price.toFixed(2)}</TableCell>
-                  <TableCell>{trade.position_size}</TableCell>
-                  <TableCell>
-                    <span className={trade.pnl >= 0 ? 'text-neon-green' : 'text-neon-red'}>
-                      ${trade.pnl.toFixed(2)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={trade.roi >= 0 ? 'default' : 'destructive'}>
-                      {trade.roi.toFixed(2)}%
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-muted-foreground">
-                      ${(trade.funding_fee || 0).toFixed(2)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-muted-foreground">
-                      ${(trade.trading_fee || 0).toFixed(2)}
-                    </span>
-                  </TableCell>
+                    </TableCell>
+                  )}
+                  {isColumnVisible('fundingFee') && (
+                    <TableCell>
+                      <span className="text-muted-foreground">
+                        ${(trade.funding_fee || 0).toFixed(2)}
+                      </span>
+                    </TableCell>
+                  )}
+                  {isColumnVisible('tradingFee') && (
+                    <TableCell>
+                      <span className="text-muted-foreground">
+                        ${(trade.trading_fee || 0).toFixed(2)}
+                      </span>
+                    </TableCell>
+                  )}
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Button
