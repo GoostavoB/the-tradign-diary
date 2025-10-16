@@ -369,9 +369,16 @@ const Upload = () => {
 
       if (error) {
         console.error('Extraction error:', error);
-        const msg = (data as any)?.error || 'Failed to extract trade information';
-        toast.error(msg, {
-          description: msg.includes('credits') ? 'Please try again later.' : 'Please try again or enter manually'
+        const status = (error as any)?.status || (error as any)?.cause?.status;
+        const errMsg = (data as any)?.error || (error as any)?.message || 'Failed to extract trade information';
+        const isCredits = status === 402 || /credit/i.test(errMsg);
+        const isRateLimited = status === 429 || /rate limit/i.test(errMsg);
+        toast.error(isCredits ? 'AI credits exhausted' : isRateLimited ? 'Too many requests' : errMsg, {
+          description: isCredits
+            ? 'Please try again later.'
+            : isRateLimited
+              ? 'Please slow down and retry in a minute.'
+              : 'Please try again or enter manually',
         });
         return;
       }
