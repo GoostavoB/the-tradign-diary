@@ -187,6 +187,27 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
   const monthLongPercentage = totalMonthTrades > 0 ? (monthLongs / totalMonthTrades) * 100 : 0;
   const isShortDominant = monthShortPercentage > monthLongPercentage;
 
+  // Day of week statistics
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayStats = daysOfWeek.map((dayName, dayIndex) => {
+    const dayTrades = trades.filter(t => new Date(t.trade_date).getDay() === dayIndex);
+    const wins = dayTrades.filter(t => t.pnl > 0).length;
+    const winRate = dayTrades.length > 0 ? (wins / dayTrades.length) * 100 : 0;
+    const avgROI = dayTrades.length > 0 
+      ? dayTrades.reduce((sum, t) => sum + (t.roi || 0), 0) / dayTrades.length 
+      : 0;
+    
+    return {
+      day: dayName,
+      trades: dayTrades.length,
+      winRate,
+      avgROI
+    };
+  }).filter(stat => stat.trades > 0); // Only show days with trades
+
+  const topDaysByWinRate = [...dayStats].sort((a, b) => b.winRate - a.winRate).slice(0, 5);
+  const topDaysByROI = [...dayStats].sort((a, b) => b.avgROI - a.avgROI).slice(0, 5);
+
   const StatCard = ({ title, value, subtitle, icon: Icon, trend }: any) => (
     <Card className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300">
       <div className="flex items-center justify-between mb-2">
@@ -354,6 +375,82 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
               <p className="text-xs text-muted-foreground text-center">
                 {totalMonthTrades} trades this month
               </p>
+            </div>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {/* Best Days by Win Rate */}
+          <Card className="p-6 bg-card border-border">
+            <h3 className="text-lg font-semibold mb-4">🏆 Best Days by Win Rate</h3>
+            <div className="space-y-3">
+              {topDaysByWinRate.length > 0 ? topDaysByWinRate.map((stat, index) => (
+                <div key={stat.day} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                      index === 0 ? 'bg-yellow-500/20 text-yellow-500' :
+                      index === 1 ? 'bg-gray-400/20 text-gray-400' :
+                      index === 2 ? 'bg-orange-600/20 text-orange-600' :
+                      'bg-muted text-muted-foreground'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="font-medium">{stat.day}</p>
+                      <p className="text-xs text-muted-foreground">{stat.trades} trades</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-lg font-bold ${stat.winRate >= 60 ? 'text-neon-green' : 'text-foreground'}`}>
+                      {stat.winRate.toFixed(1)}%
+                    </p>
+                    <p className="text-xs text-muted-foreground">win rate</p>
+                  </div>
+                </div>
+              )) : (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Not enough data yet
+                </p>
+              )}
+            </div>
+          </Card>
+
+          {/* Best Days by ROI */}
+          <Card className="p-6 bg-card border-border">
+            <h3 className="text-lg font-semibold mb-4">💰 Best Days by Avg ROI</h3>
+            <div className="space-y-3">
+              {topDaysByROI.length > 0 ? topDaysByROI.map((stat, index) => (
+                <div key={stat.day} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                      index === 0 ? 'bg-yellow-500/20 text-yellow-500' :
+                      index === 1 ? 'bg-gray-400/20 text-gray-400' :
+                      index === 2 ? 'bg-orange-600/20 text-orange-600' :
+                      'bg-muted text-muted-foreground'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="font-medium">{stat.day}</p>
+                      <p className="text-xs text-muted-foreground">{stat.trades} trades</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-lg font-bold ${
+                      stat.avgROI > 0 ? 'text-neon-green' : 
+                      stat.avgROI < 0 ? 'text-neon-red' : 
+                      'text-foreground'
+                    }`}>
+                      {stat.avgROI >= 0 ? '+' : ''}{stat.avgROI.toFixed(2)}%
+                    </p>
+                    <p className="text-xs text-muted-foreground">avg ROI</p>
+                  </div>
+                </div>
+              )) : (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  Not enough data yet
+                </p>
+              )}
             </div>
           </Card>
         </div>

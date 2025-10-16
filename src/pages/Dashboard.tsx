@@ -75,12 +75,12 @@ const Dashboard = () => {
     }
   };
 
-  const StatCard = ({ title, value, icon: Icon, trend }: any) => (
+  const StatCard = ({ title, value, icon: Icon, trend, valueColor }: any) => (
     <Card className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-muted-foreground mb-1">{title}</p>
-          <p className="text-3xl font-bold">{value}</p>
+          <p className={`text-3xl font-bold ${valueColor || ''}`}>{value}</p>
         </div>
         <Icon 
           className={trend === 'up' ? 'text-neon-green' : trend === 'down' ? 'text-neon-red' : 'text-foreground'} 
@@ -109,7 +109,14 @@ const Dashboard = () => {
                 title="Total P&L"
                 value={`$${stats?.total_pnl.toFixed(2) || 0}`}
                 icon={DollarSign}
-                trend={stats && stats.total_pnl > 0 ? 'up' : 'down'}
+                trend={stats && stats.total_pnl > 0 ? 'up' : stats && stats.total_pnl < 0 ? 'down' : 'neutral'}
+                valueColor={
+                  stats && stats.total_pnl > 0 
+                    ? 'text-neon-green' 
+                    : stats && stats.total_pnl < 0 
+                    ? 'text-neon-red' 
+                    : 'text-foreground'
+                }
               />
               <StatCard
                 title="Win Rate"
