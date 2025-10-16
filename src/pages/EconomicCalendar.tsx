@@ -28,19 +28,19 @@ interface EconomicEvent {
 }
 
 const TIMEZONES = [
-  { value: "America/New_York", label: "Eastern Time (ET)" },
-  { value: "America/Chicago", label: "Central Time (CT)" },
-  { value: "America/Denver", label: "Mountain Time (MT)" },
-  { value: "America/Los_Angeles", label: "Pacific Time (PT)" },
-  { value: "America/Sao_Paulo", label: "Brazil (BRT)" },
-  { value: "Europe/London", label: "London (GMT/BST)" },
-  { value: "Europe/Paris", label: "Paris (CET/CEST)" },
-  { value: "Asia/Tokyo", label: "Tokyo (JST)" },
-  { value: "Asia/Shanghai", label: "Shanghai (CST)" },
-  { value: "Asia/Hong_Kong", label: "Hong Kong (HKT)" },
-  { value: "Asia/Singapore", label: "Singapore (SGT)" },
-  { value: "Australia/Sydney", label: "Sydney (AEDT/AEST)" },
-  { value: "UTC", label: "UTC" },
+  { value: "America/New_York", label: "Eastern Time (GMT-5/-4)" },
+  { value: "America/Chicago", label: "Central Time (GMT-6/-5)" },
+  { value: "America/Denver", label: "Mountain Time (GMT-7/-6)" },
+  { value: "America/Los_Angeles", label: "Pacific Time (GMT-8/-7)" },
+  { value: "America/Sao_Paulo", label: "Brasil (GMT-3)" },
+  { value: "Europe/London", label: "London (GMT+0/+1)" },
+  { value: "Europe/Paris", label: "Paris (GMT+1/+2)" },
+  { value: "Asia/Tokyo", label: "Tokyo (GMT+9)" },
+  { value: "Asia/Shanghai", label: "Shanghai (GMT+8)" },
+  { value: "Asia/Hong_Kong", label: "Hong Kong (GMT+8)" },
+  { value: "Asia/Singapore", label: "Singapore (GMT+8)" },
+  { value: "Australia/Sydney", label: "Sydney (GMT+10/+11)" },
+  { value: "UTC", label: "UTC (GMT+0)" },
 ];
 
 const EconomicCalendar = () => {
