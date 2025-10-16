@@ -45,57 +45,87 @@ export type Database = {
         Row: {
           asset: string
           broker: string | null
+          closed_at: string | null
           created_at: string | null
+          duration_days: number | null
+          duration_hours: number | null
           duration_minutes: number | null
           emotional_tag: string | null
           entry_price: number | null
           exit_price: number | null
+          funding_fee: number | null
           id: string
+          margin: number | null
           notes: string | null
+          opened_at: string | null
+          period_of_day: string | null
           pnl: number | null
           position_size: number | null
+          position_type: string | null
+          profit_loss: number | null
           roi: number | null
           screenshot_url: string | null
           setup: string | null
           trade_date: string | null
+          trading_fee: number | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
           asset: string
           broker?: string | null
+          closed_at?: string | null
           created_at?: string | null
+          duration_days?: number | null
+          duration_hours?: number | null
           duration_minutes?: number | null
           emotional_tag?: string | null
           entry_price?: number | null
           exit_price?: number | null
+          funding_fee?: number | null
           id?: string
+          margin?: number | null
           notes?: string | null
+          opened_at?: string | null
+          period_of_day?: string | null
           pnl?: number | null
           position_size?: number | null
+          position_type?: string | null
+          profit_loss?: number | null
           roi?: number | null
           screenshot_url?: string | null
           setup?: string | null
           trade_date?: string | null
+          trading_fee?: number | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
           asset?: string
           broker?: string | null
+          closed_at?: string | null
           created_at?: string | null
+          duration_days?: number | null
+          duration_hours?: number | null
           duration_minutes?: number | null
           emotional_tag?: string | null
           entry_price?: number | null
           exit_price?: number | null
+          funding_fee?: number | null
           id?: string
+          margin?: number | null
           notes?: string | null
+          opened_at?: string | null
+          period_of_day?: string | null
           pnl?: number | null
           position_size?: number | null
+          position_type?: string | null
+          profit_loss?: number | null
           roi?: number | null
           screenshot_url?: string | null
           setup?: string | null
           trade_date?: string | null
+          trading_fee?: number | null
           updated_at?: string | null
           user_id?: string
         }

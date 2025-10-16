@@ -1,1 +1,4 @@
 project_id = "qziawervfvptoretkjrn"
+
+[functions.extract-trade-info]
+verify_jwt = false
