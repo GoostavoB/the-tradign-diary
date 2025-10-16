@@ -90,15 +90,11 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
     return acc;
   }, {} as Record<string, number>);
   const mostTradedAsset = Object.entries(assetCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
-
-  // Asset with biggest losses
-  const assetLosses = trades.reduce((acc, trade) => {
-    if (!acc[trade.asset]) acc[trade.asset] = 0;
-    acc[trade.asset] += trade.pnl || 0;
-    return acc;
-  }, {} as Record<string, number>);
-  const assetWithBiggestLosses = Object.entries(assetLosses)
-    .sort((a, b) => a[1] - b[1])[0]?.[0] || 'N/A';
+  const mostTradedCount = mostTradedAsset !== 'N/A' ? assetCounts[mostTradedAsset] : 0;
+  const mostTradedPercentage = trades.length > 0 ? (mostTradedCount / trades.length) * 100 : 0;
+  const mostTradedROI = mostTradedAsset !== 'N/A'
+    ? trades.filter(t => t.asset === mostTradedAsset).reduce((sum, t) => sum + (t.roi || 0), 0)
+    : 0;
 
   // Asset with more wins
   const assetWins = trades.reduce((acc, trade) => {
@@ -110,6 +106,29 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
   }, {} as Record<string, number>);
   const assetWithMoreWins = Object.entries(assetWins)
     .sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
+  const totalWins = trades.filter(t => t.pnl > 0).length;
+  const mostWinsCount = assetWithMoreWins !== 'N/A' ? assetWins[assetWithMoreWins] : 0;
+  const mostWinsPercentage = totalWins > 0 ? (mostWinsCount / totalWins) * 100 : 0;
+  const mostWinsROI = assetWithMoreWins !== 'N/A'
+    ? trades.filter(t => t.asset === assetWithMoreWins && t.pnl > 0).reduce((sum, t) => sum + (t.roi || 0), 0)
+    : 0;
+
+  // Asset with biggest losses
+  const assetLosses = trades.reduce((acc, trade) => {
+    if (!acc[trade.asset]) acc[trade.asset] = 0;
+    acc[trade.asset] += trade.pnl || 0;
+    return acc;
+  }, {} as Record<string, number>);
+  const assetWithBiggestLosses = Object.entries(assetLosses)
+    .sort((a, b) => a[1] - b[1])[0]?.[0] || 'N/A';
+  const totalLosses = trades.filter(t => t.pnl < 0).length;
+  const biggestLossesCount = assetWithBiggestLosses !== 'N/A' 
+    ? trades.filter(t => t.asset === assetWithBiggestLosses && t.pnl < 0).length 
+    : 0;
+  const biggestLossesPercentage = totalLosses > 0 ? (biggestLossesCount / totalLosses) * 100 : 0;
+  const biggestLossesROI = assetWithBiggestLosses !== 'N/A'
+    ? trades.filter(t => t.asset === assetWithBiggestLosses && t.pnl < 0).reduce((sum, t) => sum + (t.roi || 0), 0)
+    : 0;
 
   // Top setup by wins
   const setupWins = trades.reduce((acc, trade) => {
@@ -240,18 +259,42 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="p-6 bg-card border-border">
             <h3 className="text-lg font-semibold mb-4">Asset Performance</h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div>
-                <p className="text-sm text-muted-foreground">Most Traded</p>
-                <p className="font-medium">{mostTradedAsset}</p>
+                <p className="text-sm text-muted-foreground mb-1">Most Traded</p>
+                <p className="text-xl font-medium mb-1">{mostTradedAsset}</p>
+                <p className="text-xs text-muted-foreground">
+                  {mostTradedCount} trades / {trades.length} total ({mostTradedPercentage.toFixed(1)}%)
+                </p>
+                <p className="text-sm font-medium mt-1">
+                  Total ROI: <span className={mostTradedROI >= 0 ? 'text-neon-green' : 'text-neon-red'}>
+                    {mostTradedROI >= 0 ? '+' : ''}{mostTradedROI.toFixed(2)}%
+                  </span>
+                </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Most Wins</p>
-                <p className="font-medium text-neon-green">{assetWithMoreWins}</p>
+                <p className="text-sm text-muted-foreground mb-1">Most Wins</p>
+                <p className="text-xl font-medium text-neon-green mb-1">{assetWithMoreWins}</p>
+                <p className="text-xs text-muted-foreground">
+                  {mostWinsCount} wins / {totalWins} total ({mostWinsPercentage.toFixed(1)}%)
+                </p>
+                <p className="text-sm font-medium mt-1">
+                  Total ROI: <span className="text-neon-green">
+                    +{mostWinsROI.toFixed(2)}%
+                  </span>
+                </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Biggest Losses</p>
-                <p className="font-medium text-neon-red">{assetWithBiggestLosses}</p>
+                <p className="text-sm text-muted-foreground mb-1">Biggest Losses</p>
+                <p className="text-xl font-medium text-neon-red mb-1">{assetWithBiggestLosses}</p>
+                <p className="text-xs text-muted-foreground">
+                  {biggestLossesCount} losses / {totalLosses} total ({biggestLossesPercentage.toFixed(1)}%)
+                </p>
+                <p className="text-sm font-medium mt-1">
+                  Total ROI: <span className="text-neon-red">
+                    {biggestLossesROI.toFixed(2)}%
+                  </span>
+                </p>
               </div>
             </div>
           </Card>
