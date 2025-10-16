@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      event_reminders: {
+        Row: {
+          created_at: string | null
+          event_category: string | null
+          event_impact: string | null
+          event_name: string
+          event_time: string
+          id: string
+          notified: boolean | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_category?: string | null
+          event_impact?: string | null
+          event_name: string
+          event_time: string
+          id?: string
+          notified?: boolean | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_category?: string | null
+          event_impact?: string | null
+          event_name?: string
+          event_time?: string
+          id?: string
+          notified?: boolean | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

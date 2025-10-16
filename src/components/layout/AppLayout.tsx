@@ -3,12 +3,16 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from './AppSidebar';
 import { UserMenu } from './UserMenu';
 import { CryptoPrices } from '@/components/CryptoPrices';
+import { useReminderNotifications } from '@/hooks/useReminderNotifications';
 
 interface AppLayoutProps {
   children: ReactNode;
 }
 
 const AppLayout = ({ children }: AppLayoutProps) => {
+  // Enable reminder notifications
+  useReminderNotifications();
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">

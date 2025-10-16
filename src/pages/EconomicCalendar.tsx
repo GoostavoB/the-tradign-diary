@@ -5,8 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Calendar, TrendingUp, TrendingDown, Clock } from "lucide-react";
+import { useNotifications } from "@/hooks/useNotifications";
+import { Calendar, TrendingUp, TrendingDown, Clock, Bell, BellOff } from "lucide-react";
 import { formatInTimeZone } from "date-fns-tz";
 
 interface EconomicEvent {
@@ -48,6 +50,7 @@ const EconomicCalendar = () => {
   const [loading, setLoading] = useState(true);
   const [timezone, setTimezone] = useState<string>("America/New_York");
   const { toast } = useToast();
+  const { permission, requestPermission, addReminder, removeReminder, hasReminder } = useNotifications();
 
   useEffect(() => {
     fetchEconomicCalendar();
@@ -129,6 +132,22 @@ const EconomicCalendar = () => {
     return null;
   };
 
+  const handleReminderToggle = async (event: EconomicEvent) => {
+    const eventDate = new Date(event.Date);
+    const hasReminderSet = hasReminder(event.Event, eventDate);
+
+    if (hasReminderSet) {
+      await removeReminder(event.Event, eventDate);
+    } else {
+      await addReminder(
+        event.Event,
+        eventDate,
+        event.Category,
+        getImportanceLabel(event.Importance)
+      );
+    }
+  };
+
   return (
     <AppLayout>
       <div className="space-y-6">
@@ -153,6 +172,17 @@ const EconomicCalendar = () => {
                 ))}
               </SelectContent>
             </Select>
+            {permission !== 'granted' && (
+              <Button
+                onClick={requestPermission}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+              >
+                <Bell className="h-4 w-4" />
+                Ativar Notificações
+              </Button>
+            )}
           </div>
         </div>
 
@@ -198,6 +228,7 @@ const EconomicCalendar = () => {
                       <TableHead className="text-right">Actual</TableHead>
                       <TableHead className="text-right">Forecast</TableHead>
                       <TableHead className="text-right">Previous</TableHead>
+                      <TableHead className="text-center">Reminder</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -231,6 +262,20 @@ const EconomicCalendar = () => {
                         </TableCell>
                         <TableCell className="text-right text-muted-foreground">
                           {event.Previous || "-"}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleReminderToggle(event)}
+                            className="h-8 w-8 p-0"
+                          >
+                            {hasReminder(event.Event, new Date(event.Date)) ? (
+                              <BellOff className="h-4 w-4 text-primary" />
+                            ) : (
+                              <Bell className="h-4 w-4 text-muted-foreground" />
+                            )}
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
