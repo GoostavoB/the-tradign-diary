@@ -649,7 +649,7 @@ const Upload = () => {
                               className={cn(
                                 "w-full transition-all duration-200",
                                 extracting
-                                  ? "bg-muted text-muted-foreground opacity-70 cursor-not-allowed hover:scale-100 active:scale-100"
+                                  ? "bg-muted text-muted-foreground cursor-not-allowed border border-border hover:scale-100 active:scale-100"
                                   : "bg-primary text-primary-foreground active:scale-95 hover:scale-[1.02]"
                               )}
                               disabled={extracting}
@@ -672,6 +672,8 @@ const Upload = () => {
                                 </>
                               )}
                             </Button>
+
+                            {extracting && (
                               <div className="mt-6 flex items-center justify-center">
                                 <div className="flex items-center gap-4">
                                   <div className="h-8 w-8 rounded-full border-2 border-foreground/30 border-t-primary animate-spin" aria-label="Loading" />
@@ -681,6 +683,7 @@ const Upload = () => {
                                   </div>
                                 </div>
                               </div>
+                            )}
                           </>
                         )}
                       </div>
