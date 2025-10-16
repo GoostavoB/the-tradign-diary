@@ -571,53 +571,85 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="p-6 bg-card border-border">
-            <h3 className="text-lg font-semibold mb-4">Asset Performance</h3>
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Most Traded</p>
-                <p className="text-xl font-medium mb-1">{mostTradedAsset}</p>
-                <p className="text-xs text-muted-foreground">
-                  {mostTradedCount} trades / {trades.length} total ({mostTradedPercentage.toFixed(1)}%)
-                </p>
-                <p className="text-sm font-medium mt-1">
-                  Avg ROI: <span className={mostTradedROI >= 0 ? 'text-neon-green' : 'text-neon-red'}>
-                    {mostTradedROI >= 0 ? '+' : ''}{mostTradedROI.toFixed(2)}%
-                  </span>
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* Most Traded Asset */}
+          <Card className="p-5 bg-gradient-to-br from-card to-muted/20 border-border hover:border-primary/50 transition-all duration-300 group">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Most Traded</p>
+                <TrendingUp className="w-4 h-4 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Most Wins</p>
-                <p className="text-xl font-medium text-neon-green mb-1">{assetWithMoreWins}</p>
-                <p className="text-xs text-muted-foreground">
-                  {mostWinsCount} wins / {totalWins} total ({mostWinsPercentage.toFixed(1)}%)
-                </p>
-                <p className="text-sm font-medium mt-1">
-                  Avg ROI: <span className="text-neon-green">
-                    +{mostWinsROI.toFixed(2)}%
-                  </span>
-                </p>
+                <p className="text-2xl font-bold text-foreground mb-1">{mostTradedAsset}</p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="font-medium">{mostTradedCount} trades</span>
+                  <span>•</span>
+                  <span>{mostTradedPercentage.toFixed(1)}%</span>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Biggest Losses</p>
-                <p className="text-xl font-medium text-neon-red mb-1">{assetWithBiggestLosses}</p>
-                <p className="text-xs text-muted-foreground">
-                  {biggestLossesCount} losses / {totalLosses} total ({biggestLossesPercentage.toFixed(1)}%)
-                </p>
-                <p className="text-sm font-medium mt-1">
-                  Avg ROI: <span className="text-neon-red">
-                    {biggestLossesROI.toFixed(2)}%
-                  </span>
+              <div className="pt-3 border-t border-border/50">
+                <p className="text-xs text-muted-foreground mb-1">Average ROI</p>
+                <p className={`text-lg font-bold ${mostTradedROI >= 0 ? 'text-neon-green' : 'text-neon-red'}`}>
+                  {mostTradedROI >= 0 ? '+' : ''}{mostTradedROI.toFixed(2)}%
                 </p>
               </div>
             </div>
           </Card>
 
+          {/* Most Wins Asset */}
+          <Card className="p-5 bg-gradient-to-br from-card to-neon-green/5 border-border hover:border-neon-green/50 transition-all duration-300 group">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Most Wins</p>
+                <Target className="w-4 h-4 text-neon-green opacity-60 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-neon-green mb-1">{assetWithMoreWins}</p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="font-medium">{mostWinsCount} wins</span>
+                  <span>•</span>
+                  <span>{mostWinsPercentage.toFixed(1)}%</span>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-border/50">
+                <p className="text-xs text-muted-foreground mb-1">Average ROI</p>
+                <p className="text-lg font-bold text-neon-green">
+                  +{mostWinsROI.toFixed(2)}%
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Biggest Losses Asset */}
+          <Card className="p-5 bg-gradient-to-br from-card to-neon-red/5 border-border hover:border-neon-red/50 transition-all duration-300 group">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Biggest Losses</p>
+                <TrendingDown className="w-4 h-4 text-neon-red opacity-60 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-neon-red mb-1">{assetWithBiggestLosses}</p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="font-medium">{biggestLossesCount} losses</span>
+                  <span>•</span>
+                  <span>{biggestLossesPercentage.toFixed(1)}%</span>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-border/50">
+                <p className="text-xs text-muted-foreground mb-1">Average ROI</p>
+                <p className="text-lg font-bold text-neon-red">
+                  {biggestLossesROI.toFixed(2)}%
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
           <Card className="p-6 bg-card border-border">
             <h3 className="text-lg font-semibold mb-4">Setup Performance</h3>
-            <div className="space-y-4">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
                 <p className="text-sm text-muted-foreground mb-1">Top Setup by Wins</p>
                 <p className="text-xl font-medium mb-1">{topSetupByWins}</p>
                 <p className="text-sm font-medium">
@@ -626,7 +658,7 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
                   </span>
                 </p>
               </div>
-              <div>
+              <div className="space-y-2">
                 <p className="text-sm text-muted-foreground mb-1">Top Setup by ROI</p>
                 <p className="text-xl font-medium mb-1">{topSetupByROI}</p>
                 <p className="text-sm font-medium">
