@@ -28,6 +28,7 @@ interface Trade {
   emotional_tag?: string | null;
   funding_fee?: number | null;
   trading_fee?: number | null;
+  broker?: string | null;
 }
 
 interface AdvancedAnalyticsProps {
@@ -209,8 +210,36 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
     };
   }).filter(stat => stat.trades > 0); // Only show days with trades
 
-  const topDaysByWinRate = [...dayStats].sort((a, b) => b.winRate - a.winRate).slice(0, 5);
-  const topDaysByROI = [...dayStats].sort((a, b) => b.avgROI - a.avgROI).slice(0, 5);
+  const topDaysByWinRate = [...dayStats].sort((a, b) => b.winRate - a.winRate).slice(0, 7);
+  const topDaysByROI = [...dayStats].sort((a, b) => b.avgROI - a.avgROI).slice(0, 7);
+
+  // Fee calculations
+  const totalFundingFees = trades.reduce((sum, t) => sum + (t.funding_fee || 0), 0);
+  const totalTradingFees = trades.reduce((sum, t) => sum + (t.trading_fee || 0), 0);
+  const totalFees = totalFundingFees + totalTradingFees;
+
+  // Broker fee statistics
+  const brokerStats = trades.reduce((acc, trade) => {
+    const broker = trade.broker || 'Unknown';
+    if (!acc[broker]) {
+      acc[broker] = {
+        totalFees: 0,
+        tradeCount: 0
+      };
+    }
+    acc[broker].totalFees += (trade.funding_fee || 0) + (trade.trading_fee || 0);
+    acc[broker].tradeCount += 1;
+    return acc;
+  }, {} as Record<string, { totalFees: number; tradeCount: number }>);
+
+  const brokerFeeData = Object.entries(brokerStats)
+    .map(([broker, stats]) => ({
+      broker,
+      totalFees: stats.totalFees,
+      avgFeePerTrade: stats.totalFees / stats.tradeCount,
+      tradeCount: stats.tradeCount
+    }))
+    .sort((a, b) => b.totalFees - a.totalFees);
 
   const StatCard = ({ title, value, subtitle, icon: Icon, trend }: any) => (
     <Card className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300">
@@ -310,6 +339,89 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
             icon={DollarSign}
             trend={avgRevenuePerDay > 0 ? 'up' : 'down'}
           />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* Total Funding Fees */}
+          <Card className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-muted-foreground">Total Funding Fees</p>
+              <DollarSign className="text-neon-red" size={24} />
+            </div>
+            <p className="text-2xl font-bold text-neon-red">
+              ${totalFundingFees.toFixed(2)}
+            </p>
+          </Card>
+
+          {/* Total Trading Fees */}
+          <Card className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-muted-foreground">Total Trading Fees</p>
+              <DollarSign className="text-neon-red" size={24} />
+            </div>
+            <p className="text-2xl font-bold text-neon-red">
+              ${totalTradingFees.toFixed(2)}
+            </p>
+          </Card>
+
+          {/* Total Fees */}
+          <Card className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-muted-foreground">Total Fees</p>
+              <DollarSign className="text-neon-red" size={24} />
+            </div>
+            <p className="text-2xl font-bold text-neon-red">
+              ${totalFees.toFixed(2)}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Funding + Trading fees
+            </p>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 mb-6">
+          {/* Fees Per Broker */}
+          <Card className="p-6 bg-card border-border">
+            <h3 className="text-lg font-semibold mb-4">💳 Total Paid Fees Per Broker</h3>
+            <div className="space-y-3">
+              {brokerFeeData.length > 0 ? brokerFeeData.map((data, index) => (
+                <div key={data.broker} className="flex items-center justify-between p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                      index === 0 ? 'bg-yellow-500/20 text-yellow-500 border-2 border-yellow-500' :
+                      index === 1 ? 'bg-gray-400/20 text-gray-400 border-2 border-gray-400' :
+                      index === 2 ? 'bg-orange-600/20 text-orange-600 border-2 border-orange-600' :
+                      'bg-muted text-muted-foreground border-2 border-muted'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-lg">{data.broker}</p>
+                      <p className="text-xs text-muted-foreground">{data.tradeCount} trades</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-6 items-center">
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground mb-1">Total Fees</p>
+                      <p className="text-lg font-bold text-neon-red">
+                        ${data.totalFees.toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground mb-1">Avg per Trade</p>
+                      <p className="text-lg font-bold text-foreground">
+                        ${data.avgFeePerTrade.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )) : (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No broker data available
+                </p>
+              )}
+            </div>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

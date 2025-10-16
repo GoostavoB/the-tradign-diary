@@ -28,6 +28,7 @@ interface Trade {
   position_type: 'long' | 'short' | null;
   funding_fee: number | null;
   trading_fee: number | null;
+  broker: string | null;
 }
 
 const Dashboard = () => {
