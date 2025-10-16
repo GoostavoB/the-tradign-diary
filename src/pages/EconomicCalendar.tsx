@@ -8,14 +8,21 @@ import { useToast } from "@/hooks/use-toast";
 import { Calendar, TrendingUp, TrendingDown } from "lucide-react";
 
 interface EconomicEvent {
-  event: string;
-  country: string;
-  date: string;
-  actual: number | null;
-  previous: number | null;
-  estimate: number | null;
-  impact: string;
-  currency: string;
+  CalendarId: string;
+  Date: string;
+  Country: string;
+  Category: string;
+  Event: string;
+  Reference: string;
+  Actual: string | null;
+  Previous: string | null;
+  Forecast: string | null;
+  TEForecast: string | null;
+  Importance: number;
+  LastUpdate: string;
+  Currency: string;
+  Unit: string;
+  Source: string;
 }
 
 const EconomicCalendar = () => {
@@ -30,11 +37,21 @@ const EconomicCalendar = () => {
   const fetchEconomicCalendar = async () => {
     setLoading(true);
     try {
-      // Using FinancialModelingPrep free API
-      // You can replace with your API key for more requests
-      const apiKey = "demo"; // Use "demo" for testing, get free API key at financialmodelingprep.com
+      // Using Trading Economics API
+      // Get your free API key at https://tradingeconomics.com/api
+      const apiKey = "guest:guest"; // Replace with your API key
+      
+      // Get current date and 30 days ahead
+      const today = new Date();
+      const futureDate = new Date();
+      futureDate.setDate(today.getDate() + 30);
+      
+      const formatDate = (date: Date) => {
+        return date.toISOString().split('T')[0];
+      };
+      
       const response = await fetch(
-        `https://financialmodelingprep.com/api/v3/economic_calendar?apikey=${apiKey}`
+        `https://api.tradingeconomics.com/calendar/country/united states/${formatDate(today)}/${formatDate(futureDate)}?c=${apiKey}&importance=3`
       );
       
       if (!response.ok) {
@@ -42,17 +59,12 @@ const EconomicCalendar = () => {
       }
       
       const data = await response.json();
-      // Filter for high impact events only
-      const highImpactEvents = data.filter((event: EconomicEvent) => 
-        event.impact === "High"
-      ).slice(0, 50); // Limit to 50 events
-      
-      setEvents(highImpactEvents);
+      setEvents(data.slice(0, 50)); // Limit to 50 events
     } catch (error) {
       console.error("Error fetching economic calendar:", error);
       toast({
         title: "Error",
-        description: "Failed to load economic calendar. Using demo data.",
+        description: "Failed to load economic calendar. Please check your API key.",
         variant: "destructive",
       });
     } finally {
@@ -60,23 +72,41 @@ const EconomicCalendar = () => {
     }
   };
 
-  const getImpactColor = (impact: string) => {
-    switch (impact?.toLowerCase()) {
-      case "high":
+  const getImpactColor = (importance: number) => {
+    switch (importance) {
+      case 3:
         return "bg-red-500/20 text-red-600 border-red-500/50";
-      case "medium":
+      case 2:
         return "bg-yellow-500/20 text-yellow-600 border-yellow-500/50";
-      case "low":
+      case 1:
         return "bg-green-500/20 text-green-600 border-green-500/50";
       default:
         return "bg-muted text-muted-foreground";
     }
   };
 
-  const getChangeIndicator = (actual: number | null, previous: number | null) => {
-    if (actual === null || previous === null) return null;
-    if (actual > previous) return <TrendingUp className="h-4 w-4 text-neon-green" />;
-    if (actual < previous) return <TrendingDown className="h-4 w-4 text-neon-red" />;
+  const getImportanceLabel = (importance: number) => {
+    switch (importance) {
+      case 3: return "High";
+      case 2: return "Medium";
+      case 1: return "Low";
+      default: return "Unknown";
+    }
+  };
+
+  const parseValue = (value: string | null) => {
+    if (!value) return null;
+    // Remove currency symbols and units, parse the number
+    const cleaned = value.replace(/[^\d.-]/g, '');
+    return parseFloat(cleaned);
+  };
+
+  const getChangeIndicator = (actual: string | null, previous: string | null) => {
+    const actualNum = parseValue(actual);
+    const previousNum = parseValue(previous);
+    if (actualNum === null || previousNum === null) return null;
+    if (actualNum > previousNum) return <TrendingUp className="h-4 w-4 text-neon-green" />;
+    if (actualNum < previousNum) return <TrendingDown className="h-4 w-4 text-neon-red" />;
     return null;
   };
 
@@ -94,10 +124,10 @@ const EconomicCalendar = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              <CardTitle>High-Impact Economic Events</CardTitle>
+              <CardTitle>United States Economic Events</CardTitle>
             </div>
             <CardDescription>
-              Major economic events that may affect market movements
+              High-impact economic events from the United States
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -109,15 +139,15 @@ const EconomicCalendar = () => {
               </div>
             ) : events.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No economic events available. The API may require authentication.
+                No economic events available. Please verify your API key.
                 <br />
                 <a 
-                  href="https://financialmodelingprep.com/developer/docs/" 
+                  href="https://tradingeconomics.com/api" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-primary hover:underline"
                 >
-                  Get a free API key
+                  Get a free API key at Trading Economics
                 </a>
               </div>
             ) : (
@@ -127,7 +157,7 @@ const EconomicCalendar = () => {
                     <TableRow>
                       <TableHead>Date/Time</TableHead>
                       <TableHead>Event</TableHead>
-                      <TableHead>Country</TableHead>
+                      <TableHead>Category</TableHead>
                       <TableHead className="text-center">Impact</TableHead>
                       <TableHead className="text-right">Actual</TableHead>
                       <TableHead className="text-right">Forecast</TableHead>
@@ -135,10 +165,10 @@ const EconomicCalendar = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {events.map((event, index) => (
-                      <TableRow key={index} className="hover:bg-muted/50">
+                    {events.map((event) => (
+                      <TableRow key={event.CalendarId} className="hover:bg-muted/50">
                         <TableCell className="font-medium">
-                          {new Date(event.date).toLocaleString('en-US', {
+                          {new Date(event.Date).toLocaleString('en-US', {
                             month: 'short',
                             day: 'numeric',
                             hour: '2-digit',
@@ -146,32 +176,30 @@ const EconomicCalendar = () => {
                           })}
                         </TableCell>
                         <TableCell className="max-w-xs">
-                          <div className="flex items-center gap-2">
-                            {event.event}
+                          <div className="flex flex-col">
+                            <span className="font-medium">{event.Event}</span>
+                            <span className="text-xs text-muted-foreground">{event.Reference}</span>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2">
-                            <span className="text-lg">{event.country}</span>
-                            <span className="text-xs text-muted-foreground">{event.currency}</span>
-                          </div>
+                          <span className="text-sm">{event.Category}</span>
                         </TableCell>
                         <TableCell className="text-center">
-                          <Badge className={getImpactColor(event.impact)} variant="outline">
-                            {event.impact}
+                          <Badge className={getImpactColor(event.Importance)} variant="outline">
+                            {getImportanceLabel(event.Importance)}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right font-semibold">
                           <div className="flex items-center justify-end gap-1">
-                            {event.actual !== null ? event.actual : "-"}
-                            {getChangeIndicator(event.actual, event.previous)}
+                            {event.Actual || "-"}
+                            {getChangeIndicator(event.Actual, event.Previous)}
                           </div>
                         </TableCell>
                         <TableCell className="text-right text-muted-foreground">
-                          {event.estimate !== null ? event.estimate : "-"}
+                          {event.Forecast || event.TEForecast || "-"}
                         </TableCell>
                         <TableCell className="text-right text-muted-foreground">
-                          {event.previous !== null ? event.previous : "-"}
+                          {event.Previous || "-"}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -185,12 +213,12 @@ const EconomicCalendar = () => {
         <div className="text-center text-sm text-muted-foreground">
           Economic data provided by{" "}
           <a 
-            href="https://financialmodelingprep.com/" 
+            href="https://tradingeconomics.com/" 
             rel="nofollow" 
             target="_blank" 
             className="text-primary font-semibold hover:underline"
           >
-            FinancialModelingPrep
+            Trading Economics
           </a>
         </div>
       </div>
