@@ -304,16 +304,15 @@ const Upload = () => {
   const extractTradeInfo = async (file: File) => {
     setExtractedTrades([]);
 
-    try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Image = reader.result as string;
+    const reader = new FileReader();
 
+    reader.onloadend = async () => {
+      try {
+        const base64Image = reader.result as string;
 
         const { data, error } = await supabase.functions.invoke('extract-trade-info', {
           body: { imageBase64: base64Image }
         });
-
 
         if (error) {
           console.error('Extraction error:', error);
@@ -333,19 +332,23 @@ const Upload = () => {
             description: 'Please check if the image is clear and contains trade information'
           });
         }
-      };
-      reader.readAsDataURL(file);
-    } catch (error) {
-      console.error('Error extracting trade info:', error);
-      toast.dismiss('extraction-loading');
-      toast.error('Failed to extract trade information', {
-        description: 'An unexpected error occurred'
-      });
-    } finally {
-      setExtracting(false);
-    }
-  };
+      } catch (error) {
+        console.error('Error extracting trade info:', error);
+        toast.error('Failed to extract trade information', {
+          description: 'An unexpected error occurred'
+        });
+      } finally {
+        setExtracting(false);
+      }
+    };
 
+    reader.onerror = () => {
+      toast.error('Failed to read image file');
+      setExtracting(false);
+    };
+
+    reader.readAsDataURL(file);
+  };
   const removeScreenshot = () => {
     setScreenshot(null);
     setScreenshotPreview(null);
