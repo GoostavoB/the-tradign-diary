@@ -262,11 +262,14 @@ const LongShortRatio = () => {
                 </CardHeader>
                 <CardContent className="flex items-center justify-center">
                   {latestCombinedData && (
-                    <img 
-                      src={getMarketSentimentImage(latestCombinedData.longAccount, latestCombinedData.shortAccount)} 
-                      alt="Market sentiment"
-                      className="w-24 h-24 object-contain"
-                    />
+                    <div className="w-24 h-24 rounded-full overflow-hidden bg-black flex items-center justify-center">
+                      <img 
+                        src={getMarketSentimentImage(latestCombinedData.longAccount, latestCombinedData.shortAccount)} 
+                        alt="Market sentiment"
+                        className="w-full h-full object-cover"
+                        style={{ mixBlendMode: 'lighten' }}
+                      />
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -464,14 +467,17 @@ const LongShortRatio = () => {
                 </CardHeader>
                 <CardContent className="flex items-center justify-center">
                   {latestBinanceData && (
-                    <img 
-                      src={getMarketSentimentImage(
-                        parseFloat(latestBinanceData.longAccount) * 100, 
-                        parseFloat(latestBinanceData.shortAccount) * 100
-                      )} 
-                      alt="Market sentiment"
-                      className="w-24 h-24 object-contain"
-                    />
+                    <div className="w-24 h-24 rounded-full overflow-hidden bg-black flex items-center justify-center">
+                      <img 
+                        src={getMarketSentimentImage(
+                          parseFloat(latestBinanceData.longAccount) * 100, 
+                          parseFloat(latestBinanceData.shortAccount) * 100
+                        )} 
+                        alt="Market sentiment"
+                        className="w-full h-full object-cover"
+                        style={{ mixBlendMode: 'lighten' }}
+                      />
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -674,14 +680,17 @@ const LongShortRatio = () => {
                 </CardHeader>
                 <CardContent className="flex items-center justify-center">
                   {latestBybitData && (
-                    <img 
-                      src={getMarketSentimentImage(
-                        parseFloat(latestBybitData.buyRatio) * 100, 
-                        parseFloat(latestBybitData.sellRatio) * 100
-                      )} 
-                      alt="Market sentiment"
-                      className="w-24 h-24 object-contain"
-                    />
+                    <div className="w-24 h-24 rounded-full overflow-hidden bg-black flex items-center justify-center">
+                      <img 
+                        src={getMarketSentimentImage(
+                          parseFloat(latestBybitData.buyRatio) * 100, 
+                          parseFloat(latestBybitData.sellRatio) * 100
+                        )} 
+                        alt="Market sentiment"
+                        className="w-full h-full object-cover"
+                        style={{ mixBlendMode: 'lighten' }}
+                      />
+                    </div>
                   )}
                 </CardContent>
               </Card>

@@ -484,17 +484,18 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
                   </div>
                 </div>
                 <div className="ml-6 flex items-center justify-center">
-                  <div className={`w-20 h-20 rounded-full overflow-hidden flex items-center justify-center border-2 ${
+                  <div className={`w-20 h-20 rounded-full overflow-hidden flex items-center justify-center border-2 bg-black ${
                     (monthLongs === monthShorts)
-                      ? 'border-foreground bg-card'
+                      ? 'border-foreground'
                       : isShortDominant 
-                        ? 'border-neon-red bg-neon-red/10' 
-                        : 'border-neon-green bg-neon-green/10'
+                        ? 'border-neon-red' 
+                        : 'border-neon-green'
                   } transition-all duration-500`}>
                     <img 
                       src={(monthLongs === monthShorts) ? bullBearFight : (isShortDominant ? bearNeon : bullNeon)} 
                       alt={(monthLongs === monthShorts) ? "Balanced Market" : (isShortDominant ? "Bear Market" : "Bull Market")}
                       className="w-full h-full object-cover"
+                      style={{ mixBlendMode: 'lighten' }}
                     />
                   </div>
                 </div>
