@@ -6,6 +6,19 @@ interface CryptoPricesProps {
   symbols?: string[];
 }
 
+const cryptoColors: Record<string, string> = {
+  'BTC': 'text-orange-500',
+  'ETH': 'text-slate-400',
+  'BNB': 'text-yellow-400',
+  'SOL': 'text-purple-500',
+  'XRP': 'text-gray-400',
+  'DOGE': 'text-yellow-500',
+  'TRX': 'text-red-600',
+  'TON': 'text-sky-400',
+  'ADA': 'text-blue-700',
+  'AVAX': 'text-red-500',
+};
+
 export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => {
   const { prices, loading, error } = useCryptoPrice(symbols);
 
@@ -33,10 +46,10 @@ export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => 
           </div>
           {prices.map((price) => (
             <div key={price.symbol} className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-base font-semibold text-foreground">
+              <span className={`text-base font-semibold ${cryptoColors[price.displaySymbol] || 'text-foreground'}`}>
                 {price.displaySymbol}
               </span>
-              <span className="text-base font-mono text-neon-green">
+              <span className={`text-base font-mono font-bold drop-shadow-[0_0_8px_currentColor] ${cryptoColors[price.displaySymbol] || 'text-neon-green'}`}>
                 ${price.price}
               </span>
             </div>
