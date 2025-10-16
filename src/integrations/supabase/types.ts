@@ -179,6 +179,42 @@ export type Database = {
         }
         Relationships: []
       }
+      upload_batches: {
+        Row: {
+          assets: string[]
+          created_at: string
+          id: string
+          most_recent_trade_asset: string | null
+          most_recent_trade_id: string | null
+          most_recent_trade_value: number | null
+          total_entry_value: number
+          trade_count: number
+          user_id: string
+        }
+        Insert: {
+          assets?: string[]
+          created_at?: string
+          id?: string
+          most_recent_trade_asset?: string | null
+          most_recent_trade_id?: string | null
+          most_recent_trade_value?: number | null
+          total_entry_value?: number
+          trade_count?: number
+          user_id: string
+        }
+        Update: {
+          assets?: string[]
+          created_at?: string
+          id?: string
+          most_recent_trade_asset?: string | null
+          most_recent_trade_id?: string | null
+          most_recent_trade_value?: number | null
+          total_entry_value?: number
+          trade_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null

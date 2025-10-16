@@ -15,6 +15,7 @@ import { Upload as UploadIcon, X, Sparkles, Check, ChevronsUpDown, Plus } from '
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from "@/lib/utils";
+import { UploadHistory } from '@/components/UploadHistory';
 
 interface ExtractedTrade {
   asset: string;
@@ -495,6 +496,16 @@ const Upload = () => {
       if (error) {
         toast.error(`Failed to save trade ${index + 1}`);
       } else {
+        // Create upload batch for single trade
+        await supabase.from('upload_batches').insert({
+          user_id: user.id,
+          trade_count: 1,
+          assets: [finalTrade.asset],
+          total_entry_value: finalTrade.entry_price * finalTrade.position_size,
+          most_recent_trade_asset: finalTrade.asset,
+          most_recent_trade_value: finalTrade.profit_loss
+        });
+
         toast.success(`Trade ${index + 1} saved successfully!`);
         // Remove the saved trade from the list
         setExtractedTrades(prev => prev.filter((_, i) => i !== index));
@@ -549,15 +560,36 @@ const Upload = () => {
         };
       });
 
-      const { error } = await supabase
+      const { data: insertedTrades, error } = await supabase
         .from('trades')
-        .insert(tradesData);
+        .insert(tradesData)
+        .select('id, asset, profit_loss, entry_price, position_size');
 
       if (error) {
         toast.error('Failed to save trades');
       } else {
+        // Create upload batch record
+        const assets = [...new Set(tradesData.map(t => t.asset))];
+        const totalEntryValue = tradesData.reduce((sum, t) => sum + (t.entry_price * t.position_size), 0);
+        const mostRecentTrade = insertedTrades?.[0];
+
+        await supabase.from('upload_batches').insert({
+          user_id: user.id,
+          trade_count: extractedTrades.length,
+          assets: assets,
+          total_entry_value: totalEntryValue,
+          most_recent_trade_id: mostRecentTrade?.id,
+          most_recent_trade_asset: mostRecentTrade?.asset,
+          most_recent_trade_value: mostRecentTrade?.profit_loss
+        });
+
         toast.success(`All ${extractedTrades.length} trades saved successfully!`);
-        navigate('/dashboard');
+        
+        // Clear the extraction image and trades
+        setExtractionImage(null);
+        setExtractionPreview(null);
+        setExtractedTrades([]);
+        setTradeEdits({});
       }
     } catch (error) {
       console.error('Error saving trades:', error);
@@ -1511,6 +1543,8 @@ const Upload = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        <UploadHistory />
       </div>
     </AppLayout>
   );
