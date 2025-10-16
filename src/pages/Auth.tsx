@@ -4,15 +4,35 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { TrendingUp, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
+
+const signupSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string(),
+  fullName: z.string().min(2, 'Full name is required'),
+  country: z.string().min(2, 'Please select your country'),
+  termsAccepted: z.boolean().refine((val) => val === true, 'You must accept the terms and conditions'),
+  marketingConsent: z.boolean()
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [country, setCountry] = useState('');
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
 
@@ -40,7 +60,25 @@ const Auth = () => {
           toast.success('Welcome back!');
         }
       } else {
-        const { error } = await signUp(email, password, fullName);
+        // Validate signup form
+        const result = signupSchema.safeParse({
+          email,
+          password,
+          confirmPassword,
+          fullName,
+          country,
+          termsAccepted,
+          marketingConsent
+        });
+
+        if (!result.success) {
+          const firstError = result.error.errors[0];
+          toast.error(firstError.message);
+          setLoading(false);
+          return;
+        }
+
+        const { error } = await signUp(email, password, fullName, country, marketingConsent);
         if (error) {
           toast.error(error.message || 'Failed to sign up');
         } else {
@@ -82,17 +120,31 @@ const Auth = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && !isForgotPassword && (
-            <div>
-              <label className="text-sm font-medium text-foreground">Full Name</label>
-              <Input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required={!isLogin}
-                className="mt-1"
-                placeholder="John Doe"
-              />
-            </div>
+            <>
+              <div>
+                <label className="text-sm font-medium text-foreground">Full Name</label>
+                <Input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required={!isLogin}
+                  className="mt-1"
+                  placeholder="John Doe"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-foreground">Country</label>
+                <Input
+                  type="text"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  required={!isLogin}
+                  className="mt-1"
+                  placeholder="United States"
+                />
+              </div>
+            </>
           )}
 
           <div>
@@ -108,24 +160,68 @@ const Auth = () => {
           </div>
 
           {!isForgotPassword && (
-            <div>
-              <label className="text-sm font-medium text-foreground">Password</label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="mt-1"
-                placeholder="••••••••"
-                minLength={6}
-              />
-            </div>
+            <>
+              <div>
+                <label className="text-sm font-medium text-foreground">Password</label>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="mt-1"
+                  placeholder="••••••••"
+                  minLength={6}
+                />
+              </div>
+
+              {!isLogin && (
+                <div>
+                  <label className="text-sm font-medium text-foreground">Confirm Password</label>
+                  <Input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required={!isLogin}
+                    className="mt-1"
+                    placeholder="••••••••"
+                    minLength={6}
+                  />
+                </div>
+              )}
+            </>
           )}
 
           {isForgotPassword && (
             <p className="text-sm text-muted-foreground">
               Enter your email address and we'll send you a link to reset your password.
             </p>
+          )}
+
+          {!isLogin && !isForgotPassword && (
+            <div className="space-y-4">
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+                  required
+                />
+                <Label htmlFor="terms" className="text-sm text-muted-foreground leading-tight cursor-pointer">
+                  I agree to the Terms and Conditions and Privacy Policy. I authorize the collection and use of my trading data (non-personal) for developing reports and analytics.
+                </Label>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="marketing"
+                  checked={marketingConsent}
+                  onCheckedChange={(checked) => setMarketingConsent(checked as boolean)}
+                />
+                <Label htmlFor="marketing" className="text-sm text-muted-foreground leading-tight cursor-pointer">
+                  I agree to receive communications and marketing updates about promotions and news from The Trading Diary.
+                </Label>
+              </div>
+            </div>
           )}
 
           <Button
