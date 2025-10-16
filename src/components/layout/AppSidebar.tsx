@@ -1,4 +1,4 @@
-import { BarChart3, Upload, TrendingUp, Settings, BookOpen, HelpCircle, LogOut, TrendingDown } from 'lucide-react';
+import { BarChart3, Upload, TrendingUp, Settings, BookOpen, HelpCircle, LogOut, TrendingDown, Calendar } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Sidebar,
@@ -18,6 +18,7 @@ const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: BarChart3 },
   { title: 'Upload Trade', url: '/upload', icon: Upload },
   { title: 'Forecast', url: '/forecast', icon: TrendingUp },
+  { title: 'Economic Calendar', url: '/economic-calendar', icon: Calendar },
   { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
