@@ -316,7 +316,7 @@ const Upload = () => {
     return data.publicUrl;
   };
 
-  const updateTradeField = (index: number, field: keyof ExtractedTrade, value: string) => {
+  const updateTradeField = (index: number, field: keyof ExtractedTrade, value: string | number) => {
     setTradeEdits(prev => ({
       ...prev,
       [index]: {
@@ -685,70 +685,144 @@ const Upload = () => {
                         const edits = tradeEdits[index] || {};
                         return (
                           <Card key={index} className="p-4 bg-muted/50 border-border space-y-4">
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                            <div className="mb-3 pb-2 border-b border-border">
+                              <h4 className="font-semibold text-sm">Trade #{index + 1} - Review & Edit</h4>
+                              <p className="text-xs text-muted-foreground">AI extracted this data. Please verify and correct if needed.</p>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                               <div>
-                                <span className="text-muted-foreground">Asset:</span>
-                                <p className="font-medium">{trade.asset}</p>
+                                <Label className="text-xs text-muted-foreground">Asset *</Label>
+                                <Input
+                                  value={edits.asset ?? trade.asset}
+                                  onChange={(e) => updateTradeField(index, 'asset', e.target.value)}
+                                  className="mt-1 h-8 text-sm"
+                                  placeholder="BTC/USDT"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Position:</span>
-                                <p className={`font-medium capitalize ${trade.position_type === 'long' ? 'text-neon-green' : 'text-neon-red'}`}>
-                                  {trade.position_type}
-                                </p>
+                                <Label className="text-xs text-muted-foreground">Position Type *</Label>
+                                <select
+                                  value={edits.position_type ?? trade.position_type}
+                                  onChange={(e) => updateTradeField(index, 'position_type', e.target.value as 'long' | 'short')}
+                                  className="mt-1 w-full h-8 px-2 text-sm border border-border rounded-md bg-background"
+                                >
+                                  <option value="long">Long</option>
+                                  <option value="short">Short</option>
+                                </select>
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Entry:</span>
-                                <p className="font-medium">{trade.entry_price.toFixed(2)}</p>
+                                <Label className="text-xs text-muted-foreground">Entry Price *</Label>
+                                <Input
+                                  type="number"
+                                  step="0.00000001"
+                                  value={edits.entry_price ?? trade.entry_price}
+                                  onChange={(e) => updateTradeField(index, 'entry_price', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Exit:</span>
-                                <p className="font-medium">{trade.exit_price.toFixed(2)}</p>
+                                <Label className="text-xs text-muted-foreground">Exit Price *</Label>
+                                <Input
+                                  type="number"
+                                  step="0.00000001"
+                                  value={edits.exit_price ?? trade.exit_price}
+                                  onChange={(e) => updateTradeField(index, 'exit_price', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Size:</span>
-                                <p className="font-medium">
-                                  {trade.position_size && trade.position_size > 0 ? trade.position_size : 'N/A'}
-                                </p>
+                                <Label className="text-xs text-muted-foreground">Position Size *</Label>
+                                <Input
+                                  type="number"
+                                  step="0.00000001"
+                                  value={edits.position_size ?? trade.position_size}
+                                  onChange={(e) => updateTradeField(index, 'position_size', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Leverage:</span>
-                                <p className="font-medium">
-                                  {trade.leverage}x
-                                </p>
+                                <Label className="text-xs text-muted-foreground">Leverage</Label>
+                                <Input
+                                  type="number"
+                                  step="1"
+                                  value={edits.leverage ?? trade.leverage}
+                                  onChange={(e) => updateTradeField(index, 'leverage', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">P&L:</span>
-                                <p className={`font-medium ${trade.profit_loss >= 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-                                  {trade.profit_loss >= 0 ? '+' : ''}{trade.profit_loss.toFixed(2)}
-                                </p>
+                                <Label className="text-xs text-muted-foreground">P&L *</Label>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={edits.profit_loss ?? trade.profit_loss}
+                                  onChange={(e) => updateTradeField(index, 'profit_loss', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">ROI:</span>
-                                <p className={`font-medium ${trade.roi >= 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-                                  {trade.roi >= 0 ? '+' : ''}{trade.roi.toFixed(2)}%
-                                </p>
+                                <Label className="text-xs text-muted-foreground">ROI % *</Label>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={edits.roi ?? trade.roi}
+                                  onChange={(e) => updateTradeField(index, 'roi', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Funding Fee:</span>
-                                <p className="font-medium text-neon-red">
-                                  -${Math.abs(trade.funding_fee).toFixed(2)}
-                                </p>
+                                <Label className="text-xs text-muted-foreground">Funding Fee</Label>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={edits.funding_fee ?? trade.funding_fee}
+                                  onChange={(e) => updateTradeField(index, 'funding_fee', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Trading Fee:</span>
-                                <p className="font-medium text-neon-red">
-                                  -${Math.abs(trade.trading_fee).toFixed(2)}
-                                </p>
+                                <Label className="text-xs text-muted-foreground">Trading Fee</Label>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={edits.trading_fee ?? trade.trading_fee}
+                                  onChange={(e) => updateTradeField(index, 'trading_fee', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Duration:</span>
-                                <p className="font-medium">
-                                  {formatDuration(trade.duration_days, trade.duration_hours, trade.duration_minutes)}
-                                </p>
+                                <Label className="text-xs text-muted-foreground">Period of Day</Label>
+                                <select
+                                  value={edits.period_of_day ?? trade.period_of_day}
+                                  onChange={(e) => updateTradeField(index, 'period_of_day', e.target.value as 'morning' | 'afternoon' | 'night')}
+                                  className="mt-1 w-full h-8 px-2 text-sm border border-border rounded-md bg-background"
+                                >
+                                  <option value="morning">Morning</option>
+                                  <option value="afternoon">Afternoon</option>
+                                  <option value="night">Night</option>
+                                </select>
                               </div>
+                              
                               <div>
-                                <span className="text-muted-foreground">Period:</span>
-                                <p className="font-medium capitalize">{trade.period_of_day}</p>
+                                <Label className="text-xs text-muted-foreground">Margin</Label>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={edits.margin ?? trade.margin ?? 0}
+                                  onChange={(e) => updateTradeField(index, 'margin', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
                               </div>
                             </div>
                             
