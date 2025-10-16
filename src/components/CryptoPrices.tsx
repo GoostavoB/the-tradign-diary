@@ -38,8 +38,8 @@ export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => 
 
   return (
     <div className={`bg-card/30 backdrop-blur-sm border-b border-border ${className}`}>
-      <div className="px-6 py-4 overflow-x-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
-        <div className="flex items-center gap-6 min-w-max">
+      <div className="px-6 py-4">
+        <div className="flex items-center justify-center gap-6 flex-wrap">
           <div className="flex items-center gap-3 flex-shrink-0">
             <TrendingUp className="text-neon-green" size={24} />
             <span className="text-base font-semibold text-muted-foreground">LIVE (24h):</span>

@@ -8,8 +8,7 @@ interface CryptoPrice {
 }
 
 export const useCryptoPrice = (symbols: string[] = [
-  'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'XRPUSDT',
-  'DOGEUSDT', 'TRXUSDT', 'TONUSDT', 'ADAUSDT', 'AVAXUSDT'
+  'BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'XRPUSDT', 'ADAUSDT'
 ]) => {
   const [prices, setPrices] = useState<CryptoPrice[]>([]);
   const [loading, setLoading] = useState(true);
