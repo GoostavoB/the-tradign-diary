@@ -11,6 +11,7 @@ import { AdvancedAnalytics } from '@/components/AdvancedAnalytics';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { CryptoPrices } from '@/components/CryptoPrices';
 
 interface TradeStats {
   total_pnl: number;
@@ -222,6 +223,8 @@ const Dashboard = () => {
                 trend="neutral"
               />
             </div>
+
+            <CryptoPrices className="mb-6" />
 
             {stats && stats.total_trades === 0 ? (
               <Card className="p-8 text-center bg-card border-border">
