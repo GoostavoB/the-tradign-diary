@@ -21,6 +21,7 @@ interface ExtractedTrade {
   exit_price: number;
   position_size: number;
   position_type: 'long' | 'short';
+  leverage: number;
   funding_fee: number;
   trading_fee: number;
   margin: number;
@@ -59,6 +60,7 @@ const Upload = () => {
     exit_price: '',
     position_size: '',
     position_type: 'long' as 'long' | 'short',
+    leverage: '1',
     funding_fee: '',
     trading_fee: '',
     margin: '',
@@ -98,6 +100,7 @@ const Upload = () => {
         exit_price: data.exit_price.toString(),
         position_size: data.position_size.toString(),
         position_type: (data.position_type as 'long' | 'short') || 'long',
+        leverage: data.leverage?.toString() || '1',
         funding_fee: data.funding_fee?.toString() || '',
         trading_fee: data.trading_fee?.toString() || '',
         margin: data.margin?.toString() || '',
@@ -294,6 +297,7 @@ const Upload = () => {
         exit_price: finalTrade.exit_price,
         position_size: finalTrade.position_size,
         position_type: finalTrade.position_type,
+        leverage: finalTrade.leverage || 1,
         profit_loss: finalTrade.profit_loss,
         funding_fee: finalTrade.funding_fee,
         trading_fee: finalTrade.trading_fee,
@@ -353,6 +357,7 @@ const Upload = () => {
           exit_price: finalTrade.exit_price,
           position_size: finalTrade.position_size,
           position_type: finalTrade.position_type,
+          leverage: finalTrade.leverage || 1,
           profit_loss: finalTrade.profit_loss,
           funding_fee: finalTrade.funding_fee,
           trading_fee: finalTrade.trading_fee,
@@ -410,6 +415,7 @@ const Upload = () => {
       exit_price: exit,
       position_size: size,
       position_type: formData.position_type,
+      leverage: parseFloat(formData.leverage) || 1,
       funding_fee: parseFloat(formData.funding_fee) || 0,
       trading_fee: parseFloat(formData.trading_fee) || 0,
       margin: parseFloat(formData.margin) || null,
@@ -657,6 +663,12 @@ const Upload = () => {
                                 </p>
                               </div>
                               <div>
+                                <span className="text-muted-foreground">Leverage:</span>
+                                <p className="font-medium">
+                                  {trade.leverage}x
+                                </p>
+                              </div>
+                              <div>
                                 <span className="text-muted-foreground">P&L:</span>
                                 <p className={`font-medium ${trade.profit_loss >= 0 ? 'text-neon-green' : 'text-neon-red'}`}>
                                   {trade.profit_loss >= 0 ? '+' : ''}{trade.profit_loss.toFixed(2)}
@@ -840,6 +852,19 @@ const Upload = () => {
                       value={formData.position_size}
                       onChange={(e) => setFormData({...formData, position_size: e.target.value})}
                       placeholder="0.00"
+                      required
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Leverage</label>
+                    <Input
+                      type="number"
+                      step="1"
+                      value={formData.leverage}
+                      onChange={(e) => setFormData({...formData, leverage: e.target.value})}
+                      placeholder="1"
                       required
                       className="mt-1"
                     />

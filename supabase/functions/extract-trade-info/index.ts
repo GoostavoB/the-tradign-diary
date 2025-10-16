@@ -59,12 +59,17 @@ CRITICAL RULES:
    - If you cannot find it explicitly, try to calculate from: margin / entry_price for futures
    - NEVER leave position_size as null - calculate it if needed
    - Common locations: near entry/exit price, in trade details, beside margin
-6. Extract ALL available information including:
+6. CRITICAL - Extract leverage (e.g., "10x", "5X", "Leverage: 10"):
+   - Look for leverage indicators like "10x", "5X", "20x", "Leverage:", "Lev:"
+   - Extract just the number (e.g., from "10x" extract 10)
+   - Common locations: near position size, in trade header, beside margin
+   - Default to 1 if no leverage is found
+7. Extract ALL available information including:
    - broker: trading platform/broker name if visible
    - setup: trading strategy/setup type if visible (e.g., "Breakout", "Reversal", "Scalp")
    - emotional_tag: emotional state if visible or inferable (leave empty if not available)
    - notes: any additional observations or notes visible (leave empty if not available)
-7. Return an array of trades even if there's only one trade
+8. Return an array of trades even if there's only one trade
 
 Return ONLY valid JSON with this structure (as an array):
 [{
@@ -76,6 +81,7 @@ Return ONLY valid JSON with this structure (as an array):
   "exit_price": 46000.00,
   "position_size": 0.5,
   "position_type": "long",
+  "leverage": 10,
   "profit_loss": 500.00,
   "funding_fee": 0.15,
   "trading_fee": 2.50,

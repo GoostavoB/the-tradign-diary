@@ -32,6 +32,7 @@ interface Trade {
   funding_fee: number | null;
   trading_fee: number | null;
   broker: string | null;
+  leverage: number | null;
 }
 
 const Dashboard = () => {

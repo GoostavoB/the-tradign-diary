@@ -55,6 +55,7 @@ interface Trade {
   position_type?: 'long' | 'short';
   funding_fee?: number;
   trading_fee?: number;
+  leverage?: number;
 }
 
 type ColumnKey = 'date' | 'asset' | 'setup' | 'type' | 'entry' | 'exit' | 'size' | 'pnl' | 'roi' | 'fundingFee' | 'tradingFee';
@@ -652,6 +653,10 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
                 <div>
                   <p className="text-sm text-muted-foreground">Position Size</p>
                   <p className="font-medium">{selectedTrade.position_size}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Leverage</p>
+                  <p className="font-medium">{selectedTrade.leverage || 1}x</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Duration</p>

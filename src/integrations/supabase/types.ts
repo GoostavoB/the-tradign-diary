@@ -56,6 +56,7 @@ export type Database = {
           exit_price: number | null
           funding_fee: number | null
           id: string
+          leverage: number | null
           margin: number | null
           notes: string | null
           opened_at: string | null
@@ -86,6 +87,7 @@ export type Database = {
           exit_price?: number | null
           funding_fee?: number | null
           id?: string
+          leverage?: number | null
           margin?: number | null
           notes?: string | null
           opened_at?: string | null
@@ -116,6 +118,7 @@ export type Database = {
           exit_price?: number | null
           funding_fee?: number | null
           id?: string
+          leverage?: number | null
           margin?: number | null
           notes?: string | null
           opened_at?: string | null
