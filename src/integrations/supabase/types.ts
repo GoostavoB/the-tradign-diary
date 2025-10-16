@@ -157,6 +157,7 @@ export type Database = {
           blur_enabled: boolean | null
           created_at: string | null
           id: string
+          initial_investment: number | null
           sidebar_style: string | null
           updated_at: string | null
           user_id: string
@@ -165,6 +166,7 @@ export type Database = {
           blur_enabled?: boolean | null
           created_at?: string | null
           id?: string
+          initial_investment?: number | null
           sidebar_style?: string | null
           updated_at?: string | null
           user_id: string
@@ -173,6 +175,7 @@ export type Database = {
           blur_enabled?: boolean | null
           created_at?: string | null
           id?: string
+          initial_investment?: number | null
           sidebar_style?: string | null
           updated_at?: string | null
           user_id?: string

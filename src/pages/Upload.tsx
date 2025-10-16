@@ -53,6 +53,13 @@ const Upload = () => {
     entry_price: '',
     exit_price: '',
     position_size: '',
+    position_type: 'long' as 'long' | 'short',
+    funding_fee: '',
+    trading_fee: '',
+    margin: '',
+    opened_at: '',
+    closed_at: '',
+    period_of_day: 'morning' as 'morning' | 'afternoon' | 'night',
     emotional_tag: '',
     notes: '',
     duration_minutes: ''
@@ -84,6 +91,13 @@ const Upload = () => {
         entry_price: data.entry_price.toString(),
         exit_price: data.exit_price.toString(),
         position_size: data.position_size.toString(),
+        position_type: (data.position_type as 'long' | 'short') || 'long',
+        funding_fee: data.funding_fee?.toString() || '',
+        trading_fee: data.trading_fee?.toString() || '',
+        margin: data.margin?.toString() || '',
+        opened_at: data.opened_at || '',
+        closed_at: data.closed_at || '',
+        period_of_day: (data.period_of_day as 'morning' | 'afternoon' | 'night') || 'morning',
         emotional_tag: data.emotional_tag || '',
         notes: data.notes || '',
         duration_minutes: data.duration_minutes?.toString() || ''
@@ -343,12 +357,20 @@ const Upload = () => {
       entry_price: entry,
       exit_price: exit,
       position_size: size,
+      position_type: formData.position_type,
+      funding_fee: parseFloat(formData.funding_fee) || 0,
+      trading_fee: parseFloat(formData.trading_fee) || 0,
+      margin: parseFloat(formData.margin) || null,
+      opened_at: formData.opened_at || null,
+      closed_at: formData.closed_at || null,
+      period_of_day: formData.period_of_day,
       pnl: pnl,
       roi: roi,
+      profit_loss: pnl,
       emotional_tag: formData.emotional_tag,
       notes: formData.notes,
       duration_minutes: parseInt(formData.duration_minutes) || 0,
-      trade_date: new Date().toISOString()
+      trade_date: formData.opened_at || new Date().toISOString()
     };
 
     let error;
@@ -664,6 +686,87 @@ const Upload = () => {
                       onChange={(e) => setFormData({...formData, position_size: e.target.value})}
                       placeholder="0.00"
                       required
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Position Type</label>
+                    <select
+                      value={formData.position_type}
+                      onChange={(e) => setFormData({...formData, position_type: e.target.value as 'long' | 'short'})}
+                      className="mt-1 w-full px-3 py-2 border border-border rounded-md bg-background"
+                    >
+                      <option value="long">Long</option>
+                      <option value="short">Short</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Period of Day</label>
+                    <select
+                      value={formData.period_of_day}
+                      onChange={(e) => setFormData({...formData, period_of_day: e.target.value as 'morning' | 'afternoon' | 'night'})}
+                      className="mt-1 w-full px-3 py-2 border border-border rounded-md bg-background"
+                    >
+                      <option value="morning">Morning (before 12:00)</option>
+                      <option value="afternoon">Afternoon (12:00 - 18:00)</option>
+                      <option value="night">Night (after 18:00)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Funding Fee</label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={formData.funding_fee}
+                      onChange={(e) => setFormData({...formData, funding_fee: e.target.value})}
+                      placeholder="0.00"
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Trading Fee</label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={formData.trading_fee}
+                      onChange={(e) => setFormData({...formData, trading_fee: e.target.value})}
+                      placeholder="0.00"
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Margin</label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={formData.margin}
+                      onChange={(e) => setFormData({...formData, margin: e.target.value})}
+                      placeholder="0.00"
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Opened At</label>
+                    <Input
+                      type="datetime-local"
+                      value={formData.opened_at}
+                      onChange={(e) => setFormData({...formData, opened_at: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Closed At</label>
+                    <Input
+                      type="datetime-local"
+                      value={formData.closed_at}
+                      onChange={(e) => setFormData({...formData, closed_at: e.target.value})}
                       className="mt-1"
                     />
                   </div>

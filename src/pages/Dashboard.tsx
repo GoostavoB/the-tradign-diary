@@ -7,6 +7,7 @@ import { TrendingUp, TrendingDown, DollarSign, Target } from 'lucide-react';
 import { DashboardCharts } from '@/components/DashboardCharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TradeHistory } from '@/components/TradeHistory';
+import { AdvancedAnalytics } from '@/components/AdvancedAnalytics';
 
 interface TradeStats {
   total_pnl: number;
@@ -20,6 +21,8 @@ interface Trade {
   trade_date: string;
   pnl: number;
   roi: number;
+  asset: string;
+  setup: string | null;
 }
 
 const Dashboard = () => {
@@ -27,9 +30,11 @@ const Dashboard = () => {
   const [stats, setStats] = useState<TradeStats | null>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
+  const [initialInvestment, setInitialInvestment] = useState(0);
 
   useEffect(() => {
     fetchStats();
+    fetchInitialInvestment();
   }, [user]);
 
   const fetchStats = async () => {
@@ -54,6 +59,20 @@ const Dashboard = () => {
       });
     }
     setLoading(false);
+  };
+
+  const fetchInitialInvestment = async () => {
+    if (!user) return;
+
+    const { data } = await supabase
+      .from('user_settings')
+      .select('initial_investment')
+      .eq('user_id', user.id)
+      .single();
+
+    if (data) {
+      setInitialInvestment(data.initial_investment || 0);
+    }
   };
 
   const StatCard = ({ title, value, icon: Icon, trend }: any) => (
@@ -126,11 +145,16 @@ const Dashboard = () => {
               <Tabs defaultValue="analytics" className="space-y-6">
                 <TabsList>
                   <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                  <TabsTrigger value="advanced">Advanced</TabsTrigger>
                   <TabsTrigger value="history">Trade History</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="analytics" className="space-y-6">
                   <DashboardCharts trades={trades} />
+                </TabsContent>
+
+                <TabsContent value="advanced" className="space-y-6">
+                  <AdvancedAnalytics trades={trades} initialInvestment={initialInvestment} />
                 </TabsContent>
 
                 <TabsContent value="history">
