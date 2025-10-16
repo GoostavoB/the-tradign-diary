@@ -656,7 +656,9 @@ const Upload = () => {
                               </div>
                               <div>
                                 <span className="text-muted-foreground">Size:</span>
-                                <p className="font-medium">{trade.position_size}</p>
+                                <p className="font-medium">
+                                  {trade.position_size && trade.position_size > 0 ? trade.position_size : 'N/A'}
+                                </p>
                               </div>
                               <div>
                                 <span className="text-muted-foreground">P&L:</span>
