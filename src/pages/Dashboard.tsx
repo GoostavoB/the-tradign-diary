@@ -184,7 +184,7 @@ const Dashboard = () => {
                 />
                 <div className="flex items-center justify-center gap-2 bg-card/50 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-border">
                   <Label htmlFor="fees-toggle" className="text-xs cursor-pointer text-muted-foreground">
-                    {includeFeesInPnL ? 'Com Fees' : 'Sem Fees'}
+                    {includeFeesInPnL ? 'With Fees' : 'Without Fees'}
                   </Label>
                   <Switch
                     id="fees-toggle"
