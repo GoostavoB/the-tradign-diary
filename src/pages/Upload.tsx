@@ -251,17 +251,74 @@ const Upload = () => {
     }
   };
 
-  const processImageFile = (file: File) => {
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error('Image must be less than 10MB');
+  const compressAndResizeImage = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          if (!ctx) {
+            reject(new Error('Could not get canvas context'));
+            return;
+          }
+          
+          // Calculate new dimensions (max 1920px on longest side)
+          let width = img.width;
+          let height = img.height;
+          const maxSize = 1920;
+          
+          if (width > height && width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          } else if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with quality compression (JPEG at 85% quality)
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+          resolve(compressedBase64);
+        };
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const processImageFile = async (file: File) => {
+    // Check file size (20MB limit before compression)
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error('Image file is too large', {
+        description: 'Please upload an image smaller than 20MB'
+      });
       return;
     }
-    setExtractionImage(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setExtractionPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+
+    try {
+      toast.info('Processing image...', { duration: 1000 });
+      
+      // Compress and resize the image
+      const compressedBase64 = await compressAndResizeImage(file);
+      
+      setExtractionImage(file);
+      setExtractionPreview(compressedBase64);
+      
+      toast.success('Image ready for extraction!');
+    } catch (error) {
+      console.error('Image processing error:', error);
+      toast.error('Failed to process image', {
+        description: 'Please try with a different image'
+      });
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -287,68 +344,56 @@ const Upload = () => {
   };
 
   const handleConfirmExtraction = async () => {
-    if (!extractionImage || extracting) return;
+    if (!extractionPreview || extracting) return;
     setExtracting(true);
     toast.info('🔍 Starting AI extraction...', {
       description: 'Analyzing your trade screenshot',
       duration: 2000
     });
     try {
-      await extractTradeInfo(extractionImage);
+      await extractTradeInfo();
     } catch (error) {
       console.error('Error in extraction:', error);
       setExtracting(false);
     }
   };
 
-  const extractTradeInfo = async (file: File) => {
+  const extractTradeInfo = async () => {
     setExtractedTrades([]);
 
-    const reader = new FileReader();
+    try {
+      // Use the already-compressed preview
+      const { data, error } = await supabase.functions.invoke('extract-trade-info', {
+        body: { imageBase64: extractionPreview }
+      });
 
-    reader.onloadend = async () => {
-      try {
-        const base64Image = reader.result as string;
-
-        const { data, error } = await supabase.functions.invoke('extract-trade-info', {
-          body: { imageBase64: base64Image }
+      if (error) {
+        console.error('Extraction error:', error);
+        const msg = (data as any)?.error || 'Failed to extract trade information';
+        toast.error(msg, {
+          description: msg.includes('credits') ? 'Please try again later.' : 'Please try again or enter manually'
         });
-
-        if (error) {
-          console.error('Extraction error:', error);
-          const msg = (data as any)?.error || 'Failed to extract trade information';
-          toast.error(msg, {
-            description: msg.includes('credits') ? 'Please try again later.' : 'Please try again or enter manually'
-          });
-          return;
-        }
-
-        if (data?.trades && data.trades.length > 0) {
-          setExtractedTrades(data.trades);
-          toast.success(`✅ Extracted ${data.trades.length} trade(s) from image!`, {
-            description: 'Review and save your trades below'
-          });
-        } else {
-          toast.error('No trades found in the image', {
-            description: 'Please check if the image is clear and contains trade information'
-          });
-        }
-      } catch (error) {
-        console.error('Error extracting trade info:', error);
-        toast.error('Failed to extract trade information', {
-          description: 'An unexpected error occurred'
-        });
-      } finally {
-        setExtracting(false);
+        return;
       }
-    };
 
-    reader.onerror = () => {
-      toast.error('Failed to read image file');
+      if (data?.trades && data.trades.length > 0) {
+        setExtractedTrades(data.trades);
+        toast.success(`✅ Extracted ${data.trades.length} trade(s) from image!`, {
+          description: 'Review and save your trades below'
+        });
+      } else {
+        toast.error('No trades found in the image', {
+          description: 'Please check if the image is clear and contains trade information'
+        });
+      }
+    } catch (error) {
+      console.error('Error extracting trade info:', error);
+      toast.error('Failed to extract trade information', {
+        description: 'An unexpected error occurred'
+      });
+    } finally {
       setExtracting(false);
-    };
-
-    reader.readAsDataURL(file);
+    }
   };
   const removeScreenshot = () => {
     setScreenshot(null);
