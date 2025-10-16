@@ -19,27 +19,27 @@ const EconomicCalendar = () => {
               High-impact economic events that may affect market movements
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex justify-center">
-            <div className="w-full max-w-4xl">
+          <CardContent className="p-6">
+            <div className="w-full overflow-hidden rounded-lg border border-border bg-background">
               <iframe 
                 src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&importance=3&features=datepicker,timezone&countries=5&calType=week&timeZone=8&lang=1" 
                 width="100%" 
-                height="467" 
+                height="500" 
                 frameBorder="0" 
                 allowTransparency={true}
-                className="rounded-lg"
+                className="w-full"
               />
-              <div className="mt-4 text-center text-sm text-muted-foreground">
-                Real Time Economic Calendar provided by{" "}
-                <a 
-                  href="https://www.investing.com/" 
-                  rel="nofollow" 
-                  target="_blank" 
-                  className="text-primary font-semibold hover:underline"
-                >
-                  Investing.com
-                </a>
-              </div>
+            </div>
+            <div className="mt-4 text-center text-sm text-muted-foreground">
+              Real Time Economic Calendar provided by{" "}
+              <a 
+                href="https://www.investing.com/" 
+                rel="nofollow" 
+                target="_blank" 
+                className="text-primary font-semibold hover:underline"
+              >
+                Investing.com
+              </a>
             </div>
           </CardContent>
         </Card>
