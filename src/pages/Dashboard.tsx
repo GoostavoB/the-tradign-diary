@@ -12,11 +12,13 @@ import { PerformanceInsights } from '@/components/PerformanceInsights';
 import { DashboardSkeleton } from '@/components/DashboardSkeleton';
 import { GoalsTracker } from '@/components/GoalsTracker';
 import { AchievementBadges } from '@/components/AchievementBadges';
+import { WeeklyReview } from '@/components/WeeklyReview';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
 import { StatisticsComparison } from '@/components/StatisticsComparison';
 import { TradingStreaks } from '@/components/TradingStreaks';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
+import { SetupManager } from '@/components/SetupManager';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { AnimatedCounter } from '@/components/AnimatedCounter';
@@ -471,6 +473,9 @@ const Dashboard = () => {
                 </TabsList>
 
                 <TabsContent value="insights" className="space-y-6">
+                  <WeeklyReview 
+                    trades={filteredTrades.length > 0 ? filteredTrades : trades}
+                  />
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <GoalsTracker 
                       trades={filteredTrades.length > 0 ? filteredTrades : trades}
@@ -491,6 +496,9 @@ const Dashboard = () => {
                 </TabsContent>
 
                 <TabsContent value="advanced" className="space-y-6">
+                  <SetupManager
+                    trades={filteredTrades.length > 0 ? filteredTrades : trades}
+                  />
                   <AdvancedAnalytics
                     trades={filteredTrades.length > 0 ? filteredTrades : trades}
                     initialInvestment={initialInvestment}
