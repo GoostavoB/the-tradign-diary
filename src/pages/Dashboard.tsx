@@ -13,6 +13,7 @@ import { DashboardSkeleton } from '@/components/DashboardSkeleton';
 import { GoalsTracker } from '@/components/GoalsTracker';
 import { AchievementBadges } from '@/components/AchievementBadges';
 import { WeeklyReview } from '@/components/WeeklyReview';
+import { ExpenseTracker } from '@/components/ExpenseTracker';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
 import { StatisticsComparison } from '@/components/StatisticsComparison';
 import { TradingStreaks } from '@/components/TradingStreaks';
@@ -499,6 +500,7 @@ const Dashboard = () => {
                   <SetupManager
                     trades={filteredTrades.length > 0 ? filteredTrades : trades}
                   />
+                  <ExpenseTracker />
                   <AdvancedAnalytics
                     trades={filteredTrades.length > 0 ? filteredTrades : trades}
                     initialInvestment={initialInvestment}
