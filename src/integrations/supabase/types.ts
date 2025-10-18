@@ -49,6 +49,8 @@ export type Database = {
       }
       profiles: {
         Row: {
+          accepted_privacy_at: string | null
+          accepted_terms_at: string | null
           avatar_url: string | null
           country: string | null
           created_at: string | null
@@ -56,10 +58,13 @@ export type Database = {
           full_name: string | null
           id: string
           marketing_consent: boolean | null
+          provider: string | null
           terms_accepted_at: string | null
           updated_at: string | null
         }
         Insert: {
+          accepted_privacy_at?: string | null
+          accepted_terms_at?: string | null
           avatar_url?: string | null
           country?: string | null
           created_at?: string | null
@@ -67,10 +72,13 @@ export type Database = {
           full_name?: string | null
           id: string
           marketing_consent?: boolean | null
+          provider?: string | null
           terms_accepted_at?: string | null
           updated_at?: string | null
         }
         Update: {
+          accepted_privacy_at?: string | null
+          accepted_terms_at?: string | null
           avatar_url?: string | null
           country?: string | null
           created_at?: string | null
@@ -78,6 +86,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           marketing_consent?: boolean | null
+          provider?: string | null
           terms_accepted_at?: string | null
           updated_at?: string | null
         }
@@ -85,7 +94,6 @@ export type Database = {
       }
       trades: {
         Row: {
-          asset: string
           broker: string | null
           closed_at: string | null
           created_at: string | null
@@ -98,6 +106,7 @@ export type Database = {
           exit_price: number | null
           funding_fee: number | null
           id: string
+          image_url: string | null
           leverage: number | null
           margin: number | null
           notes: string | null
@@ -105,18 +114,21 @@ export type Database = {
           period_of_day: string | null
           pnl: number | null
           position_size: number | null
-          position_type: string | null
           profit_loss: number | null
           roi: number | null
           screenshot_url: string | null
           setup: string | null
+          side: string | null
+          side_temp: string | null
+          symbol: string | null
+          symbol_temp: string
           trade_date: string | null
+          trade_hash: string | null
           trading_fee: number | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
-          asset: string
           broker?: string | null
           closed_at?: string | null
           created_at?: string | null
@@ -129,6 +141,7 @@ export type Database = {
           exit_price?: number | null
           funding_fee?: number | null
           id?: string
+          image_url?: string | null
           leverage?: number | null
           margin?: number | null
           notes?: string | null
@@ -136,18 +149,21 @@ export type Database = {
           period_of_day?: string | null
           pnl?: number | null
           position_size?: number | null
-          position_type?: string | null
           profit_loss?: number | null
           roi?: number | null
           screenshot_url?: string | null
           setup?: string | null
+          side?: string | null
+          side_temp?: string | null
+          symbol?: string | null
+          symbol_temp: string
           trade_date?: string | null
+          trade_hash?: string | null
           trading_fee?: number | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
-          asset?: string
           broker?: string | null
           closed_at?: string | null
           created_at?: string | null
@@ -160,6 +176,7 @@ export type Database = {
           exit_price?: number | null
           funding_fee?: number | null
           id?: string
+          image_url?: string | null
           leverage?: number | null
           margin?: number | null
           notes?: string | null
@@ -167,12 +184,16 @@ export type Database = {
           period_of_day?: string | null
           pnl?: number | null
           position_size?: number | null
-          position_type?: string | null
           profit_loss?: number | null
           roi?: number | null
           screenshot_url?: string | null
           setup?: string | null
+          side?: string | null
+          side_temp?: string | null
+          symbol?: string | null
+          symbol_temp?: string
           trade_date?: string | null
+          trade_hash?: string | null
           trading_fee?: number | null
           updated_at?: string | null
           user_id?: string
@@ -238,29 +259,38 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          accent_color: string | null
           blur_enabled: boolean | null
           created_at: string | null
           id: string
           initial_investment: number | null
+          layout_json: Json | null
           sidebar_style: string | null
+          theme: string | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          accent_color?: string | null
           blur_enabled?: boolean | null
           created_at?: string | null
           id?: string
           initial_investment?: number | null
+          layout_json?: Json | null
           sidebar_style?: string | null
+          theme?: string | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          accent_color?: string | null
           blur_enabled?: boolean | null
           created_at?: string | null
           id?: string
           initial_investment?: number | null
+          layout_json?: Json | null
           sidebar_style?: string | null
+          theme?: string | null
           updated_at?: string | null
           user_id?: string
         }
