@@ -318,56 +318,54 @@ const Dashboard = () => {
                       isVisible={isWidgetVisible('stats')}
                       onToggleVisibility={toggleWidgetVisibility}
                     >
-                      <div className="mt-4 mb-6">
-                        {/* Stats Cards Grid - Using CSS Grid for stability */}
-                        <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6 items-stretch p-4">
-                          <div className="p-4 rounded-xl glass-subtle">
-                            <div className="text-sm text-muted-foreground mb-2">Total P&L</div>
-                            <div className={`text-2xl font-bold ${
-                              stats && stats.total_pnl > 0 ? 'text-neon-green' : 
-                              stats && stats.total_pnl < 0 ? 'text-neon-red' : 'text-foreground'
-                            }`}>
-                              <AnimatedCounter value={stats?.total_pnl || 0} prefix="$" decimals={2} />
-                            </div>
-                          </div>
-                          
-                          <div className="p-4 rounded-xl glass-subtle">
-                            <div className="text-sm text-muted-foreground mb-2">Win Rate</div>
-                            <div className={`text-2xl font-bold ${
-                              stats && stats.win_rate > 70 ? 'text-neon-green' : 'text-foreground'
-                            }`}>
-                              <AnimatedCounter value={stats?.win_rate || 0} suffix="%" decimals={1} />
-                            </div>
-                          </div>
-                          
-                          <div className="p-4 rounded-xl glass-subtle">
-                            <div className="text-sm text-muted-foreground mb-2">Total Trades</div>
-                            <div className="text-2xl font-bold">
-                              <AnimatedCounter value={stats?.total_trades || 0} decimals={0} />
-                            </div>
-                          </div>
-                          
-                          <div className="p-4 rounded-xl glass-subtle">
-                            <div className="text-sm text-muted-foreground mb-2">Avg Duration</div>
-                            <div className="text-2xl font-bold">
-                              <AnimatedCounter value={Math.round(stats?.avg_duration || 0)} decimals={0} />
-                              <span className="text-base ml-1">m</span>
-                            </div>
+                      {/* Stats Cards Grid - Using CSS Grid for stability */}
+                      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6 items-stretch p-4">
+                        <div className="p-4 rounded-xl glass-subtle">
+                          <div className="text-sm text-muted-foreground mb-2">Total P&L</div>
+                          <div className={`text-2xl font-bold ${
+                            stats && stats.total_pnl > 0 ? 'text-neon-green' : 
+                            stats && stats.total_pnl < 0 ? 'text-neon-red' : 'text-foreground'
+                          }`}>
+                            <AnimatedCounter value={stats?.total_pnl || 0} prefix="$" decimals={2} />
                           </div>
                         </div>
                         
-                        {/* Fees Toggle - Centered below stats in separate container */}
-                        <div className="flex justify-center mt-4">
-                          <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass-subtle">
-                            <Label htmlFor="fees-toggle-grid" className="cursor-pointer text-sm text-muted-foreground">
-                              {includeFeesInPnL ? 'Including Fees' : 'Excluding Fees'}
-                            </Label>
-                            <Switch
-                              id="fees-toggle-grid"
-                              checked={includeFeesInPnL}
-                              onCheckedChange={setIncludeFeesInPnL}
-                            />
+                        <div className="p-4 rounded-xl glass-subtle">
+                          <div className="text-sm text-muted-foreground mb-2">Win Rate</div>
+                          <div className={`text-2xl font-bold ${
+                            stats && stats.win_rate > 70 ? 'text-neon-green' : 'text-foreground'
+                          }`}>
+                            <AnimatedCounter value={stats?.win_rate || 0} suffix="%" decimals={1} />
                           </div>
+                        </div>
+                        
+                        <div className="p-4 rounded-xl glass-subtle">
+                          <div className="text-sm text-muted-foreground mb-2">Total Trades</div>
+                          <div className="text-2xl font-bold">
+                            <AnimatedCounter value={stats?.total_trades || 0} decimals={0} />
+                          </div>
+                        </div>
+                        
+                        <div className="p-4 rounded-xl glass-subtle">
+                          <div className="text-sm text-muted-foreground mb-2">Avg Duration</div>
+                          <div className="text-2xl font-bold">
+                            <AnimatedCounter value={Math.round(stats?.avg_duration || 0)} decimals={0} />
+                            <span className="text-base ml-1">m</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Fees Toggle - Centered below stats */}
+                      <div className="flex justify-center px-4 pb-4">
+                        <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass-subtle">
+                          <Label htmlFor="fees-toggle-grid" className="cursor-pointer text-sm text-muted-foreground">
+                            {includeFeesInPnL ? 'Including Fees' : 'Excluding Fees'}
+                          </Label>
+                          <Switch
+                            id="fees-toggle-grid"
+                            checked={includeFeesInPnL}
+                            onCheckedChange={setIncludeFeesInPnL}
+                          />
                         </div>
                       </div>
                     </DashboardWidget>
