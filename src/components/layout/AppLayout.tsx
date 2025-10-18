@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from './AppSidebar';
 import { UserMenu } from './UserMenu';
 import { CryptoPrices } from '@/components/CryptoPrices';
@@ -24,10 +24,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         <AppSidebar />
         <div className="flex-1 flex flex-col">
           <CryptoPrices />
-          <header className="h-14 border-b border-border/50 backdrop-blur-xl bg-card/50 flex items-center justify-end gap-3 px-6">
-            <KeyboardShortcutsHelp />
-            <ThemeToggle />
-            <UserMenu />
+          <header className="h-14 border-b border-border/50 backdrop-blur-xl bg-card/50 flex items-center justify-between gap-3 px-6">
+            <div className="flex items-center gap-3">
+              <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
+            </div>
+            <div className="flex items-center gap-3">
+              <KeyboardShortcutsHelp />
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </header>
           <main className="flex-1 p-6 overflow-auto pb-20 md:pb-6 custom-scrollbar">
             {children}

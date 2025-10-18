@@ -44,7 +44,7 @@ export function AppSidebar() {
       : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground';
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border/50 backdrop-blur-xl bg-card/50">
+    <Sidebar collapsible="icon" className="border-r border-border/50 backdrop-blur-xl bg-card/50 glass">
       <div className="p-4 border-b border-border/50 flex items-center gap-2">
         <TrendingDown className="text-neon-red" size={24} />
         {open && <span className="font-bold text-lg">The Trading Diary</span>}
@@ -58,7 +58,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild tooltip={item.title}>
                     <NavLink to={item.url} end className={getNavCls}>
                       <item.icon className="mr-2 h-4 w-4" />
                       <span>{item.title}</span>
@@ -76,7 +76,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {resourceItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild tooltip={item.title}>
                     <NavLink to={item.url} end className={getNavCls}>
                       <item.icon className="mr-2 h-4 w-4" />
                       <span>{item.title}</span>
@@ -92,7 +92,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={signOut} className="text-muted-foreground hover:text-foreground hover:bg-muted/50">
+                <SidebarMenuButton onClick={signOut} tooltip="Logout" className="text-muted-foreground hover:text-foreground hover:bg-muted/50">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Logout</span>
                 </SidebarMenuButton>
