@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
+import Analytics from "./pages/Analytics";
 import Forecast from "./pages/Forecast";
 import EconomicCalendar from "./pages/EconomicCalendar";
 import LongShortRatio from "./pages/LongShortRatio";
@@ -17,6 +18,8 @@ import Tools from "./pages/Tools";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import FAQ from "./pages/FAQ";
+import Social from "./pages/Social";
+import AITools from "./pages/AITools";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,11 +51,14 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
+              <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
               <Route path="/forecast" element={<ProtectedRoute><Forecast /></ProtectedRoute>} />
               <Route path="/tools" element={<ProtectedRoute><Tools /></ProtectedRoute>} />
               <Route path="/economic-calendar" element={<ProtectedRoute><EconomicCalendar /></ProtectedRoute>} />
               <Route path="/long-short-ratio" element={<ProtectedRoute><LongShortRatio /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
+              <Route path="/ai-tools" element={<ProtectedRoute><AITools /></ProtectedRoute>} />
               <Route path="/blog" element={<ProtectedRoute><Blog /></ProtectedRoute>} />
               <Route path="/blog/:slug" element={<ProtectedRoute><BlogPost /></ProtectedRoute>} />
               <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />

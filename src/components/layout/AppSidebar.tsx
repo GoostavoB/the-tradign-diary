@@ -1,4 +1,4 @@
-import { BarChart3, Upload, TrendingUp, Settings, BookOpen, HelpCircle, LogOut, TrendingDown, Calendar, Scale, Wrench } from 'lucide-react';
+import { BarChart3, Upload, TrendingUp, Settings, BookOpen, HelpCircle, LogOut, TrendingDown, Calendar, Scale, Wrench, Users, Brain } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Sidebar,
@@ -17,7 +17,10 @@ import { useAuth } from '@/contexts/AuthContext';
 const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: BarChart3 },
   { title: 'Upload Trade', url: '/upload', icon: Upload },
+  { title: 'Analytics', url: '/analytics', icon: TrendingUp },
   { title: 'Forecast', url: '/forecast', icon: TrendingUp },
+  { title: 'Social', url: '/social', icon: Users },
+  { title: 'AI Tools', url: '/ai-tools', icon: Brain },
   { title: 'Tools', url: '/tools', icon: Wrench },
   { title: 'Economic Calendar', url: '/economic-calendar', icon: Calendar },
   { title: 'BTC Long/Short Ratio', url: '/long-short-ratio', icon: Scale },

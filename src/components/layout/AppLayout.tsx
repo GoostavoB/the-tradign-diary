@@ -6,6 +6,9 @@ import { CryptoPrices } from '@/components/CryptoPrices';
 import { useReminderNotifications } from '@/hooks/useReminderNotifications';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp';
+import { MobileNav } from '@/components/mobile/MobileNav';
+import { QuickAddTrade } from '@/components/mobile/QuickAddTrade';
+import { InstallPrompt } from '@/components/mobile/InstallPrompt';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -26,9 +29,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             <ThemeToggle />
             <UserMenu />
           </header>
-          <main className="flex-1 p-6 overflow-auto">
+          <main className="flex-1 p-6 overflow-auto pb-20 md:pb-6">
             {children}
           </main>
+          <MobileNav />
+          <QuickAddTrade />
+          <InstallPrompt />
         </div>
       </div>
     </SidebarProvider>
