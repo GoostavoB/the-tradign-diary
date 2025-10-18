@@ -318,53 +318,54 @@ const Dashboard = () => {
                       isVisible={isWidgetVisible('stats')}
                       onToggleVisibility={toggleWidgetVisibility}
                     >
-                      <div className="grid min-w-0 items-stretch grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
-                        {/* Stats Cards Content */}
-                        <div className="flex flex-col h-full justify-between gap-2">
-                              <div className="p-3 rounded-xl glass-subtle grow">
-                            <div className="text-xs text-muted-foreground mb-1">Total P&L</div>
-                            <div className={`text-xl font-bold ${
+                      <div className="space-y-5">
+                        {/* Stats Cards Grid */}
+                        <div className="flex flex-wrap gap-5 items-start">
+                          <div className="flex-1 min-w-[200px] p-4 rounded-xl glass-subtle mb-5">
+                            <div className="text-sm text-muted-foreground mb-2">Total P&L</div>
+                            <div className={`text-2xl font-bold ${
                               stats && stats.total_pnl > 0 ? 'text-neon-green' : 
                               stats && stats.total_pnl < 0 ? 'text-neon-red' : 'text-foreground'
                             }`}>
                               <AnimatedCounter value={stats?.total_pnl || 0} prefix="$" decimals={2} />
                             </div>
                           </div>
-                          <div className="flex items-center justify-center gap-2 px-2 py-1 rounded-lg glass-subtle text-xs">
-                            <Label htmlFor="fees-toggle-grid" className="cursor-pointer text-muted-foreground">
-                              {includeFeesInPnL ? 'With Fees' : 'Without Fees'}
-                            </Label>
-                            <Switch
-                              id="fees-toggle-grid"
-                              checked={includeFeesInPnL}
-                              onCheckedChange={setIncludeFeesInPnL}
-                              className="scale-75"
-                            />
+                          
+                          <div className="flex-1 min-w-[200px] p-4 rounded-xl glass-subtle mb-5">
+                            <div className="text-sm text-muted-foreground mb-2">Win Rate</div>
+                            <div className={`text-2xl font-bold ${
+                              stats && stats.win_rate > 70 ? 'text-neon-green' : 'text-foreground'
+                            }`}>
+                              <AnimatedCounter value={stats?.win_rate || 0} suffix="%" decimals={1} />
+                            </div>
+                          </div>
+                          
+                          <div className="flex-1 min-w-[200px] p-4 rounded-xl glass-subtle mb-5">
+                            <div className="text-sm text-muted-foreground mb-2">Total Trades</div>
+                            <div className="text-2xl font-bold">
+                              <AnimatedCounter value={stats?.total_trades || 0} decimals={0} />
+                            </div>
+                          </div>
+                          
+                          <div className="flex-1 min-w-[200px] p-4 rounded-xl glass-subtle mb-5">
+                            <div className="text-sm text-muted-foreground mb-2">Avg Duration</div>
+                            <div className="text-2xl font-bold">
+                              <AnimatedCounter value={Math.round(stats?.avg_duration || 0)} decimals={0} />
+                              <span className="text-base ml-1">m</span>
+                            </div>
                           </div>
                         </div>
                         
-                            <div className="p-3 rounded-xl glass-subtle h-full">
-                          <div className="text-xs text-muted-foreground mb-1">Win Rate</div>
-                          <div className={`text-xl font-bold ${
-                            stats && stats.win_rate > 70 ? 'text-neon-green' : 'text-foreground'
-                          }`}>
-                            <AnimatedCounter value={stats?.win_rate || 0} suffix="%" decimals={1} />
-                          </div>
-                        </div>
-                        
-                            <div className="p-3 rounded-xl glass-subtle h-full">
-                          <div className="text-xs text-muted-foreground mb-1">Total Trades</div>
-                          <div className="text-xl font-bold">
-                            <AnimatedCounter value={stats?.total_trades || 0} decimals={0} />
-                          </div>
-                        </div>
-                        
-                        <div className="p-3 rounded-xl glass-subtle h-full">
-                          <div className="text-xs text-muted-foreground mb-1">Avg Duration</div>
-                          <div className="text-xl font-bold">
-                            <AnimatedCounter value={Math.round(stats?.avg_duration || 0)} decimals={0} />
-                            <span className="text-sm ml-0.5">m</span>
-                          </div>
+                        {/* Fees Toggle - Separate from stat boxes */}
+                        <div className="flex items-center justify-end gap-2 px-3 py-2 rounded-lg glass-subtle w-fit ml-auto">
+                          <Label htmlFor="fees-toggle-grid" className="cursor-pointer text-sm text-muted-foreground">
+                            {includeFeesInPnL ? 'Including Fees' : 'Excluding Fees'}
+                          </Label>
+                          <Switch
+                            id="fees-toggle-grid"
+                            checked={includeFeesInPnL}
+                            onCheckedChange={setIncludeFeesInPnL}
+                          />
                         </div>
                       </div>
                     </DashboardWidget>
@@ -373,7 +374,7 @@ const Dashboard = () => {
 
                 {/* Heatmap Widget */}
                 {(isCustomizing || isWidgetVisible('heatmap')) && (
-                  <div key="heatmap">
+                  <div key="heatmap" className="pt-6">
                     <DashboardWidget
                       id="heatmap"
                       title="Trading Success Heatmap"
