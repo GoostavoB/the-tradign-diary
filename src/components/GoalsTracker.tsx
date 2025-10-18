@@ -68,7 +68,7 @@ export const GoalsTracker = ({ trades }: GoalsTrackerProps) => {
       return;
     }
 
-    setGoals(data || []);
+    setGoals((data || []) as Goal[]);
   };
 
   const calculateCurrentValue = (goal: Goal, relevantTrades: Trade[]) => {

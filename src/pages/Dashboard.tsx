@@ -10,6 +10,8 @@ import { TradeHistory } from '@/components/TradeHistory';
 import { AdvancedAnalytics } from '@/components/AdvancedAnalytics';
 import { PerformanceInsights } from '@/components/PerformanceInsights';
 import { DashboardSkeleton } from '@/components/DashboardSkeleton';
+import { GoalsTracker } from '@/components/GoalsTracker';
+import { AchievementBadges } from '@/components/AchievementBadges';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
 import { StatisticsComparison } from '@/components/StatisticsComparison';
 import { TradingStreaks } from '@/components/TradingStreaks';
@@ -469,6 +471,12 @@ const Dashboard = () => {
                 </TabsList>
 
                 <TabsContent value="insights" className="space-y-6">
+                  <GoalsTracker 
+                    trades={filteredTrades.length > 0 ? filteredTrades : trades}
+                  />
+                  <AchievementBadges 
+                    trades={filteredTrades.length > 0 ? filteredTrades : trades}
+                  />
                   <StatisticsComparison 
                     trades={filteredTrades.length > 0 ? filteredTrades : trades}
                   />
