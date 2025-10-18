@@ -24,7 +24,7 @@ export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => 
   }
 
   return (
-    <div className={`bg-card/30 backdrop-blur-sm border-b border-border ${className}`}>
+    <div className={`hidden md:block bg-card/30 backdrop-blur-sm border-b border-border ${className}`}>
       <div className="px-6 py-4">
         <div className="flex items-center justify-center gap-6 flex-wrap">
           <div className="flex items-center gap-3 flex-shrink-0">
