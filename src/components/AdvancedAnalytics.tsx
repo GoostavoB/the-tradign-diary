@@ -17,21 +17,7 @@ import { toast } from 'sonner';
 import bullNeon from '@/assets/bull-neon.png';
 import bearNeon from '@/assets/bear-neon.png';
 import bullBearFight from '@/assets/bull-bear-fight-neon.png';
-
-interface Trade {
-  id: string;
-  asset: string;
-  pnl: number;
-  roi: number;
-  setup: string;
-  trade_date: string;
-  position_type?: 'long' | 'short';
-  notes?: string | null;
-  emotional_tag?: string | null;
-  funding_fee?: number | null;
-  trading_fee?: number | null;
-  broker?: string | null;
-}
+import type { Trade } from '@/types/trade';
 
 interface AdvancedAnalyticsProps {
   trades: Trade[];
@@ -95,13 +81,13 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
 
   // Most traded asset
   const assetCounts = trades.reduce((acc, trade) => {
-    acc[trade.asset] = (acc[trade.asset] || 0) + 1;
+    acc[trade.symbol] = (acc[trade.symbol] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
   const mostTradedAsset = Object.entries(assetCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
   const mostTradedCount = mostTradedAsset !== 'N/A' ? assetCounts[mostTradedAsset] : 0;
   const mostTradedPercentage = trades.length > 0 ? (mostTradedCount / trades.length) * 100 : 0;
-  const mostTradedTrades = mostTradedAsset !== 'N/A' ? trades.filter(t => t.asset === mostTradedAsset) : [];
+  const mostTradedTrades = mostTradedAsset !== 'N/A' ? trades.filter(t => t.symbol === mostTradedAsset) : [];
   const mostTradedROI = mostTradedTrades.length > 0
     ? mostTradedTrades.reduce((sum, t) => sum + (t.roi || 0), 0) / mostTradedTrades.length
     : 0;
@@ -109,8 +95,8 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
   // Asset with more wins
   const assetWins = trades.reduce((acc, trade) => {
     if (trade.pnl > 0) {
-      if (!acc[trade.asset]) acc[trade.asset] = 0;
-      acc[trade.asset] += 1;
+      if (!acc[trade.symbol]) acc[trade.symbol] = 0;
+      acc[trade.symbol] += 1;
     }
     return acc;
   }, {} as Record<string, number>);
@@ -119,22 +105,22 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
   const totalWins = trades.filter(t => t.pnl > 0).length;
   const mostWinsCount = assetWithMoreWins !== 'N/A' ? assetWins[assetWithMoreWins] : 0;
   const mostWinsPercentage = totalWins > 0 ? (mostWinsCount / totalWins) * 100 : 0;
-  const mostWinsTrades = assetWithMoreWins !== 'N/A' ? trades.filter(t => t.asset === assetWithMoreWins && t.pnl > 0) : [];
+  const mostWinsTrades = assetWithMoreWins !== 'N/A' ? trades.filter(t => t.symbol === assetWithMoreWins && t.pnl > 0) : [];
   const mostWinsROI = mostWinsTrades.length > 0
     ? mostWinsTrades.reduce((sum, t) => sum + (t.roi || 0), 0) / mostWinsTrades.length
     : 0;
 
   // Asset with biggest losses
   const assetLosses = trades.reduce((acc, trade) => {
-    if (!acc[trade.asset]) acc[trade.asset] = 0;
-    acc[trade.asset] += trade.pnl || 0;
+    if (!acc[trade.symbol]) acc[trade.symbol] = 0;
+    acc[trade.symbol] += trade.pnl || 0;
     return acc;
   }, {} as Record<string, number>);
   const assetWithBiggestLosses = Object.entries(assetLosses)
     .sort((a, b) => a[1] - b[1])[0]?.[0] || 'N/A';
   const totalLosses = trades.filter(t => t.pnl < 0).length;
   const biggestLossesTrades = assetWithBiggestLosses !== 'N/A' 
-    ? trades.filter(t => t.asset === assetWithBiggestLosses && t.pnl < 0)
+    ? trades.filter(t => t.symbol === assetWithBiggestLosses && t.pnl < 0)
     : [];
   const biggestLossesCount = biggestLossesTrades.length;
   const biggestLossesPercentage = totalLosses > 0 ? (biggestLossesCount / totalLosses) * 100 : 0;
@@ -176,8 +162,8 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
   const topSetupByROIAvg = topSetupByROIEntry?.avgROI || 0;
 
   // Short vs Long statistics
-  const totalShorts = trades.filter(t => t.position_type === 'short').length;
-  const totalLongs = trades.filter(t => t.position_type === 'long').length;
+  const totalShorts = trades.filter(t => t.side === 'short').length;
+  const totalLongs = trades.filter(t => t.side === 'long').length;
   
   // Current month statistics
   const currentDate = new Date();
@@ -187,8 +173,8 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
     const tradeDate = new Date(t.trade_date);
     return tradeDate.getMonth() === currentMonth && tradeDate.getFullYear() === currentYear;
   });
-  const monthShorts = currentMonthTrades.filter(t => t.position_type === 'short').length;
-  const monthLongs = currentMonthTrades.filter(t => t.position_type === 'long').length;
+  const monthShorts = currentMonthTrades.filter(t => t.side === 'short').length;
+  const monthLongs = currentMonthTrades.filter(t => t.side === 'long').length;
   const totalMonthTrades = currentMonthTrades.length;
   const monthShortPercentage = totalMonthTrades > 0 ? (monthShorts / totalMonthTrades) * 100 : 0;
   const monthLongPercentage = totalMonthTrades > 0 ? (monthLongs / totalMonthTrades) * 100 : 0;

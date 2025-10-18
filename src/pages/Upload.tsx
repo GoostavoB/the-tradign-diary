@@ -18,14 +18,14 @@ import { cn } from "@/lib/utils";
 import { UploadHistory } from '@/components/UploadHistory';
 
 interface ExtractedTrade {
-  asset: string;
+  symbol: string;
   broker?: string;
   setup?: string;
   emotional_tag?: string;
   entry_price: number;
   exit_price: number;
   position_size: number;
-  position_type: 'long' | 'short';
+  side: 'long' | 'short';
   leverage: number;
   funding_fee: number;
   trading_fee: number;
@@ -170,13 +170,13 @@ const Upload = () => {
 
     if (data) {
       setFormData({
-        asset: data.asset,
+        asset: data.symbol,
         setup: data.setup || '',
         broker: data.broker || '',
         entry_price: data.entry_price.toString(),
         exit_price: data.exit_price.toString(),
         position_size: data.position_size.toString(),
-        position_type: (data.position_type as 'long' | 'short') || 'long',
+        position_type: (data.side as 'long' | 'short') || 'long',
         leverage: data.leverage?.toString() || '1',
         funding_fee: data.funding_fee?.toString() || '',
         trading_fee: data.trading_fee?.toString() || '',
@@ -487,14 +487,16 @@ const Upload = () => {
         
         return {
           user_id: user.id,
-          asset: finalTrade.asset,
+          symbol: finalTrade.symbol,
+          symbol_temp: finalTrade.symbol,
           broker: finalTrade.broker || null,
           setup: finalTrade.setup || null,
           emotional_tag: finalTrade.emotional_tag || null,
           entry_price: finalTrade.entry_price,
           exit_price: finalTrade.exit_price,
           position_size: finalTrade.position_size,
-          position_type: finalTrade.position_type,
+          side: finalTrade.side,
+          side_temp: finalTrade.side,
           leverage: finalTrade.leverage || 1,
           profit_loss: finalTrade.profit_loss,
           funding_fee: finalTrade.funding_fee,
@@ -516,13 +518,13 @@ const Upload = () => {
       const { data: insertedTrades, error } = await supabase
         .from('trades')
         .insert(tradesData)
-        .select('id, asset, profit_loss, entry_price, position_size');
+        .select('id, symbol, profit_loss, entry_price, position_size');
 
       if (error) {
         toast.error('Failed to save trades');
       } else {
         // Create upload batch record
-        const assets = [...new Set(tradesData.map(t => t.asset))];
+        const assets = [...new Set(tradesData.map(t => t.symbol))];
         const totalEntryValue = tradesData.reduce((sum, t) => sum + (t.entry_price * t.position_size), 0);
         const mostRecentTrade = insertedTrades?.[0];
 
@@ -532,7 +534,7 @@ const Upload = () => {
           assets: assets,
           total_entry_value: totalEntryValue,
           most_recent_trade_id: mostRecentTrade?.id,
-          most_recent_trade_asset: mostRecentTrade?.asset,
+          most_recent_trade_asset: mostRecentTrade?.symbol,
           most_recent_trade_value: mostRecentTrade?.profit_loss
         });
 
@@ -574,13 +576,15 @@ const Upload = () => {
 
     const tradeData = {
       user_id: user.id,
-      asset: formData.asset,
+      symbol: formData.asset,
+      symbol_temp: formData.asset,
       setup: formData.setup,
       broker: formData.broker,
       entry_price: entry,
       exit_price: exit,
       position_size: size,
-      position_type: formData.position_type,
+      side: formData.position_type,
+      side_temp: formData.position_type,
       leverage: parseFloat(formData.leverage) || 1,
       funding_fee: parseFloat(formData.funding_fee) || 0,
       trading_fee: parseFloat(formData.trading_fee) || 0,
@@ -812,10 +816,10 @@ const Upload = () => {
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                               <div>
-                                <Label className="text-xs text-muted-foreground">Asset *</Label>
+                                <Label className="text-xs text-muted-foreground">Symbol *</Label>
                                 <Input
-                                  value={edits.asset ?? trade.asset}
-                                  onChange={(e) => updateTradeField(index, 'asset', e.target.value)}
+                                  value={edits.symbol ?? trade.symbol}
+                                  onChange={(e) => updateTradeField(index, 'symbol', e.target.value)}
                                   className="mt-1 h-8 text-sm"
                                   placeholder="BTC/USDT"
                                 />
@@ -824,8 +828,8 @@ const Upload = () => {
                               <div>
                                 <Label className="text-xs text-muted-foreground">Position Type *</Label>
                                 <select
-                                  value={edits.position_type ?? trade.position_type}
-                                  onChange={(e) => updateTradeField(index, 'position_type', e.target.value as 'long' | 'short')}
+                                  value={edits.side ?? trade.side}
+                                  onChange={(e) => updateTradeField(index, 'side', e.target.value as 'long' | 'short')}
                                   className="mt-1 w-full h-8 px-2 text-sm border border-border rounded-md bg-background"
                                 >
                                   <option value="long">Long</option>

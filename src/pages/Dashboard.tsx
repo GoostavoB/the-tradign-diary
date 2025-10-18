@@ -12,28 +12,13 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import type { Trade } from '@/types/trade';
 
 interface TradeStats {
   total_pnl: number;
   win_rate: number;
   total_trades: number;
   avg_duration: number;
-}
-
-interface Trade {
-  id: string;
-  trade_date: string;
-  pnl: number;
-  roi: number;
-  asset: string;
-  setup: string | null;
-  notes: string | null;
-  emotional_tag: string | null;
-  position_type: 'long' | 'short' | null;
-  funding_fee: number | null;
-  trading_fee: number | null;
-  broker: string | null;
-  leverage: number | null;
 }
 
 const Dashboard = () => {
@@ -77,7 +62,7 @@ const Dashboard = () => {
     if (trades) {
       setTrades(trades.map(trade => ({
         ...trade,
-        position_type: trade.position_type as 'long' | 'short' | null
+        side: trade.side as 'long' | 'short' | null
       })));
       
       // Calculate P&L without fees

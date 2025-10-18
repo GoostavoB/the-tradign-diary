@@ -22,9 +22,9 @@ interface UploadBatch {
 
 interface BatchTrade {
   id: string;
-  asset: string;
+  symbol: string;
   trade_date: string;
-  position_type: 'long' | 'short';
+  side: 'long' | 'short' | null;
   entry_price: number;
   profit_loss: number;
 }
@@ -101,14 +101,14 @@ export const UploadHistory = () => {
         // Fetch trades for this batch (within 5 seconds of batch creation)
         const { data: trades } = await supabase
           .from('trades')
-          .select('trade_date, position_type, broker, profit_loss')
+          .select('trade_date, side, broker, profit_loss')
           .eq('user_id', user.id)
           .gte('created_at', new Date(new Date(batch.created_at).getTime() - 5000).toISOString())
           .lte('created_at', new Date(new Date(batch.created_at).getTime() + 5000).toISOString())
           .order('trade_date', { ascending: false });
 
         // Get unique position types and brokers
-        const positionTypes = trades ? [...new Set(trades.map(t => t.position_type).filter(Boolean))] : [];
+        const positionTypes = trades ? [...new Set(trades.map(t => t.side).filter(Boolean))] : [];
         const brokers = trades ? [...new Set(trades.map(t => t.broker).filter(Boolean))] : [];
         
         // Calculate total P&L
@@ -146,7 +146,7 @@ export const UploadHistory = () => {
 
     const { data, error } = await supabase
       .from('trades')
-      .select('id, asset, trade_date, position_type, entry_price, profit_loss')
+      .select('id, symbol, trade_date, side, entry_price, profit_loss')
       .eq('user_id', user.id)
       .gte('created_at', startTime.toISOString())
       .lte('created_at', endTime.toISOString())
@@ -336,17 +336,17 @@ export const UploadHistory = () => {
                       className="flex items-center justify-between py-2 px-3 rounded-md bg-muted/50 text-sm"
                     >
                       <div className="flex items-center gap-4 flex-1">
-                        <span className="font-medium min-w-[100px]">{trade.asset}</span>
+                        <span className="font-medium min-w-[100px]">{trade.symbol}</span>
                         <span className="text-muted-foreground">${trade.entry_price.toFixed(2)}</span>
                         <Badge
                           variant="outline"
                           className={
-                            trade.position_type === 'long'
+                            trade.side === 'long'
                               ? 'border-neon-green text-neon-green'
                               : 'border-neon-red text-neon-red'
                           }
                         >
-                          {trade.position_type.toUpperCase()}
+                          {trade.side?.toUpperCase()}
                         </Badge>
                       </div>
                       <span

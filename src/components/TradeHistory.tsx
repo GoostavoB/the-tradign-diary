@@ -45,27 +45,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Textarea } from '@/components/ui/textarea';
-
-interface Trade {
-  id: string;
-  symbol: string;
-  entry_price: number;
-  exit_price: number;
-  position_size: number;
-  pnl: number;
-  roi: number;
-  setup: string;
-  broker: string;
-  emotional_tag: string;
-  notes: string;
-  duration_minutes: number;
-  trade_date: string;
-  screenshot_url: string | null;
-  side?: 'long' | 'short';
-  funding_fee?: number;
-  trading_fee?: number;
-  leverage?: number;
-}
+import { Trade } from '@/types/trade';
 
 type ColumnKey = 'date' | 'symbol' | 'setup' | 'broker' | 'type' | 'entry' | 'exit' | 'size' | 'pnl' | 'roi' | 'fundingFee' | 'tradingFee';
 
@@ -77,7 +57,7 @@ interface ColumnConfig {
 
 const DEFAULT_COLUMNS: ColumnConfig[] = [
   { key: 'date', label: 'Date', visible: true },
-  { key: 'asset', label: 'Asset', visible: true },
+  { key: 'symbol', label: 'Symbol', visible: true },
   { key: 'setup', label: 'Setup', visible: true },
   { key: 'broker', label: 'Broker', visible: true },
   { key: 'type', label: 'Type', visible: true },
@@ -269,7 +249,7 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
         return {
           ...trade,
           screenshot_url: signedUrl,
-          position_type: trade.position_type as 'long' | 'short' | undefined
+          side: trade.side as 'long' | 'short' | null
         };
       }));
       
@@ -285,7 +265,7 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
     if (searchTerm) {
       filtered = filtered.filter(
         (t) =>
-          t.asset.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          t.symbol?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           t.setup?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           t.broker?.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -382,11 +362,11 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
     const { error } = await supabase
       .from('trades')
       .update({
-        asset: editingTrade.asset,
+        symbol: editingTrade.symbol,
         entry_price: entry,
         exit_price: exit,
         position_size: size,
-        position_type: editingTrade.position_type,
+        side: editingTrade.side,
         leverage: editingTrade.leverage || 1,
         funding_fee: editingTrade.funding_fee || 0,
         trading_fee: editingTrade.trading_fee || 0,
@@ -498,7 +478,7 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
           <Input
-            placeholder="Search by asset, setup, or broker..."
+            placeholder="Search by symbol, setup, or broker..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -629,7 +609,7 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
                   />
                 </TableHead>
                 {isColumnVisible('date') && <TableHead>Date</TableHead>}
-                {isColumnVisible('asset') && <TableHead>Asset</TableHead>}
+                {isColumnVisible('symbol') && <TableHead>Symbol</TableHead>}
                 {isColumnVisible('setup') && <TableHead>Setup</TableHead>}
                 {isColumnVisible('broker') && <TableHead>Broker</TableHead>}
                 {isColumnVisible('type') && <TableHead>Type</TableHead>}
@@ -655,8 +635,8 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
                   {isColumnVisible('date') && (
                     <TableCell>{format(new Date(trade.trade_date), 'MMM dd, yyyy')}</TableCell>
                   )}
-                  {isColumnVisible('asset') && (
-                    <TableCell className="font-medium">{trade.asset}</TableCell>
+                  {isColumnVisible('symbol') && (
+                    <TableCell className="font-medium">{trade.symbol}</TableCell>
                   )}
                   {isColumnVisible('setup') && (
                     <TableCell>
@@ -804,12 +784,12 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
                   )}
                   {isColumnVisible('type') && (
                     <TableCell>
-                      {trade.position_type ? (
+                      {trade.side ? (
                         <Badge 
                           variant="outline" 
-                          className={trade.position_type === 'long' ? 'border-neon-green text-neon-green' : 'border-neon-red text-neon-red'}
+                          className={trade.side === 'long' ? 'border-neon-green text-neon-green' : 'border-neon-red text-neon-red'}
                         >
-                          {trade.position_type.toUpperCase()}
+                          {trade.side.toUpperCase()}
                         </Badge>
                       ) : '-'}
                     </TableCell>
@@ -935,18 +915,18 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Asset</p>
-                  <p className="font-medium">{selectedTrade.asset}</p>
+                  <p className="text-sm text-muted-foreground">Symbol</p>
+                  <p className="font-medium">{selectedTrade.symbol}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Position Type</p>
                   <p className="font-medium">
-                    {selectedTrade.position_type ? (
+                    {selectedTrade.side ? (
                       <Badge 
                         variant="outline" 
-                        className={selectedTrade.position_type === 'long' ? 'border-neon-green text-neon-green' : 'border-neon-red text-neon-red'}
+                        className={selectedTrade.side === 'long' ? 'border-neon-green text-neon-green' : 'border-neon-red text-neon-red'}
                       >
-                        {selectedTrade.position_type.toUpperCase()}
+                        {selectedTrade.side.toUpperCase()}
                       </Badge>
                     ) : '-'}
                   </p>
@@ -1053,10 +1033,10 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label>Asset *</Label>
+                  <Label>Symbol *</Label>
                   <Input
-                    value={editingTrade.asset}
-                    onChange={(e) => setEditingTrade({ ...editingTrade, asset: e.target.value })}
+                    value={editingTrade.symbol}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, symbol: e.target.value })}
                     className="mt-1"
                   />
                 </div>
@@ -1064,9 +1044,9 @@ export const TradeHistory = ({ onTradesChange }: TradeHistoryProps = {}) => {
                 <div>
                   <Label>Position Type *</Label>
                   <Select
-                    value={editingTrade.position_type || 'long'}
+                    value={editingTrade.side || 'long'}
                     onValueChange={(value: 'long' | 'short') => 
-                      setEditingTrade({ ...editingTrade, position_type: value })
+                      setEditingTrade({ ...editingTrade, side: value })
                     }
                   >
                     <SelectTrigger className="mt-1">
