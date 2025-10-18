@@ -433,15 +433,7 @@ const Dashboard = () => {
                     isVisible={isWidgetVisible('heatmap')}
                     onToggleVisibility={toggleWidgetVisibility}
                   >
-                    <div className="overflow-x-auto">
-                      {/* Heatmap content - will be extracted from TradingHeatmap component internals */}
-                      <div className="text-sm text-muted-foreground mb-4">
-                        Your performance by day and time. Hover for details.
-                      </div>
-                      <div className="text-center text-muted-foreground py-8">
-                        Heatmap visualization coming soon
-                      </div>
-                    </div>
+                    <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
                   </DashboardWidget>
                 </div>
 
