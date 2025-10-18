@@ -109,13 +109,13 @@ const Upload = () => {
   const [extractedSetupSearches, setExtractedSetupSearches] = useState<Record<number, string>>({});
   
   const [formData, setFormData] = useState({
-    asset: '',
+    symbol: '',
     setup: '',
     broker: '',
     entry_price: '',
     exit_price: '',
     position_size: '',
-    position_type: 'long' as 'long' | 'short',
+    side: 'long' as 'long' | 'short',
     leverage: '1',
     funding_fee: '',
     trading_fee: '',
@@ -170,13 +170,13 @@ const Upload = () => {
 
     if (data) {
       setFormData({
-        asset: data.symbol,
+        symbol: data.symbol,
         setup: data.setup || '',
         broker: data.broker || '',
         entry_price: data.entry_price.toString(),
         exit_price: data.exit_price.toString(),
         position_size: data.position_size.toString(),
-        position_type: (data.side as 'long' | 'short') || 'long',
+        side: (data.side as 'long' | 'short') || 'long',
         leverage: data.leverage?.toString() || '1',
         funding_fee: data.funding_fee?.toString() || '',
         trading_fee: data.trading_fee?.toString() || '',
@@ -518,7 +518,7 @@ const Upload = () => {
       const { data: insertedTrades, error } = await supabase
         .from('trades')
         .insert(tradesData)
-        .select('id, symbol, profit_loss, entry_price, position_size');
+        .select('id, symbol, profit_loss');
 
       if (error) {
         toast.error('Failed to save trades');
@@ -576,15 +576,15 @@ const Upload = () => {
 
     const tradeData = {
       user_id: user.id,
-      symbol: formData.asset,
-      symbol_temp: formData.asset,
+      symbol: formData.symbol,
+      symbol_temp: formData.symbol,
       setup: formData.setup,
       broker: formData.broker,
       entry_price: entry,
       exit_price: exit,
       position_size: size,
-      side: formData.position_type,
-      side_temp: formData.position_type,
+      side: formData.side,
+      side_temp: formData.side,
       leverage: parseFloat(formData.leverage) || 1,
       funding_fee: parseFloat(formData.funding_fee) || 0,
       trading_fee: parseFloat(formData.trading_fee) || 0,
@@ -1130,8 +1130,8 @@ const Upload = () => {
                   <div>
                     <label className="text-sm font-medium">Asset</label>
                     <Input
-                      value={formData.asset}
-                      onChange={(e) => setFormData({...formData, asset: e.target.value})}
+                      value={formData.symbol}
+                      onChange={(e) => setFormData({...formData, symbol: e.target.value})}
                       placeholder="BTC/USD"
                       required
                       className="mt-1"
@@ -1332,8 +1332,8 @@ const Upload = () => {
                   <div>
                     <label className="text-sm font-medium">Position Type</label>
                     <select
-                      value={formData.position_type}
-                      onChange={(e) => setFormData({...formData, position_type: e.target.value as 'long' | 'short'})}
+                      value={formData.side}
+                      onChange={(e) => setFormData({...formData, side: e.target.value as 'long' | 'short'})}
                       className="mt-1 w-full px-3 py-2 border border-border rounded-md bg-background"
                     >
                       <option value="long">Long</option>
