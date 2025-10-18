@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/components/layout/AppLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { ForecastScenarioCard } from '@/components/forecast/ForecastScenarioCard';
+import { CalculationModal } from '@/components/forecast/CalculationModal';
+import { GoalSimulator } from '@/components/forecast/GoalSimulator';
+import { calculateAdvancedStats, AdvancedStats } from '@/lib/forecastCalculations';
+import { Sparkles } from 'lucide-react';
 
 const Forecast = () => {
   const { user } = useAuth();
@@ -11,9 +17,13 @@ const Forecast = () => {
   const [avgDailyPnl, setAvgDailyPnl] = useState(0);
   const [projectedEquity, setProjectedEquity] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [advancedStats, setAdvancedStats] = useState<AdvancedStats | null>(null);
+  const [currentBalance, setCurrentBalance] = useState(0);
+  const [showCalculationModal, setShowCalculationModal] = useState(false);
 
   useEffect(() => {
     fetchAvgPnl();
+    fetchAdvancedStats();
     
     // Set up realtime subscription for trades changes
     const channel = supabase
@@ -22,6 +32,7 @@ const Forecast = () => {
         { event: '*', schema: 'public', table: 'trades', filter: `user_id=eq.${user?.id}` },
         () => {
           fetchAvgPnl();
+          fetchAdvancedStats();
         }
       )
       .subscribe();
@@ -52,6 +63,33 @@ const Forecast = () => {
       setAvgDailyPnl(0);
     }
     setLoading(false);
+  };
+
+  const fetchAdvancedStats = async () => {
+    if (!user) return;
+
+    // Fetch trades with ROI and margin data
+    const { data: trades } = await supabase
+      .from('trades')
+      .select('roi, margin, pnl')
+      .eq('user_id', user.id)
+      .is('deleted_at', null);
+
+    // Fetch user settings for balance
+    const { data: settings } = await supabase
+      .from('user_settings')
+      .select('initial_investment')
+      .eq('user_id', user.id)
+      .single();
+
+    if (settings) {
+      setCurrentBalance(settings.initial_investment || 0);
+    }
+
+    if (trades) {
+      const stats = calculateAdvancedStats(trades);
+      setAdvancedStats(stats);
+    }
   };
 
   const formatDays = (days: number) => {
@@ -131,9 +169,85 @@ const Forecast = () => {
                 Past performance does not guarantee future results. Markets are unpredictable, and actual results may vary significantly.
               </p>
             </Card>
+
+            {/* Forecast 2.0 Section */}
+            <div className="space-y-6 mt-12">
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-8 w-8 text-primary" />
+                <div>
+                  <h2 className="text-3xl font-bold">Forecast 2.0 - Long-Term Growth</h2>
+                  <p className="text-muted-foreground">
+                    Statistical projections based on geometric expectancy and compound growth
+                  </p>
+                </div>
+              </div>
+
+              {advancedStats ? (
+                <>
+                  {/* Three Scenario Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <ForecastScenarioCard
+                      scenario="conservative"
+                      dailyGrowth={advancedStats.daily_growth_conservative}
+                      monthlyGrowth={advancedStats.monthly_growth_conservative}
+                      yearlyGrowth={advancedStats.yearly_growth_conservative}
+                      fiveYearGrowth={advancedStats.five_year_growth_conservative}
+                    />
+                    <ForecastScenarioCard
+                      scenario="base"
+                      dailyGrowth={advancedStats.daily_growth_base}
+                      monthlyGrowth={advancedStats.monthly_growth_base}
+                      yearlyGrowth={advancedStats.yearly_growth_base}
+                      fiveYearGrowth={advancedStats.five_year_growth_base}
+                    />
+                    <ForecastScenarioCard
+                      scenario="optimistic"
+                      dailyGrowth={advancedStats.daily_growth_optimistic}
+                      monthlyGrowth={advancedStats.monthly_growth_optimistic}
+                      yearlyGrowth={advancedStats.yearly_growth_optimistic}
+                      fiveYearGrowth={advancedStats.five_year_growth_optimistic}
+                    />
+                  </div>
+
+                  {/* Understand the Calculation Button */}
+                  <div className="flex justify-center">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => setShowCalculationModal(true)}
+                    >
+                      Understand the Calculation
+                    </Button>
+                  </div>
+
+                  {/* Goal Simulator */}
+                  <GoalSimulator
+                    currentBalance={currentBalance}
+                    winRate={advancedStats.success_rate}
+                    avgGainRoi={advancedStats.weighted_roi_gain}
+                    avgLossRoi={advancedStats.weighted_roi_loss}
+                  />
+                </>
+              ) : (
+                <Card className="p-12 text-center bg-card border-border">
+                  <p className="text-muted-foreground mb-2">
+                    Add at least 5 trades to see advanced growth projections
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Forecast 2.0 requires minimum trading history for statistical validity
+                  </p>
+                </Card>
+              )}
+            </div>
           </>
         )}
       </div>
+
+      {/* Calculation Modal */}
+      <CalculationModal
+        open={showCalculationModal}
+        onOpenChange={setShowCalculationModal}
+      />
     </AppLayout>
   );
 };
