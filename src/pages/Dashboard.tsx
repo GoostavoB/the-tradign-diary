@@ -283,9 +283,10 @@ const Dashboard = () => {
             </a>
           </Card>
         ) : (
-          <ResponsiveGridLayout
-            className="layout"
-            layouts={{ 
+          <>
+            <ResponsiveGridLayout
+              className="layout"
+              layouts={{
               lg: layout.filter(item => isCustomizing || isWidgetVisible(item.i)),
               md: layout.filter(item => isCustomizing || isWidgetVisible(item.i)),
               sm: layout.filter(item => isCustomizing || isWidgetVisible(item.i)),
@@ -399,9 +400,8 @@ const Dashboard = () => {
                   </div>
                 )}
               </ResponsiveGridLayout>
-            )}
 
-            {stats && stats.total_trades > 0 && (
+              {stats && stats.total_trades > 0 && (
               <Tabs defaultValue="insights" className="space-y-6 mt-6">
                 <TabsList>
                   <TabsTrigger value="insights">Insights</TabsTrigger>
@@ -455,10 +455,10 @@ const Dashboard = () => {
               <TabsContent value="history">
                 <TradeHistory onTradesChange={fetchStats} />
               </TabsContent>
-              </Tabs>
-            )}
-          </>
-        )}
+            </Tabs>
+          )}
+        </>
+      )}
       </div>
     </AppLayout>
   );
