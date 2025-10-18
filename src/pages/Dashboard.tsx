@@ -303,7 +303,8 @@ const Dashboard = () => {
             }}
             draggableHandle=".drag-handle"
             compactType="vertical"
-            preventCollision={false}
+             preventCollision={true}
+             isBounded={true}
             margin={[16, 16]}
             containerPadding={[0, 0]}
           >
@@ -317,10 +318,10 @@ const Dashboard = () => {
                       isVisible={isWidgetVisible('stats')}
                       onToggleVisibility={toggleWidgetVisibility}
                     >
-                      <div className="grid grid-cols-4 gap-3">
+                      <div className="grid min-w-0 items-stretch grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
                         {/* Stats Cards Content */}
-                        <div className="space-y-2">
-                          <div className="p-3 rounded-xl glass-subtle">
+                        <div className="flex flex-col h-full justify-between gap-2">
+                              <div className="p-3 rounded-xl glass-subtle grow">
                             <div className="text-xs text-muted-foreground mb-1">Total P&L</div>
                             <div className={`text-xl font-bold ${
                               stats && stats.total_pnl > 0 ? 'text-neon-green' : 
@@ -342,7 +343,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                         
-                        <div className="p-3 rounded-xl glass-subtle">
+                            <div className="p-3 rounded-xl glass-subtle h-full">
                           <div className="text-xs text-muted-foreground mb-1">Win Rate</div>
                           <div className={`text-xl font-bold ${
                             stats && stats.win_rate > 70 ? 'text-neon-green' : 'text-foreground'
@@ -351,14 +352,14 @@ const Dashboard = () => {
                           </div>
                         </div>
                         
-                        <div className="p-3 rounded-xl glass-subtle">
+                            <div className="p-3 rounded-xl glass-subtle h-full">
                           <div className="text-xs text-muted-foreground mb-1">Total Trades</div>
                           <div className="text-xl font-bold">
                             <AnimatedCounter value={stats?.total_trades || 0} decimals={0} />
                           </div>
                         </div>
                         
-                        <div className="p-3 rounded-xl glass-subtle">
+                        <div className="p-3 rounded-xl glass-subtle h-full">
                           <div className="text-xs text-muted-foreground mb-1">Avg Duration</div>
                           <div className="text-xl font-bold">
                             <AnimatedCounter value={Math.round(stats?.avg_duration || 0)} decimals={0} />
