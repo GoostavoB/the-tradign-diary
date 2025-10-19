@@ -1040,8 +1040,8 @@ const Upload = () => {
                                       <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
                                     </Button>
                                   </PopoverTrigger>
-                                  <PopoverContent className="w-[300px] p-0 bg-popover z-50" align="start">
-                                    <Command>
+                                  <PopoverContent className="w-[300px] p-0 bg-popover z-50 mt-2" align="start">
+                                    <Command className="rounded-lg border shadow-md">
                                       <CommandInput placeholder="Search broker..." />
                                       <CommandList>
                                         <CommandEmpty>No broker found.</CommandEmpty>
