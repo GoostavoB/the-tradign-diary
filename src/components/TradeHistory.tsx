@@ -52,6 +52,8 @@ import { ShareTradeCard } from '@/components/ShareTradeCard';
 import { TradeFilters } from '@/components/trade-history/TradeFilters';
 import { TradeTableRow } from '@/components/trade-history/TradeTableRow';
 import { BulkActionsToolbar } from '@/components/trade-history/BulkActionsToolbar';
+import { useTradePagination } from '@/components/trade-history/useTradePagination';
+import { PaginationControls } from '@/components/trade-history/PaginationControls';
 
 type ColumnKey = 'date' | 'symbol' | 'setup' | 'broker' | 'type' | 'entry' | 'exit' | 'size' | 'pnl' | 'roi' | 'fundingFee' | 'tradingFee';
 
@@ -109,15 +111,71 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [tradeToShare, setTradeToShare] = useState<Trade | null>(null);
 
-  useEffect(() => {
-    fetchTrades();
-    fetchUserSetups();
-    fetchUserBrokers();
-  }, [user, showDeleted]);
+  // Filter and sort trades with memoization
+  const filterAndSortTrades = useCallback(() => {
+    let filtered = [...trades];
+
+    // Filter by deleted status
+    if (showDeleted) {
+      filtered = filtered.filter(t => t.deleted_at !== null);
+    } else {
+      filtered = filtered.filter(t => t.deleted_at === null);
+    }
+
+    // Filter by search term (using debounced value)
+    if (debouncedSearchTerm) {
+      filtered = filtered.filter(
+        (t) =>
+          t.symbol?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+          t.setup?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+          t.broker?.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by type
+    if (filterType === 'wins') {
+      filtered = filtered.filter((t) => (t.pnl || 0) > 0);
+    } else if (filterType === 'losses') {
+      filtered = filtered.filter((t) => (t.pnl || 0) <= 0);
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      if (sortBy === 'date') {
+        return new Date(b.trade_date).getTime() - new Date(a.trade_date).getTime();
+      } else if (sortBy === 'pnl') {
+        return (b.pnl || 0) - (a.pnl || 0);
+      } else if (sortBy === 'roi') {
+        return (b.roi || 0) - (a.roi || 0);
+      }
+      return 0;
+    });
+
+    return filtered;
+  }, [trades, debouncedSearchTerm, filterType, sortBy, showDeleted]);
+
+  // Memoized filtered trades
+  const filteredTrades = useMemo(() => filterAndSortTrades(), [filterAndSortTrades]);
+
+  // Pagination
+  const pagination = useTradePagination(filteredTrades.length);
+  const paginatedTrades = useMemo(() => 
+    filteredTrades.slice(pagination.startIndex, pagination.endIndex),
+    [filteredTrades, pagination.startIndex, pagination.endIndex]
+  );
 
   useEffect(() => {
-    filterAndSortTrades();
-  }, [trades, searchTerm, sortBy, filterType]);
+    if (user) {
+      fetchTrades();
+      fetchUserSetups();
+      fetchUserBrokers();
+    }
+  }, [user, showDeleted]);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    pagination.reset();
+  }, [debouncedSearchTerm, filterType, sortBy, showDeleted]);
 
   useEffect(() => {
     localStorage.setItem('tradeHistoryColumns', JSON.stringify(columns));
@@ -265,51 +323,6 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
     }
     setLoading(false);
   };
-
-  const filterAndSortTrades = useCallback(() => {
-    let filtered = [...trades];
-
-    // Filter by deleted status
-    if (showDeleted) {
-      filtered = filtered.filter(t => t.deleted_at !== null);
-    } else {
-      filtered = filtered.filter(t => t.deleted_at === null);
-    }
-
-    // Filter by search term (using debounced value)
-    if (debouncedSearchTerm) {
-      filtered = filtered.filter(
-        (t) =>
-          t.symbol?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          t.setup?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          t.broker?.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by type
-    if (filterType === 'wins') {
-      filtered = filtered.filter((t) => (t.pnl || 0) > 0);
-    } else if (filterType === 'losses') {
-      filtered = filtered.filter((t) => (t.pnl || 0) <= 0);
-    }
-
-    // Sort
-    filtered.sort((a, b) => {
-      if (sortBy === 'date') {
-        return new Date(b.trade_date).getTime() - new Date(a.trade_date).getTime();
-      } else if (sortBy === 'pnl') {
-        return (b.pnl || 0) - (a.pnl || 0);
-      } else if (sortBy === 'roi') {
-        return (b.roi || 0) - (a.roi || 0);
-      }
-      return 0;
-    });
-
-    return filtered;
-  }, [trades, debouncedSearchTerm, filterType, sortBy, showDeleted]);
-
-  // Memoized filtered trades
-  const filteredTrades = useMemo(() => filterAndSortTrades(), [filterAndSortTrades]);
 
   const handleDelete = async (id: string) => {
     if (showDeleted) {
@@ -877,6 +890,16 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
             </TableBody>
           </Table>
         </div>
+      )}
+
+      {filteredTrades.length > 0 && (
+        <PaginationControls
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={pagination.goToPage}
+          totalItems={filteredTrades.length}
+          itemsPerPage={pagination.itemsPerPage}
+        />
       )}
 
       <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
