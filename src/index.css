@@ -470,17 +470,6 @@ textarea:focus-visible {
   }
 }
 
-/* Fixed left sidebar */
-.sidebar-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 240px;
-  height: 100vh;
-  background-color: hsl(var(--sidebar-background));
-  border-right: 1px solid hsl(var(--border));
-}
-
 /* Dashboard grid and cards */
 .dashboard-grid {
   display: grid;
