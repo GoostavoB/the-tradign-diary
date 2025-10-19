@@ -263,39 +263,13 @@ const LongShortRatio = () => {
                 </CardHeader>
                 <CardContent className="flex items-center justify-center py-4">
                   {latestCombinedData && (
-                    <div className="relative">
-                      <svg 
-                        width="80" 
-                        height="80" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        className={`${
-                          latestCombinedData.longAccount > latestCombinedData.shortAccount 
-                            ? 'text-neon-green' 
-                            : 'text-red-500'
-                        }`}
-                      >
-                        {latestCombinedData.longAccount > latestCombinedData.shortAccount ? (
-                          <path 
-                            d="M 12 4 L 12 20 M 12 4 L 8 8 M 12 4 L 16 8 M 6 12 L 4 14 M 18 12 L 20 14" 
-                            stroke="currentColor" 
-                            strokeWidth="1.5" 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round"
-                            className="drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]"
-                          />
-                        ) : (
-                          <path 
-                            d="M 12 20 L 12 4 M 12 20 L 8 16 M 12 20 L 16 16 M 6 12 L 4 10 M 18 12 L 20 10" 
-                            stroke="currentColor" 
-                            strokeWidth="1.5" 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round"
-                            className="drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
-                          />
-                        )}
-                      </svg>
-                    </div>
+                    <p className={`text-2xl font-bold ${
+                      latestCombinedData.longAccount > latestCombinedData.shortAccount 
+                        ? 'text-neon-green' 
+                        : 'text-neon-red'
+                    }`}>
+                      {latestCombinedData.longAccount > latestCombinedData.shortAccount ? 'Bullish' : 'Bearish'}
+                    </p>
                   )}
                 </CardContent>
               </Card>
