@@ -235,17 +235,22 @@ const Dashboard = () => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="relative cursor-help">
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5 blur-lg"></div>
-                      <div className="relative flex items-center gap-2 px-4 py-2.5 glass-strong rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 animate-glow">
-                        <Flame className="w-5 h-5 text-accent flex-shrink-0" />
-                        <div>
-                          <div className="text-sm font-semibold text-accent tracking-wide">
-                            Monstro Mode
-                          </div>
-                          <div className="text-[10px] text-muted-foreground">
-                            {beastModeDays} {beastModeDays === 1 ? 'day' : 'days'}
-                          </div>
+                    <div 
+                      className="flex items-center gap-2 px-4 py-2.5 glass-strong rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 cursor-help"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.85)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255, 255, 255, 0.5)'
+                      }}
+                    >
+                      <Flame className="w-5 h-5 text-primary flex-shrink-0" />
+                      <div>
+                        <div className="text-sm font-semibold text-primary tracking-wide">
+                          Monstro Mode
+                        </div>
+                        <div className="text-[10px] text-muted-foreground">
+                          {beastModeDays} {beastModeDays === 1 ? 'day' : 'days'}
                         </div>
                       </div>
                     </div>
