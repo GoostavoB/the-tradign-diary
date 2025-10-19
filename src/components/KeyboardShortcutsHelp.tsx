@@ -17,8 +17,26 @@ const shortcuts = [
       { keys: ['Alt', 'D'], description: 'Go to Dashboard' },
       { keys: ['Alt', 'U'], description: 'Go to Upload' },
       { keys: ['Alt', 'F'], description: 'Go to Forecast' },
+      { keys: ['Alt', 'A'], description: 'Go to Analytics' },
+      { keys: ['Alt', 'T'], description: 'Go to Tools' },
       { keys: ['Alt', 'H'], description: 'Go to Home' },
       { keys: ['Alt', 'S'], description: 'Go to Settings' },
+    ],
+  },
+  {
+    category: 'Dashboard Actions',
+    items: [
+      { keys: ['N'], description: 'Add new trade' },
+      { keys: ['E'], description: 'Export trades' },
+      { keys: ['C'], description: 'Customize dashboard' },
+      { keys: ['Tab'], description: 'Navigate between sections' },
+    ],
+  },
+  {
+    category: 'AI Assistant',
+    items: [
+      { keys: ['Alt', 'I'], description: 'Open AI Assistant' },
+      { keys: ['Ctrl', 'Enter'], description: 'Send message (in chat)' },
     ],
   },
   {
@@ -26,6 +44,8 @@ const shortcuts = [
     items: [
       { keys: ['Shift', '?'], description: 'Show keyboard shortcuts' },
       { keys: ['Esc'], description: 'Close dialogs/modals' },
+      { keys: ['Ctrl', 'K'], description: 'Focus search' },
+      { keys: ['Ctrl', '/'], description: 'Toggle sidebar' },
     ],
   },
 ];

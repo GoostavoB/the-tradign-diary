@@ -4,7 +4,9 @@ import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { ExplainMetricButton } from "@/components/ExplainMetricButton";
+import { MetricTooltip } from "@/components/MetricTooltip";
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
+import { getMetricDefinition } from '@/utils/metricDefinitions';
 
 interface StatCardProps {
   title: string;
@@ -31,11 +33,27 @@ export const StatCard = memo(({
   const { openWithPrompt } = useAIAssistant();
   const chartData = sparklineData?.map((val, idx) => ({ value: val, index: idx })) || [];
   
+  // Get metric definition for enhanced tooltip
+  const metricKey = title.toLowerCase().replace(/[^a-z]/g, '');
+  const metricDef = getMetricDefinition(metricKey);
+  
   return (
     <GlassCard hover className={cn("p-5", className)}>
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            {metricDef && (
+              <MetricTooltip
+                title={metricDef.title}
+                description={metricDef.description}
+                calculation={metricDef.calculation}
+                example={metricDef.example}
+                variant="info"
+                side="right"
+              />
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <ExplainMetricButton 
               metricName={title}
