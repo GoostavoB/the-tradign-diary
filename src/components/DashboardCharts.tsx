@@ -66,9 +66,12 @@ export const DashboardCharts = ({ trades }: DashboardChartsProps) => {
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '6px',
+                  backgroundColor: 'hsl(var(--background) / 0.8)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid hsl(var(--border) / 0.5)',
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
                 }}
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
                 formatter={(value: any) => {
@@ -111,9 +114,12 @@ export const DashboardCharts = ({ trades }: DashboardChartsProps) => {
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '6px',
+                  backgroundColor: 'hsl(var(--background) / 0.8)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid hsl(var(--border) / 0.5)',
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
                 }}
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
               />

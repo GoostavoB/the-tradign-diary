@@ -70,20 +70,20 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
 
   return (
     <div className="w-full">
-      <p className="text-sm text-muted-foreground mb-4">
+      <p className="text-xs lg:text-sm text-muted-foreground mb-2 lg:mb-3">
         Your performance by day and time. Hover for details.
       </p>
       <TooltipProvider>
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full">
             {/* Hour labels */}
-            <div className="flex mb-2">
-              <div className="w-12"></div>
+            <div className="flex mb-1">
+              <div className="w-10 lg:w-12"></div>
               {HOURS.filter((h) => h % 3 === 0).map((hour) => (
                 <div
                   key={hour}
-                  className="text-xs text-muted-foreground text-center"
-                  style={{ width: '36px', marginRight: '2px' }}
+                  className="text-[10px] lg:text-xs text-muted-foreground text-center"
+                  style={{ width: '30px', marginRight: '1px' }}
                 >
                   {hour}h
                 </div>
@@ -92,8 +92,8 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
 
             {/* Heatmap grid */}
             {DAYS.map((day, dayIndex) => (
-              <div key={day} className="flex items-center mb-1">
-                <div className="w-12 text-xs text-muted-foreground font-medium">
+              <div key={day} className="flex items-center mb-0.5">
+                <div className="w-10 lg:w-12 text-[10px] lg:text-xs text-muted-foreground font-medium">
                   {day}
                 </div>
                 <div className="flex gap-0.5">
@@ -106,7 +106,7 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
                       <Tooltip key={hour} delayDuration={0}>
                         <TooltipTrigger asChild>
                           <div
-                            className={`w-3 h-8 rounded-sm transition-all hover:scale-125 cursor-pointer ${
+                            className={`w-2.5 lg:w-3 h-5 lg:h-6 rounded-sm transition-all hover:scale-125 cursor-pointer ${
                               isBest ? 'ring-2 ring-accent ring-offset-2 ring-offset-background' : ''
                             }`}
                             style={{
@@ -141,18 +141,18 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
             ))}
 
             {/* Legend */}
-            <div className="flex flex-wrap items-center gap-4 lg:gap-6 mt-4 text-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(var(--neon-green))' }}></div>
-                <span className="text-muted-foreground">High Win Rate (70%+)</span>
+            <div className="flex flex-wrap items-center gap-3 lg:gap-4 mt-2 lg:mt-3 text-[10px] lg:text-xs">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded" style={{ backgroundColor: 'hsl(var(--neon-green))' }}></div>
+                <span className="text-muted-foreground">High (70%+)</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(45 93% 47%)' }}></div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded" style={{ backgroundColor: 'hsl(45 93% 47%)' }}></div>
                 <span className="text-muted-foreground">Neutral (40-50%)</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(var(--neon-red))' }}></div>
-                <span className="text-muted-foreground">Low Win Rate (&lt;40%)</span>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded" style={{ backgroundColor: 'hsl(var(--neon-red))' }}></div>
+                <span className="text-muted-foreground">Low (&lt;40%)</span>
               </div>
             </div>
           </div>
