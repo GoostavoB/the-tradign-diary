@@ -85,25 +85,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
             {/* Right: Icon Buttons */}
             <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="glass-subtle hover:glass-strong rounded-xl transition-all"
-                onClick={() => {}}
-              >
-                <KeyboardShortcutsHelp />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="glass-subtle hover:glass-strong rounded-xl transition-all"
-                onClick={() => {}}
-              >
-                <ThemeToggle />
-              </Button>
-              <div className="glass-subtle hover:glass-strong rounded-xl transition-all">
-                <UserMenu />
-              </div>
+              <KeyboardShortcutsHelp />
+              <ThemeToggle />
+              <UserMenu />
             </div>
           </header>
 
