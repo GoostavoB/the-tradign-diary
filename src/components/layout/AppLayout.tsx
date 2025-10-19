@@ -9,6 +9,11 @@ import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp';
 import { MobileNav } from '@/components/mobile/MobileNav';
 import { QuickAddTrade } from '@/components/mobile/QuickAddTrade';
 import { InstallPrompt } from '@/components/mobile/InstallPrompt';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Search, LayoutDashboard, BarChart3, Wrench, Users, Upload } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -18,22 +23,102 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   // Enable reminder notifications
   useReminderNotifications();
   const { isCollapsed, setIsCollapsed } = useSidebarState();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const navItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/analytics', label: 'Analytics', icon: BarChart3 },
+    { path: '/tools', label: 'Tools', icon: Wrench },
+    { path: '/social', label: 'Social', icon: Users },
+    { path: '/upload', label: 'Upload', icon: Upload },
+  ];
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <SidebarProvider defaultOpen={!isCollapsed} onOpenChange={setIsCollapsed}>
       <div className="min-h-screen flex w-full mobile-safe">
         <AppSidebar />
         <div className="flex-1 flex flex-col mobile-safe">
-          <header className="h-14 border-b border-border/50 backdrop-blur-xl glass-subtle flex items-center justify-between gap-2 px-3 md:px-6">
-            <div className="flex items-center gap-2 md:gap-3">
+          {/* Desktop Header with Pills Navigation */}
+          <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6">
+            {/* Left: Sidebar trigger + Pills Navigation */}
+            <div className="flex items-center gap-6">
+              <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
+              
+              <nav className="flex items-center gap-1 p-1 rounded-2xl bg-muted/30 backdrop-blur-sm">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Button
+                      key={item.path}
+                      onClick={() => navigate(item.path)}
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "gap-2 rounded-xl px-4 py-2 transition-all duration-200",
+                        isActive(item.path)
+                          ? "bg-background shadow-sm text-foreground"
+                          : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </Button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Center: Search Bar */}
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search trades, analytics..."
+                  className="pl-10 glass-subtle border-0 focus-visible:ring-1 focus-visible:ring-primary/20"
+                />
+              </div>
+            </div>
+
+            {/* Right: Icon Buttons */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="glass-subtle hover:glass-strong rounded-xl transition-all"
+                onClick={() => {}}
+              >
+                <KeyboardShortcutsHelp />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="glass-subtle hover:glass-strong rounded-xl transition-all"
+                onClick={() => {}}
+              >
+                <ThemeToggle />
+              </Button>
+              <div className="glass-subtle hover:glass-strong rounded-xl transition-all">
+                <UserMenu />
+              </div>
+            </div>
+          </header>
+
+          {/* Mobile Header (Simplified) */}
+          <header className="md:hidden h-14 border-b border-border/50 backdrop-blur-xl glass-subtle flex items-center justify-between gap-2 px-3">
+            <div className="flex items-center gap-2">
               <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
             </div>
-            <div className="flex items-center gap-2 md:gap-3">
+            <div className="flex items-center gap-2">
               <KeyboardShortcutsHelp />
               <ThemeToggle />
               <UserMenu />
             </div>
           </header>
+
           <main className="flex-1 p-3 md:p-6 overflow-auto pb-20 md:pb-6 custom-scrollbar mobile-safe">
             {children}
           </main>

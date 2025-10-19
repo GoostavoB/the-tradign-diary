@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Bot, Send } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { toast } from 'sonner';
+import { useAIAssistant } from '@/contexts/AIAssistantContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -12,6 +12,7 @@ interface Message {
 }
 
 export const AIAssistant = () => {
+  const { isOpen, setIsOpen, initialPrompt, clearInitialPrompt } = useAIAssistant();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -20,6 +21,18 @@ export const AIAssistant = () => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Handle initial prompt when provided
+  useEffect(() => {
+    if (initialPrompt && isOpen) {
+      setInput(initialPrompt);
+      clearInitialPrompt();
+    }
+  }, [initialPrompt, isOpen, clearInitialPrompt]);
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -94,7 +107,7 @@ export const AIAssistant = () => {
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
         <Button
           size="lg"

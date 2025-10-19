@@ -2,6 +2,8 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
 import { AnimatedCounter } from "./AnimatedCounter";
 import { LineChart, Line, ResponsiveContainer, Tooltip } from "recharts";
+import { ExplainMetricButton } from "@/components/ExplainMetricButton";
+import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import { formatCurrency } from "@/utils/formatNumber";
 import { Trade } from "@/types/trade";
 
@@ -20,6 +22,8 @@ export const TotalBalanceCard = ({
   trades,
   className 
 }: TotalBalanceCardProps) => {
+  const { openWithPrompt } = useAIAssistant();
+  
   // Generate sparkline data from last 14 trades
   const sparklineData = trades
     .slice(-14)
@@ -44,17 +48,25 @@ export const TotalBalanceCard = ({
             </div>
             <p className="text-sm font-medium text-muted-foreground">Total Balance</p>
           </div>
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${
-            isPositive ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'
-          }`}>
-            {isPositive ? (
-              <TrendingUp className="h-3 w-3" />
-            ) : (
-              <TrendingDown className="h-3 w-3" />
-            )}
-            <span className="text-xs font-semibold">
-              {isPositive ? '+' : ''}{changePercent.toFixed(1)}%
-            </span>
+          <div className="flex items-center gap-2">
+            <ExplainMetricButton 
+              metricName="Total Balance"
+              metricValue={formatCurrency(balance)}
+              context={`Current change: ${formatCurrency(change)} (${changePercent.toFixed(1)}%)`}
+              onExplain={openWithPrompt}
+            />
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${
+              isPositive ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'
+            }`}>
+              {isPositive ? (
+                <TrendingUp className="h-3 w-3" />
+              ) : (
+                <TrendingDown className="h-3 w-3" />
+              )}
+              <span className="text-xs font-semibold">
+                {isPositive ? '+' : ''}{changePercent.toFixed(1)}%
+              </span>
+            </div>
           </div>
         </div>
         
