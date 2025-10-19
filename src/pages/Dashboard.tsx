@@ -28,6 +28,7 @@ import { DrawdownAnalysis } from '@/components/DrawdownAnalysis';
 import { AnimatedCounter } from '@/components/AnimatedCounter';
 import { DateRangeFilter, DateRange } from '@/components/DateRangeFilter';
 import { TradingHeatmap } from '@/components/TradingHeatmap';
+import { PerformanceSummary } from '@/components/PerformanceSummary';
 import { DashboardWidget } from '@/components/DashboardWidget';
 import { CustomizeDashboardControls } from '@/components/CustomizeDashboardControls';
 import { useDashboardLayout } from '@/hooks/useDashboardLayout';
@@ -402,8 +403,8 @@ const Dashboard = () => {
               </ResponsiveGridLayout>
             </div>
 
-            {/* Analytics Row - Heatmap and Charts side by side */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
+            {/* Analytics Row - Heatmap, Summary, and Charts side by side */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
               {/* Heatmap Widget */}
               {(isCustomizing || isWidgetVisible('heatmap')) && (
                 <DashboardWidget
@@ -412,9 +413,23 @@ const Dashboard = () => {
                   isCustomizing={isCustomizing}
                   isVisible={isWidgetVisible('heatmap')}
                   onToggleVisibility={toggleWidgetVisibility}
-                  className="w-full"
+                  className="w-full lg:col-span-2"
                 >
                   <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
+                </DashboardWidget>
+              )}
+
+              {/* Performance Summary Widget */}
+              {(isCustomizing || isWidgetVisible('heatmap')) && (
+                <DashboardWidget
+                  id="performance-summary"
+                  title="Performance Insights"
+                  isCustomizing={isCustomizing}
+                  isVisible={isWidgetVisible('heatmap')}
+                  onToggleVisibility={toggleWidgetVisibility}
+                  className="w-full"
+                >
+                  <PerformanceSummary trades={filteredTrades.length > 0 ? filteredTrades : trades} />
                 </DashboardWidget>
               )}
 
@@ -431,8 +446,10 @@ const Dashboard = () => {
                   <DashboardCharts trades={filteredTrades.length > 0 ? filteredTrades : trades} chartType="cumulative" />
                 </DashboardWidget>
               )}
+            </div>
 
-              {/* Wins vs Losses Chart */}
+            {/* Wins vs Losses Chart - Full Width */}
+            <div className="mb-6">
               {(isCustomizing || isWidgetVisible('charts')) && (
                 <DashboardWidget
                   id="wins-losses"
