@@ -19,6 +19,7 @@ import { MonthlyReport } from '@/components/MonthlyReport';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
 import { StatisticsComparison } from '@/components/StatisticsComparison';
 import { TradingStreaks } from '@/components/TradingStreaks';
+import { MonthSummaryInsights } from '@/components/MonthSummaryInsights';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
 import { SetupManager } from '@/components/SetupManager';
@@ -401,6 +402,13 @@ const Dashboard = () => {
                 )}
               </ResponsiveGridLayout>
             </div>
+
+            {/* Month Summary Insights */}
+            {stats && stats.total_trades > 0 && (
+              <div className="mb-4">
+                <MonthSummaryInsights trades={filteredTrades.length > 0 ? filteredTrades : trades} />
+              </div>
+            )}
 
             {/* Trading Streaks */}
             {stats && stats.total_trades > 0 && (
