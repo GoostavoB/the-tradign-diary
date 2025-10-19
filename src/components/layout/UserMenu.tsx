@@ -15,6 +15,15 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { User, LogOut, KeyRound } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
+
+const passwordChangeSchema = z.object({
+  newPassword: z.string().min(6, 'Password must be at least 6 characters').max(128, 'Password is too long'),
+  confirmPassword: z.string()
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
 
 export const UserMenu = () => {
   const { user, signOut } = useAuth();
@@ -33,13 +42,15 @@ export const UserMenu = () => {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
+    // Validate password change form
+    const result = passwordChangeSchema.safeParse({
+      newPassword,
+      confirmPassword
+    });
 
-    if (newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters');
+    if (!result.success) {
+      const firstError = result.error.errors[0];
+      toast.error(firstError.message);
       return;
     }
 

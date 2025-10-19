@@ -10,12 +10,21 @@ import { TrendingUp, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+const loginSchema = z.object({
+  email: z.string().email('Please enter a valid email address').max(255, 'Email is too long'),
+  password: z.string().min(6, 'Password must be at least 6 characters').max(128, 'Password is too long')
+});
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Please enter a valid email address').max(255, 'Email is too long')
+});
+
 const signupSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email('Please enter a valid email address').max(255, 'Email is too long'),
+  password: z.string().min(6, 'Password must be at least 6 characters').max(128, 'Password is too long'),
   confirmPassword: z.string(),
-  fullName: z.string().min(2, 'Full name is required'),
-  country: z.string().min(2, 'Please select your country'),
+  fullName: z.string().min(2, 'Full name is required').max(100, 'Name is too long'),
+  country: z.string().min(2, 'Please select your country').max(100, 'Country name is too long'),
   termsAccepted: z.boolean().refine((val) => val === true, 'You must accept the Terms and Privacy Policy'),
   privacyAccepted: z.boolean().refine((val) => val === true, 'You must accept the Privacy Policy'),
   marketingConsent: z.boolean()
@@ -44,6 +53,16 @@ const Auth = () => {
 
     try {
       if (isForgotPassword) {
+        // Validate forgot password form
+        const result = forgotPasswordSchema.safeParse({ email });
+        
+        if (!result.success) {
+          const firstError = result.error.errors[0];
+          toast.error(firstError.message);
+          setLoading(false);
+          return;
+        }
+
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/auth`,
         });
@@ -55,6 +74,16 @@ const Auth = () => {
           setEmail('');
         }
       } else if (isLogin) {
+        // Validate login form
+        const result = loginSchema.safeParse({ email, password });
+        
+        if (!result.success) {
+          const firstError = result.error.errors[0];
+          toast.error(firstError.message);
+          setLoading(false);
+          return;
+        }
+
         const { error } = await signIn(email, password);
         if (error) {
           toast.error(error.message || 'Failed to sign in');
