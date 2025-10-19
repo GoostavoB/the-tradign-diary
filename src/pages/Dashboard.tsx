@@ -367,7 +367,7 @@ const Dashboard = () => {
 
                 {/* Heatmap Widget - with proper spacing from stats */}
                 {(isCustomizing || isWidgetVisible('heatmap')) && (
-                  <div key="heatmap" className="mt-6">
+                  <div key="heatmap">
                     <DashboardWidget
                       id="heatmap"
                       title="Trading Success Heatmap"
