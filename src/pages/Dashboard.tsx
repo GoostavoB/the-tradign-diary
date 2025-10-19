@@ -720,64 +720,67 @@ const Dashboard = () => {
               )}
             </ResponsiveGridLayout>
 
-            {/* Charts Section - Flexible Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 mt-12">
-              <div className="glass rounded-2xl p-6 hover-lift widget-card">
-                <div className="flex items-center justify-between mb-4 w-full">
-                  <h3 className="text-lg font-semibold">Cumulative P&L</h3>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Info className="h-4 w-4 text-muted-foreground" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="left" className="glass-strong max-w-xs">
-                        <p className="font-semibold mb-1">Cumulative Profit & Loss</p>
-                        <p className="text-xs mb-2">Running total of all profits and losses over time, showing your account growth trajectory.</p>
-                        <p className="text-xs text-muted-foreground">Formula: Sum of all P&L values up to each point in time</p>
-                        <p className="text-xs text-accent mt-2">Why it matters: Visualizes your overall trading performance trend and consistency.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+            {/* Charts Section - Fixed Spacing and Containment */}
+            <div className="relative z-0 w-full mt-8 mb-8 space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Cumulative P&L Chart */}
+                <div className="glass rounded-2xl p-6 hover-lift widget-card">
+                  <div className="flex items-center justify-between mb-4 w-full">
+                    <h3 className="text-lg font-semibold">Cumulative P&L</h3>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Info className="h-4 w-4 text-muted-foreground" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="left" className="glass-strong max-w-xs">
+                          <p className="font-semibold mb-1">Cumulative Profit & Loss</p>
+                          <p className="text-xs mb-2">Running total of all profits and losses over time, showing your account growth trajectory.</p>
+                          <p className="text-xs text-muted-foreground">Formula: Sum of all P&L values up to each point in time</p>
+                          <p className="text-xs text-accent mt-2">Why it matters: Visualizes your overall trading performance trend and consistency.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                  <div className="h-[280px] w-full overflow-hidden">
+                    <LazyChart height={280}>
+                      <DashboardCharts trades={processedTrades} chartType="cumulative" />
+                    </LazyChart>
+                  </div>
                 </div>
-                <div className="chart-wrapper">
-                  <LazyChart height={280}>
-                    <DashboardCharts trades={processedTrades} chartType="cumulative" />
-                  </LazyChart>
-                </div>
-              </div>
               
-              <div className="glass rounded-2xl p-6 hover-lift widget-card">
-                <div className="flex items-center justify-between mb-4 w-full">
-                  <h3 className="text-lg font-semibold">Wins vs Losses</h3>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Info className="h-4 w-4 text-muted-foreground" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="left" className="glass-strong max-w-xs">
-                        <p className="font-semibold mb-1">Wins vs Losses Distribution</p>
-                        <p className="text-xs mb-2">Compares the number and magnitude of profitable trades against losing trades.</p>
-                        <p className="text-xs text-muted-foreground">Shows: Count and total value of winning vs losing positions</p>
-                        <p className="text-xs text-accent mt-2">Why it matters: Helps identify if losses are balanced by wins and guides risk management.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <div className="chart-wrapper">
-                  <LazyChart height={280}>
-                    <DashboardCharts trades={processedTrades} chartType="winsLosses" />
-                  </LazyChart>
+                {/* Wins vs Losses Chart */}
+                <div className="glass rounded-2xl p-6 hover-lift widget-card">
+                  <div className="flex items-center justify-between mb-4 w-full">
+                    <h3 className="text-lg font-semibold">Wins vs Losses</h3>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Info className="h-4 w-4 text-muted-foreground" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="left" className="glass-strong max-w-xs">
+                          <p className="font-semibold mb-1">Wins vs Losses Distribution</p>
+                          <p className="text-xs mb-2">Compares the number and magnitude of profitable trades against losing trades.</p>
+                          <p className="text-xs text-muted-foreground">Shows: Count and total value of winning vs losing positions</p>
+                          <p className="text-xs text-accent mt-2">Why it matters: Helps identify if losses are balanced by wins and guides risk management.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                  <div className="h-[280px] w-full overflow-hidden">
+                    <LazyChart height={280}>
+                      <DashboardCharts trades={processedTrades} chartType="winsLosses" />
+                    </LazyChart>
+                  </div>
                 </div>
               </div>
-            </div>
 
             {/* Trading Heatmap */}
             {stats && stats.total_trades > 0 && (
-              <div className="glass rounded-2xl p-6 hover-lift widget-card mb-6">
+              <div className="glass rounded-2xl p-6 hover-lift widget-card">
                 <div className="flex items-center justify-between mb-4 w-full">
                   <h3 className="text-lg font-semibold">Trading Heatmap</h3>
                   <TooltipProvider>
@@ -796,7 +799,7 @@ const Dashboard = () => {
                     </Tooltip>
                   </TooltipProvider>
                 </div>
-                <div className="chart-wrapper">
+                <div className="h-[300px] w-full overflow-hidden">
                   <LazyChart height={300}>
                     <TradingHeatmap trades={processedTrades} />
                   </LazyChart>
@@ -806,15 +809,16 @@ const Dashboard = () => {
 
             {/* Wins by Hour Chart */}
             {stats && stats.total_trades > 0 && (
-              <div className="mb-6">
+              <div className="w-full">
                 <LazyChart height={300}>
                   <WinsByHourChart trades={processedTrades} />
                 </LazyChart>
               </div>
             )}
+            </div>
 
-            {/* Grid Layout Container - Isolated stacking context */}
-            <div className="relative w-full mb-3">
+            {/* Second Grid Layout Container - Properly Separated */}
+            <div className="relative z-0 w-full mt-8">
               <ResponsiveGridLayout
                 className="layout"
                 layouts={{
