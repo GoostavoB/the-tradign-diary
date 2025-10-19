@@ -9,7 +9,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { X, Plus, Edit2, Check, Upload, Download, User, Bell, Palette } from 'lucide-react';
+import { X, Plus, Edit2, Check, Upload, Download, User, Bell, TrendingUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AccentColorPicker } from '@/components/AccentColorPicker';
 import { NotificationPreferences } from '@/components/NotificationPreferences';
@@ -282,7 +282,7 @@ const Settings = () => {
               Profile
             </TabsTrigger>
             <TabsTrigger value="trading">
-              <Palette className="w-4 h-4 mr-2" />
+              <TrendingUp className="w-4 h-4 mr-2" />
               Trading
             </TabsTrigger>
             <TabsTrigger value="setups">
