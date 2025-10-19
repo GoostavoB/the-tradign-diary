@@ -179,13 +179,41 @@
     line-height: 1.4;
   }
 
-  /* Minimum touch targets for mobile */
-  @media (max-width: 768px) {
-    button, [role="button"], a {
-      min-height: 44px;
-      min-width: 44px;
-    }
+/* Global Widget Card Alignment Rules */
+.glass, .glass-strong, .glass-subtle {
+  display: flex;
+  flex-direction: column;
+  min-height: auto !important;
+  height: auto !important;
+}
+
+.glass > *, .glass-strong > *, .glass-subtle > * {
+  width: 100%;
+}
+
+/* Chart Container Responsiveness */
+.recharts-wrapper,
+.recharts-surface,
+canvas,
+svg {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+}
+
+/* Dashboard Grid Auto-Sizing */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
   }
+}
 
   @keyframes glow-pulse {
     0%, 100% {

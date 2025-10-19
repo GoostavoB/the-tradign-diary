@@ -71,35 +71,35 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
   const bestSlot = getBestSlot();
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="flex items-center gap-2 mb-3">
+    <div className="w-full">
+      <div className="flex items-center gap-2 mb-4">
         <Info className="w-3.5 h-3.5 text-muted-foreground" />
         <p className="text-xs text-muted-foreground">
-          Click cells to view details
+          Click cells to view details • Color indicates win rate
         </p>
       </div>
       
       <TooltipProvider>
-        <div className="relative">
-          {/* Compact Grid */}
-          <div className="flex gap-1">
+        <div className="relative w-full">
+          {/* Responsive Grid Container */}
+          <div className="flex gap-2 w-full overflow-x-auto">
             {/* Day labels */}
-            <div className="flex flex-col justify-around py-1">
+            <div className="flex flex-col justify-around py-2 flex-shrink-0">
               {DAYS.map((day) => (
-                <div key={day} className="text-[9px] text-muted-foreground font-medium w-6 text-right pr-1">
-                  {day.slice(0, 3)}
+                <div key={day} className="text-[10px] text-muted-foreground font-medium w-8 text-right pr-2">
+                  {day}
                 </div>
               ))}
             </div>
 
             {/* Heatmap grid */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               {/* Hour labels */}
-              <div className="flex gap-[2px] mb-1 ml-[2px]">
+              <div className="flex gap-[3px] mb-2 ml-[3px]">
                 {HOURS.filter((h) => h % 4 === 0).map((hour) => (
                   <div
                     key={hour}
-                    className="text-[8px] text-muted-foreground text-center flex-1"
+                    className="text-[9px] text-muted-foreground text-center flex-1"
                   >
                     {hour}h
                   </div>
@@ -107,9 +107,9 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
               </div>
 
               {/* Grid cells */}
-              <div className="space-y-[2px]">
+              <div className="space-y-[3px]">
                 {DAYS.map((day, dayIndex) => (
-                  <div key={day} className="flex gap-[2px]">
+                  <div key={day} className="flex gap-[3px]">
                     {HOURS.map((hour) => {
                       const key = `${dayIndex}-${hour}`;
                       const cell = heatmapData[key];
@@ -122,29 +122,29 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
                             <button
                               onClick={() => setSelectedCell(isSelected ? null : key)}
                               className={`
-                                flex-1 h-4 rounded-[2px] transition-all duration-200
-                                hover:scale-110 hover:shadow-md hover:z-10
-                                ${isSelected ? 'scale-110 shadow-lg ring-2 ring-primary z-10' : ''}
-                                ${isBest && !isSelected ? 'ring-1 ring-accent' : ''}
+                                flex-1 aspect-square rounded transition-all duration-200
+                                hover:scale-110 hover:shadow-lg hover:z-10 min-h-[20px]
+                                ${isSelected ? 'scale-110 shadow-xl ring-2 ring-accent z-10' : ''}
+                                ${isBest && !isSelected ? 'ring-1 ring-accent/50' : ''}
                               `}
                               style={{
                                 backgroundColor: getCellColor(dayIndex, hour),
-                                opacity: cell ? (isSelected ? 1 : 0.85) : 0.15,
+                                opacity: cell ? (isSelected ? 1 : 0.9) : 0.2,
                               }}
                             />
                           </TooltipTrigger>
                           <TooltipContent 
-                            className="bg-popover/95 backdrop-blur-sm border-border shadow-lg"
+                            className="glass-strong border-accent/20 shadow-xl"
                             side="top"
                           >
                             {cell ? (
-                              <div className="text-xs space-y-0.5 min-w-[140px]">
-                                <div className="font-semibold text-foreground border-b border-border pb-1 mb-1">
-                                  {day} {hour}:00
+                              <div className="text-xs space-y-1 min-w-[150px]">
+                                <div className="font-semibold text-foreground border-b border-border/50 pb-1.5 mb-1.5">
+                                  {day} at {hour}:00
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-muted-foreground">Win Rate:</span>
-                                  <span className="font-medium" style={{ color: getCellColor(dayIndex, hour) }}>
+                                  <span className="font-semibold" style={{ color: getCellColor(dayIndex, hour) }}>
                                     {((cell.wins / cell.total) * 100).toFixed(0)}%
                                   </span>
                                 </div>
@@ -153,21 +153,23 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
                                   <span className="font-medium">{cell.total}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-muted-foreground">ROI:</span>
+                                  <span className="text-muted-foreground">Avg ROI:</span>
                                   <span className="font-medium">{(cell.roi / cell.total).toFixed(1)}%</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-muted-foreground">P&L:</span>
-                                  <span className="font-medium">${cell.pnl.toFixed(0)}</span>
+                                  <span className="text-muted-foreground">Total P&L:</span>
+                                  <span className={`font-semibold ${cell.pnl >= 0 ? 'text-neon-green' : 'text-neon-red'}`}>
+                                    ${cell.pnl.toFixed(2)}
+                                  </span>
                                 </div>
                                 {isBest && (
-                                  <div className="text-accent font-semibold pt-1 border-t border-border mt-1 text-center">
-                                    ⭐ Best Time
+                                  <div className="text-accent font-semibold pt-1.5 border-t border-border/50 mt-1.5 text-center">
+                                    ⭐ Best Time Slot
                                   </div>
                                 )}
                               </div>
                             ) : (
-                              <div className="text-xs text-muted-foreground">No trades in this slot</div>
+                              <div className="text-xs text-muted-foreground">No trades in this time slot</div>
                             )}
                           </TooltipContent>
                         </Tooltip>
@@ -179,19 +181,19 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
             </div>
           </div>
 
-          {/* Compact Legend */}
-          <div className="flex items-center justify-center gap-4 mt-3 pt-3 border-t border-border/50">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: 'hsl(var(--neon-green))' }}></div>
-              <span className="text-[10px] text-muted-foreground">High</span>
+          {/* Legend */}
+          <div className="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-border/30">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(var(--neon-green))' }}></div>
+              <span className="text-xs text-muted-foreground font-medium">High Win Rate (≥70%)</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: 'hsl(45 93% 47%)' }}></div>
-              <span className="text-[10px] text-muted-foreground">Medium</span>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(45 93% 47%)' }}></div>
+              <span className="text-xs text-muted-foreground font-medium">Medium (40-70%)</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: 'hsl(var(--neon-red))' }}></div>
-              <span className="text-[10px] text-muted-foreground">Low</span>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(var(--neon-red))' }}></div>
+              <span className="text-xs text-muted-foreground font-medium">Low (&lt;40%)</span>
             </div>
           </div>
         </div>

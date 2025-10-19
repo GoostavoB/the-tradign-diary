@@ -406,7 +406,7 @@ const Dashboard = () => {
 
             {/* Trading Heatmap */}
             {stats && stats.total_trades > 0 && (
-              <div className="glass rounded-2xl p-6 hover-lift mb-6">
+              <div className="glass rounded-2xl p-6 hover-lift">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">Trading Heatmap</h3>
                   <TooltipProvider>
@@ -425,7 +425,9 @@ const Dashboard = () => {
                     </Tooltip>
                   </TooltipProvider>
                 </div>
-                <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
+                <div className="flex justify-center items-center w-full">
+                  <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
+                </div>
               </div>
             )}
 
