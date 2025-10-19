@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -72,16 +72,16 @@ const Pricing = () => {
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
-            <Card
+            <GlassCard
               key={index}
-              className={`p-8 bg-card transition-all duration-300 relative ${
-                plan.popular
-                  ? "border-2 border-neon-green shadow-lg shadow-neon-green/20 scale-105"
-                  : "border-border hover:border-foreground/20"
+              variant={plan.popular ? "strong" : "default"}
+              hover
+              className={`p-8 relative ${
+                plan.popular ? "ring-2 ring-primary shadow-lg shadow-primary/20 scale-105" : ""
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-neon-green text-background text-sm font-semibold rounded-full flex items-center gap-1">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 gradient-primary text-background text-sm font-semibold rounded-full flex items-center gap-1">
                   <Sparkles size={14} />
                   Most Popular
                 </div>
@@ -93,7 +93,7 @@ const Pricing = () => {
                   {plan.description}
                 </p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-5xl font-bold">{plan.price}</span>
+                  <span className="text-5xl font-bold text-gradient-primary">{plan.price}</span>
                   <span className="text-muted-foreground">/{plan.period}</span>
                 </div>
               </div>
@@ -102,7 +102,7 @@ const Pricing = () => {
                 onClick={() => navigate('/auth')}
                 className={`w-full mb-6 ${
                   plan.popular
-                    ? "bg-neon-green text-background hover:bg-neon-green/90"
+                    ? "gradient-primary text-background hover:opacity-90"
                     : "bg-foreground text-background hover:bg-foreground/90"
                 }`}
               >
@@ -115,14 +115,14 @@ const Pricing = () => {
                     <Check
                       size={20}
                       className={`mt-0.5 flex-shrink-0 ${
-                        plan.popular ? "text-neon-green" : "text-foreground"
+                        plan.popular ? "text-primary" : "text-foreground"
                       }`}
                     />
                     <span className="text-sm text-muted-foreground">{feature}</span>
                   </li>
                 ))}
               </ul>
-            </Card>
+            </GlassCard>
           ))}
         </div>
 

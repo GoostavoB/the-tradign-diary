@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/glass-card";
 import { Star } from "lucide-react";
 
 const testimonials = [
@@ -48,7 +48,7 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="py-24 px-6 bg-muted/30">
+    <section className="py-24 px-6">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold mb-4">
@@ -61,9 +61,10 @@ const Testimonials = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
-            <Card
+            <GlassCard
               key={index}
-              className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300 group"
+              hover
+              className="p-6"
             >
               <div className="flex items-start gap-4 mb-4">
                 <div className="text-4xl">{testimonial.image}</div>
@@ -75,14 +76,14 @@ const Testimonials = () => {
               
               <div className="flex gap-1 mb-3">
                 {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <Star key={i} size={16} className="fill-neon-green text-neon-green" />
+                  <Star key={i} size={16} className="fill-primary text-primary" />
                 ))}
               </div>
               
               <p className="text-muted-foreground leading-relaxed">
                 "{testimonial.text}"
               </p>
-            </Card>
+            </GlassCard>
           ))}
         </div>
       </div>

@@ -6,16 +6,14 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { CryptoPrices } from "@/components/CryptoPrices";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen">
-      <CryptoPrices />
-      <div className="absolute top-14 right-6 z-50 flex items-center gap-3">
+    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">
+      <div className="absolute top-6 right-6 z-50 flex items-center gap-3">
         <ThemeToggle />
         <Button
           onClick={() => navigate('/auth')}
