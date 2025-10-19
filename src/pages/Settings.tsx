@@ -14,12 +14,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AccentColorPicker } from '@/components/AccentColorPicker';
 import { NotificationPreferences } from '@/components/NotificationPreferences';
 import { DataManagement } from '@/components/DataManagement';
+import { CapitalManagement } from '@/components/CapitalManagement';
 
 const Settings = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState({ full_name: '', email: '' });
-  const [settings, setSettings] = useState({ blur_enabled: false, sidebar_style: 'matte', initial_investment: 0 });
+  const [settings, setSettings] = useState({ blur_enabled: false, sidebar_style: 'matte' });
   const [setups, setSetups] = useState<{ id: string; name: string }[]>([]);
   const [newSetupName, setNewSetupName] = useState('');
   const [editingSetupId, setEditingSetupId] = useState<string | null>(null);
@@ -65,8 +66,7 @@ const Settings = () => {
     if (data) {
       setSettings({ 
         blur_enabled: data.blur_enabled, 
-        sidebar_style: data.sidebar_style,
-        initial_investment: data.initial_investment || 0
+        sidebar_style: data.sidebar_style
       });
     }
   };
@@ -189,25 +189,6 @@ const Settings = () => {
       toast.error('Failed to update setting');
     } else {
       toast.success('Setting updated!');
-    }
-  };
-
-  const handleSaveInvestment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-
-    setLoading(true);
-    const { error } = await supabase
-      .from('user_settings')
-      .update({ initial_investment: settings.initial_investment })
-      .eq('user_id', user.id);
-
-    setLoading(false);
-
-    if (error) {
-      toast.error('Failed to update initial investment');
-    } else {
-      toast.success('Initial investment updated!');
     }
   };
 
@@ -389,31 +370,7 @@ const Settings = () => {
           <TabsContent value="trading" className="space-y-6">
             <AccentColorPicker />
             
-            <Card className="p-6 bg-card border-border">
-              <h2 className="text-xl font-semibold mb-4">Trading Settings</h2>
-              <form onSubmit={handleSaveInvestment} className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium">Initial Investment</label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={settings.initial_investment}
-                    onChange={(e) => setSettings({...settings, initial_investment: parseFloat(e.target.value) || 0})}
-                    placeholder="Enter your starting capital"
-                    className="mt-1"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">This is used to calculate your total ROI</p>
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-foreground text-background hover:bg-foreground/90"
-                >
-                  {loading ? 'Saving...' : 'Save Investment'}
-                </Button>
-              </form>
-            </Card>
+            <CapitalManagement />
 
             <Card className="p-6 bg-card border-border">
               <h2 className="text-xl font-semibold mb-4">Display Preferences</h2>
