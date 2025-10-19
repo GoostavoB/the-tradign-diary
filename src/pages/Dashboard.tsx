@@ -400,6 +400,7 @@ const Dashboard = () => {
                       isCustomizing={isCustomizing}
                       isVisible={isWidgetVisible('heatmap')}
                       onToggleVisibility={toggleWidgetVisibility}
+                      className="w-fit max-w-full"
                     >
                       <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
                     </DashboardWidget>
