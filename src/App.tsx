@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { AIAssistantProvider } from "@/contexts/AIAssistantContext";
 import { ThemeProvider } from "next-themes";
+import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -66,6 +67,7 @@ const App = () => (
                 <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <PerformanceMonitor />
             </AIAssistantProvider>
           </AuthProvider>
         </BrowserRouter>
