@@ -42,7 +42,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         <AppSidebar />
         <div className="flex-1 flex flex-col mobile-safe">
           {/* Desktop Header with Pills Navigation */}
-          <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6">
+          <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6 sticky top-0 z-50">
             {/* Left: Sidebar trigger + Pills Navigation */}
             <div className="flex items-center gap-6">
               <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
@@ -108,7 +108,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           </header>
 
           {/* Mobile Header (Simplified) */}
-          <header className="md:hidden h-14 border-b border-border/50 backdrop-blur-xl glass-subtle flex items-center justify-between gap-2 px-3">
+          <header className="md:hidden h-14 border-b border-border/50 backdrop-blur-xl glass-subtle flex items-center justify-between gap-2 px-3 sticky top-0 z-50">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
             </div>
