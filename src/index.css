@@ -470,6 +470,36 @@ textarea:focus-visible {
   }
 }
 
+/* Fixed left sidebar */
+.sidebar-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background-color: hsl(var(--sidebar-background));
+  border-right: 1px solid hsl(var(--border));
+}
+
+/* Dashboard grid and cards */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.dash-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  box-sizing: border-box;
+}
+
+
 .card-header {
   @apply mb-4;
 }

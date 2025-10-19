@@ -38,9 +38,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   return (
     <SidebarProvider defaultOpen={!isCollapsed} onOpenChange={setIsCollapsed}>
-      <div className="min-h-screen flex w-full mobile-safe">
+      <div className="hidden md:block sidebar-fixed">
         <AppSidebar />
-        <div className="flex-1 flex flex-col mobile-safe">
+      </div>
+      <div className="min-h-screen w-full md:ml-[240px] flex flex-col mobile-safe">
           {/* Desktop Header with Pills Navigation */}
           <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6 sticky top-0 z-50">
             {/* Left: Sidebar trigger */}
@@ -87,7 +88,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           <QuickAddTrade />
           <InstallPrompt />
         </div>
-      </div>
     </SidebarProvider>
   );
 };
