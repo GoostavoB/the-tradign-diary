@@ -402,25 +402,8 @@ const Dashboard = () => {
               </ResponsiveGridLayout>
             </div>
 
-            {/* Analytics Row - Heatmap */}
-            <div className="mb-6">
-              {/* Heatmap Widget */}
-              {(isCustomizing || isWidgetVisible('heatmap')) && (
-                <DashboardWidget
-                  id="heatmap"
-                  title="Trading Success Heatmap"
-                  isCustomizing={isCustomizing}
-                  isVisible={isWidgetVisible('heatmap')}
-                  onToggleVisibility={toggleWidgetVisibility}
-                  className="w-full max-w-4xl mx-auto"
-                >
-                  <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
-                </DashboardWidget>
-              )}
-            </div>
-
-            {/* Charts Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-6">
+            {/* Analytics Row - Charts and Heatmap side by side */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
               {/* Cumulative P&L Chart */}
               {(isCustomizing || isWidgetVisible('charts')) && (
                 <DashboardWidget
@@ -446,6 +429,20 @@ const Dashboard = () => {
                   className="w-full"
                 >
                   <DashboardCharts trades={filteredTrades.length > 0 ? filteredTrades : trades} chartType="winsLosses" />
+                </DashboardWidget>
+              )}
+
+              {/* Heatmap Widget */}
+              {(isCustomizing || isWidgetVisible('heatmap')) && (
+                <DashboardWidget
+                  id="heatmap"
+                  title="Trading Success Heatmap"
+                  isCustomizing={isCustomizing}
+                  isVisible={isWidgetVisible('heatmap')}
+                  onToggleVisibility={toggleWidgetVisibility}
+                  className="w-full"
+                >
+                  <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
                 </DashboardWidget>
               )}
             </div>
