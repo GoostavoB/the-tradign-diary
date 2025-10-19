@@ -11,9 +11,10 @@ interface Trade {
 
 interface DashboardChartsProps {
   trades: Trade[];
+  chartType?: 'cumulative' | 'winsLosses';
 }
 
-export const DashboardCharts = ({ trades }: DashboardChartsProps) => {
+export const DashboardCharts = ({ trades, chartType }: DashboardChartsProps) => {
   // Calculate cumulative P&L over time
   const cumulativePnL = trades
     .sort((a, b) => new Date(a.trade_date).getTime() - new Date(b.trade_date).getTime())
@@ -41,6 +42,105 @@ export const DashboardCharts = ({ trades }: DashboardChartsProps) => {
 
   const winsLossesData = Object.values(tradesByDate);
 
+  // Render specific chart if chartType is provided
+  if (chartType === 'cumulative') {
+    return (
+      <div className="w-full">
+        {cumulativePnL.length > 0 ? (
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={cumulativePnL}>
+              <defs>
+                <linearGradient id="colorPnl" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(var(--neon-green))" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="hsl(var(--neon-green))" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis 
+                dataKey="date" 
+                stroke="hsl(var(--muted-foreground))"
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+              />
+              <YAxis 
+                stroke="hsl(var(--muted-foreground))"
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--background) / 0.8)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid hsl(var(--border) / 0.5)',
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                formatter={(value: any) => {
+                  const numValue = Number(value);
+                  const color = numValue === 0 ? 'hsl(var(--foreground))' : numValue > 0 ? 'hsl(var(--neon-green))' : 'hsl(var(--neon-red))';
+                  return [<span style={{ color }}>${numValue.toFixed(2)}</span>, 'pnl'];
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="pnl"
+                stroke="hsl(var(--neon-green))"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#colorPnl)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm">
+            No data available
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (chartType === 'winsLosses') {
+    return (
+      <div className="w-full">
+        {winsLossesData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={winsLossesData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis 
+                dataKey="date"
+                stroke="hsl(var(--muted-foreground))"
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+              />
+              <YAxis 
+                stroke="hsl(var(--muted-foreground))"
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--background) / 0.8)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid hsl(var(--border) / 0.5)',
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+              />
+              <Bar dataKey="wins" fill="hsl(var(--neon-green))" />
+              <Bar dataKey="losses" fill="hsl(var(--neon-red))" />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm">
+            No data available
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Default: render both charts (legacy support)
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
       <Card className="p-4 lg:p-6 bg-card border-border">

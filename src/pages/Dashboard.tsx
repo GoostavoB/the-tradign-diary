@@ -399,38 +399,52 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
-
-                {/* Heatmap Widget - with proper spacing from stats */}
-                {(isCustomizing || isWidgetVisible('heatmap')) && (
-                  <div key="heatmap">
-                    <DashboardWidget
-                      id="heatmap"
-                      title="Trading Success Heatmap"
-                      isCustomizing={isCustomizing}
-                      isVisible={isWidgetVisible('heatmap')}
-                      onToggleVisibility={toggleWidgetVisibility}
-                      className="w-fit max-w-full"
-                    >
-                      <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
-                    </DashboardWidget>
-                  </div>
-                )}
-
-                {/* Charts Widget */}
-                {(isCustomizing || isWidgetVisible('charts')) && (
-                  <div key="charts">
-                    <DashboardWidget
-                      id="charts"
-                      title="Performance Charts"
-                      isCustomizing={isCustomizing}
-                      isVisible={isWidgetVisible('charts')}
-                      onToggleVisibility={toggleWidgetVisibility}
-                    >
-                      <DashboardCharts trades={filteredTrades.length > 0 ? filteredTrades : trades} />
-                    </DashboardWidget>
-                  </div>
-                )}
               </ResponsiveGridLayout>
+            </div>
+
+            {/* Analytics Row - Heatmap and Charts side by side */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
+              {/* Heatmap Widget */}
+              {(isCustomizing || isWidgetVisible('heatmap')) && (
+                <DashboardWidget
+                  id="heatmap"
+                  title="Trading Success Heatmap"
+                  isCustomizing={isCustomizing}
+                  isVisible={isWidgetVisible('heatmap')}
+                  onToggleVisibility={toggleWidgetVisibility}
+                  className="w-full"
+                >
+                  <TradingHeatmap trades={filteredTrades.length > 0 ? filteredTrades : trades} />
+                </DashboardWidget>
+              )}
+
+              {/* Cumulative P&L Chart */}
+              {(isCustomizing || isWidgetVisible('charts')) && (
+                <DashboardWidget
+                  id="cumulative-pnl"
+                  title="Cumulative P&L"
+                  isCustomizing={isCustomizing}
+                  isVisible={isWidgetVisible('charts')}
+                  onToggleVisibility={toggleWidgetVisibility}
+                  className="w-full"
+                >
+                  <DashboardCharts trades={filteredTrades.length > 0 ? filteredTrades : trades} chartType="cumulative" />
+                </DashboardWidget>
+              )}
+
+              {/* Wins vs Losses Chart */}
+              {(isCustomizing || isWidgetVisible('charts')) && (
+                <DashboardWidget
+                  id="wins-losses"
+                  title="Wins vs Losses"
+                  isCustomizing={isCustomizing}
+                  isVisible={isWidgetVisible('charts')}
+                  onToggleVisibility={toggleWidgetVisibility}
+                  className="w-full"
+                >
+                  <DashboardCharts trades={filteredTrades.length > 0 ? filteredTrades : trades} chartType="winsLosses" />
+                </DashboardWidget>
+              )}
             </div>
 
             {/* Tabs Section - Separate stacking context */}
