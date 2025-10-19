@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Info } from 'lucide-react';
 
 interface Trade {
   trade_date: string;
@@ -15,6 +16,7 @@ const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 export function TradingHeatmap({ trades }: TradingHeatmapProps) {
+  const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const heatmapData = useMemo(() => {
     const data: Record<string, { wins: number; total: number; pnl: number; roi: number }> = {};
 
@@ -69,91 +71,127 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
   const bestSlot = getBestSlot();
 
   return (
-    <div className="w-full">
-      <p className="text-xs lg:text-sm text-muted-foreground mb-2 lg:mb-3">
-        Your performance by day and time. Hover for details.
-      </p>
+    <div className="w-full max-w-2xl mx-auto">
+      <div className="flex items-center gap-2 mb-3">
+        <Info className="w-3.5 h-3.5 text-muted-foreground" />
+        <p className="text-xs text-muted-foreground">
+          Click cells to view details
+        </p>
+      </div>
+      
       <TooltipProvider>
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full">
-            {/* Hour labels */}
-            <div className="flex mb-1">
-              <div className="w-10 lg:w-12"></div>
-              {HOURS.filter((h) => h % 3 === 0).map((hour) => (
-                <div
-                  key={hour}
-                  className="text-[10px] lg:text-xs text-muted-foreground text-center"
-                  style={{ width: '30px', marginRight: '1px' }}
-                >
-                  {hour}h
+        <div className="relative">
+          {/* Compact Grid */}
+          <div className="flex gap-1">
+            {/* Day labels */}
+            <div className="flex flex-col justify-around py-1">
+              {DAYS.map((day) => (
+                <div key={day} className="text-[9px] text-muted-foreground font-medium w-6 text-right pr-1">
+                  {day.slice(0, 3)}
                 </div>
               ))}
             </div>
 
             {/* Heatmap grid */}
-            {DAYS.map((day, dayIndex) => (
-              <div key={day} className="flex items-center mb-0.5">
-                <div className="w-10 lg:w-12 text-[10px] lg:text-xs text-muted-foreground font-medium">
-                  {day}
-                </div>
-                <div className="flex gap-0.5">
-                  {HOURS.map((hour) => {
-                    const key = `${dayIndex}-${hour}`;
-                    const cell = heatmapData[key];
-                    const isBest = key === bestSlot.key;
+            <div className="flex-1">
+              {/* Hour labels */}
+              <div className="flex gap-[2px] mb-1 ml-[2px]">
+                {HOURS.filter((h) => h % 4 === 0).map((hour) => (
+                  <div
+                    key={hour}
+                    className="text-[8px] text-muted-foreground text-center flex-1"
+                  >
+                    {hour}h
+                  </div>
+                ))}
+              </div>
 
-                    return (
-                      <Tooltip key={hour} delayDuration={0}>
-                        <TooltipTrigger asChild>
-                          <div
-                            className={`w-2.5 lg:w-3 h-5 lg:h-6 rounded-sm transition-all hover:scale-125 cursor-pointer ${
-                              isBest ? 'ring-2 ring-accent ring-offset-2 ring-offset-background' : ''
-                            }`}
-                            style={{
-                              backgroundColor: getCellColor(dayIndex, hour),
-                              opacity: cell ? 0.9 : 0.2,
-                            }}
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent className="bg-popover border-border">
-                          {cell ? (
-                            <div className="text-xs space-y-1">
-                              <div className="font-semibold">
-                                {day} {hour}:00-{hour + 1}:00
+              {/* Grid cells */}
+              <div className="space-y-[2px]">
+                {DAYS.map((day, dayIndex) => (
+                  <div key={day} className="flex gap-[2px]">
+                    {HOURS.map((hour) => {
+                      const key = `${dayIndex}-${hour}`;
+                      const cell = heatmapData[key];
+                      const isBest = key === bestSlot.key;
+                      const isSelected = selectedCell === key;
+
+                      return (
+                        <Tooltip key={hour} delayDuration={100}>
+                          <TooltipTrigger asChild>
+                            <button
+                              onClick={() => setSelectedCell(isSelected ? null : key)}
+                              className={`
+                                flex-1 h-4 rounded-[2px] transition-all duration-200
+                                hover:scale-110 hover:shadow-md hover:z-10
+                                ${isSelected ? 'scale-110 shadow-lg ring-2 ring-primary z-10' : ''}
+                                ${isBest && !isSelected ? 'ring-1 ring-accent' : ''}
+                              `}
+                              style={{
+                                backgroundColor: getCellColor(dayIndex, hour),
+                                opacity: cell ? (isSelected ? 1 : 0.85) : 0.15,
+                              }}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent 
+                            className="bg-popover/95 backdrop-blur-sm border-border shadow-lg"
+                            side="top"
+                          >
+                            {cell ? (
+                              <div className="text-xs space-y-0.5 min-w-[140px]">
+                                <div className="font-semibold text-foreground border-b border-border pb-1 mb-1">
+                                  {day} {hour}:00
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-muted-foreground">Win Rate:</span>
+                                  <span className="font-medium" style={{ color: getCellColor(dayIndex, hour) }}>
+                                    {((cell.wins / cell.total) * 100).toFixed(0)}%
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-muted-foreground">Trades:</span>
+                                  <span className="font-medium">{cell.total}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-muted-foreground">ROI:</span>
+                                  <span className="font-medium">{(cell.roi / cell.total).toFixed(1)}%</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-muted-foreground">P&L:</span>
+                                  <span className="font-medium">${cell.pnl.toFixed(0)}</span>
+                                </div>
+                                {isBest && (
+                                  <div className="text-accent font-semibold pt-1 border-t border-border mt-1 text-center">
+                                    ⭐ Best Time
+                                  </div>
+                                )}
                               </div>
-                              <div>Win Rate: {((cell.wins / cell.total) * 100).toFixed(1)}%</div>
-                              <div>Trades: {cell.total}</div>
-                              <div>Avg ROI: {(cell.roi / cell.total).toFixed(2)}%</div>
-                              <div>Total P&L: ${cell.pnl.toFixed(2)}</div>
-                              {isBest && (
-                                <div className="text-accent font-semibold mt-1">⭐ Best Slot</div>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="text-xs">No trades</div>
-                          )}
-                        </TooltipContent>
-                      </Tooltip>
-                    );
-                  })}
-                </div>
+                            ) : (
+                              <div className="text-xs text-muted-foreground">No trades in this slot</div>
+                            )}
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
 
-            {/* Legend */}
-            <div className="flex flex-wrap items-center gap-3 lg:gap-4 mt-2 lg:mt-3 text-[10px] lg:text-xs">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded" style={{ backgroundColor: 'hsl(var(--neon-green))' }}></div>
-                <span className="text-muted-foreground">High (70%+)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded" style={{ backgroundColor: 'hsl(45 93% 47%)' }}></div>
-                <span className="text-muted-foreground">Neutral (40-50%)</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded" style={{ backgroundColor: 'hsl(var(--neon-red))' }}></div>
-                <span className="text-muted-foreground">Low (&lt;40%)</span>
-              </div>
+          {/* Compact Legend */}
+          <div className="flex items-center justify-center gap-4 mt-3 pt-3 border-t border-border/50">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: 'hsl(var(--neon-green))' }}></div>
+              <span className="text-[10px] text-muted-foreground">High</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: 'hsl(45 93% 47%)' }}></div>
+              <span className="text-[10px] text-muted-foreground">Medium</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: 'hsl(var(--neon-red))' }}></div>
+              <span className="text-[10px] text-muted-foreground">Low</span>
             </div>
           </div>
         </div>
