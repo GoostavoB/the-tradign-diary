@@ -46,6 +46,9 @@ export const DashboardCharts = ({ trades, chartType }: DashboardChartsProps) => 
   if (chartType === 'cumulative') {
     return (
       <div className="w-full">
+        <p className="text-xs lg:text-sm text-muted-foreground mb-2 lg:mb-3">
+          Track your cumulative profit and loss over time.
+        </p>
         {cumulativePnL.length > 0 ? (
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={cumulativePnL}>
@@ -103,6 +106,9 @@ export const DashboardCharts = ({ trades, chartType }: DashboardChartsProps) => 
   if (chartType === 'winsLosses') {
     return (
       <div className="w-full">
+        <p className="text-xs lg:text-sm text-muted-foreground mb-2 lg:mb-3">
+          Compare your winning and losing trades by date.
+        </p>
         {winsLossesData.length > 0 ? (
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={winsLossesData}>
