@@ -210,13 +210,13 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6 mobile-safe">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
-            <p className="text-muted-foreground">Track your trading performance and analytics</p>
+            <h1 className="text-2xl md:text-4xl font-bold mb-2">Dashboard</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Track your trading performance and analytics</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4 flex-wrap">
             <DateRangeFilter dateRange={dateRange} onDateRangeChange={setDateRange} />
             {trades.length > 0 && (
               <ExportTradesDialog trades={filteredTrades.length > 0 ? filteredTrades : trades} />
@@ -226,16 +226,16 @@ const Dashboard = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="relative cursor-help">
+                  <div className="relative cursor-help w-full md:w-auto">
                     <div className="absolute inset-0 bg-gradient-to-r from-neon-green/20 to-primary/20 blur-xl animate-pulse"></div>
-                    <div className="relative flex items-center gap-3 px-6 py-3 glass-strong border-2 border-neon-green/30 rounded-xl shadow-lg">
-                      <Flame className="w-8 h-8 text-neon-green" />
+                    <div className="relative flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 glass-strong border-2 border-neon-green/30 rounded-xl shadow-lg">
+                      <Flame className="w-6 h-6 md:w-8 md:h-8 text-neon-green flex-shrink-0" />
                       <div>
-                        <div className="text-xs font-medium text-neon-green uppercase tracking-wider">Unlocked</div>
-                        <div className="text-xl font-bold text-neon-green">
+                        <div className="text-[10px] md:text-xs font-medium text-neon-green uppercase tracking-wider">Unlocked</div>
+                        <div className="text-base md:text-xl font-bold text-neon-green">
                           BEAST MODE
                         </div>
-                        <div className="text-xs text-muted-foreground mt-0.5">
+                        <div className="text-[10px] md:text-xs text-muted-foreground mt-0.5">
                           {beastModeDays} {beastModeDays === 1 ? 'day' : 'days'}
                         </div>
                       </div>
@@ -282,12 +282,21 @@ const Dashboard = () => {
               layouts={{
               lg: layout.filter(item => isCustomizing || isWidgetVisible(item.i)),
               md: layout.filter(item => isCustomizing || isWidgetVisible(item.i)),
-              sm: layout.filter(item => isCustomizing || isWidgetVisible(item.i)),
-              xs: layout.filter(item => isCustomizing || isWidgetVisible(item.i)),
-              xxs: layout.filter(item => isCustomizing || isWidgetVisible(item.i))
+              sm: layout.filter(item => isCustomizing || isWidgetVisible(item.i)).map(item => ({
+                ...item,
+                x: 0,
+                w: 6,
+                static: !isCustomizing
+              })),
+              xs: layout.filter(item => isCustomizing || isWidgetVisible(item.i)).map(item => ({
+                ...item,
+                x: 0,
+                w: 1,
+                static: true
+              }))
             }}
-            breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-            cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+            breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 0 }}
+            cols={{ lg: 12, md: 10, sm: 6, xs: 1 }}
             rowHeight={70}
             isDraggable={isCustomizing}
             isResizable={isCustomizing}
@@ -311,11 +320,11 @@ const Dashboard = () => {
                       isVisible={isWidgetVisible('stats')}
                       onToggleVisibility={toggleWidgetVisibility}
                     >
-                      {/* Stats Cards Grid - Using CSS Grid for stability */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                        <div className="p-4 rounded-xl glass-subtle">
-                          <div className="text-sm text-muted-foreground mb-2">Total P&L</div>
-                          <div className={`text-2xl font-bold ${
+                      {/* Stats Cards Grid - Mobile optimized */}
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 items-stretch">
+                        <div className="p-3 lg:p-4 rounded-xl glass-subtle">
+                          <div className="text-xs lg:text-sm text-muted-foreground mb-1 lg:mb-2">Total P&L</div>
+                          <div className={`text-lg lg:text-2xl font-bold ${
                             stats && stats.total_pnl > 0 ? 'text-neon-green' : 
                             stats && stats.total_pnl < 0 ? 'text-neon-red' : 'text-foreground'
                           }`}>
@@ -323,35 +332,35 @@ const Dashboard = () => {
                           </div>
                         </div>
                         
-                        <div className="p-4 rounded-xl glass-subtle">
-                          <div className="text-sm text-muted-foreground mb-2">Win Rate</div>
-                          <div className={`text-2xl font-bold ${
+                        <div className="p-3 lg:p-4 rounded-xl glass-subtle">
+                          <div className="text-xs lg:text-sm text-muted-foreground mb-1 lg:mb-2">Win Rate</div>
+                          <div className={`text-lg lg:text-2xl font-bold ${
                             stats && stats.win_rate > 70 ? 'text-neon-green' : 'text-foreground'
                           }`}>
                             <AnimatedCounter value={stats?.win_rate || 0} suffix="%" decimals={1} />
                           </div>
                         </div>
                         
-                        <div className="p-4 rounded-xl glass-subtle">
-                          <div className="text-sm text-muted-foreground mb-2">Total Trades</div>
-                          <div className="text-2xl font-bold">
+                        <div className="p-3 lg:p-4 rounded-xl glass-subtle">
+                          <div className="text-xs lg:text-sm text-muted-foreground mb-1 lg:mb-2">Total Trades</div>
+                          <div className="text-lg lg:text-2xl font-bold">
                             <AnimatedCounter value={stats?.total_trades || 0} decimals={0} />
                           </div>
                         </div>
                         
-                        <div className="p-4 rounded-xl glass-subtle">
-                          <div className="text-sm text-muted-foreground mb-2">Avg Duration</div>
-                          <div className="text-2xl font-bold">
+                        <div className="p-3 lg:p-4 rounded-xl glass-subtle">
+                          <div className="text-xs lg:text-sm text-muted-foreground mb-1 lg:mb-2">Avg Duration</div>
+                          <div className="text-lg lg:text-2xl font-bold">
                             <AnimatedCounter value={Math.round(stats?.avg_duration || 0)} decimals={0} />
-                            <span className="text-base ml-1">m</span>
+                            <span className="text-sm lg:text-base ml-1">m</span>
                           </div>
                         </div>
                       </div>
                       
-                      {/* Fees Toggle - Centered below stats */}
-                      <div className="flex justify-center mt-4">
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass-subtle">
-                          <Label htmlFor="fees-toggle-grid" className="cursor-pointer text-sm text-muted-foreground">
+                      {/* Fees Toggle - Mobile optimized */}
+                      <div className="flex justify-center mt-3 lg:mt-4">
+                        <div className="flex items-center gap-2 px-3 lg:px-4 py-2 rounded-lg glass-subtle">
+                          <Label htmlFor="fees-toggle-grid" className="cursor-pointer text-xs lg:text-sm text-muted-foreground">
                             {includeFeesInPnL ? 'Including Fees' : 'Excluding Fees'}
                           </Label>
                           <Switch
@@ -397,14 +406,14 @@ const Dashboard = () => {
               </ResponsiveGridLayout>
 
               {stats && stats.total_trades > 0 && (
-              <Tabs defaultValue="insights" className="space-y-6 mt-6">
-                <TabsList>
-                  <TabsTrigger value="insights">Insights</TabsTrigger>
-                  <TabsTrigger value="advanced">Advanced Analytics</TabsTrigger>
-                  <TabsTrigger value="history">Trade History</TabsTrigger>
+              <Tabs defaultValue="insights" className="space-y-4 md:space-y-6 mt-4 md:mt-6">
+                <TabsList className="w-full grid grid-cols-3 h-auto gap-1">
+                  <TabsTrigger value="insights" className="text-xs md:text-sm py-2">Insights</TabsTrigger>
+                  <TabsTrigger value="advanced" className="text-xs md:text-sm py-2">Advanced Analytics</TabsTrigger>
+                  <TabsTrigger value="history" className="text-xs md:text-sm py-2">Trade History</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="insights" className="space-y-6">
+                <TabsContent value="insights" className="space-y-4 md:space-y-6">
                   <MonthlyReport 
                     trades={filteredTrades.length > 0 ? filteredTrades : trades}
                   />

@@ -42,11 +42,11 @@ export const DashboardCharts = ({ trades }: DashboardChartsProps) => {
   const winsLossesData = Object.values(tradesByDate);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <Card className="p-6 bg-card border-border">
-        <h3 className="text-lg font-semibold mb-4">Cumulative P&L</h3>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+      <Card className="p-4 lg:p-6 bg-card border-border">
+        <h3 className="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Cumulative P&L</h3>
         {cumulativePnL.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={250}>
             <AreaChart data={cumulativePnL}>
               <defs>
                 <linearGradient id="colorPnl" x1="0" y1="0" x2="0" y2="1">
@@ -88,16 +88,16 @@ export const DashboardCharts = ({ trades }: DashboardChartsProps) => {
             </AreaChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+          <div className="h-[250px] flex items-center justify-center text-muted-foreground text-sm">
             No data available
           </div>
         )}
       </Card>
 
-      <Card className="p-6 bg-card border-border">
-        <h3 className="text-lg font-semibold mb-4">Wins vs Losses</h3>
+      <Card className="p-4 lg:p-6 bg-card border-border">
+        <h3 className="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Wins vs Losses</h3>
         {winsLossesData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={250}>
             <BarChart data={winsLossesData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis 
@@ -122,7 +122,7 @@ export const DashboardCharts = ({ trades }: DashboardChartsProps) => {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+          <div className="h-[250px] flex items-center justify-center text-muted-foreground text-sm">
             No data available
           </div>
         )}
