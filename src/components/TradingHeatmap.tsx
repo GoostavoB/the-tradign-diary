@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Info, Star } from 'lucide-react';
 import { useThemeMode } from '@/hooks/useThemeMode';
@@ -18,7 +18,7 @@ interface TradingHeatmapProps {
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
-export function TradingHeatmap({ trades }: TradingHeatmapProps) {
+const TradingHeatmapComponent = ({ trades }: TradingHeatmapProps) => {
   const { colors, isClassic } = useThemeMode();
   const { openWithPrompt } = useAIAssistant();
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
@@ -225,4 +225,6 @@ export function TradingHeatmap({ trades }: TradingHeatmapProps) {
       </TooltipProvider>
     </div>
   );
-}
+};
+
+export const TradingHeatmap = memo(TradingHeatmapComponent);

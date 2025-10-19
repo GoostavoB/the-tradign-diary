@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useThemeMode } from "@/hooks/useThemeMode";
@@ -14,35 +15,46 @@ interface WinsByHourChartProps {
   trades: Trade[];
 }
 
-export const WinsByHourChart = ({ trades }: WinsByHourChartProps) => {
+const WinsByHourChartComponent = ({ trades }: WinsByHourChartProps) => {
   const { colors } = useThemeMode();
-  const { isMobile, optimizeDataPoints } = useMobileOptimization();
+  const { isMobile } = useMobileOptimization();
   const { openWithPrompt } = useAIAssistant();
 
-  const hourlyDataRaw = Array.from({ length: 24 }, (_, hour) => {
-    const tradesAtHour = trades.filter(trade => {
-      const date = new Date(trade.trade_date);
-      return date.getHours() === hour;
+  const { hourlyData, totalTrades, chartSummary } = useMemo(() => {
+    const hourlyDataRaw = Array.from({ length: 24 }, (_, hour) => {
+      const tradesAtHour = trades.filter(trade => {
+        const date = new Date(trade.trade_date);
+        return date.getHours() === hour;
+      });
+
+      const wins = tradesAtHour.filter(t => t.pnl > 0).length;
+      const losses = tradesAtHour.filter(t => t.pnl <= 0).length;
+
+      return {
+        hour: hour.toString().padStart(2, '0') + 'h',
+        hourNum: hour,
+        wins,
+        losses,
+      };
     });
 
-    const wins = tradesAtHour.filter(t => t.pnl > 0).length;
-    const losses = tradesAtHour.filter(t => t.pnl <= 0).length;
+    // Optimize for mobile: show every 2-3 hours instead of all 24
+    const optimizedData = isMobile 
+      ? hourlyDataRaw.filter((_, index) => index % 3 === 0)
+      : hourlyDataRaw;
 
-    return {
-      hour: hour.toString().padStart(2, '0') + 'h',
-      hourNum: hour,
-      wins,
-      losses,
+    const totalCount = trades.length;
+    const peakHour = hourlyDataRaw.reduce((max, h) => 
+      h.wins + h.losses > max.wins + max.losses ? h : max
+    );
+    const summary = `Trading activity across ${totalCount} trades. Peak hours show ${peakHour.hour}`;
+
+    return { 
+      hourlyData: optimizedData, 
+      totalTrades: totalCount, 
+      chartSummary: summary 
     };
-  });
-
-  // Optimize for mobile: show every 2-3 hours instead of all 24
-  const hourlyData = isMobile 
-    ? hourlyDataRaw.filter((_, index) => index % 3 === 0)
-    : hourlyDataRaw;
-
-  const totalTrades = trades.length;
-  const chartSummary = `Trading activity across ${totalTrades} trades. Peak hours show ${hourlyDataRaw.reduce((max, h) => h.wins + h.losses > max.wins + max.losses ? h : max).hour}`;
+  }, [trades, isMobile]);
 
   return (
     <Card className="glass-card">
@@ -108,3 +120,5 @@ export const WinsByHourChart = ({ trades }: WinsByHourChartProps) => {
     </Card>
   );
 };
+
+export const WinsByHourChart = memo(WinsByHourChartComponent);
