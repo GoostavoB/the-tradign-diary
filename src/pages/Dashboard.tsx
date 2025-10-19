@@ -489,7 +489,9 @@ const Dashboard = () => {
                 </TabsContent>
 
               <TabsContent value="history" className="relative">
-                <TradeHistory onTradesChange={fetchStats} />
+                <Card className="p-4 lg:p-6 glass">
+                  <TradeHistory onTradesChange={fetchStats} />
+                </Card>
               </TabsContent>
               </Tabs>
             </div>
