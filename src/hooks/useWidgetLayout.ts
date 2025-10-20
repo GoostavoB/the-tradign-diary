@@ -94,6 +94,9 @@ export const useWidgetLayout = (userId: string | undefined) => {
     const widgetWidth = widget.defaultLayout.w;
     const widgetHeight = widget.defaultLayout.h;
     
+    // Max columns for grid (assumes 12 columns for desktop)
+    const maxColumns = 12;
+    
     let bestX = 0;
     let bestY = 0;
 
@@ -133,7 +136,7 @@ export const useWidgetLayout = (userId: string | undefined) => {
         if (found) break;
         
         // Check if there's space at the end of the row
-        if (currentX + widgetWidth <= 12) {
+        if (currentX + widgetWidth <= maxColumns) {
           bestX = currentX;
           bestY = y;
           found = true;

@@ -32,24 +32,23 @@ export const useResponsiveLayout = (containerWidth: number = 1200) => {
       const isTablet = width >= 768 && width < 1024;
       const isDesktop = width >= 1024;
       
-      // Enable compact mode for screens between 1024px and 1599px
-      const isCompact = width >= 1024 && width < 1600;
+      // Disable compact mode - let widgets use full width on all screens
+      const isCompact = false;
       
-      // Calculate compact scale (10-15% reduction)
-      const compactScale = isCompact ? 0.88 : 1;
+      // No scaling - use full available space
+      const compactScale = 1;
       
-      // Dynamic column system
+      // Dynamic column system - keep 12 columns for desktop to maximize space usage
       let columns = 12;
       if (isMobile) {
         columns = 4;
       } else if (isTablet) {
         columns = 8;
-      } else if (width >= 1024 && width < 1280) {
-        columns = 10;
       }
+      // Desktop (1024+) keeps full 12 columns to utilize wider screens
       
-      // Row height adjusts based on compact mode
-      const rowHeight = isCompact ? 0.88 : 1;
+      // Standard row height
+      const rowHeight = 1;
 
       setConfig({
         isCompact,

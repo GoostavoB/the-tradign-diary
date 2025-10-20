@@ -582,14 +582,14 @@ const Dashboard = () => {
               {/* Overview Tab - Main Dashboard Grid */}
               <TabsContent value="overview" className="space-y-6">
                 {/* Dashboard Grid */}
-                <div ref={gridContainerRef} className="w-full">
+                <div ref={gridContainerRef} className="w-full max-w-none">
                   <GridLayout
                     className="dashboard-grid"
                     layout={layout}
-                    cols={12}
+                    cols={responsiveLayout.columns}
                     rowHeight={1}
                     width={containerWidth}
-                    margin={[20, 0]}
+                    margin={[16, 16]}
                     containerPadding={[0, 0]}
                     isDraggable={isCustomizing}
                     isResizable={isCustomizing}
@@ -597,7 +597,7 @@ const Dashboard = () => {
                     draggableHandle=".drag-handle"
                     compactType="vertical"
                     preventCollision={false}
-                    isBounded={true}
+                    isBounded={false}
                     autoSize={true}
                   >
                     {layout.map(renderWidget)}
