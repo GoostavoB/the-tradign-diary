@@ -102,7 +102,7 @@ export const AccentColorPicker = () => {
     <Popover open={isOpen} onOpenChange={setIsOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button variant="outline" size="icon" className="glass hover-lift">
-          <Palette className="h-4 w-4" style={{ color: accentColor }} />
+          <Palette className="h-4 w-4 text-primary" />
         </Button>
       </PopoverTrigger>
       <PopoverContent 
