@@ -44,6 +44,7 @@ const Auth = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const { signIn, signUp, signInWithGoogle } = useAuth();
 
@@ -269,17 +270,32 @@ const Auth = () => {
             </div>
           )}
 
-          <div className="flex items-start gap-2">
-            <Checkbox
-              id="privacy"
-              checked={privacyAccepted}
-              onCheckedChange={(checked) => setPrivacyAccepted(checked as boolean)}
-              required
-            />
-            <Label htmlFor="privacy" className="text-sm text-muted-foreground leading-tight cursor-pointer">
-              I have read and accept the Privacy Policy regarding the collection and use of my personal data.
-            </Label>
-          </div>
+          {isLogin && !isForgotPassword && (
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="rememberMe"
+                checked={rememberMe}
+                onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+              />
+              <Label htmlFor="rememberMe" className="text-sm text-muted-foreground leading-tight cursor-pointer">
+                Keep me logged in
+              </Label>
+            </div>
+          )}
+
+          {!isLogin && !isForgotPassword && (
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="privacy"
+                checked={privacyAccepted}
+                onCheckedChange={(checked) => setPrivacyAccepted(checked as boolean)}
+                required
+              />
+              <Label htmlFor="privacy" className="text-sm text-muted-foreground leading-tight cursor-pointer">
+                I have read and accept the Privacy Policy regarding the collection and use of my personal data.
+              </Label>
+            </div>
+          )}
 
           <Button
             type="submit"

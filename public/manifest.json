@@ -1,6 +1,6 @@
 {
-  "name": "Trading Analytics Pro",
-  "short_name": "TradingPro",
+  "name": "The Trading Diary",
+  "short_name": "TradingDiary",
   "description": "Professional-grade trading analytics dashboard with AI insights, customizable widgets, and real-time performance tracking",
   "start_url": "/",
   "display": "standalone",
