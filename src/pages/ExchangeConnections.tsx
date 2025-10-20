@@ -145,16 +145,28 @@ export default function ExchangeConnections() {
 
   const exchanges = [
     {
+      id: 'binance',
+      name: 'Binance',
+      description: 'Connect your Binance account to automatically sync spot & futures trades',
+      icon: '🟡',
+    },
+    {
       id: 'bingx',
       name: 'BingX',
-      description: 'Connect your BingX account to automatically sync trades',
+      description: 'Connect your BingX account to automatically sync spot & futures trades',
       icon: '🏦',
     },
     {
-      id: 'binance',
-      name: 'Binance',
-      description: 'Connect your Binance account to automatically sync trades',
-      icon: '🟡',
+      id: 'bybit',
+      name: 'Bybit',
+      description: 'Connect your Bybit account to automatically sync spot & futures trades',
+      icon: '🟠',
+    },
+    {
+      id: 'mexc',
+      name: 'MEXC',
+      description: 'Connect your MEXC account to automatically sync spot & futures trades',
+      icon: '🔵',
     },
   ];
 

@@ -46,6 +46,35 @@ interface BingXFuturesTrade {
   positionSide: string;
 }
 
+interface BybitTrade {
+  symbol: string;
+  orderId: string;
+  orderLinkId: string;
+  side: string;
+  orderPrice: string;
+  orderQty: string;
+  execFee: string;
+  execId: string;
+  execPrice: string;
+  execQty: string;
+  execTime: string;
+  closedPnl?: string;
+}
+
+interface MexcTrade {
+  symbol: string;
+  id: number;
+  orderId: number;
+  price: string;
+  qty: string;
+  commission: string;
+  commissionAsset: string;
+  time: number;
+  isBuyer: boolean;
+  isMaker: boolean;
+  realizedPnl?: string;
+}
+
 async function fetchBinanceSpotTrades(
   apiKey: string,
   apiSecret: string,
@@ -124,6 +153,168 @@ async function fetchBinanceFuturesTrades(
       await new Promise(resolve => setTimeout(resolve, 100));
     } catch (error) {
       console.error(`Error fetching ${symbol} futures:`, error);
+    }
+  }
+  
+  return allTrades;
+}
+
+async function fetchBybitSpotTrades(
+  apiKey: string,
+  apiSecret: string,
+  startTime?: number,
+  endTime?: number
+): Promise<BybitTrade[]> {
+  const allTrades: BybitTrade[] = [];
+  const symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'SOLUSDT'];
+  
+  for (const symbol of symbols) {
+    const timestamp = Date.now().toString();
+    let queryString = `api_key=${apiKey}&symbol=${symbol}&timestamp=${timestamp}`;
+    
+    if (startTime) queryString += `&startTime=${startTime}`;
+    if (endTime) queryString += `&endTime=${endTime}`;
+    
+    const signature = createHmac('sha256', apiSecret)
+      .update(queryString)
+      .digest('hex');
+    
+    const url = `https://api.bybit.com/v5/execution/list?${queryString}&sign=${signature}`;
+    
+    try {
+      const response = await fetch(url, {
+        headers: { 'X-BAPI-API-KEY': apiKey },
+      });
+      
+      const data = await response.json();
+      
+      if (data.retCode === 0 && data.result?.list) {
+        allTrades.push(...data.result.list);
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 100));
+    } catch (error) {
+      console.error(`Error fetching ${symbol} from Bybit:`, error);
+    }
+  }
+  
+  return allTrades;
+}
+
+async function fetchBybitFuturesTrades(
+  apiKey: string,
+  apiSecret: string,
+  startTime?: number,
+  endTime?: number
+): Promise<BybitTrade[]> {
+  const allTrades: BybitTrade[] = [];
+  const timestamp = Date.now().toString();
+  let queryString = `api_key=${apiKey}&category=linear&timestamp=${timestamp}`;
+  
+  if (startTime) queryString += `&startTime=${startTime}`;
+  if (endTime) queryString += `&endTime=${endTime}`;
+  
+  const signature = createHmac('sha256', apiSecret)
+    .update(queryString)
+    .digest('hex');
+  
+  const url = `https://api.bybit.com/v5/execution/list?${queryString}&sign=${signature}`;
+  
+  try {
+    const response = await fetch(url, {
+      headers: { 'X-BAPI-API-KEY': apiKey },
+    });
+    
+    const data = await response.json();
+    
+    if (data.retCode === 0 && data.result?.list) {
+      allTrades.push(...data.result.list);
+    }
+  } catch (error) {
+    console.error('Error fetching futures from Bybit:', error);
+  }
+  
+  return allTrades;
+}
+
+async function fetchMexcSpotTrades(
+  apiKey: string,
+  apiSecret: string,
+  startTime?: number,
+  endTime?: number
+): Promise<MexcTrade[]> {
+  const allTrades: MexcTrade[] = [];
+  const symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'SOLUSDT'];
+  
+  for (const symbol of symbols) {
+    const timestamp = Date.now().toString();
+    let queryString = `symbol=${symbol}&timestamp=${timestamp}`;
+    
+    if (startTime) queryString += `&startTime=${startTime}`;
+    if (endTime) queryString += `&endTime=${endTime}`;
+    
+    const signature = createHmac('sha256', apiSecret)
+      .update(queryString)
+      .digest('hex');
+    
+    const url = `https://api.mexc.com/api/v3/myTrades?${queryString}&signature=${signature}`;
+    
+    try {
+      const response = await fetch(url, {
+        headers: { 'X-MEXC-APIKEY': apiKey },
+      });
+      
+      const data = await response.json();
+      
+      if (Array.isArray(data)) {
+        allTrades.push(...data);
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 100));
+    } catch (error) {
+      console.error(`Error fetching ${symbol} from MEXC:`, error);
+    }
+  }
+  
+  return allTrades;
+}
+
+async function fetchMexcFuturesTrades(
+  apiKey: string,
+  apiSecret: string,
+  startTime?: number,
+  endTime?: number
+): Promise<MexcTrade[]> {
+  const allTrades: MexcTrade[] = [];
+  const symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'SOLUSDT'];
+  
+  for (const symbol of symbols) {
+    const timestamp = Date.now().toString();
+    let queryString = `symbol=${symbol}&timestamp=${timestamp}`;
+    
+    if (startTime) queryString += `&startTime=${startTime}`;
+    if (endTime) queryString += `&endTime=${endTime}`;
+    
+    const signature = createHmac('sha256', apiSecret)
+      .update(queryString)
+      .digest('hex');
+    
+    const url = `https://contract.mexc.com/api/v1/private/account/trades?${queryString}&signature=${signature}`;
+    
+    try {
+      const response = await fetch(url, {
+        headers: { 'ApiKey': apiKey },
+      });
+      
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        allTrades.push(...data.data);
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 100));
+    } catch (error) {
+      console.error(`Error fetching ${symbol} futures from MEXC:`, error);
     }
   }
   
@@ -276,6 +467,42 @@ function normalizeFuturesTrade(trade: BingXFuturesTrade, userId: string): any {
   };
 }
 
+function normalizeBybitTrade(trade: BybitTrade, userId: string, isFutures: boolean = false): any {
+  return {
+    user_id: userId,
+    symbol: trade.symbol,
+    side: trade.side.toLowerCase() as 'long' | 'short',
+    entry_price: parseFloat(trade.execPrice),
+    position_size: parseFloat(trade.execQty),
+    trading_fee: parseFloat(trade.execFee),
+    profit_loss: trade.closedPnl ? parseFloat(trade.closedPnl) : undefined,
+    pnl: trade.closedPnl ? parseFloat(trade.closedPnl) : undefined,
+    opened_at: new Date(parseInt(trade.execTime)).toISOString(),
+    trade_date: new Date(parseInt(trade.execTime)).toISOString().split('T')[0],
+    exchange_source: 'bybit',
+    exchange_trade_id: trade.execId,
+    broker: isFutures ? 'Bybit Futures' : 'Bybit',
+  };
+}
+
+function normalizeMexcTrade(trade: MexcTrade, userId: string, isFutures: boolean = false): any {
+  return {
+    user_id: userId,
+    symbol: trade.symbol,
+    side: trade.isBuyer ? 'long' : 'short',
+    entry_price: parseFloat(trade.price),
+    position_size: parseFloat(trade.qty),
+    trading_fee: parseFloat(trade.commission),
+    profit_loss: trade.realizedPnl ? parseFloat(trade.realizedPnl) : undefined,
+    pnl: trade.realizedPnl ? parseFloat(trade.realizedPnl) : undefined,
+    opened_at: new Date(trade.time).toISOString(),
+    trade_date: new Date(trade.time).toISOString().split('T')[0],
+    exchange_source: 'mexc',
+    exchange_trade_id: trade.id.toString(),
+    broker: isFutures ? 'MEXC Futures' : 'MEXC',
+  };
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -424,6 +651,24 @@ Deno.serve(async (req) => {
 
       const normalizedSpot = spotTrades.map(t => normalizeSpotTrade(t, user.id));
       const normalizedFutures = futuresTrades.map(t => normalizeFuturesTrade(t, user.id));
+      allTrades = [...normalizedSpot, ...normalizedFutures];
+    } else if (connection.exchange_name === 'bybit') {
+      const [spotTrades, futuresTrades] = await Promise.all([
+        fetchBybitSpotTrades(apiKey, apiSecret, startTime, endTime),
+        fetchBybitFuturesTrades(apiKey, apiSecret, startTime, endTime),
+      ]);
+
+      const normalizedSpot = spotTrades.map(t => normalizeBybitTrade(t, user.id, false));
+      const normalizedFutures = futuresTrades.map(t => normalizeBybitTrade(t, user.id, true));
+      allTrades = [...normalizedSpot, ...normalizedFutures];
+    } else if (connection.exchange_name === 'mexc') {
+      const [spotTrades, futuresTrades] = await Promise.all([
+        fetchMexcSpotTrades(apiKey, apiSecret, startTime, endTime),
+        fetchMexcFuturesTrades(apiKey, apiSecret, startTime, endTime),
+      ]);
+
+      const normalizedSpot = spotTrades.map(t => normalizeMexcTrade(t, user.id, false));
+      const normalizedFutures = futuresTrades.map(t => normalizeMexcTrade(t, user.id, true));
       allTrades = [...normalizedSpot, ...normalizedFutures];
     }
 

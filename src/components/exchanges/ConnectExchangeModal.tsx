@@ -91,6 +91,14 @@ export function ConnectExchangeModal({
       name: 'BingX',
       docsUrl: 'https://bingx.com/en-us/support/articles/360039749673',
     },
+    bybit: {
+      name: 'Bybit',
+      docsUrl: 'https://www.bybit.com/en/help-center/article/How-to-Create-a-New-API-Key',
+    },
+    mexc: {
+      name: 'MEXC',
+      docsUrl: 'https://www.mexc.com/support/articles/360051385112',
+    },
   };
 
   const info = exchangeInfo[exchange] || { name: exchange, docsUrl: '#' };
