@@ -28,6 +28,7 @@ import { AvgPnLPerTradeWidget } from '@/components/widgets/AvgPnLPerTradeWidget'
 import { AvgPnLPerDayWidget } from '@/components/widgets/AvgPnLPerDayWidget';
 import { CurrentROIWidget } from '@/components/widgets/CurrentROIWidget';
 import { AvgROIPerTradeWidget } from '@/components/widgets/AvgROIPerTradeWidget';
+import { CapitalGrowthWidget } from '@/components/widgets/CapitalGrowthWidget';
 
 /**
  * Widget Catalog - Registry of all available dashboard widgets
@@ -279,6 +280,25 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: AvgROIPerTradeWidget,
     requiresData: ['stats'],
   },
+
+  capitalGrowth: {
+    id: 'capitalGrowth',
+    title: 'Capital Growth',
+    description: 'Visualize your capital growth over time',
+    category: 'performance',
+    icon: TrendingUp,
+    defaultSize: 'large',
+    defaultLayout: {
+      w: 6,
+      h: 480,
+      minW: 6,
+      minH: 1,
+      maxW: 12,
+      maxH: 720,
+    },
+    component: CapitalGrowthWidget,
+    requiresData: ['stats', 'trades'],
+  },
 };
 
 /**
@@ -297,14 +317,17 @@ export const DEFAULT_DASHBOARD_LAYOUT = [
   { i: 'currentROI', x: 6, y: 360, w: 3, h: 360 },
   { i: 'avgROIPerTrade', x: 9, y: 360, w: 3, h: 360 },
   
-  // Row 3: Portfolio Overview (720px) + Top Movers (600px) + Quick Actions (360px)
-  { i: 'portfolioOverview', x: 0, y: 720, w: 6, h: 720 },
-  { i: 'topMovers', x: 6, y: 720, w: 3, h: 600 },
-  { i: 'quickActions', x: 9, y: 720, w: 3, h: 360 },
+  // Row 3: Capital Growth (6) + Portfolio Overview (6)
+  { i: 'capitalGrowth', x: 0, y: 720, w: 6, h: 480 },
+  { i: 'portfolioOverview', x: 6, y: 720, w: 6, h: 480 },
   
-  // Row 4: Recent Transactions (720px) + AI Insights (600px)
-  { i: 'recentTransactions', x: 0, y: 1440, w: 6, h: 720 },
-  { i: 'aiInsights', x: 6, y: 1440, w: 6, h: 600 },
+  // Row 4: Recent Transactions (6) + Top Movers (3) + Quick Actions (3)
+  { i: 'recentTransactions', x: 0, y: 1200, w: 6, h: 720 },
+  { i: 'topMovers', x: 6, y: 1200, w: 3, h: 600 },
+  { i: 'quickActions', x: 9, y: 1200, w: 3, h: 360 },
+  
+  // Row 5: AI Insights (6)
+  { i: 'aiInsights', x: 0, y: 1920, w: 6, h: 600 },
 ];
 
 /**

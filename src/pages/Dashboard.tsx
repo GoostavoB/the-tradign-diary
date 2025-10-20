@@ -455,6 +455,11 @@ const Dashboard = () => {
         widgetProps.avgROIPerTrade = stats?.avg_roi_per_trade || 0;
         widgetProps.totalTrades = stats?.total_trades || 0;
         break;
+      case 'capitalGrowth':
+        widgetProps.chartData = portfolioChartData;
+        widgetProps.initialInvestment = initialInvestment;
+        widgetProps.currentBalance = initialInvestment + (stats?.total_pnl || 0);
+        break;
     }
 
     return (
