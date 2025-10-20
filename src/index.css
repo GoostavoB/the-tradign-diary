@@ -472,9 +472,6 @@ textarea:focus-visible {
 
 /* Dashboard grid and cards */
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 20px;
   width: 100%;
 }
 
@@ -485,6 +482,7 @@ textarea:focus-visible {
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
   box-sizing: border-box;
   transition: all 0.3s ease;
   overflow: hidden;

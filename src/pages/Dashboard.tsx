@@ -394,6 +394,7 @@ const Dashboard = () => {
                     cols={12}
                     rowHeight={30}
                     width={containerWidth}
+                    margin={[20, 20]}
                     isDraggable={isCustomizing}
                     isResizable={isCustomizing}
                     onLayoutChange={updateLayout}
