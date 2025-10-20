@@ -8,6 +8,8 @@ const corsHeaders = {
 
 interface FetchRequest {
   connectionId: string;
+  mode: 'preview' | 'import';
+  selectedTradeIds?: string[];
   startDate?: string;
   endDate?: string;
 }
@@ -182,7 +184,7 @@ Deno.serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    const { connectionId, startDate, endDate }: FetchRequest = await req.json();
+    const { connectionId, mode, selectedTradeIds, startDate, endDate }: FetchRequest = await req.json();
 
     // Fetch connection
     const { data: connection, error: connectionError } = await supabaseClient
@@ -196,7 +198,68 @@ Deno.serve(async (req) => {
       throw new Error('Connection not found');
     }
 
-    // Update status to syncing
+    // Handle import mode
+    if (mode === 'import') {
+      if (!selectedTradeIds || selectedTradeIds.length === 0) {
+        throw new Error('No trades selected for import');
+      }
+
+      // Fetch selected pending trades
+      const { data: pendingTrades, error: fetchError } = await supabaseClient
+        .from('exchange_pending_trades')
+        .select('*')
+        .in('id', selectedTradeIds)
+        .eq('connection_id', connectionId);
+
+      if (fetchError) throw fetchError;
+
+      // Insert into trades table
+      let imported = 0;
+      let skipped = 0;
+
+      for (const pending of pendingTrades || []) {
+        const { error } = await supabaseClient
+          .from('trades')
+          .insert(pending.trade_data);
+
+        if (error) {
+          if (error.code === '23505') {
+            skipped++;
+          } else {
+            console.error('Insert error:', error);
+          }
+        } else {
+          imported++;
+        }
+      }
+
+      // Clean up pending trades
+      await supabaseClient
+        .from('exchange_pending_trades')
+        .delete()
+        .eq('connection_id', connectionId);
+
+      // Update connection
+      await supabaseClient
+        .from('exchange_connections')
+        .update({
+          sync_status: 'success',
+          last_synced_at: new Date().toISOString(),
+          sync_error: null,
+        })
+        .eq('id', connectionId);
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          tradesImported: imported,
+          tradesSkipped: skipped,
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Update status to syncing for preview mode
     await supabaseClient
       .from('exchange_connections')
       .update({ sync_status: 'syncing' })
@@ -238,33 +301,23 @@ Deno.serve(async (req) => {
       allTrades = [...normalizedSpot, ...normalizedFutures];
     }
 
-    // Insert trades (ignore duplicates)
-    let imported = 0;
-    let skipped = 0;
-
+    // Store trades in pending_trades table (preview mode)
     for (const trade of allTrades) {
-      const { error } = await supabaseClient
-        .from('trades')
-        .insert(trade);
-
-      if (error) {
-        if (error.code === '23505') {
-          // Duplicate key error
-          skipped++;
-        } else {
-          console.error('Insert error:', error);
-        }
-      } else {
-        imported++;
-      }
+      await supabaseClient
+        .from('exchange_pending_trades')
+        .insert({
+          user_id: user.id,
+          connection_id: connectionId,
+          trade_data: trade,
+          is_selected: true,
+        });
     }
 
-    // Update connection
+    // Update connection status
     await supabaseClient
       .from('exchange_connections')
       .update({
-        sync_status: 'success',
-        last_synced_at: new Date().toISOString(),
+        sync_status: 'pending_review',
         sync_error: null,
       })
       .eq('id', connectionId);
@@ -275,9 +328,7 @@ Deno.serve(async (req) => {
         .from('exchange_sync_history')
         .update({
           trades_fetched: allTrades.length,
-          trades_imported: imported,
-          trades_skipped: skipped,
-          status: 'success',
+          status: 'pending_review',
           completed_at: new Date().toISOString(),
         })
         .eq('id', syncHistory.id);
@@ -287,15 +338,13 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         tradesFetched: allTrades.length,
-        tradesImported: imported,
-        tradesSkipped: skipped,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
     console.error('Error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

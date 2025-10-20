@@ -7,6 +7,7 @@ import { RefreshCw, Unplug, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ConnectExchangeModal } from '@/components/exchanges/ConnectExchangeModal';
 import { SyncHistoryWidget } from '@/components/exchanges/SyncHistoryWidget';
+import { TradePreviewModal } from '@/components/exchanges/TradePreviewModal';
 import { formatDistanceToNow } from 'date-fns';
 
 interface ExchangeConnection {
@@ -22,6 +23,8 @@ interface ExchangeConnection {
 export default function ExchangeConnections() {
   const [selectedExchange, setSelectedExchange] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [previewConnectionId, setPreviewConnectionId] = useState<string | null>(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: connections = [], isLoading } = useQuery({
@@ -50,7 +53,10 @@ export default function ExchangeConnections() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${session.access_token}`,
           },
-          body: JSON.stringify({ connectionId }),
+          body: JSON.stringify({ 
+            connectionId,
+            mode: 'preview'
+          }),
         }
       );
 
@@ -59,15 +65,13 @@ export default function ExchangeConnections() {
         throw new Error(error.error || 'Sync failed');
       }
 
-      return response.json();
+      return { ...await response.json(), connectionId };
     },
     onSuccess: (data) => {
-      toast.success(
-        `Synced ${data.tradesImported} new trades (${data.tradesSkipped} duplicates skipped)`
-      );
+      toast.success(`Fetched ${data.tradesFetched} trades. Review and select which to import.`);
+      setPreviewConnectionId(data.connectionId);
+      setIsPreviewModalOpen(true);
       queryClient.invalidateQueries({ queryKey: ['exchange-connections'] });
-      queryClient.invalidateQueries({ queryKey: ['trades'] });
-      queryClient.invalidateQueries({ queryKey: ['sync-history'] });
     },
     onError: (error: Error) => {
       toast.error(`Sync failed: ${error.message}`);
@@ -249,6 +253,19 @@ export default function ExchangeConnections() {
         }}
         onSuccess={() => {
           queryClient.invalidateQueries({ queryKey: ['exchange-connections'] });
+        }}
+      />
+
+      <TradePreviewModal
+        connectionId={previewConnectionId}
+        isOpen={isPreviewModalOpen}
+        onClose={() => {
+          setIsPreviewModalOpen(false);
+          setPreviewConnectionId(null);
+        }}
+        onImportComplete={() => {
+          setIsPreviewModalOpen(false);
+          setPreviewConnectionId(null);
         }}
       />
     </div>

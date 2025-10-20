@@ -296,6 +296,44 @@ export type Database = {
         }
         Relationships: []
       }
+      exchange_pending_trades: {
+        Row: {
+          connection_id: string
+          expires_at: string | null
+          fetched_at: string | null
+          id: string
+          is_selected: boolean | null
+          trade_data: Json
+          user_id: string
+        }
+        Insert: {
+          connection_id: string
+          expires_at?: string | null
+          fetched_at?: string | null
+          id?: string
+          is_selected?: boolean | null
+          trade_data: Json
+          user_id: string
+        }
+        Update: {
+          connection_id?: string
+          expires_at?: string | null
+          fetched_at?: string | null
+          id?: string
+          is_selected?: boolean | null
+          trade_data?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchange_pending_trades_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "exchange_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exchange_sync_history: {
         Row: {
           completed_at: string | null
@@ -1246,6 +1284,10 @@ export type Database = {
         Returns: boolean
       }
       cleanup_deleted_trades: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_expired_pending_trades: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
