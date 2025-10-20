@@ -251,6 +251,107 @@ export type Database = {
         }
         Relationships: []
       }
+      exchange_connections: {
+        Row: {
+          api_key_encrypted: string
+          api_passphrase_encrypted: string | null
+          api_secret_encrypted: string
+          created_at: string | null
+          exchange_name: string
+          id: string
+          is_active: boolean | null
+          last_synced_at: string | null
+          sync_error: string | null
+          sync_status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          api_key_encrypted: string
+          api_passphrase_encrypted?: string | null
+          api_secret_encrypted: string
+          created_at?: string | null
+          exchange_name: string
+          id?: string
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          sync_error?: string | null
+          sync_status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          api_key_encrypted?: string
+          api_passphrase_encrypted?: string | null
+          api_secret_encrypted?: string
+          created_at?: string | null
+          exchange_name?: string
+          id?: string
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          sync_error?: string | null
+          sync_status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      exchange_sync_history: {
+        Row: {
+          completed_at: string | null
+          connection_id: string | null
+          created_at: string | null
+          error_message: string | null
+          exchange_name: string
+          id: string
+          started_at: string | null
+          status: string
+          sync_type: string
+          trades_fetched: number | null
+          trades_imported: number | null
+          trades_skipped: number | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          connection_id?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          exchange_name: string
+          id?: string
+          started_at?: string | null
+          status: string
+          sync_type: string
+          trades_fetched?: number | null
+          trades_imported?: number | null
+          trades_skipped?: number | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          connection_id?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          exchange_name?: string
+          id?: string
+          started_at?: string | null
+          status?: string
+          sync_type?: string
+          trades_fetched?: number | null
+          trades_imported?: number | null
+          trades_skipped?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchange_sync_history_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "exchange_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       journal_entries: {
         Row: {
           content: string
@@ -739,6 +840,8 @@ export type Database = {
           duration_minutes: number | null
           emotional_tag: string | null
           entry_price: number | null
+          exchange_source: string | null
+          exchange_trade_id: string | null
           exit_price: number | null
           funding_fee: number | null
           id: string
@@ -774,6 +877,8 @@ export type Database = {
           duration_minutes?: number | null
           emotional_tag?: string | null
           entry_price?: number | null
+          exchange_source?: string | null
+          exchange_trade_id?: string | null
           exit_price?: number | null
           funding_fee?: number | null
           id?: string
@@ -809,6 +914,8 @@ export type Database = {
           duration_minutes?: number | null
           emotional_tag?: string | null
           entry_price?: number | null
+          exchange_source?: string | null
+          exchange_trade_id?: string | null
           exit_price?: number | null
           funding_fee?: number | null
           id?: string
