@@ -1,4 +1,4 @@
-import { BarChart3, Upload, TrendingUp, TrendingDown, Target, Users, Brain, Trophy, Settings, BookOpen, HelpCircle, LineChart, LogOut, Circle, Star, PieChart, Activity, Zap, Sparkles, DollarSign, RefreshCw } from 'lucide-react';
+import { BarChart3, Upload, TrendingUp, TrendingDown, Target, Users, Brain, Trophy, Settings, BookOpen, HelpCircle, LineChart, LogOut, Circle, Star, PieChart, Activity, Zap, Sparkles, DollarSign, RefreshCw, Wallet } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import * as LucideIcons from 'lucide-react';
@@ -23,6 +23,7 @@ const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: BarChart3 },
   { title: 'Add Trade', url: '/upload', icon: Upload },
   { title: 'Exchange Sync', url: '/exchanges', icon: RefreshCw },
+  { title: 'Spot Wallet', url: '/spot-wallet', icon: Wallet },
   { title: 'Analytics', url: '/analytics', icon: TrendingUp },
   { title: 'Market Data', url: '/market-data', icon: LineChart },
   { title: 'Forecast & Goals', url: '/forecast', icon: Target },
