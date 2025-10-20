@@ -31,7 +31,9 @@ export const useLSRNotifications = () => {
 
   const requestPermission = async () => {
     if (!('Notification' in window)) {
-      toast.error('Browser notifications are not supported');
+      toast.error('Notifications Not Supported', {
+        description: 'Your browser doesn\'t support push notifications. Please try Chrome, Firefox, or Safari.',
+      });
       return false;
     }
 
@@ -39,10 +41,20 @@ export const useLSRNotifications = () => {
     setPermission(result);
 
     if (result === 'granted') {
-      toast.success('Notifications enabled! You\'ll receive LSR alerts.');
+      toast.success('Notifications Enabled! 🔔', {
+        description: 'You\'ll now receive real-time LSR alerts. Configure your preferences below.',
+      });
       return true;
+    } else if (result === 'denied') {
+      toast.error('Notifications Blocked', {
+        description: 'To enable notifications:\n1. Click the lock icon (🔒) in your browser address bar\n2. Find "Notifications" and change to "Allow"\n3. Refresh the page and try again',
+        duration: 8000,
+      });
+      return false;
     } else {
-      toast.error('Notification permission denied');
+      toast('Permission Dismissed', {
+        description: 'You can enable notifications later by clicking "Allow Notifications" again.',
+      });
       return false;
     }
   };

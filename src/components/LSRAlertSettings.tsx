@@ -195,20 +195,73 @@ export const LSRAlertSettings = () => {
       {/* Notification Permission */}
       {permission !== 'granted' && (
         <Card className="border-neon-green/50 bg-neon-green/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Bell className="w-5 h-5 text-neon-green" />
-                <div>
-                  <p className="font-medium">Enable Notifications</p>
-                  <p className="text-sm text-muted-foreground">
-                    Allow browser notifications to receive real-time alerts
-                  </p>
-                </div>
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-neon-green/10">
+                <Bell className="w-6 h-6 text-neon-green" />
               </div>
-              <Button onClick={requestPermission} variant="default">
-                Enable
+              <div>
+                <CardTitle>Enable Push Notifications</CardTitle>
+                <CardDescription>
+                  Get instant alerts when market sentiment changes
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Stay ahead of the market with real-time notifications. You'll receive alerts when:
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-start gap-2">
+                  <span className="text-neon-green mt-0.5">📈</span>
+                  <span><strong>Rapid changes detected:</strong> When the Long/Short ratio changes significantly (customizable threshold)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-0.5">📉</span>
+                  <span><strong>Sentiment turns bearish:</strong> When the ratio drops below 1.0 (more shorts than longs)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-neon-green mt-0.5">📈</span>
+                  <span><strong>Sentiment turns bullish:</strong> When the ratio rises above 1.0 (more longs than shorts)</span>
+                </li>
+              </ul>
+              <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
+                <p className="text-xs text-muted-foreground">
+                  <strong>Privacy Note:</strong> Notifications are sent directly from our backend to your browser. 
+                  We don't store any personal data beyond your alert preferences. You can disable alerts anytime.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Button onClick={requestPermission} size="lg" className="w-full">
+                <Bell className="w-4 h-4 mr-2" />
+                Allow Notifications
               </Button>
+              <p className="text-xs text-center text-muted-foreground">
+                Click "Allow" when your browser asks for permission
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Notification Enabled Success */}
+      {permission === 'granted' && (
+        <Card className="border-neon-green/50 bg-neon-green/5">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-neon-green/10">
+                <Check className="w-5 h-5 text-neon-green" />
+              </div>
+              <div>
+                <p className="font-medium text-neon-green">Notifications Enabled</p>
+                <p className="text-sm text-muted-foreground">
+                  You'll receive real-time alerts based on your configuration below
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
