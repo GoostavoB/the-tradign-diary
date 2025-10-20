@@ -118,6 +118,12 @@ export default function ExchangeConnections() {
       description: 'Connect your BingX account to automatically sync trades',
       icon: '🏦',
     },
+    {
+      id: 'binance',
+      name: 'Binance',
+      description: 'Connect your Binance account to automatically sync trades',
+      icon: '🟡',
+    },
   ];
 
   const getConnection = (exchangeName: string) =>
