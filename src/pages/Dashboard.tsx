@@ -75,6 +75,8 @@ const Dashboard = () => {
   const [filteredTrades, setFilteredTrades] = useState<Trade[]>([]);
   const [activeTab, setActiveTab] = useState<string>('overview');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
+  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(1200);
   
   // Memoize processed trades to prevent unnecessary recalculations
   const processedTrades = useMemo(() => 
@@ -126,6 +128,22 @@ const Dashboard = () => {
       setCapitalLog(data || []);
     }
   };
+
+  // Measure grid container width for responsive layout
+  useEffect(() => {
+    const container = gridContainerRef.current;
+    if (!container) return;
+
+    const updateWidth = () => {
+      setContainerWidth(container.offsetWidth);
+    };
+
+    updateWidth();
+    const resizeObserver = new ResizeObserver(updateWidth);
+    resizeObserver.observe(container);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -369,18 +387,19 @@ const Dashboard = () => {
               {/* Overview Tab - Main Dashboard Grid */}
               <TabsContent value="overview" className="space-y-6">
                 {/* Dashboard Grid */}
-                <GridLayout
-                  className="dashboard-grid"
-                  layout={layout}
-                  cols={12}
-                  rowHeight={30}
-                  width={1200}
-                  isDraggable={isCustomizing}
-                  isResizable={isCustomizing}
-                  onLayoutChange={updateLayout}
-                  draggableHandle=".drag-handle"
-                  compactType="vertical"
-                >
+                <div ref={gridContainerRef} className="w-full">
+                  <GridLayout
+                    className="dashboard-grid"
+                    layout={layout}
+                    cols={12}
+                    rowHeight={30}
+                    width={containerWidth}
+                    isDraggable={isCustomizing}
+                    isResizable={isCustomizing}
+                    onLayoutChange={updateLayout}
+                    draggableHandle=".drag-handle"
+                    compactType="vertical"
+                  >
               {/* Total Balance Card */}
               {(isCustomizing || isWidgetVisible('totalBalance')) && (
                 <div key="totalBalance" className={`dash-card ${isCustomizing && !isWidgetVisible('totalBalance') ? 'opacity-50' : ''}`}>
@@ -655,6 +674,7 @@ const Dashboard = () => {
                 </div>
               )}
               </GridLayout>
+                </div>
             </TabsContent>
 
             {/* Insights Tab */}

@@ -33,11 +33,7 @@ const DEFAULT_WIDGETS: WidgetConfig[] = [
   { id: 'quickActions', visible: true },
   { id: 'recentTransactions', visible: true },
   { id: 'insights', visible: true },
-  // Hidden by default but available in customize
   { id: 'premiumCTA', visible: false },
-  { id: 'streaks', visible: false },
-  { id: 'heatmap', visible: false },
-  { id: 'charts', visible: false },
 ];
 
 const DEFAULT_LAYOUT: LayoutItem[] = [
@@ -49,9 +45,6 @@ const DEFAULT_LAYOUT: LayoutItem[] = [
   { i: 'recentTransactions', x: 0, y: 9, w: 9, h: 4, minW: 6, minH: 3, maxH: 6 },
   { i: 'premiumCTA', x: 9, y: 9, w: 3, h: 4, minW: 3, minH: 3, maxH: 6 },
   { i: 'insights', x: 0, y: 13, w: 12, h: 2, minW: 6, minH: 2, maxH: 4 },
-  { i: 'streaks', x: 0, y: 15, w: 12, h: 2, minW: 6, minH: 2, maxH: 4 },
-  { i: 'heatmap', x: 0, y: 17, w: 12, h: 4, minW: 6, minH: 3, maxH: 8 },
-  { i: 'charts', x: 0, y: 21, w: 12, h: 5, minW: 6, minH: 4, maxH: 10 },
 ];
 
 export function useDashboardLayout() {
