@@ -4,6 +4,7 @@ import { AnimatedCounter } from '@/components/AnimatedCounter';
 import { formatCurrency, formatPercent } from '@/utils/formatNumber';
 import { WidgetProps } from '@/types/widget';
 import { WidgetWrapper } from './WidgetWrapper';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface TotalBalanceWidgetProps extends WidgetProps {
   totalBalance: number;
@@ -20,6 +21,7 @@ export const TotalBalanceWidget = memo(({
   change24h = 0,
   changePercent24h = 0,
 }: TotalBalanceWidgetProps) => {
+  const { t } = useTranslation();
   const isPositive = change24h >= 0;
 
   return (
@@ -31,7 +33,7 @@ export const TotalBalanceWidget = memo(({
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">Total Balance</p>
+          <p className="text-sm font-medium text-muted-foreground">{t('widgets.totalBalance')}</p>
           <div className="p-2 rounded-xl bg-primary/10">
             <DollarSign className="h-4 w-4 text-primary" />
           </div>
