@@ -86,7 +86,7 @@ export default function Analytics() {
         </div>
 
         <Tabs defaultValue="charts" className="space-y-6">
-          <TabsList className="grid w-full max-w-5xl grid-cols-4 md:grid-cols-7 glass">
+          <TabsList className="grid w-full max-w-4xl grid-cols-3 md:grid-cols-5 glass">
             <TabsTrigger value="charts" className="gap-2 text-xs md:text-sm">
               <BarChart3 className="h-4 w-4" />
               <span className="hidden md:inline">Charts</span>
@@ -106,14 +106,6 @@ export default function Analytics() {
             <TabsTrigger value="capital" className="gap-2 text-xs md:text-sm">
               <DollarSign className="h-4 w-4" />
               <span className="hidden md:inline">Capital</span>
-            </TabsTrigger>
-            <TabsTrigger value="replay" className="gap-2 text-xs md:text-sm">
-              <Clock className="h-4 w-4" />
-              <span className="hidden md:inline">Replay</span>
-            </TabsTrigger>
-            <TabsTrigger value="compare" className="gap-2 text-xs md:text-sm">
-              <Target className="h-4 w-4" />
-              <span className="hidden md:inline">Compare</span>
             </TabsTrigger>
           </TabsList>
 
@@ -153,20 +145,6 @@ export default function Analytics() {
             <CapitalManagement />
             <CapitalHistoryChart />
             <PeriodBasedROI />
-          </TabsContent>
-
-          <TabsContent value="replay">
-            {trades.length > 0 ? (
-              <TradeReplay trade={trades[0]} />
-            ) : (
-              <p className="text-center text-muted-foreground p-8">
-                No trades available for replay
-              </p>
-            )}
-          </TabsContent>
-
-          <TabsContent value="compare">
-            <TradeComparison trades={selectedTrades.length > 0 ? selectedTrades : trades.slice(0, 3)} />
           </TabsContent>
         </Tabs>
       </div>

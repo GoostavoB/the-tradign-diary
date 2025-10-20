@@ -9,7 +9,6 @@ export const MobileNav = () => {
     { path: "/dashboard", icon: Home, label: "Home" },
     { path: "/tools", icon: BarChart3, label: "Tools" },
     { path: "/upload", icon: TrendingUp, label: "Trade" },
-    { path: "/social", icon: Users, label: "Social" },
     { path: "/settings", icon: Settings, label: "More" },
   ];
 

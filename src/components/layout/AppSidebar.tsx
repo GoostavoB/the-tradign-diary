@@ -25,7 +25,6 @@ const mainItems = [
   { title: 'Analytics', url: '/analytics', icon: TrendingUp },
   { title: 'Market Data', url: '/market-data', icon: LineChart },
   { title: 'Forecast & Goals', url: '/forecast', icon: Target },
-  { title: 'Community', url: '/social', icon: Users },
   { title: 'AI Assistant', url: '/ai-tools', icon: Brain },
   { title: 'Achievements', url: '/achievements', icon: Trophy },
   { title: 'Settings', url: '/settings', icon: Settings },
