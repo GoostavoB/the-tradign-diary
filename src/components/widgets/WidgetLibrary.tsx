@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Search, Crown } from 'lucide-react';
+import { Plus, Search, Crown, Trash2 } from 'lucide-react';
 import { WIDGET_CATALOG, WIDGET_CATEGORIES } from '@/config/widgetCatalog';
 import { WidgetConfig } from '@/types/widget';
 import { cn } from '@/lib/utils';
@@ -19,6 +19,7 @@ interface WidgetLibraryProps {
   open: boolean;
   onClose: () => void;
   onAddWidget: (widgetId: string) => void;
+  onRemoveWidget: (widgetId: string) => void;
   activeWidgets: string[];
 }
 
@@ -26,6 +27,7 @@ export const WidgetLibrary = memo(({
   open,
   onClose,
   onAddWidget,
+  onRemoveWidget,
   activeWidgets,
 }: WidgetLibraryProps) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,9 +40,12 @@ export const WidgetLibrary = memo(({
     return matchesSearch && matchesCategory;
   });
 
-  const handleAddWidget = (widgetId: string) => {
-    onAddWidget(widgetId);
-    // Don't close modal to allow adding multiple widgets
+  const handleToggleWidget = (widgetId: string, isActive: boolean) => {
+    if (isActive) {
+      onRemoveWidget(widgetId);
+    } else {
+      onAddWidget(widgetId);
+    }
   };
 
   const isWidgetActive = (widgetId: string) => activeWidgets.includes(widgetId);
@@ -94,7 +99,7 @@ export const WidgetLibrary = memo(({
                       key={widget.id}
                       widget={widget}
                       isActive={isWidgetActive(widget.id)}
-                      onAdd={() => handleAddWidget(widget.id)}
+                      onToggle={() => handleToggleWidget(widget.id, isWidgetActive(widget.id))}
                     />
                   ))}
               </div>
@@ -124,10 +129,10 @@ WidgetLibrary.displayName = 'WidgetLibrary';
 interface WidgetCardProps {
   widget: WidgetConfig;
   isActive: boolean;
-  onAdd: () => void;
+  onToggle: () => void;
 }
 
-const WidgetCard = memo(({ widget, isActive, onAdd }: WidgetCardProps) => {
+const WidgetCard = memo(({ widget, isActive, onToggle }: WidgetCardProps) => {
   const Icon = widget.icon;
 
   return (
@@ -165,13 +170,15 @@ const WidgetCard = memo(({ widget, isActive, onAdd }: WidgetCardProps) => {
 
           <Button
             size="sm"
-            variant={isActive ? "outline" : "default"}
-            onClick={onAdd}
-            disabled={isActive}
+            variant={isActive ? "destructive" : "default"}
+            onClick={onToggle}
             className="w-full"
           >
             {isActive ? (
-              "Already Added"
+              <>
+                <Trash2 className="h-3.5 w-3.5 mr-1" />
+                Remove Widget
+              </>
             ) : (
               <>
                 <Plus className="h-3.5 w-3.5 mr-1" />

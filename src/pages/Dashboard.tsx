@@ -577,7 +577,7 @@ const Dashboard = () => {
                     onLayoutChange={updateLayout}
                     draggableHandle=".drag-handle"
                     compactType="vertical"
-                    preventCollision={true}
+                    preventCollision={false}
                     isBounded={true}
                     autoSize={true}
                   >
@@ -616,6 +616,7 @@ const Dashboard = () => {
           open={showWidgetLibrary}
           onClose={() => setShowWidgetLibrary(false)}
           onAddWidget={addWidget}
+          onRemoveWidget={removeWidget}
           activeWidgets={activeWidgets}
         />
       </div>

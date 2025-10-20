@@ -80,7 +80,7 @@ export const useWidgetLayout = (userId: string | undefined) => {
     setLayout(newLayout);
   }, []);
 
-  // Add widget to layout
+  // Add widget to layout with smart positioning
   const addWidget = useCallback((widgetId: string) => {
     const widget = WIDGET_CATALOG[widgetId];
     if (!widget) return;
@@ -91,13 +91,67 @@ export const useWidgetLayout = (userId: string | undefined) => {
       return;
     }
 
-    // Find next available position
-    const maxY = Math.max(...layout.map(item => item.y + item.h), 0);
+    const widgetWidth = widget.defaultLayout.w;
+    const widgetHeight = widget.defaultLayout.h;
+    
+    let bestX = 0;
+    let bestY = 0;
+
+    // If layout is empty, start at origin
+    if (layout.length === 0) {
+      bestX = 0;
+      bestY = 0;
+    } else {
+      // Sort existing widgets by position (top to bottom, left to right)
+      const sortedLayout = [...layout].sort((a, b) => {
+        if (a.y !== b.y) return a.y - b.y;
+        return a.x - b.x;
+      });
+
+      // Get unique Y levels
+      const yLevels = [...new Set(sortedLayout.map(item => item.y))].sort((a, b) => a - b);
+      
+      let found = false;
+      
+      // Try to fit widget in existing rows first
+      for (const y of yLevels) {
+        const itemsInRow = sortedLayout.filter(item => item.y === y);
+        
+        // Check for gaps in this row
+        let currentX = 0;
+        for (const item of itemsInRow.sort((a, b) => a.x - b.x)) {
+          if (item.x - currentX >= widgetWidth) {
+            // Found a gap!
+            bestX = currentX;
+            bestY = y;
+            found = true;
+            break;
+          }
+          currentX = item.x + item.w;
+        }
+        
+        if (found) break;
+        
+        // Check if there's space at the end of the row
+        if (currentX + widgetWidth <= 12) {
+          bestX = currentX;
+          bestY = y;
+          found = true;
+          break;
+        }
+      }
+      
+      // If no gap found, add to a new row
+      if (!found) {
+        bestX = 0;
+        bestY = Math.max(...sortedLayout.map(item => item.y + item.h), 0);
+      }
+    }
     
     const newItem: WidgetLayout = {
       i: widgetId,
-      x: 0,
-      y: maxY,
+      x: bestX,
+      y: bestY,
       ...widget.defaultLayout,
     };
 

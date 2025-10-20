@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { QuickActionCard } from '@/components/QuickActionCard';
+import { WidgetWrapper } from './WidgetWrapper';
 import { WidgetProps } from '@/types/widget';
 
 interface QuickActionsWidgetProps extends WidgetProps {
@@ -12,9 +13,13 @@ export const QuickActionsWidget = memo(({
   onRemove,
 }: QuickActionsWidgetProps) => {
   return (
-    <div className="h-full">
+    <WidgetWrapper
+      id={id}
+      isEditMode={isEditMode}
+      onRemove={onRemove}
+    >
       <QuickActionCard />
-    </div>
+    </WidgetWrapper>
   );
 });
 
