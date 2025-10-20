@@ -24,7 +24,7 @@ const DashboardShowcase = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="space-y-6 lg:pr-8"
+            className="space-y-6 lg:pr-8 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
               Other journals show numbers.{" "}
