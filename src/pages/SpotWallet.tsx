@@ -8,6 +8,7 @@ import { useWalletAnalytics } from '@/hooks/useWalletAnalytics';
 import { AddTokenModal } from '@/components/spot-wallet/AddTokenModal';
 import { TokenAllocationChart } from '@/components/spot-wallet/TokenAllocationChart';
 import { TokenList } from '@/components/spot-wallet/TokenList';
+import { TokenIcon } from '@/components/TokenIcon';
 import { formatCurrency, formatPercent } from '@/utils/formatNumber';
 
 export default function SpotWallet() {
@@ -31,6 +32,7 @@ export default function SpotWallet() {
 
   const tokenListData = analytics.allocation.map(item => ({
     ...item,
+    icon: prices[item.symbol]?.icon,
     priceChange24h: prices[item.symbol]?.priceChangePercentage24h,
     priceChange7d: prices[item.symbol]?.priceChangePercentage7d,
     priceChange30d: prices[item.symbol]?.priceChangePercentage30d,
@@ -99,7 +101,10 @@ export default function SpotWallet() {
           <CardContent>
             {analytics.bestPerformer ? (
               <>
-                <div className="text-2xl font-bold">{analytics.bestPerformer.symbol}</div>
+                <div className="flex items-center gap-2">
+                  <TokenIcon symbol={analytics.bestPerformer.symbol} size="sm" />
+                  <div className="text-2xl font-bold">{analytics.bestPerformer.symbol}</div>
+                </div>
                 <p className="text-xs text-neon-green mt-1">
                   +{formatPercent(analytics.bestPerformer.changePercent)} (24h)
                 </p>

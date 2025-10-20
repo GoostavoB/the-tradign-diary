@@ -5,6 +5,7 @@ import { formatPercent, formatCurrency } from "@/utils/formatNumber";
 import { Trade } from "@/types/trade";
 import { ExplainMetricButton } from "@/components/ExplainMetricButton";
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
+import { TokenIcon } from "@/components/TokenIcon";
 
 interface AssetMover {
   symbol: string;
@@ -81,6 +82,7 @@ const TopMoversCardComponent = ({ trades, className }: TopMoversCardProps) => {
                         <TrendingDown className="h-3 w-3 text-secondary" />
                       )}
                     </div>
+                    <TokenIcon symbol={asset.symbol} size="sm" />
                     <div>
                       <p className="font-medium text-sm">{asset.symbol}</p>
                       <p className="text-xs text-muted-foreground">{asset.trades} trades</p>

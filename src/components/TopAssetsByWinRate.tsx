@@ -5,6 +5,7 @@ import { TrendingUp } from "lucide-react";
 import { formatPercent } from "@/utils/formatNumber";
 import { ExplainMetricButton } from "@/components/ExplainMetricButton";
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
+import { TokenIcon } from "@/components/TokenIcon";
 
 interface AssetStats {
   asset: string;
@@ -61,6 +62,7 @@ const TopAssetsByWinRateComponent = ({ assets, limit = 5 }: TopAssetsByWinRatePr
                 >
                   {index + 1}
                 </div>
+                <TokenIcon symbol={asset.asset} size="sm" />
                 <div>
                   <p className="font-medium">{asset.asset}</p>
                   <p className="text-xs text-muted-foreground">{asset.trades} trades</p>

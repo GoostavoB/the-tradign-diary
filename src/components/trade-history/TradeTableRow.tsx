@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Trade } from '@/types/trade';
 import { getFinancialColor } from '@/lib/utils';
+import { TokenIcon } from '@/components/TokenIcon';
 
 type ColumnKey = 'date' | 'symbol' | 'setup' | 'broker' | 'type' | 'entry' | 'exit' | 'size' | 'pnl' | 'roi' | 'fundingFee' | 'tradingFee';
 
@@ -53,7 +54,12 @@ export const TradeTableRow = memo(({
         <TableCell>{format(new Date(trade.trade_date), 'MMM dd, yyyy')}</TableCell>
       )}
       {columns.find(c => c.key === 'symbol')?.visible && (
-        <TableCell className="font-medium">{trade.symbol}</TableCell>
+        <TableCell>
+          <div className="flex items-center gap-2">
+            <TokenIcon symbol={trade.symbol} size="sm" />
+            <span className="font-medium">{trade.symbol}</span>
+          </div>
+        </TableCell>
       )}
       {columns.find(c => c.key === 'setup')?.visible && (
         <TableCell>{trade.setup || '-'}</TableCell>
