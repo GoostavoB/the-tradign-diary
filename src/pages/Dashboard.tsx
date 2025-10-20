@@ -450,6 +450,10 @@ const Dashboard = () => {
         widgetProps.currentROI = stats?.current_roi || 0;
         widgetProps.initialInvestment = initialInvestment;
         widgetProps.currentBalance = initialInvestment + (stats?.total_pnl || 0);
+        widgetProps.onInitialInvestmentUpdate = async (newValue: number) => {
+          setInitialInvestment(newValue);
+          await fetchStats();
+        };
         break;
       case 'avgROIPerTrade':
         widgetProps.avgROIPerTrade = stats?.avg_roi_per_trade || 0;
