@@ -176,7 +176,7 @@ const Dashboard = () => {
       supabase.removeChannel(tradesChannel);
       supabase.removeChannel(capitalChannel);
     };
-  }, [user, includeFeesInPnL]);
+  }, [user, includeFeesInPnL, initialInvestment]);
 
   // Filter trades based on date range
   useEffect(() => {
@@ -458,7 +458,7 @@ const Dashboard = () => {
         widgetProps.currentBalance = initialInvestment + (stats?.total_pnl || 0);
         widgetProps.onInitialInvestmentUpdate = async (newValue: number) => {
           setInitialInvestment(newValue);
-          await fetchStats();
+          // fetchStats will be automatically called via useEffect when initialInvestment changes
         };
         break;
       case 'avgROIPerTrade':
