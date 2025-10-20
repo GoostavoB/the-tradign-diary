@@ -48,6 +48,9 @@ export const CapitalManagement = () => {
   // Add/Update capital entry
   const saveMutation = useMutation({
     mutationFn: async (entry: Partial<CapitalLogEntry>) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
       // Calculate total_after
       const previousTotal = capitalLog.length > 0 && !editingId
         ? capitalLog[0].total_after
@@ -75,11 +78,12 @@ export const CapitalManagement = () => {
         const { error } = await supabase
           .from('capital_log')
           .insert({
+            user_id: user.id,
             log_date: format(date, 'yyyy-MM-dd'),
             amount_added: parseFloat(amountAdded),
             total_after: totalAfter,
             notes: notes || null,
-          } as any);
+          });
 
         if (error) throw error;
       }
