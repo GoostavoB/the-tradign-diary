@@ -570,7 +570,7 @@ const Dashboard = () => {
                     cols={12}
                     rowHeight={1}
                     width={containerWidth}
-                    margin={[20, 20]}
+                    margin={[20, 0]}
                     containerPadding={[0, 0]}
                     isDraggable={isCustomizing}
                     isResizable={isCustomizing}

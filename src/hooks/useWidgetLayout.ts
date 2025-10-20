@@ -29,8 +29,14 @@ export const useWidgetLayout = (userId: string | undefined) => {
           return;
         }
 
-        if (data?.layout_json && Array.isArray(data.layout_json)) {
-          setLayout(data.layout_json as unknown as WidgetLayout[]);
+        if (data?.layout_json) {
+          // Handle both array format and object format with layout property
+          const layoutData = data.layout_json as any;
+          if (Array.isArray(layoutData)) {
+            setLayout(layoutData as WidgetLayout[]);
+          } else if (layoutData.layout && Array.isArray(layoutData.layout)) {
+            setLayout(layoutData.layout as WidgetLayout[]);
+          }
         }
       } catch (error) {
         console.error('Failed to load layout:', error);
@@ -51,7 +57,7 @@ export const useWidgetLayout = (userId: string | undefined) => {
       const { error } = await supabase
         .from('user_settings')
         .update({
-          layout_json: newLayout as any,
+          layout_json: { layout: newLayout } as any,
           updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);
