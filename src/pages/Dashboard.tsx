@@ -27,6 +27,7 @@ import { formatCurrency } from '@/utils/formatNumber';
 import type { Trade } from '@/types/trade';
 import { WIDGET_CATALOG } from '@/config/widgetCatalog';
 import { WidgetLibrary } from '@/components/widgets/WidgetLibrary';
+import { toast } from 'sonner';
 
 // Lazy load heavy components
 const TradeHistory = lazy(() => import('@/components/TradeHistory').then(m => ({ default: m.TradeHistory })));
@@ -340,30 +341,110 @@ const Dashboard = () => {
   useEffect(() => {
     if (!layout?.length) return;
 
-    // Measure after paint
-    const id = requestAnimationFrame(() => {
-      let changed = false;
-      const updated = layout.map((item: any) => {
-        const el = itemRefs.current[item.i];
-        if (!el) return item;
-        const contentHeight = el.scrollHeight; // includes overflowed content
-        const desiredH = Math.max(item.minH || 1, Math.ceil(contentHeight / ROW_HEIGHT_PX));
-        if (desiredH !== item.h) {
-          changed = true;
-          return { ...item, h: desiredH };
-        }
-        return item;
+    // Compact layout to remove gaps
+    const compactLayout = (items: any[]) => {
+      const sorted = [...items].sort((a, b) => {
+        if (a.y !== b.y) return a.y - b.y;
+        return a.x - b.x;
       });
-      if (changed) {
-        updateLayout(updated);
-      }
-    });
 
-    return () => cancelAnimationFrame(id);
-  }, [containerWidth, isCustomizing, layout, updateLayout]);
+      const compacted = sorted.map((item, idx) => {
+        if (idx === 0) return item;
+        
+        // Find the lowest Y position this item can go
+        let targetY = 0;
+        for (let y = 0; y <= item.y; y++) {
+          let hasCollision = false;
+          for (const other of sorted.slice(0, idx)) {
+            // Check if there's overlap at this Y position
+            if (
+              other.y < y + item.h &&
+              other.y + other.h > y &&
+              other.x < item.x + item.w &&
+              other.x + other.w > item.x
+            ) {
+              hasCollision = true;
+              break;
+            }
+          }
+          if (!hasCollision) {
+            targetY = y;
+            break;
+          } else {
+            targetY = y + 1;
+          }
+        }
+        
+        return { ...item, y: targetY };
+      });
+
+      return compacted;
+    };
+
+    const compacted = compactLayout(layout);
+    const hasChanges = layout.some((item, idx) => item.y !== compacted[idx]?.y);
+    
+    if (hasChanges && !isCustomizing) {
+      updateLayout(compacted);
+    }
+  }, [layout, isCustomizing, updateLayout]);
   const handleCancelCustomize = useCallback(() => {
     setIsCustomizing(false);
   }, []);
+
+  const handleOptimizeLayout = useCallback(() => {
+    // Compact layout to remove all gaps
+    const compactLayout = (items: any[]) => {
+      const sorted = [...items].sort((a, b) => {
+        if (a.y !== b.y) return a.y - b.y;
+        return a.x - b.x;
+      });
+
+      const compacted: any[] = [];
+      
+      for (const item of sorted) {
+        let bestY = 0;
+        let bestX = item.x;
+        
+        // Try to find the lowest Y position
+        for (let y = 0; y <= (compacted.length > 0 ? Math.max(...compacted.map(c => c.y + c.h)) : 0) + 10; y++) {
+          // Try different X positions in this row
+          for (let x = 0; x <= 12 - item.w; x++) {
+            let hasCollision = false;
+            
+            for (const other of compacted) {
+              if (
+                other.y < y + item.h &&
+                other.y + other.h > y &&
+                other.x < x + item.w &&
+                other.x + other.w > x
+              ) {
+                hasCollision = true;
+                break;
+              }
+            }
+            
+            if (!hasCollision) {
+              bestY = y;
+              bestX = x;
+              break;
+            }
+          }
+          
+          if (bestX !== undefined) break;
+        }
+        
+        compacted.push({ ...item, x: bestX, y: bestY });
+      }
+      
+      return compacted;
+    };
+
+    const optimized = compactLayout(layout);
+    updateLayout(optimized);
+    saveLayout(optimized);
+    toast.success('Layout optimized');
+  }, [layout, updateLayout, saveLayout]);
   const spotWalletTotal = useMemo(() => {
     return holdings.reduce((sum, holding) => {
       const price = Number(prices[holding.token_symbol] || 0);
@@ -391,7 +472,7 @@ const Dashboard = () => {
 
   // Dynamic widget renderer
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const ROW_HEIGHT_PX = 1;
+  const ROW_HEIGHT_PX = 80;
 
   const renderWidget = useCallback((layoutItem: any) => {
     const widgetConfig = WIDGET_CATALOG[layoutItem.i];
@@ -526,13 +607,22 @@ const Dashboard = () => {
         {!loading && stats && stats.total_trades > 0 && (
           <div className="flex items-center gap-2 flex-wrap">
             {!isCustomizing ? (
-              <Button
-                onClick={handleStartCustomize}
-                variant="outline"
-                className="glass"
-              >
-                Customize Dashboard
-              </Button>
+              <>
+                <Button
+                  onClick={handleStartCustomize}
+                  variant="outline"
+                  className="glass"
+                >
+                  Customize Dashboard
+                </Button>
+                <Button
+                  onClick={handleOptimizeLayout}
+                  variant="outline"
+                  className="glass"
+                >
+                  Optimize Layout
+                </Button>
+              </>
             ) : (
               <>
                 <Button
@@ -548,6 +638,9 @@ const Dashboard = () => {
                 </Button>
                 <Button onClick={handleCancelCustomize} variant="outline">
                   Cancel
+                </Button>
+                <Button onClick={handleOptimizeLayout} variant="outline">
+                  Optimize Layout
                 </Button>
                 <Button onClick={resetLayout} variant="ghost">
                   Reset to Default
@@ -587,9 +680,9 @@ const Dashboard = () => {
                     className="dashboard-grid"
                     layout={layout}
                     cols={responsiveLayout.columns}
-                    rowHeight={1}
+                    rowHeight={80}
                     width={containerWidth}
-                    margin={[16, 16]}
+                    margin={[12, 12]}
                     containerPadding={[0, 0]}
                     isDraggable={isCustomizing}
                     isResizable={isCustomizing}
@@ -597,8 +690,8 @@ const Dashboard = () => {
                     draggableHandle=".drag-handle"
                     compactType="vertical"
                     preventCollision={false}
-                    isBounded={false}
-                    autoSize={true}
+                    useCSSTransforms={true}
+                    verticalCompact={true}
                   >
                     {layout.map(renderWidget)}
                   </GridLayout>
