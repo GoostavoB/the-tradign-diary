@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import bullBearRealistic from "@/assets/bull-bear-realistic.png";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const Hero = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 py-16">
@@ -31,8 +33,8 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight"
           >
-            Turn your trading data into{" "}
-            <span className="text-gradient-primary inline-block animate-fade-in">real profit</span>
+            {t('landing.hero.title').split(' ').slice(0, -2).join(' ')}{" "}
+            <span className="text-gradient-primary inline-block animate-fade-in">{t('landing.hero.title').split(' ').slice(-2).join(' ')}</span>
           </motion.h1>
 
           {/* Supporting Text */}
@@ -42,7 +44,7 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
           >
-            Log every move, analyze results, and sharpen your edge.
+            {t('landing.hero.subtitle')}
           </motion.p>
 
           {/* CTA Button */}
@@ -55,10 +57,10 @@ const Hero = () => {
               onClick={() => navigate('/auth')}
               className="px-8 py-7 text-lg font-medium rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:scale-105"
             >
-              Start for Free
+              {t('landing.hero.cta')}
             </Button>
             <p className="text-xs md:text-sm text-muted-foreground mt-4">
-              No credit card required • Free forever
+              {t('landing.cta.note').split(' • ')[0]} • {t('landing.cta.note').split(' • ')[2]}
             </p>
           </motion.div>
 

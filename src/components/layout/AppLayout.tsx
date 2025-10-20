@@ -5,6 +5,7 @@ import { UserMenu } from './UserMenu';
 import { useReminderNotifications } from '@/hooks/useReminderNotifications';
 import { useSidebarState } from '@/hooks/useSidebarState';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp';
 import { MobileNav } from '@/components/mobile/MobileNav';
 import { QuickAddTrade } from '@/components/mobile/QuickAddTrade';
@@ -63,6 +64,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             {/* Right: Icon Buttons */}
             <div className="flex items-center gap-2">
               <KeyboardShortcutsHelp />
+              <LanguageToggle />
               <ThemeToggle />
               <UserMenu />
             </div>
@@ -75,6 +77,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             </div>
             <div className="flex items-center gap-2">
               <KeyboardShortcutsHelp />
+              <LanguageToggle />
               <ThemeToggle />
               <UserMenu />
             </div>

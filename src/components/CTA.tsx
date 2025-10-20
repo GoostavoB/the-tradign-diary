@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const CTA = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <section className="py-20 md:py-28 px-6">
@@ -16,11 +18,11 @@ const CTA = () => {
           className="text-center space-y-6"
         >
           <h2 className="text-3xl md:text-4xl font-bold leading-tight">
-            Start journaling smarter today.
+            {t('landing.cta.title')}
           </h2>
           
           <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            Create your free account and see your trading with clarity.
+            {t('landing.cta.subtitle')}
           </p>
           
           <div>
@@ -29,11 +31,11 @@ const CTA = () => {
               size="lg"
               className="px-10 py-7 text-base font-medium rounded-xl"
             >
-              Get Started Free
+              {t('landing.cta.button')}
             </Button>
             
             <p className="mt-4 text-xs text-muted-foreground">
-              Free forever • No credit card • 2 minute setup
+              {t('landing.cta.note')}
             </p>
           </div>
         </motion.div>
