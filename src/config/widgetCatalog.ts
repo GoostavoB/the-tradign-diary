@@ -37,11 +37,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     defaultLayout: {
       w: 3,
-      h: 3,
+      h: 360,
       minW: 3,
-      minH: 3,
+      minH: 360,
       maxW: 6,
-      maxH: 5,
+      maxH: 600,
     },
     component: TotalBalanceWidget,
     requiresData: ['stats'],
@@ -56,11 +56,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     defaultLayout: {
       w: 3,
-      h: 3,
+      h: 360,
       minW: 3,
-      minH: 3,
+      minH: 360,
       maxW: 6,
-      maxH: 5,
+      maxH: 600,
     },
     component: WinRateWidget,
     requiresData: ['stats'],
@@ -75,11 +75,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     defaultLayout: {
       w: 3,
-      h: 3,
+      h: 360,
       minW: 3,
-      minH: 3,
+      minH: 360,
       maxW: 6,
-      maxH: 5,
+      maxH: 600,
     },
     component: TotalTradesWidget,
     requiresData: ['stats'],
@@ -94,11 +94,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     defaultLayout: {
       w: 3,
-      h: 3,
+      h: 360,
       minW: 3,
-      minH: 3,
+      minH: 360,
       maxW: 6,
-      maxH: 5,
+      maxH: 600,
     },
     component: SpotWalletWidget,
     requiresData: ['holdings'],
@@ -113,11 +113,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'medium',
     defaultLayout: {
       w: 6,
-      h: 6,
+      h: 720,
       minW: 6,
-      minH: 5,
+      minH: 600,
       maxW: 12,
-      maxH: 8,
+      maxH: 960,
     },
     component: PortfolioOverviewWidget,
     requiresData: ['stats', 'trades'],
@@ -132,11 +132,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     defaultLayout: {
       w: 3,
-      h: 5,
+      h: 600,
       minW: 3,
-      minH: 4,
+      minH: 480,
       maxW: 6,
-      maxH: 6,
+      maxH: 720,
     },
     component: TopMoversWidget,
     requiresData: ['trades'],
@@ -151,11 +151,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     defaultLayout: {
       w: 3,
-      h: 5,
+      h: 600,
       minW: 3,
-      minH: 4,
+      minH: 480,
       maxW: 6,
-      maxH: 6,
+      maxH: 720,
     },
     component: AIInsightsWidget,
     isPremium: false,
@@ -170,11 +170,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'medium',
     defaultLayout: {
       w: 6,
-      h: 6,
+      h: 720,
       minW: 6,
-      minH: 5,
+      minH: 600,
       maxW: 12,
-      maxH: 8,
+      maxH: 960,
     },
     component: RecentTransactionsWidget,
     requiresData: ['trades'],
@@ -189,11 +189,11 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     defaultLayout: {
       w: 3,
-      h: 3,
+      h: 360,
       minW: 3,
-      minH: 3,
+      minH: 360,
       maxW: 4,
-      maxH: 5,
+      maxH: 600,
     },
     component: QuickActionsWidget,
   },
@@ -203,20 +203,20 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
  * Default dashboard layout for new users
  */
 export const DEFAULT_DASHBOARD_LAYOUT = [
-  // Row 1: 4 small widgets (3 grid units tall)
-  { i: 'totalBalance', x: 0, y: 0, w: 3, h: 3 },
-  { i: 'spotWallet', x: 3, y: 0, w: 3, h: 3 },
-  { i: 'winRate', x: 6, y: 0, w: 3, h: 3 },
-  { i: 'totalTrades', x: 9, y: 0, w: 3, h: 3 },
+  // Row 1: 4 small widgets (360px tall)
+  { i: 'totalBalance', x: 0, y: 0, w: 3, h: 360 },
+  { i: 'spotWallet', x: 3, y: 0, w: 3, h: 360 },
+  { i: 'winRate', x: 6, y: 0, w: 3, h: 360 },
+  { i: 'totalTrades', x: 9, y: 0, w: 3, h: 360 },
   
-  // Row 2: Portfolio Overview (6) + Top Movers (3) + Quick Actions (3)
-  { i: 'portfolioOverview', x: 0, y: 3, w: 6, h: 6 },
-  { i: 'topMovers', x: 6, y: 3, w: 3, h: 5 },
-  { i: 'quickActions', x: 9, y: 3, w: 3, h: 3 },
+  // Row 2: Portfolio Overview (720px) + Top Movers (600px) + Quick Actions (360px)
+  { i: 'portfolioOverview', x: 0, y: 360, w: 6, h: 720 },
+  { i: 'topMovers', x: 6, y: 360, w: 3, h: 600 },
+  { i: 'quickActions', x: 9, y: 360, w: 3, h: 360 },
   
-  // Row 3: Recent Transactions (6) + AI Insights (6)
-  { i: 'recentTransactions', x: 0, y: 9, w: 6, h: 6 },
-  { i: 'aiInsights', x: 6, y: 9, w: 6, h: 5 },
+  // Row 3: Recent Transactions (720px) + AI Insights (600px)
+  { i: 'recentTransactions', x: 0, y: 1080, w: 6, h: 720 },
+  { i: 'aiInsights', x: 6, y: 1080, w: 6, h: 600 },
 ];
 
 /**

@@ -33,7 +33,6 @@ export const WidgetWrapper = memo(({
         isEditMode && "ring-2 ring-primary/20 hover:ring-primary/40",
         className
       )}
-      style={{ height: 'auto', minHeight: 'fit-content' }}
     >
       {/* Edit Mode Controls */}
       {isEditMode && (

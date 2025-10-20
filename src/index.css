@@ -499,9 +499,15 @@ textarea:focus-visible {
   opacity: 0.8;
 }
 
-/* Allow proper content flow */
+/* Allow proper content flow - content-driven heights */
+.react-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .react-grid-item > div {
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
 }
@@ -509,11 +515,12 @@ textarea:focus-visible {
 /* Widget content scrolling */
 .react-grid-item > div > * {
   overflow: visible;
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .dash-card {
-  height: 100%;
+  height: auto;
+  min-height: unset;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -539,7 +546,8 @@ textarea:focus-visible {
 /* Chart container standardization */
 .chart-wrapper {
   @apply w-full relative;
-  height: 280px;
+  height: auto;
+  min-height: 200px;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -553,6 +561,8 @@ textarea:focus-visible {
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
+  height: auto;
+  min-height: unset;
 }
 
 .widget-card canvas,

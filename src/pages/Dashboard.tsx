@@ -511,7 +511,7 @@ const Dashboard = () => {
                     className="dashboard-grid"
                     layout={layout}
                     cols={12}
-                    rowHeight={120}
+                    rowHeight={1}
                     width={containerWidth}
                     margin={[20, 20]}
                     containerPadding={[0, 0]}
@@ -520,8 +520,9 @@ const Dashboard = () => {
                     onLayoutChange={updateLayout}
                     draggableHandle=".drag-handle"
                     compactType="vertical"
-                    preventCollision={true}
+                    preventCollision={false}
                     isBounded={true}
+                    autoSize={true}
                   >
                     {layout.map(renderWidget)}
                   </GridLayout>
