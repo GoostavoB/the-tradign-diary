@@ -9,6 +9,7 @@ interface WidgetWrapperProps {
   title?: string;
   children: ReactNode;
   isEditMode?: boolean;
+  isCompact?: boolean;
   onRemove?: () => void;
   onExpand?: () => void;
   className?: string;
@@ -20,6 +21,7 @@ export const WidgetWrapper = memo(({
   title,
   children,
   isEditMode = false,
+  isCompact = false,
   onRemove,
   onExpand,
   className,
@@ -31,6 +33,7 @@ export const WidgetWrapper = memo(({
         "relative flex flex-col",
         "transition-all duration-200",
         isEditMode && "ring-2 ring-primary/20 hover:ring-primary/40",
+        isCompact && "widget-compact",
         className
       )}
     >
@@ -56,11 +59,11 @@ export const WidgetWrapper = memo(({
       {/* Content */}
       <div className={cn(
         "flex-1 overflow-visible",
-        "px-6 py-4"
+        isCompact ? "px-4 py-3" : "px-6 py-4"
       )}>
         {title && (
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-semibold">{title}</h3>
+            <h3 className={cn("font-semibold", isCompact ? "text-base" : "text-lg")}>{title}</h3>
             <div className="flex items-center gap-2">
               {headerActions}
               {onExpand && !isEditMode && (

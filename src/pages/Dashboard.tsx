@@ -22,6 +22,7 @@ import { useDashboardStats } from '@/hooks/useDashboardStats';
 import { useBadgeNotifications } from '@/hooks/useBadgeNotifications';
 import { useSpotWallet } from '@/hooks/useSpotWallet';
 import { useTokenPrices } from '@/hooks/useTokenPrices';
+import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
 import { formatCurrency } from '@/utils/formatNumber';
 import type { Trade } from '@/types/trade';
 import { WIDGET_CATALOG } from '@/config/widgetCatalog';
@@ -67,6 +68,9 @@ const Dashboard = () => {
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(1200);
+  
+  // Responsive layout configuration
+  const responsiveLayout = useResponsiveLayout(containerWidth);
   
   // Memoize processed trades to prevent unnecessary recalculations
   const processedTrades = useMemo(() => 
@@ -400,6 +404,7 @@ const Dashboard = () => {
     const widgetProps: any = {
       id: widgetId,
       isEditMode: isCustomizing,
+      isCompact: responsiveLayout.isCompact,
       onRemove: () => removeWidget(widgetId),
     };
 
