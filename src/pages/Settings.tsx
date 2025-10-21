@@ -11,7 +11,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { X, Plus, Edit2, Check, Upload, Download, User, Bell, TrendingUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AccentColorPicker } from '@/components/AccentColorPicker';
 import { NotificationPreferences } from '@/components/NotificationPreferences';
 import { DataManagement } from '@/components/DataManagement';
 import { CapitalManagement } from '@/components/CapitalManagement';
@@ -373,8 +372,6 @@ const Settings = () => {
           </TabsContent>
 
           <TabsContent value="trading" className="space-y-6">
-            <AccentColorPicker />
-            
             <CapitalManagement />
 
             <Card className="p-6 glass">

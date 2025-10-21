@@ -8,8 +8,8 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { ThemeStudio } from "@/components/theme-studio/ThemeStudio";
 import { Logo } from "@/components/Logo";
 import { useTranslation } from "@/hooks/useTranslation";
 import { HomeMarketBanner } from "@/components/HomeMarketBanner";
@@ -26,7 +26,7 @@ const Index = () => {
       </div>
       <div className="absolute top-6 right-6 z-50 flex items-center gap-3">
         <LanguageToggle />
-        <ThemeToggle />
+        <ThemeStudio />
         <Button
           onClick={() => navigate('/auth')}
           className="glass backdrop-blur-[10px] border border-primary/30 text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-xl px-5 py-2 font-medium shadow-sm hover:shadow-md"

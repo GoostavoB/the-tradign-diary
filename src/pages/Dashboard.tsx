@@ -23,7 +23,6 @@ import { useDailyChallenges } from '@/hooks/useDailyChallenges';
 import { useTradeXPRewards } from '@/hooks/useTradeXPRewards';
 import { TradingStreaks } from '@/components/TradingStreaks';
 import { DateRangeFilter, DateRange } from '@/components/DateRangeFilter';
-import { AccentColorPicker } from '@/components/AccentColorPicker';
 import { CustomizeDashboardControls } from '@/components/CustomizeDashboardControls';
 import { useWidgetLayout } from '@/hooks/useWidgetLayout';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -757,7 +756,6 @@ const Dashboard = () => {
             <p className="text-sm text-muted-foreground/80">{t('dashboard.overview')}</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <AccentColorPicker />
             <DateRangeFilter dateRange={dateRange} onDateRangeChange={handleDateRangeChange} />
             {trades.length > 0 && (
               <ExportTradesDialog trades={processedTrades} />
