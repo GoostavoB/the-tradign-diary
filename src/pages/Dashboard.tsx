@@ -708,13 +708,13 @@ const Dashboard = () => {
                   onDragEnd={handleDragEnd}
                   onDragCancel={handleDragCancel}
                 >
-                  <div ref={gridRef} className="dashboard-grid-free">
-                    {Array.from({ length: columnCount }, (_, colIdx) => (
-                      <div key={`col-${colIdx}`} className="dashboard-column-free">
-                        <SortableContext 
-                          items={Object.entries(grid[colIdx] || {}).map(([row, id]) => id)}
-                          strategy={rectSortingStrategy}
-                        >
+                  <SortableContext 
+                    items={positions.map(p => p.id)}
+                    strategy={rectSortingStrategy}
+                  >
+                    <div ref={gridRef} className="dashboard-grid-free">
+                      {Array.from({ length: columnCount }, (_, colIdx) => (
+                        <div key={`col-${colIdx}`} className="dashboard-column-free">
                           {Object.entries(grid[colIdx] || {})
                             .sort(([rowA], [rowB]) => parseInt(rowA) - parseInt(rowB))
                             .map(([row, widgetId]) => (
@@ -722,13 +722,13 @@ const Dashboard = () => {
                                 {renderWidget(widgetId)}
                               </div>
                             ))}
-                        </SortableContext>
-                        {isCustomizing && (
-                          <DropZone id={`dropzone-${colIdx}-${Object.keys(grid[colIdx] || {}).length}`} />
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                          {isCustomizing && (
+                            <DropZone id={`dropzone-${colIdx}-${Object.keys(grid[colIdx] || {}).length}`} />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </SortableContext>
                 </DndContext>
               </TabsContent>
 
