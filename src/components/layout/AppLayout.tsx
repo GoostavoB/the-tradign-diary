@@ -11,6 +11,7 @@ import { ThemeUnlockNotification } from '@/components/theme-studio/ThemeUnlockNo
 import { MobileNav } from '@/components/mobile/MobileNav';
 import { QuickAddTrade } from '@/components/mobile/QuickAddTrade';
 import { InstallPrompt } from '@/components/mobile/InstallPrompt';
+import { GamificationSidebar } from '@/components/gamification/GamificationSidebar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -45,7 +46,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       <ThemeUnlockNotification />
       <div className="min-h-screen flex w-full mobile-safe overflow-hidden">
         <AppSidebar />
-        <div className="flex-1 flex flex-col mobile-safe overflow-hidden h-screen">
+        <div className="flex-1 flex flex-col mobile-safe overflow-hidden h-screen relative">
           {/* Desktop Header */}
           <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6 sticky top-0 z-30">
             {/* Left: Sidebar trigger */}
@@ -75,9 +76,17 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             </div>
           </header>
 
-          <main className="flex-1 p-3 md:p-6 overflow-auto pb-20 md:pb-6 custom-scrollbar mobile-safe">
-            {children}
-          </main>
+          <div className="flex-1 flex overflow-hidden">
+            <main className="flex-1 p-3 md:p-6 overflow-auto pb-20 md:pb-6 custom-scrollbar mobile-safe">
+              {children}
+            </main>
+            
+            {/* Right Sidebar - Gamification (Desktop Only) */}
+            <aside className="hidden xl:block w-80 border-l border-border/50 p-4 overflow-auto custom-scrollbar bg-background/50 backdrop-blur-sm">
+              <GamificationSidebar />
+            </aside>
+          </div>
+          
           <MobileNav />
           <QuickAddTrade />
           <InstallPrompt />
