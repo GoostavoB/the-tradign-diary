@@ -39,7 +39,7 @@ export const WidgetWrapper = memo(({
     >
       {/* Edit Mode Controls */}
       {isEditMode && (
-        <div className="absolute top-2 left-2 z-10 flex gap-1">
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 flex gap-1">
           <div className="drag-handle cursor-move p-1.5 rounded bg-background/80 hover:bg-background">
             <GripVertical className="h-4 w-4 text-muted-foreground" />
           </div>
