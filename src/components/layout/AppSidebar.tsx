@@ -1,4 +1,4 @@
-import { BarChart3, Upload, TrendingUp, Target, Brain, Trophy, Settings2, BookOpen, HelpCircle, LineChart, LogOut, Zap, Sparkles, RefreshCw, Wallet, Receipt, BookMarked, Users, GitCompare } from 'lucide-react';
+import { BarChart3, Upload, TrendingUp, Target, Brain, Trophy, Settings2, BookOpen, HelpCircle, LineChart, LogOut, Zap, Sparkles, RefreshCw, Wallet, Receipt, BookMarked, Users, GitCompare, Shield } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import {
@@ -32,6 +32,7 @@ export function AppSidebar() {
     { title: t('navigation.analytics'), url: '/analytics', icon: TrendingUp },
     { title: t('navigation.feeAnalysis'), url: '/fee-analysis', icon: Receipt },
     { title: 'Trade Analysis', url: '/trade-analysis', icon: GitCompare },
+    { title: 'Risk Management', url: '/risk-management', icon: Shield },
     { title: t('navigation.marketData'), url: '/market-data', icon: LineChart },
     { title: t('navigation.forecast'), url: '/forecast', icon: Target },
     { title: t('navigation.aiTools'), url: '/ai-tools', icon: Brain },
