@@ -20,5 +20,5 @@ export const ConfettiEffect = ({ trigger, onComplete }: ConfettiEffectProps) => 
     }
   }, [trigger, onComplete]);
 
-  return show ? <Confetti /> : null;
+  return show ? <Confetti active={show} /> : null;
 };

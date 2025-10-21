@@ -37,14 +37,29 @@ export const useWidgetStyles = () => {
         .select('*')
         .eq('user_id', user.id);
 
-      // Fetch user level
-      const { data: progression } = await supabase
-        .from('user_progression')
-        .select('current_level')
+      // Fetch user XP to calculate level
+      const { data: xpData } = await supabase
+        .from('user_xp_levels')
+        .select('total_xp_earned')
         .eq('user_id', user.id)
         .single();
 
-      const userLevel = progression?.current_level || 1;
+      // Calculate level from total XP
+      const calculateLevel = (totalXP: number): number => {
+        let level = 1;
+        let xpNeeded = 100;
+        let totalNeeded = 0;
+        
+        while (totalNeeded + xpNeeded <= totalXP) {
+          totalNeeded += xpNeeded;
+          level++;
+          xpNeeded = Math.floor(100 * Math.pow(1.5, level - 1));
+        }
+        
+        return level;
+      };
+
+      const userLevel = xpData?.total_xp_earned ? calculateLevel(xpData.total_xp_earned) : 1;
       const unlockedIds = new Set(unlockedStyles?.map(s => s.style_id) || []);
 
       const formattedStyles = (allStyles || []).map(style => {

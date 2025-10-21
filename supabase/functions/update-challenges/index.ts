@@ -44,6 +44,30 @@ const CHALLENGE_TEMPLATES = [
   }
 ];
 
+const WEEKLY_CHALLENGE_TEMPLATES = [
+  {
+    challenge_type: 'weekly_trade_count',
+    title: 'Active Trader',
+    description: 'Execute 20 trades this week',
+    target_value: 20,
+    xp_reward: 100
+  },
+  {
+    challenge_type: 'weekly_profit',
+    title: 'Profit Master',
+    description: 'Earn $500 profit this week',
+    target_value: 500,
+    xp_reward: 150
+  },
+  {
+    challenge_type: 'weekly_win_rate',
+    title: 'Consistency King',
+    description: 'Maintain 70% win rate this week',
+    target_value: 70,
+    xp_reward: 120
+  },
+];
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -70,6 +94,12 @@ serve(async (req) => {
     }
 
     let createdCount = 0;
+    let weeklyCreatedCount = 0;
+
+    // Calculate week start (Monday)
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+    const weekStartStr = weekStart.toISOString().split('T')[0];
 
     for (const user of users) {
       // Check if user already has challenges for today
@@ -87,10 +117,11 @@ serve(async (req) => {
         challenge_date: today,
         ...template,
         current_progress: 0,
-        is_completed: false
+        is_completed: false,
+        mystery_unlocked: false
       }));
 
-      // Randomly add one "Mystery Challenge" (1 in 7 chance)
+      // Add "Mystery Challenge" with 1 in 7 chance (enhanced)
       if (Math.random() < 1/7) {
         challenges.push({
           user_id: user.id,
@@ -99,9 +130,10 @@ serve(async (req) => {
           title: '🎁 Mystery Challenge',
           description: 'Complete any challenge to unlock this bonus!',
           target_value: 1,
-          xp_reward: 30, // Double XP
+          xp_reward: 30,
           current_progress: 0,
-          is_completed: false
+          is_completed: false,
+          mystery_unlocked: false
         });
       }
 
@@ -110,11 +142,36 @@ serve(async (req) => {
         .insert(challenges);
 
       if (!error) createdCount++;
+
+      // Create weekly challenges (only on Monday)
+      if (weekStart.getDay() === 1) {
+        const { data: weeklyExisting } = await supabase
+          .from("weekly_challenges")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("week_start_date", weekStartStr);
+
+        if (!weeklyExisting || weeklyExisting.length === 0) {
+          const weeklyChallenges = WEEKLY_CHALLENGE_TEMPLATES.map(template => ({
+            user_id: user.id,
+            week_start_date: weekStartStr,
+            ...template,
+            current_progress: 0,
+            is_completed: false
+          }));
+
+          const { error: weeklyError } = await supabase
+            .from("weekly_challenges")
+            .insert(weeklyChallenges);
+
+          if (!weeklyError) weeklyCreatedCount++;
+        }
+      }
     }
 
     return new Response(
       JSON.stringify({ 
-        message: `Daily challenges created for ${createdCount} users`,
+        message: `Daily challenges created for ${createdCount} users, Weekly challenges: ${weeklyCreatedCount}`,
         date: today 
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
