@@ -147,9 +147,9 @@ const DailyChallengesPanelComponent = ({ challenges, onChallengeClick }: DailyCh
                       )}
                     </motion.div>
                   </TooltipTrigger>
-                  <TooltipContent side="top" className="max-w-xs">
-                    <p className="text-sm font-medium mb-1">{challenge.title}</p>
-                    <p className="text-xs text-muted-foreground">{explanation}</p>
+                  <TooltipContent side="top" className="max-w-xs bg-background border-2 border-primary/20 shadow-xl z-[100]">
+                    <p className="text-sm font-medium mb-2 text-foreground">{challenge.title}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{explanation}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

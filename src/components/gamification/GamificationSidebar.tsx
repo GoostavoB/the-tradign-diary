@@ -119,12 +119,15 @@ const GamificationSidebarComponent = () => {
                       </div>
                     </div>
                   </TooltipTrigger>
-                  <TooltipContent side="right" className="max-w-xs">
-                    <p className="font-semibold mb-1">{challenge.title}</p>
-                    <p className="text-xs text-muted-foreground">{getChallengeTooltip(challenge.type, challenge.target)}</p>
-                    <p className="text-xs mt-2">
-                      <span className="text-primary font-medium">Progress:</span> {challenge.progress} / {challenge.target}
-                    </p>
+                  <TooltipContent side="right" className="max-w-xs bg-background border-2 border-primary/20 shadow-xl z-[100]">
+                    <p className="font-semibold mb-1 text-foreground">{challenge.title}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{getChallengeTooltip(challenge.type, challenge.target)}</p>
+                    <div className="mt-2 pt-2 border-t border-border">
+                      <p className="text-xs">
+                        <span className="text-primary font-medium">Progress:</span>{' '}
+                        <span className="text-foreground font-semibold">{challenge.progress} / {challenge.target}</span>
+                      </p>
+                    </div>
                   </TooltipContent>
                 </Tooltip>
               );
