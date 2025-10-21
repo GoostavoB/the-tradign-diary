@@ -11,6 +11,7 @@ interface CapitalGrowthWidgetProps {
   onRemove?: () => void;
   chartData: Array<{ date: string; value: number }>;
   initialInvestment: number;
+  totalCapitalAdditions?: number;
   currentBalance: number;
 }
 
@@ -20,11 +21,13 @@ export const CapitalGrowthWidget = memo(({
   onRemove,
   chartData,
   initialInvestment,
+  totalCapitalAdditions = 0,
   currentBalance,
 }: CapitalGrowthWidgetProps) => {
   const { t } = useTranslation();
-  const totalGrowth = currentBalance - initialInvestment;
-  const growthPercentage = initialInvestment > 0 ? ((totalGrowth / initialInvestment) * 100) : 0;
+  const totalCapitalInvested = initialInvestment + totalCapitalAdditions;
+  const totalGrowth = currentBalance - totalCapitalInvested;
+  const growthPercentage = totalCapitalInvested > 0 ? ((totalGrowth / totalCapitalInvested) * 100) : 0;
   const isPositive = totalGrowth >= 0;
 
   return (
@@ -39,7 +42,7 @@ export const CapitalGrowthWidget = memo(({
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">{t('widgets.initial')}</p>
-            <p className="text-sm font-semibold">{formatCurrency(initialInvestment)}</p>
+            <p className="text-sm font-semibold">{formatCurrency(totalCapitalInvested)}</p>
           </div>
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">{t('widgets.current')}</p>

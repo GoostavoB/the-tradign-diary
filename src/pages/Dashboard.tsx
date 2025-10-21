@@ -364,7 +364,17 @@ const Dashboard = () => {
     }, 0);
   }, [holdings, prices]);
 
+  // Calculate total capital additions from capital log
+  const totalCapitalAdditions = useMemo(() => {
+    return capitalLog.reduce((sum, log) => sum + (log.amount_added || 0), 0);
+  }, [capitalLog]);
+
   const portfolioChartData = useMemo(() => {
+    // Start with initial investment as the first data point
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - 6); // Show last 6 months
+    
+    // Combine trades and capital additions
     const combined = [...trades, ...capitalLog.map(c => ({
       trade_date: c.log_date,
       pnl: c.amount_added
@@ -372,14 +382,28 @@ const Dashboard = () => {
       new Date(a.trade_date).getTime() - new Date(b.trade_date).getTime()
     );
 
+    // Always start with initial investment
+    const chartData = [];
     let cumulative = initialInvestment;
-    return combined.map(item => {
+    
+    // Add initial point if we have no data or if the first data point is after our start date
+    if (combined.length === 0 || new Date(combined[0].trade_date) > startDate) {
+      chartData.push({
+        date: startDate.toLocaleDateString(),
+        value: initialInvestment
+      });
+    }
+    
+    // Add all trades and capital additions
+    combined.forEach(item => {
       cumulative += item.pnl || 0;
-      return {
+      chartData.push({
         date: new Date(item.trade_date).toLocaleDateString(),
         value: cumulative
-      };
+      });
     });
+    
+    return chartData;
   }, [trades, capitalLog, initialInvestment]);
 
   // Dynamic widget renderer
@@ -400,10 +424,10 @@ const Dashboard = () => {
     // Add widget-specific data
     switch (widgetId) {
       case 'totalBalance':
-        widgetProps.totalBalance = stats?.total_pnl || 0;
+        widgetProps.totalBalance = initialInvestment + totalCapitalAdditions + (stats?.total_pnl || 0);
         widgetProps.change24h = stats?.total_pnl || 0;
-        widgetProps.changePercent24h = initialInvestment > 0 
-          ? ((stats?.total_pnl || 0) / initialInvestment) * 100 
+        widgetProps.changePercent24h = (initialInvestment + totalCapitalAdditions) > 0 
+          ? ((stats?.total_pnl || 0) / (initialInvestment + totalCapitalAdditions)) * 100 
           : 0;
         break;
       case 'winRate':
@@ -424,7 +448,7 @@ const Dashboard = () => {
         break;
       case 'portfolioOverview':
         widgetProps.data = portfolioChartData;
-        widgetProps.totalValue = stats?.total_pnl || 0;
+        widgetProps.totalValue = initialInvestment + totalCapitalAdditions + (stats?.total_pnl || 0);
         break;
       case 'topMovers':
       case 'aiInsights':
@@ -444,7 +468,7 @@ const Dashboard = () => {
       case 'currentROI':
         widgetProps.currentROI = stats?.current_roi || 0;
         widgetProps.initialInvestment = initialInvestment;
-        widgetProps.currentBalance = initialInvestment + (stats?.total_pnl || 0);
+        widgetProps.currentBalance = initialInvestment + totalCapitalAdditions + (stats?.total_pnl || 0);
         widgetProps.onInitialInvestmentUpdate = async (newValue: number) => {
           setInitialInvestment(newValue);
           // fetchStats will be automatically called via useEffect when initialInvestment changes
@@ -457,7 +481,8 @@ const Dashboard = () => {
       case 'capitalGrowth':
         widgetProps.chartData = portfolioChartData;
         widgetProps.initialInvestment = initialInvestment;
-        widgetProps.currentBalance = initialInvestment + (stats?.total_pnl || 0);
+        widgetProps.totalCapitalAdditions = totalCapitalAdditions;
+        widgetProps.currentBalance = initialInvestment + totalCapitalAdditions + (stats?.total_pnl || 0);
         break;
     }
 
