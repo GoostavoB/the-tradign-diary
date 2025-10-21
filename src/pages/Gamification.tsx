@@ -18,7 +18,7 @@ const Gamification = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   const getLevelTitle = (level: number) => {
-    if (level >= 50) return 'Trading Legend';
+    if (level >= 50) return 'Monstro';
     if (level >= 40) return 'Master Trader';
     if (level >= 30) return 'Expert Trader';
     if (level >= 20) return 'Advanced Trader';
