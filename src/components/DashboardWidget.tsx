@@ -29,8 +29,8 @@ const DashboardWidgetComponent = ({
     <Card 
       className={cn(
         "relative glass h-full transition-all duration-200 overflow-hidden",
-        !isVisible && isCustomizing && "opacity-50 ring-2 ring-destructive/50",
-        isCustomizing && "cursor-move hover:shadow-xl hover:border-primary/30",
+        !isVisible && isCustomizing && "opacity-50 ring-2 ring-destructive/50 bg-destructive/5",
+        isCustomizing && "cursor-move ring-2 ring-primary/40 hover:ring-primary/60 hover:shadow-2xl hover:scale-[1.02] bg-primary/5",
         className
       )}
     >
