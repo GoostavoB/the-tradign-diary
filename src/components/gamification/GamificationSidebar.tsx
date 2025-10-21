@@ -7,12 +7,30 @@ import { Badge } from '@/components/ui/badge';
 import { useXPSystem } from '@/hooks/useXPSystem';
 import { useDailyChallenges } from '@/hooks/useDailyChallenges';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const GamificationSidebarComponent = () => {
   const { xpData, loading: xpLoading, getXPForNextLevel } = useXPSystem();
   const { challenges, loading: challengesLoading } = useDailyChallenges();
 
   const completedToday = challenges.filter(c => c.isCompleted).length;
+
+  const getChallengeTooltip = (type: string, target: number) => {
+    switch (type) {
+      case 'trade_count':
+        return `Execute ${target} trades today. Each trade you make (win or loss) counts toward this challenge.`;
+      case 'win_rate':
+        return `Win ${target} consecutive trades in a row without a loss. Your streak resets if you lose a trade.`;
+      case 'profit_target':
+        return `Earn $${target} in total profit today. All your winning trades' profits are added together.`;
+      case 'journal_entry':
+        return `Write ${target} journal entry today. Document your trading thoughts, emotions, or lessons learned.`;
+      case 'daily_login':
+        return `Log in to your account for ${target} consecutive days. Don't miss a day to keep your streak!`;
+      default:
+        return 'Complete this challenge to earn XP.';
+    }
+  };
 
   if (xpLoading || challengesLoading) {
     return (
@@ -76,30 +94,43 @@ const GamificationSidebarComponent = () => {
           </Badge>
         </div>
 
-        <div className="space-y-2">
-          {challenges.slice(0, 3).map((challenge) => {
-            const progress = (challenge.progress / challenge.target) * 100;
-            return (
-              <div key={challenge.id} className="space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className={challenge.isCompleted ? 'text-primary' : 'text-muted-foreground'}>
-                    {challenge.title}
-                  </span>
-                  <span className="text-muted-foreground">
-                    +{challenge.xpReward} XP
-                  </span>
-                </div>
-                <div className="h-1.5 rounded-full bg-muted/30 overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${progress}%` }}
-                    className={`h-full ${challenge.isCompleted ? 'bg-primary' : 'bg-primary/50'}`}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <TooltipProvider>
+          <div className="space-y-2">
+            {challenges.slice(0, 3).map((challenge) => {
+              const progress = (challenge.progress / challenge.target) * 100;
+              return (
+                <Tooltip key={challenge.id}>
+                  <TooltipTrigger asChild>
+                    <div className="space-y-1 cursor-help">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className={challenge.isCompleted ? 'text-primary' : 'text-muted-foreground'}>
+                          {challenge.title}
+                        </span>
+                        <span className="text-muted-foreground">
+                          +{challenge.xpReward} XP
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-muted/30 overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progress}%` }}
+                          className={`h-full ${challenge.isCompleted ? 'bg-primary' : 'bg-primary/50'}`}
+                        />
+                      </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className="max-w-xs">
+                    <p className="font-semibold mb-1">{challenge.title}</p>
+                    <p className="text-xs text-muted-foreground">{getChallengeTooltip(challenge.type, challenge.target)}</p>
+                    <p className="text-xs mt-2">
+                      <span className="text-primary font-medium">Progress:</span> {challenge.progress} / {challenge.target}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </div>
+        </TooltipProvider>
       </Card>
     </div>
   );
