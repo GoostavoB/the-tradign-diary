@@ -18,6 +18,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { SidebarCryptoWidget } from '@/components/SidebarCryptoWidget';
 import { SidebarQuickLinks } from '@/components/SidebarQuickLinks';
+import { GamificationSidebar } from '@/components/gamification/GamificationSidebar';
 import { MenuCustomizationDialog } from '@/components/menu/MenuCustomizationDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -155,6 +156,11 @@ export function AppSidebar() {
         {/* Quick Links - Above Crypto Widget */}
         <div className="mt-auto">
           <SidebarQuickLinks />
+        </div>
+
+        {/* Gamification Widget */}
+        <div className="border-t border-border/50 px-4 py-3">
+          <GamificationSidebar />
         </div>
 
         {/* Crypto Prices Widget */}

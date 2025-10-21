@@ -86,8 +86,6 @@ const Dashboard = () => {
   useKeyboardShortcuts();
   const { user } = useAuth();
   const { t } = useTranslation();
-  const { xpData, showLevelUp, setShowLevelUp } = useXPSystem();
-  const { updateChallengeProgress } = useDailyChallenges();
   const [stats, setStats] = useState<TradeStats | null>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
@@ -145,6 +143,10 @@ const Dashboard = () => {
   const [showWidgetLibrary, setShowWidgetLibrary] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [selectedColumnCount, setSelectedColumnCount] = useState(3);
+
+  // Gamification system
+  const { xpData, showLevelUp, setShowLevelUp } = useXPSystem();
+  const { updateChallengeProgress } = useDailyChallenges();
 
   const gridRef = useRef<HTMLDivElement>(null);
   const [columnCount, setColumnCount] = useState(3);
@@ -295,6 +297,36 @@ const Dashboard = () => {
 
     setFilteredTrades(filtered);
   }, [trades, dateRange]);
+
+  // Track XP from trades and update daily challenges
+  useEffect(() => {
+    if (!trades || trades.length === 0) return;
+
+    const today = new Date().toISOString().split('T')[0];
+    const todayTrades = trades.filter(
+      t => new Date(t.trade_date).toISOString().split('T')[0] === today
+    );
+
+    if (todayTrades.length > 0) {
+      updateChallengeProgress('trade_count', todayTrades.length);
+
+      const sortedTodayTrades = todayTrades.sort(
+        (a, b) => new Date(b.trade_date).getTime() - new Date(a.trade_date).getTime()
+      );
+      let winStreak = 0;
+      for (const trade of sortedTodayTrades) {
+        if ((trade.pnl || 0) > 0) {
+          winStreak++;
+        } else {
+          break;
+        }
+      }
+      updateChallengeProgress('win_rate', winStreak);
+
+      const todayProfit = todayTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+      updateChallengeProgress('profit_target', Math.floor(todayProfit));
+    }
+  }, [trades, updateChallengeProgress]);
 
   const fetchStats = async () => {
     if (!user) return;
@@ -693,6 +725,12 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
+      <LevelUpModal 
+        show={showLevelUp} 
+        level={xpData.currentLevel} 
+        onClose={() => setShowLevelUp(false)} 
+      />
+      
       {/* Skip to main content link for keyboard navigation */}
       <a 
         href="#main-dashboard-content" 
