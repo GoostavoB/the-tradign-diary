@@ -36,6 +36,7 @@ export const UploadHistory = () => {
   const [batchTrades, setBatchTrades] = useState<Record<string, BatchTrade[]>>({});
   const [newBatchId, setNewBatchId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
     if (user) {
@@ -241,7 +242,7 @@ export const UploadHistory = () => {
         )}
       </div>
       <div className="space-y-3">
-        {batches.map((batch) => {
+        {batches.slice(0, visibleCount).map((batch) => {
           const isExpanded = expandedBatch === batch.id;
           const isNew = newBatchId === batch.id;
           
@@ -371,6 +372,19 @@ export const UploadHistory = () => {
             </Card>
           );
         })}
+
+        {visibleCount < batches.length && (
+          <div className="flex justify-center pt-2">
+            <Button
+              variant="outline"
+              onClick={() => setVisibleCount(prev => prev + 10)}
+              className="w-full sm:w-auto"
+            >
+              <ChevronDown className="w-4 h-4 mr-2" />
+              See More ({batches.length - visibleCount} remaining)
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
