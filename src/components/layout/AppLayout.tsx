@@ -7,6 +7,7 @@ import { useSidebarState } from '@/hooks/useSidebarState';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp';
+import { AccentColorPicker } from '@/components/AccentColorPicker';
 import { MobileNav } from '@/components/mobile/MobileNav';
 import { QuickAddTrade } from '@/components/mobile/QuickAddTrade';
 import { InstallPrompt } from '@/components/mobile/InstallPrompt';
@@ -55,6 +56,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             <div className="flex items-center gap-2">
               <KeyboardShortcutsHelp />
               <LanguageToggle />
+              <AccentColorPicker />
               <ThemeToggle />
               <UserMenu />
             </div>
@@ -68,6 +70,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             <div className="flex items-center gap-2">
               <KeyboardShortcutsHelp />
               <LanguageToggle />
+              <AccentColorPicker />
               <ThemeToggle />
               <UserMenu />
             </div>

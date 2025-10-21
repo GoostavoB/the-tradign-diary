@@ -214,7 +214,7 @@ export default function ExchangeConnections() {
           const isSyncing = connection?.sync_status === 'syncing';
 
           return (
-            <Card key={exchange.id} className="relative">
+            <Card key={exchange.id} className="glass relative">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">

@@ -300,7 +300,7 @@ const Settings = () => {
           </TabsList>
 
           <TabsContent value="profile" className="space-y-6">
-            <Card className="p-6 bg-card border-border">
+            <Card className="p-6 glass">
               <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
               
               <div className="flex items-center gap-6 mb-6">
@@ -372,7 +372,7 @@ const Settings = () => {
             
             <CapitalManagement />
 
-            <Card className="p-6 bg-card border-border">
+            <Card className="p-6 glass">
               <h2 className="text-xl font-semibold mb-4">Display Preferences</h2>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -390,7 +390,7 @@ const Settings = () => {
           </TabsContent>
 
           <TabsContent value="setups" className="space-y-6">
-            <Card className="p-6 bg-card border-border">
+            <Card className="p-6 glass">
               <h2 className="text-xl font-semibold mb-4">Trade Setups</h2>
               <p className="text-sm text-muted-foreground mb-4">Manage your custom trade setup tags. These will be available when logging trades.</p>
               
@@ -475,7 +475,7 @@ const Settings = () => {
           </TabsContent>
 
       <TabsContent value="notifications" className="space-y-6">
-        <Card className="p-6 bg-card border-border">
+        <Card className="p-6 glass">
           <h2 className="text-xl font-semibold mb-4">Notification Preferences</h2>
           <p className="text-sm text-muted-foreground mb-6">Choose what updates you want to receive</p>
           <div className="space-y-4">
@@ -520,7 +520,7 @@ const Settings = () => {
       </TabsContent>
 
       <TabsContent value="data" className="space-y-6">
-        <Card className="p-6 bg-card border-border">
+        <Card className="p-6 glass">
           <h2 className="text-xl font-semibold mb-4">Data Management</h2>
           <div className="space-y-6">
             <div>

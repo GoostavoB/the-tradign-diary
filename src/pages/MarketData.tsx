@@ -44,7 +44,7 @@ const MarketData = () => {
 
         {/* One-Click Notification Prompt */}
         {!isEnabled && (
-          <Card className="border-neon-green/50 bg-gradient-to-r from-neon-green/5 to-primary/5">
+          <Card className="glass border-neon-green/50 bg-gradient-to-r from-neon-green/5 to-primary/5">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-xl bg-neon-green/10 border border-neon-green/20">

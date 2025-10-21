@@ -60,7 +60,7 @@ export default function SpotWallet() {
 
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="glass">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Wallet Value</CardTitle>
             <Wallet className="h-4 w-4 text-muted-foreground" />
@@ -80,7 +80,7 @@ export default function SpotWallet() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Portfolio P/L</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -95,7 +95,7 @@ export default function SpotWallet() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Best Performer</CardTitle>
             <TrendingUp className="h-4 w-4 text-neon-green" />
@@ -117,7 +117,7 @@ export default function SpotWallet() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Tokens</CardTitle>
             <Coins className="h-4 w-4 text-muted-foreground" />
@@ -134,7 +134,7 @@ export default function SpotWallet() {
       {/* Charts and List */}
       <div className="grid gap-6 lg:grid-cols-2">
         <TokenAllocationChart data={analytics.allocation} />
-        <Card>
+        <Card className="glass">
           <CardHeader>
             <CardTitle>Performance Overview</CardTitle>
           </CardHeader>

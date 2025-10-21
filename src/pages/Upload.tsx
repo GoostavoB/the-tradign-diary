@@ -789,7 +789,7 @@ const Upload = () => {
           </TabsList>
 
           <TabsContent value="ai-extract" className="space-y-6">
-            <Card className="p-6 bg-card border-border">
+            <Card className="p-6 glass">
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="extraction-image">Upload Trade Screenshot</Label>
@@ -924,7 +924,7 @@ const Upload = () => {
                       {extractedTrades.map((trade, index) => {
                         const edits = tradeEdits[index] || {};
                         return (
-                          <Card key={index} className="p-4 bg-muted/50 border-border space-y-4">
+                          <Card key={index} className="p-4 glass-subtle space-y-4">
                             <div className="mb-3 pb-2 border-b border-border flex items-center justify-between">
                               <div>
                                 <h4 className="font-semibold text-sm">Trade #{index + 1} - Review & Edit</h4>
@@ -1262,7 +1262,7 @@ const Upload = () => {
           </TabsContent>
 
           <TabsContent value="manual">
-            <Card className="p-6 bg-card border-border">
+            <Card className="p-6 glass">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
