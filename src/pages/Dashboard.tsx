@@ -8,7 +8,11 @@ import { Plus } from 'lucide-react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PerformanceInsights } from '@/components/PerformanceInsights';
+import { InsightsQuickSummary } from '@/components/insights/InsightsQuickSummary';
+import { PerformanceHighlights } from '@/components/insights/PerformanceHighlights';
+import { TradingQualityMetrics } from '@/components/insights/TradingQualityMetrics';
+import { CostEfficiencyPanel } from '@/components/insights/CostEfficiencyPanel';
+import { BehaviorAnalytics } from '@/components/insights/BehaviorAnalytics';
 import { DashboardSkeleton } from '@/components/DashboardSkeleton';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
 import { TradingStreaks } from '@/components/TradingStreaks';
@@ -573,12 +577,52 @@ const Dashboard = () => {
               </TabsContent>
 
             {/* Insights Tab */}
-            <TabsContent value="insights" className="space-y-4 md:space-y-6 relative glass rounded-2xl p-6">
+            <TabsContent value="insights" className="space-y-6">
                 <Suspense fallback={<DashboardSkeleton />}>
+                  {/* Layer 1: Quick Summary */}
+                  <InsightsQuickSummary
+                    totalPnL={dashboardStats.totalPnL}
+                    winRate={dashboardStats.winRate}
+                    profitFactor={dashboardStats.profitFactor}
+                    avgROI={dashboardStats.avgRoi}
+                    totalTrades={dashboardStats.totalTrades}
+                  />
+
+                  {/* Layer 2: Performance + Quality */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <PerformanceHighlights
+                      trades={processedTrades}
+                      bestTrade={dashboardStats.bestTrade}
+                      worstTrade={dashboardStats.worstTrade}
+                      currentStreak={useMemo(() => {
+                        const streak = calculateCurrentStreak(processedTrades);
+                        return { 
+                          type: streak > 0 ? 'win' : 'loss' as 'win' | 'loss',
+                          count: Math.abs(streak)
+                        };
+                      }, [processedTrades])}
+                    />
+                    
+                    <TradingQualityMetrics
+                      avgWin={dashboardStats.avgWin}
+                      avgLoss={dashboardStats.avgLoss}
+                      winCount={dashboardStats.winningTrades.length}
+                      lossCount={dashboardStats.losingTrades.length}
+                      maxDrawdownPercent={Math.abs((Math.min(...processedTrades.map(t => t.pnl || 0)) / initialInvestment) * 100)}
+                      maxDrawdownAmount={Math.min(...processedTrades.map(t => t.pnl || 0))}
+                      profitFactor={dashboardStats.profitFactor}
+                    />
+                  </div>
+
+                  {/* Layer 3: Cost Efficiency + Behavior */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <CostEfficiencyPanel trades={processedTrades} />
+                    <BehaviorAnalytics trades={processedTrades} />
+                  </div>
+
+                  {/* Existing components */}
+                  <DrawdownAnalysis trades={processedTrades} initialInvestment={initialInvestment} />
                   <TradingStreaks trades={processedTrades} />
-                  <MonthlyReport trades={processedTrades} />
-                  <PerformanceInsights trades={processedTrades} />
-                  <StatisticsComparison trades={processedTrades} />
                 </Suspense>
               </TabsContent>
 
