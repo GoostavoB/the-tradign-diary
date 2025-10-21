@@ -11,7 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
 import { toast } from 'sonner';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Upload as UploadIcon, X, Sparkles, Check, ChevronsUpDown, Plus, Trash2 } from 'lucide-react';
+import { Upload as UploadIcon, X, Sparkles, Check, ChevronsUpDown, Plus, Trash2, MapPin } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from "@/lib/utils";
@@ -20,6 +20,7 @@ import { UploadProgress, getRandomThinkingPhrase } from '@/components/UploadProg
 import { DuplicateTradeDialog } from '@/components/DuplicateTradeDialog';
 import { SuccessFeedback } from '@/components/SuccessFeedback';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { ImageAnnotator, Annotation } from '@/components/upload/ImageAnnotator';
 
 interface ExtractedTrade {
   symbol: string;
@@ -121,6 +122,10 @@ const Upload = () => {
   const [openExtractedSetup, setOpenExtractedSetup] = useState<number | null>(null);
   const [setupSearch, setSetupSearch] = useState('');
   const [extractedSetupSearches, setExtractedSetupSearches] = useState<Record<number, string>>({});
+  const [preSelectedBroker, setPreSelectedBroker] = useState('');
+  const [openPreBroker, setOpenPreBroker] = useState(false);
+  const [annotations, setAnnotations] = useState<Annotation[]>([]);
+  const [showAnnotator, setShowAnnotator] = useState(false);
   
   const [formData, setFormData] = useState({
     symbol: '',
@@ -392,7 +397,11 @@ const Upload = () => {
       setProcessingMessage(getRandomThinkingPhrase());
       
       const { data, error } = await supabase.functions.invoke('extract-trade-info', {
-        body: { imageBase64: extractionPreview }
+        body: { 
+          imageBase64: extractionPreview,
+          broker: preSelectedBroker || null,
+          annotations: annotations.length > 0 ? annotations : null
+        }
       });
 
       if (error) {
@@ -476,6 +485,8 @@ const Upload = () => {
     setExtractionImage(null);
     setExtractionPreview(null);
     setExtractedTrades([]);
+    setAnnotations([]);
+    setShowAnnotator(false);
   };
 
   const uploadScreenshot = async (tradeId: string): Promise<string | null> => {
@@ -796,6 +807,57 @@ const Upload = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Upload a screenshot containing your trade information. The AI will automatically extract all trades.
                   </p>
+                  
+                  {/* Pre-select broker */}
+                  {!extractionPreview && (
+                    <div className="mb-4 p-4 border border-border rounded-lg bg-muted/30">
+                      <Label className="text-sm font-medium mb-2 block">Broker (Optional)</Label>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Select your broker to pre-fill this field in extracted trades
+                      </p>
+                      <Popover open={openPreBroker} onOpenChange={setOpenPreBroker}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={openPreBroker}
+                            className="w-full justify-between"
+                          >
+                            {preSelectedBroker || "Select broker..."}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0" align="start">
+                          <Command>
+                            <CommandInput placeholder="Search broker..." />
+                            <CommandList>
+                              <CommandEmpty>No broker found.</CommandEmpty>
+                              <CommandGroup>
+                                {BROKERS.map((broker) => (
+                                  <CommandItem
+                                    key={broker}
+                                    value={broker}
+                                    onSelect={(value) => {
+                                      setPreSelectedBroker(value === preSelectedBroker ? '' : value);
+                                      setOpenPreBroker(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        preSelectedBroker === broker ? "opacity-100" : "opacity-0"
+                                      )}
+                                    />
+                                    {broker}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  )}
                   <div className="mt-2">
                     {extractionPreview ? (
                       <div className="space-y-3">
@@ -817,6 +879,29 @@ const Upload = () => {
                         </div>
                         {extractedTrades.length === 0 && (
                           <>
+                            {/* Image annotation system */}
+                            {showAnnotator && (
+                              <div className="mb-4">
+                                <ImageAnnotator
+                                  imageUrl={extractionPreview}
+                                  onAnnotationsChange={setAnnotations}
+                                  initialAnnotations={annotations}
+                                />
+                              </div>
+                            )}
+
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() => setShowAnnotator(!showAnnotator)}
+                                variant="outline"
+                                size="lg"
+                                className="flex-1"
+                              >
+                                <MapPin className="w-5 h-5 mr-2" />
+                                {showAnnotator ? 'Hide' : 'Mark Fields'} {annotations.length > 0 && `(${annotations.length})`}
+                              </Button>
+                            </div>
+
                             <Button
                               onClick={handleConfirmExtraction}
                               className={cn(

@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { imageBase64 } = await req.json();
+    const { imageBase64, broker, annotations } = await req.json();
     
     if (!imageBase64) {
       throw new Error('No image data provided');
@@ -38,6 +38,19 @@ serve(async (req) => {
 
     console.log('Extracting trade information from image...');
 
+    // Build context based on annotations if provided
+    let annotationContext = '';
+    if (annotations && annotations.length > 0) {
+      annotationContext = '\n\nUser has marked these areas in the image:\n' + 
+        annotations.map((a: any) => `- ${a.label}: located at position (${a.x}, ${a.y})`).join('\n');
+    }
+
+    // Build broker context
+    let brokerContext = '';
+    if (broker && broker !== 'No Broker' && broker !== 'Other') {
+      brokerContext = `\n\nIMPORTANT: The user has indicated this is from ${broker} broker. Use "${broker}" as the broker field for all extracted trades.`;
+    }
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -45,7 +58,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-pro",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",
@@ -109,7 +122,7 @@ Return ONLY valid JSON with this structure (as an array):
   "notes": ""
 }]
 
-IMPORTANT: All text fields (broker, setup, emotional_tag, notes) should be extracted if visible in the image. Leave them as empty strings "" if not available.`
+IMPORTANT: All text fields (broker, setup, emotional_tag, notes) should be extracted if visible in the image. Leave them as empty strings "" if not available.${brokerContext}${annotationContext}`
           },
           {
             role: "user",
