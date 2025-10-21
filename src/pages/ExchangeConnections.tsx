@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { RefreshCw, Unplug, Loader2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { ConnectExchangeModal } from '@/components/exchanges/ConnectExchangeModal';
 import { SyncHistoryWidget } from '@/components/exchanges/SyncHistoryWidget';
@@ -150,24 +151,28 @@ export default function ExchangeConnections() {
       name: 'Binance',
       description: 'Connect your Binance account to automatically sync spot & futures trades',
       icon: '🟡',
+      comingSoon: true,
     },
     {
       id: 'bingx',
       name: 'BingX',
       description: 'Connect your BingX account to automatically sync spot & futures trades',
       icon: '🏦',
+      comingSoon: false,
     },
     {
       id: 'bybit',
       name: 'Bybit',
       description: 'Connect your Bybit account to automatically sync spot & futures trades',
       icon: '🟠',
+      comingSoon: true,
     },
     {
       id: 'mexc',
       name: 'MEXC',
       description: 'Connect your MEXC account to automatically sync spot & futures trades',
       icon: '🔵',
+      comingSoon: true,
     },
   ];
 
@@ -220,7 +225,12 @@ export default function ExchangeConnections() {
                   <div className="flex items-center gap-3">
                     <span className="text-4xl">{exchange.icon}</span>
                     <div>
-                      <CardTitle>{exchange.name}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <CardTitle>{exchange.name}</CardTitle>
+                        {exchange.comingSoon && !isConnected && (
+                          <Badge variant="secondary" className="text-xs">Soon</Badge>
+                        )}
+                      </div>
                       {isConnected && (
                         <div className="flex items-center gap-2 mt-1">
                           <div className={`h-2 w-2 rounded-full ${
@@ -284,7 +294,11 @@ export default function ExchangeConnections() {
                     </div>
                   </>
                 ) : (
-                  <Button onClick={() => handleConnect(exchange.id)} className="w-full">
+                  <Button 
+                    onClick={() => handleConnect(exchange.id)} 
+                    className="w-full"
+                    disabled={exchange.comingSoon}
+                  >
                     Connect {exchange.name}
                   </Button>
                 )}
