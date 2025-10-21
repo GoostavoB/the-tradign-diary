@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { X, Save, Plus, Trash2, MapPin, Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export interface Annotation {
@@ -331,6 +331,26 @@ export const ImageAnnotator = ({ imageUrl, onAnnotationsChange, initialAnnotatio
               </div>
             </div>
           </div>
+
+          <DialogFooter className="p-6 pt-4 border-t border-border">
+            <div className="flex items-center justify-between w-full">
+              <p className="text-sm text-muted-foreground">
+                {annotations.length === 0 ? (
+                  'No fields marked yet'
+                ) : (
+                  `${annotations.length} field${annotations.length === 1 ? '' : 's'} marked`
+                )}
+              </p>
+              <Button 
+                onClick={() => setIsDialogOpen(false)} 
+                size="lg"
+                className="bg-primary text-primary-foreground"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {annotations.length === 0 ? 'Close' : `Confirm & Save ${annotations.length} Field${annotations.length === 1 ? '' : 's'}`}
+              </Button>
+            </div>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
