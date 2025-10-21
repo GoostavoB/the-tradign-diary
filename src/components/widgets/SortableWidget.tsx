@@ -19,32 +19,33 @@ export const SortableWidget = memo(({ id, children, isEditMode, onRemove }: Sort
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ 
+    id,
+    transition: {
+      duration: 150,
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+    },
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition: transition || 'transform 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-    opacity: isDragging ? 0.4 : 1,
-    scale: isDragging ? '1.02' : '1',
-    zIndex: isDragging ? 999 : 'auto',
+    transition: transition || undefined,
+    opacity: isDragging ? 0 : 1,
+    touchAction: 'none',
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`widget-item relative transition-all duration-200 ${
-        isDragging 
-          ? 'shadow-2xl shadow-primary/30 ring-2 ring-primary/50' 
-          : 'hover:shadow-lg'
-      }`}
+      className={`widget-item relative ${isDragging ? 'dragging' : ''}`}
     >
       {isEditMode && (
-        <div className="absolute top-2 right-2 z-10 flex items-center gap-1 animate-fade-in">
+        <div className="absolute top-2 right-2 z-10 flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
-            className="drag-handle h-8 w-8 cursor-grab active:cursor-grabbing bg-background/95 backdrop-blur-sm hover:bg-primary/10 hover:scale-110 transition-all duration-200 shadow-md"
+            className="drag-handle h-8 w-8 cursor-grab active:cursor-grabbing bg-background/95 backdrop-blur-sm hover:bg-primary/10 hover:scale-105 transition-all duration-150"
             {...attributes}
             {...listeners}
           >
@@ -54,7 +55,7 @@ export const SortableWidget = memo(({ id, children, isEditMode, onRemove }: Sort
             variant="ghost"
             size="icon"
             onClick={onRemove}
-            className="h-8 w-8 bg-background/95 backdrop-blur-sm hover:bg-destructive hover:text-destructive-foreground hover:scale-110 transition-all duration-200 shadow-md"
+            className="h-8 w-8 bg-background/95 backdrop-blur-sm hover:bg-destructive hover:text-destructive-foreground hover:scale-105 transition-all duration-150"
           >
             <X className="h-4 w-4" />
           </Button>

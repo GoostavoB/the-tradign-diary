@@ -646,6 +646,32 @@ textarea:focus-visible {
   height: auto;
 }
 
+/* Drag optimization - GPU acceleration and performance hints */
+.widget-item {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.widget-item.dragging {
+  will-change: transform, opacity;
+  cursor: grabbing !important;
+}
+
+/* Prevent text selection and touch callouts during drag */
+.widget-item * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Smooth drag transitions */
+.dashboard-grid {
+  touch-action: none;
+  position: relative;
+}
+
 /* Sticky popover for color picker */
 .sticky-popover {
   position: fixed !important;
