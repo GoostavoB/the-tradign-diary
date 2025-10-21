@@ -40,7 +40,7 @@ export const WidgetWrapper = memo(({
       {/* Shimmer Effect for Edit Mode */}
       {isEditMode && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
-          <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+          <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-primary/10 to-transparent blur-sm" />
         </div>
       )}
       {/* Edit Mode Controls */}

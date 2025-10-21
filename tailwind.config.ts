@@ -151,9 +151,14 @@ export default {
         "shimmer": {
           "0%": {
             transform: "translateX(-100%)",
+            opacity: "0",
+          },
+          "50%": {
+            opacity: "1",
           },
           "100%": {
             transform: "translateX(100%)",
+            opacity: "0",
           },
         },
       },
@@ -167,7 +172,7 @@ export default {
         "pulse-subtle": "pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "pulse-glow": "pulse-glow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "breathing-ring": "breathing-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "shimmer": "shimmer 6s ease-in-out infinite",
+        "shimmer": "shimmer 8s ease-in-out infinite",
       },
     },
   },
