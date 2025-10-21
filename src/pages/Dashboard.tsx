@@ -666,25 +666,7 @@ const Dashboard = () => {
                     </div>
                   </SortableContext>
                   
-                  <DragOverlay
-                    dropAnimation={{
-                      duration: 120,
-                      easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-                    }}
-                  >
-                    {activeId ? (
-                      (() => {
-                        const config = WIDGET_CATALOG[activeId];
-                        const style = overlaySize ? { width: overlaySize.width, height: overlaySize.height } : undefined;
-                        return (
-                          <div
-                            className="pointer-events-none select-none rounded-lg bg-card/90 border border-border shadow-2xl shadow-primary/40 ring-2 ring-primary/60"
-                            style={style}
-                          />
-                        );
-                      })()
-                    ) : null}
-                  </DragOverlay>
+                  {/* DragOverlay removed to keep dragging anchored to the original item */}
                 </DndContext>
               </TabsContent>
 

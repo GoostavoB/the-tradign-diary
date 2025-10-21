@@ -31,8 +31,8 @@ export const SortableWidget = memo(({ id, children, isEditMode, onRemove }: Sort
     transform: CSS.Transform.toString(transform),
     transition: transition || undefined,
     opacity: 1,
-    visibility: isDragging ? 'hidden' as const : 'visible' as const,
     touchAction: 'none',
+    zIndex: isDragging ? 1000 : 'auto',
   };
 
   return (
@@ -40,7 +40,7 @@ export const SortableWidget = memo(({ id, children, isEditMode, onRemove }: Sort
       ref={setNodeRef}
       style={style}
       data-sortable-id={id}
-      className={`widget-item relative ${isDragging ? 'dragging' : ''}`}
+      className={`widget-item relative ${isDragging ? 'dragging ring-2 ring-primary/60 shadow-2xl shadow-primary/40 rounded-lg' : ''}`}
     >
       {isEditMode && (
         <div className="absolute top-2 right-2 z-10 flex items-center gap-1">
