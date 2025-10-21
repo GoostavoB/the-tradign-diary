@@ -1140,6 +1140,45 @@ export type Database = {
         }
         Relationships: []
       }
+      social_notifications: {
+        Row: {
+          actor_avatar: string | null
+          actor_id: string | null
+          actor_name: string
+          content: string
+          created_at: string | null
+          id: string
+          post_id: string | null
+          read: boolean | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          actor_avatar?: string | null
+          actor_id?: string | null
+          actor_name: string
+          content: string
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          read?: boolean | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          actor_avatar?: string | null
+          actor_id?: string | null
+          actor_name?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          read?: boolean | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       social_posts: {
         Row: {
           comments_count: number | null
@@ -1147,8 +1186,10 @@ export type Database = {
           created_at: string | null
           id: string
           likes_count: number | null
+          media_urls: string[] | null
           post_type: string
           shares_count: number | null
+          trade_data: Json | null
           trade_id: string | null
           updated_at: string | null
           user_id: string
@@ -1160,8 +1201,10 @@ export type Database = {
           created_at?: string | null
           id?: string
           likes_count?: number | null
+          media_urls?: string[] | null
           post_type: string
           shares_count?: number | null
+          trade_data?: Json | null
           trade_id?: string | null
           updated_at?: string | null
           user_id: string
@@ -1173,8 +1216,10 @@ export type Database = {
           created_at?: string | null
           id?: string
           likes_count?: number | null
+          media_urls?: string[] | null
           post_type?: string
           shares_count?: number | null
+          trade_data?: Json | null
           trade_id?: string | null
           updated_at?: string | null
           user_id?: string
