@@ -85,7 +85,10 @@ export const BrokerSelect = ({ value, onChange, required = false }: BrokerSelect
           style={{ width: 'var(--radix-popover-trigger-width)', minWidth: '300px' }}
         >
           <Command className="bg-popover rounded-lg border-0">
-            <CommandInput placeholder="Search broker..." className="h-9 border-0" />
+            <CommandInput 
+              placeholder="Search broker..." 
+              className="h-9 border-0 focus:ring-0 focus:outline-none" 
+            />
             <CommandList className="max-h-[300px]">
               <CommandEmpty>No broker found.</CommandEmpty>
               <CommandGroup>
