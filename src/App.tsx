@@ -34,6 +34,7 @@ const FAQ = lazy(() => import("./pages/FAQ"));
 const Social = lazy(() => import("./pages/Social"));
 const AITools = lazy(() => import("./pages/AITools"));
 const Journal = lazy(() => import("./pages/Journal"));
+const TradeAnalysis = lazy(() => import("./pages/TradeAnalysis"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CustomPage = lazy(() => import("./pages/CustomPage"));
 const ExchangeConnections = lazy(() => import("./pages/ExchangeConnections"));
@@ -97,6 +98,7 @@ const App = () => (
                       <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
                       <Route path="/ai-tools" element={<ProtectedRoute><AITools /></ProtectedRoute>} />
                       <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
+                      <Route path="/trade-analysis" element={<ProtectedRoute><TradeAnalysis /></ProtectedRoute>} />
                       <Route path="/exchanges" element={<ProtectedRoute><ExchangeConnections /></ProtectedRoute>} />
                       <Route path="/spot-wallet" element={<ProtectedRoute><SpotWallet /></ProtectedRoute>} />
                       <Route path="/fee-analysis" element={<ProtectedRoute><FeeAnalysis /></ProtectedRoute>} />
