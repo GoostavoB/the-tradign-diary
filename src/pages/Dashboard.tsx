@@ -733,7 +733,8 @@ const Dashboard = () => {
     <AppLayout>
       <FloatingXP />
       <MicroFeedbackOverlay />
-      <LevelUpModal 
+      <WeeklySummaryRecap />
+      <LevelUpModal
         show={showLevelUp} 
         level={xpData.currentLevel} 
         onClose={() => setShowLevelUp(false)} 

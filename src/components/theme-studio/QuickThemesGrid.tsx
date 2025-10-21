@@ -6,16 +6,19 @@ import { useThemeUnlocks } from '@/hooks/useThemeUnlocks';
 
 export const QuickThemesGrid = () => {
   const { themeMode, setThemeMode } = useThemeMode();
-  const { isThemeUnlocked } = useThemeUnlocks();
+  const { themes } = useThemeUnlocks();
 
-  const handleThemeClick = (theme: ColorMode) => {
-    if (isThemeUnlocked(theme.id)) {
-      setThemeMode(theme.id);
+  const handleThemeClick = (themeId: string) => {
+    const theme = themes.find(t => t.id === themeId);
+    if (theme?.isUnlocked) {
+      setThemeMode(themeId);
     }
   };
 
   const allThemes = [...PRESET_THEMES, ...ALL_ADVANCED_THEMES];
-  const unlockedThemes = allThemes.filter(t => isThemeUnlocked(t.id));
+  const unlockedThemes = allThemes.filter(t => 
+    themes.find(ut => ut.id === t.id)?.isUnlocked
+  );
 
   return (
     <div className="space-y-4">
@@ -27,7 +30,7 @@ export const QuickThemesGrid = () => {
               key={theme.id}
               theme={theme}
               isActive={themeMode === theme.id}
-              onClick={() => handleThemeClick(theme)}
+              onClick={() => handleThemeClick(theme.id)}
             />
           ))}
         </div>

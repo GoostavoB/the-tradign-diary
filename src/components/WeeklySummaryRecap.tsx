@@ -66,11 +66,11 @@ export const WeeklySummaryRecap = () => {
       // Fetch XP gained this week
       const { data: xpData } = await supabase
         .from('xp_activity_log')
-        .select('amount')
+        .select('xp_earned')
         .eq('user_id', user.id)
         .gte('created_at', oneWeekAgo.toISOString());
 
-      const xpGained = xpData?.reduce((sum, log) => sum + log.amount, 0) || 0;
+      const xpGained = xpData?.reduce((sum, log) => sum + (log.xp_earned || 0), 0) || 0;
 
       // Fetch achievements unlocked this week
       const { count: achievementsCount } = await supabase

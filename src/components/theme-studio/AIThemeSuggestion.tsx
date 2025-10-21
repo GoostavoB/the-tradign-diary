@@ -7,15 +7,16 @@ import { Sparkles, Lightbulb } from 'lucide-react';
 export const AIThemeSuggestion = () => {
   const { suggestion, hasSuggestion } = useAIThemeSuggestions();
   const { setThemeMode, themeMode } = useThemeMode();
-  const { isThemeUnlocked } = useThemeUnlocks();
+  const { themes } = useThemeUnlocks();
 
   if (!hasSuggestion || !suggestion) return null;
 
-  const isUnlocked = isThemeUnlocked(suggestion.theme.id);
+  const theme = themes.find(t => t.id === suggestion.theme.id);
+  const isUnlocked = theme?.isUnlocked || false;
   const isActive = themeMode === suggestion.theme.id;
 
-  if (!isUnlocked) return null; // Don't suggest locked themes
-  if (isActive) return null; // Don't suggest already active theme
+  if (!isUnlocked) return null;
+  if (isActive) return null;
 
   return (
     <div className="px-4 pb-4">
