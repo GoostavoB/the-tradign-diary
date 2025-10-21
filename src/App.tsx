@@ -28,6 +28,7 @@ import CustomPage from "./pages/CustomPage";
 import ExchangeConnections from "./pages/ExchangeConnections";
 import SpotWallet from "./pages/SpotWallet";
 import FeeAnalysis from "./pages/FeeAnalysis";
+import LogoDownload from "./pages/LogoDownload";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/logo-download" element={<LogoDownload />} />
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
                   <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
