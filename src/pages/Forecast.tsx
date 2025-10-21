@@ -192,12 +192,12 @@ const Forecast = () => {
             <div className="space-y-6 mt-12">
               <div className="flex items-center gap-3">
                 <Sparkles className="h-8 w-8 text-primary" />
-                <div>
-                  <h2 className="text-3xl font-bold">Forecast - Long-Term Growth</h2>
-                  <p className="text-muted-foreground">
-                    Statistical projections based on geometric expectancy and compound growth
-                  </p>
-                </div>
+              <div>
+                <h2 className="text-3xl font-bold">Forecast - Long-Term Growth</h2>
+                <p className="text-muted-foreground">
+                  Statistical projections based on geometric expectancy and compound growth
+                </p>
+              </div>
               </div>
 
               {advancedStats ? (

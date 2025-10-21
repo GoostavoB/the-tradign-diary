@@ -303,13 +303,13 @@ const WinsByHourChartComponent = ({ trades }: WinsByHourChartProps) => {
               />
               <Bar 
                 dataKey="wins" 
-                fill="hsl(142, 76%, 46%)"
+                fill={colors.positive}
                 radius={[6, 6, 0, 0]}
                 name="Wins"
               />
               <Bar 
                 dataKey="losses" 
-                fill="hsl(0, 84%, 60%)"
+                fill={colors.negative}
                 radius={[6, 6, 0, 0]}
                 name="Losses"
               />

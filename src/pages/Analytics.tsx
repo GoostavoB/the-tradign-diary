@@ -86,24 +86,24 @@ export default function Analytics() {
         </div>
 
         <Tabs defaultValue="charts" className="space-y-6">
-          <TabsList className="grid w-full max-w-4xl grid-cols-3 md:grid-cols-5 glass">
-            <TabsTrigger value="charts" className="gap-2 text-xs md:text-sm">
+          <TabsList className="grid w-full max-w-4xl grid-cols-3 md:grid-cols-5 glass p-1">
+            <TabsTrigger value="charts" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
               <BarChart3 className="h-4 w-4" />
               <span className="hidden md:inline">Charts</span>
             </TabsTrigger>
-            <TabsTrigger value="performance" className="gap-2 text-xs md:text-sm">
+            <TabsTrigger value="performance" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
               <TrendingUp className="h-4 w-4" />
               <span className="hidden md:inline">Performance</span>
             </TabsTrigger>
-            <TabsTrigger value="risk" className="gap-2 text-xs md:text-sm">
+            <TabsTrigger value="risk" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
               <Shield className="h-4 w-4" />
               <span className="hidden md:inline">Risk</span>
             </TabsTrigger>
-            <TabsTrigger value="behavior" className="gap-2 text-xs md:text-sm">
+            <TabsTrigger value="behavior" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
               <Brain className="h-4 w-4" />
               <span className="hidden md:inline">Behavior</span>
             </TabsTrigger>
-            <TabsTrigger value="capital" className="gap-2 text-xs md:text-sm">
+            <TabsTrigger value="capital" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
               <DollarSign className="h-4 w-4" />
               <span className="hidden md:inline">Capital</span>
             </TabsTrigger>
