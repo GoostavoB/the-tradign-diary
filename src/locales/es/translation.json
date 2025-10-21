@@ -45,6 +45,7 @@
     "marketData": "Datos de Mercado",
     "economicCalendar": "Calendario Económico",
     "longShortRatio": "Ratio Long/Short",
+    "feeAnalysis": "Análisis de Comisiones",
     "blog": "Blog",
     "faq": "Preguntas Frecuentes"
   },
@@ -395,5 +396,32 @@
     "lastMonth": "Mes Pasado",
     "thisYear": "Este Año",
     "custom": "Rango Personalizado"
+  },
+  "feeAnalysis": {
+    "title": "Análisis de Comisiones",
+    "subtitle": "Comprenda sus costos reales de trading",
+    "totalFees": "Comisiones Totales Pagadas",
+    "avgFeePercent": "Tasa de Comisión Promedio",
+    "mostEfficient": "Más Eficiente",
+    "leastEfficient": "Menos Eficiente",
+    "avgFee": "comisión promedio",
+    "feeImpact": "Impacto de comisiones",
+    "ofVolume": "del volumen",
+    "rank": "Rango",
+    "exchange": "Exchange",
+    "totalVolume": "Volumen Total",
+    "trades": "Operaciones",
+    "efficiency": "Eficiencia",
+    "feeImpactOnPnL": "Impacto de Comisiones en P&L",
+    "exchangeComparison": "Comparación de Exchanges",
+    "tradeDetails": "Detalles de Operaciones",
+    "pair": "Par",
+    "margin": "Margen",
+    "leverage": "Apalancamiento",
+    "grossPnLPercent": "P&L Bruto %",
+    "totalFeesPercent": "Comisiones Totales %",
+    "netPnLPercent": "P&L Neto %",
+    "feeDollar": "Comisión $",
+    "fundingDollar": "Financiación $"
   }
 }

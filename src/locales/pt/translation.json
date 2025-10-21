@@ -45,6 +45,7 @@
     "marketData": "Dados de Mercado",
     "economicCalendar": "Calendário Econômico",
     "longShortRatio": "Proporção Long/Short",
+    "feeAnalysis": "Análise de Taxas",
     "blog": "Blog",
     "faq": "Perguntas Frequentes"
   },
@@ -395,5 +396,32 @@
     "lastMonth": "Mês Passado",
     "thisYear": "Este Ano",
     "custom": "Intervalo Personalizado"
+  },
+  "feeAnalysis": {
+    "title": "Análise de Taxas",
+    "subtitle": "Entenda seus custos reais de negociação",
+    "totalFees": "Total de Taxas Pagas",
+    "avgFeePercent": "Taxa Média de Comissão",
+    "mostEfficient": "Mais Eficiente",
+    "leastEfficient": "Menos Eficiente",
+    "avgFee": "taxa média",
+    "feeImpact": "Impacto das taxas",
+    "ofVolume": "do volume",
+    "rank": "Ranking",
+    "exchange": "Exchange",
+    "totalVolume": "Volume Total",
+    "trades": "Operações",
+    "efficiency": "Eficiência",
+    "feeImpactOnPnL": "Impacto das Taxas no P&L",
+    "exchangeComparison": "Comparação de Exchanges",
+    "tradeDetails": "Detalhes das Operações",
+    "pair": "Par",
+    "margin": "Margem",
+    "leverage": "Alavancagem",
+    "grossPnLPercent": "P&L Bruto %",
+    "totalFeesPercent": "Taxas Totais %",
+    "netPnLPercent": "P&L Líquido %",
+    "feeDollar": "Taxa $",
+    "fundingDollar": "Financiamento $"
   }
 }

@@ -45,6 +45,7 @@
     "marketData": "Market Data",
     "economicCalendar": "Economic Calendar",
     "longShortRatio": "Long/Short Ratio",
+    "feeAnalysis": "Fee Analysis",
     "blog": "Blog",
     "faq": "FAQ"
   },
@@ -395,5 +396,32 @@
     "lastMonth": "Last Month",
     "thisYear": "This Year",
     "custom": "Custom Range"
+  },
+  "feeAnalysis": {
+    "title": "Fee Analysis",
+    "subtitle": "Understand your true trading costs",
+    "totalFees": "Total Fees Paid",
+    "avgFeePercent": "Average Fee Rate",
+    "mostEfficient": "Most Efficient",
+    "leastEfficient": "Least Efficient",
+    "avgFee": "avg fee",
+    "feeImpact": "Fee impact",
+    "ofVolume": "of volume",
+    "rank": "Rank",
+    "exchange": "Exchange",
+    "totalVolume": "Total Volume",
+    "trades": "Trades",
+    "efficiency": "Efficiency",
+    "feeImpactOnPnL": "Fee Impact on P&L",
+    "exchangeComparison": "Exchange Comparison",
+    "tradeDetails": "Trade Details",
+    "pair": "Pair",
+    "margin": "Margin",
+    "leverage": "Leverage",
+    "grossPnLPercent": "Gross P&L %",
+    "totalFeesPercent": "Total Fees %",
+    "netPnLPercent": "Net P&L %",
+    "feeDollar": "Fee $",
+    "fundingDollar": "Funding $"
   }
 }
