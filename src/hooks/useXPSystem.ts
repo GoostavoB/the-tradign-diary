@@ -115,7 +115,24 @@ export const useXPSystem = () => {
     if (!user || amount <= 0) return;
 
     try {
-      const newTotalXP = xpData.totalXPEarned + amount;
+      // Check for streak multiplier
+      const { data: progression } = await supabase
+        .from('user_progression')
+        .select('daily_streak')
+        .eq('user_id', user.id)
+        .single();
+
+      let multiplier = 1;
+      const streak = progression?.daily_streak || 0;
+      
+      if (streak >= 30) multiplier = 2.0;
+      else if (streak >= 14) multiplier = 1.5;
+      else if (streak >= 7) multiplier = 1.25;
+      else if (streak >= 3) multiplier = 1.1;
+
+      const finalAmount = Math.floor(amount * multiplier);
+
+      const newTotalXP = xpData.totalXPEarned + finalAmount;
       const { level: newLevel, currentXP: newCurrentXP } = calculateLevelFromXP(newTotalXP);
       const didLevelUp = newLevel > xpData.currentLevel;
 
@@ -139,8 +156,8 @@ export const useXPSystem = () => {
         .insert({
           user_id: user.id,
           activity_type: activityType,
-          xp_earned: amount,
-          description
+          xp_earned: finalAmount,
+          description: description || `Earned ${finalAmount} XP from ${activityType}${multiplier > 1 ? ` (${multiplier}x streak bonus)` : ''}`
         });
 
       if (logError) throw logError;
@@ -158,14 +175,44 @@ export const useXPSystem = () => {
         setNewLevelRef(newLevel);
         setShowLevelUp(true);
         
-        // Also show a toast for extra dopamine
         toast.success(`🎉 Level Up! You're now level ${newLevel}!`, {
           description: `Keep trading to reach level ${newLevel + 1}`,
           duration: 5000
         });
+
+        // Award freeze token every 5 levels
+        if (newLevel % 5 === 0) {
+          const { data: inventory } = await supabase
+            .from('streak_freeze_inventory')
+            .select('freeze_tokens, earned_from_level')
+            .eq('user_id', user.id)
+            .single();
+
+          if (inventory) {
+            await supabase
+              .from('streak_freeze_inventory')
+              .update({
+                freeze_tokens: inventory.freeze_tokens + 1,
+                earned_from_level: inventory.earned_from_level + 1,
+              })
+              .eq('user_id', user.id);
+          } else {
+            await supabase
+              .from('streak_freeze_inventory')
+              .insert({
+                user_id: user.id,
+                freeze_tokens: 1,
+                earned_from_level: 1,
+                earned_from_streak: 0,
+              });
+          }
+
+          toast.success('Bonus! You earned a Streak Freeze token! 🧊', {
+            duration: 4000,
+          });
+        }
       } else {
-        // Use custom XP toast with icon
-        toast.success(`+${amount} XP`, {
+        toast.success(`+${finalAmount} XP${multiplier > 1 ? ` (${multiplier}x)` : ''}`, {
           description: description || activityType,
           duration: 2000,
           icon: '⚡'

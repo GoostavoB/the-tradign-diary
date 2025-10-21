@@ -4,8 +4,13 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { XPProgressBar } from '@/components/gamification/XPProgressBar';
 import { DailyChallengesPanel } from '@/components/gamification/DailyChallengesPanel';
+import { WeeklyChallengesPanel } from '@/components/gamification/WeeklyChallengesPanel';
+import { SeasonalChallengesPanel } from '@/components/gamification/SeasonalChallengesPanel';
 import { LevelUpModal } from '@/components/gamification/LevelUpModal';
 import { BadgeProgressionPanel } from '@/components/gamification/BadgeProgressionPanel';
+import { TraderOfTheDay } from '@/components/gamification/TraderOfTheDay';
+import { ProfileBadgeShowcase } from '@/components/gamification/ProfileBadgeShowcase';
+import { RareAchievementEffect } from '@/components/gamification/RareAchievementEffect';
 import { useXPSystem } from '@/hooks/useXPSystem';
 import { useDailyChallenges } from '@/hooks/useDailyChallenges';
 import { Trophy, Zap, Target, TrendingUp, Award, Star } from 'lucide-react';
@@ -16,7 +21,7 @@ import { motion } from 'framer-motion';
 const Gamification = () => {
   const { xpData, loading: xpLoading, getXPForNextLevel, showLevelUp, setShowLevelUp } = useXPSystem();
   const { challenges, loading: challengesLoading } = useDailyChallenges();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('daily');
 
   const getLevelTitle = (level: number) => {
     if (level >= 50) return 'Monstro';
@@ -49,6 +54,7 @@ const Gamification = () => {
 
   return (
     <AppLayout>
+      <RareAchievementEffect />
       <LevelUpModal 
         show={showLevelUp} 
         level={xpData.currentLevel} 
@@ -57,10 +63,16 @@ const Gamification = () => {
       
       <div className="container mx-auto py-6 space-y-6">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Trading Progress</h1>
+          <h1 className="text-3xl font-bold mb-2">Gamification Hub</h1>
           <p className="text-muted-foreground">
-            Track your journey, complete challenges, and level up your trading skills
+            Track your journey, complete challenges, and level up
           </p>
+        </div>
+
+        {/* Highlights */}
+        <div className="grid gap-4 md:grid-cols-2">
+          <TraderOfTheDay />
+          <ProfileBadgeShowcase />
         </div>
 
         {/* Hero Card - Level & XP */}
@@ -141,32 +153,29 @@ const Gamification = () => {
           </div>
         </Card>
 
-        {/* Tabs for Challenges, Badges, XP History */}
+        {/* Tabs for Challenges */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview">Daily Challenges</TabsTrigger>
-            <TabsTrigger value="badges">Badge Progress</TabsTrigger>
-            <TabsTrigger value="history">XP History</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="daily">Daily</TabsTrigger>
+            <TabsTrigger value="weekly">Weekly</TabsTrigger>
+            <TabsTrigger value="seasonal">Seasonal</TabsTrigger>
+            <TabsTrigger value="badges">Badges</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-4">
+          <TabsContent value="daily" className="space-y-4">
             <DailyChallengesPanel challenges={challenges} />
+          </TabsContent>
+
+          <TabsContent value="weekly" className="space-y-4">
+            <WeeklyChallengesPanel />
+          </TabsContent>
+
+          <TabsContent value="seasonal" className="space-y-4">
+            <SeasonalChallengesPanel />
           </TabsContent>
 
           <TabsContent value="badges" className="space-y-4">
             <BadgeProgressionPanel />
-          </TabsContent>
-
-          <TabsContent value="history" className="space-y-4">
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Recent XP Activity</h3>
-              <p className="text-muted-foreground text-sm">
-                Track your recent XP gains and see how you're progressing.
-              </p>
-              <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">Coming Soon...</p>
-              </div>
-            </Card>
           </TabsContent>
         </Tabs>
       </div>

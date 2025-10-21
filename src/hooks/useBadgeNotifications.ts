@@ -215,16 +215,42 @@ export function useBadgeNotifications(trades: Trade[]) {
           const Icon = getAchievementIcon(badge.id);
           const rarityColor = getRarityColor(badge.rarity);
           
-          toast.success(
-            `🎉 Achievement Unlocked: ${badge.title} - ${badge.description}`,
-            {
-              duration: 6000,
-              action: {
-                label: 'Share',
-                onClick: () => shareAchievement(badge),
-              },
+          // 5% chance of rare animation (or if badge is legendary/epic)
+          const isRareAnimation = badge.rarity === 'legendary' || badge.rarity === 'epic' || Math.random() < 0.05;
+          
+          if (isRareAnimation) {
+            // Trigger extended celebration
+            toast.success(
+              `✨ RARE UNLOCK! ${badge.title} - ${badge.description}`,
+              {
+                duration: 8000,
+                className: 'animate-pulse',
+                action: {
+                  label: 'Share',
+                  onClick: () => shareAchievement(badge),
+                },
+              }
+            );
+
+            // Trigger screen shake effect
+            if (typeof window !== 'undefined') {
+              const event = new CustomEvent('rare-achievement', {
+                detail: { badge }
+              });
+              window.dispatchEvent(event);
             }
-          );
+          } else {
+            toast.success(
+              `🎉 Achievement Unlocked: ${badge.title} - ${badge.description}`,
+              {
+                duration: 6000,
+                action: {
+                  label: 'Share',
+                  onClick: () => shareAchievement(badge),
+                },
+              }
+            );
+          }
 
           previousAchievements.current.add(badge.id);
         }
