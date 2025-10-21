@@ -36,6 +36,7 @@ export function AppSidebar() {
     { title: t('navigation.forecast'), url: '/forecast', icon: Target },
     { title: t('navigation.aiTools'), url: '/ai-tools', icon: Brain },
     { title: 'Trading Journal', url: '/journal', icon: BookMarked },
+    { title: 'Goals & Milestones', url: '/goals', icon: Target },
     { title: 'Social', url: '/social', icon: Users },
     { title: 'Progress & XP', url: '/gamification', icon: Zap },
     { title: 'Leaderboard', url: '/leaderboard', icon: Trophy },
