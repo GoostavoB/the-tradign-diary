@@ -18,6 +18,10 @@ import { ThemeInitializer } from "@/components/ThemeInitializer";
 
 // Eagerly load critical pages (landing and auth)
 import Index from "./pages/Index";
+import IndexPt from "./pages/IndexPt";
+import IndexEs from "./pages/IndexEs";
+import IndexAr from "./pages/IndexAr";
+import IndexVi from "./pages/IndexVi";
 import Auth from "./pages/Auth";
 
 // Lazy load all other pages for better performance
@@ -100,7 +104,14 @@ const App = () => (
                 <AIAssistantProvider>
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
+                      {/* Landing pages by language */}
                       <Route path="/" element={<Index />} />
+                      <Route path="/pt" element={<IndexPt />} />
+                      <Route path="/es" element={<IndexEs />} />
+                      <Route path="/ar" element={<IndexAr />} />
+                      <Route path="/vi" element={<IndexVi />} />
+                      
+                      {/* Auth with language detection */}
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/logo-download" element={<LogoDownload />} />
                       <Route path="/crypto-trading-faq" element={<CryptoTradingFAQ />} />

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from '@/hooks/useTranslation';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -56,6 +57,18 @@ const Auth = () => {
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const { signIn, signUp, signInWithGoogle } = useAuth();
+  const { i18n } = useTranslation();
+
+  // Detect language from URL parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+    
+    if (langParam && ['pt', 'en', 'es', 'ar', 'vi'].includes(langParam)) {
+      i18n.changeLanguage(langParam);
+      localStorage.setItem('app-language', langParam);
+    }
+  }, [i18n]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
