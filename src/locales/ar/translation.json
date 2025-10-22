@@ -229,25 +229,81 @@
     "closed": "مغلقة"
   },
   "widgets": {
-    "totalBalance": "إجمالي الرصيد",
-    "winRate": "Win Rate",
-    "recentTransactions": "المعاملات الأخيرة",
-    "topMovers": "الأكثر حركة",
-    "aiInsights": "رؤى الذكاء الاصطناعي",
+    "totalBalance": {
+      "title": "إجمالي الرصيد"
+    },
+    "winRate": {
+      "title": "معدل الفوز"
+    },
+    "totalTrades": {
+      "title": "إجمالي الصفقات"
+    },
+    "currentROI": {
+      "title": "ROI الحالي"
+    },
+    "avgPnLPerTrade": {
+      "title": "متوسط P&L لكل صفقة"
+    },
+    "avgPnLPerDay": {
+      "title": "متوسط P&L لكل يوم"
+    },
+    "avgROIPerTrade": {
+      "title": "متوسط ROI لكل صفقة"
+    },
+    "capitalGrowth": {
+      "title": "نمو رأس المال"
+    },
+    "spotWallet": {
+      "title": "محفظة Spot"
+    },
+    "portfolioOverview": {
+      "title": "نظرة عامة على المحفظة"
+    },
+    "topMovers": {
+      "title": "الأكثر حركة"
+    },
+    "aiInsights": {
+      "title": "رؤى الذكاء الاصطناعي"
+    },
+    "recentTransactions": {
+      "title": "المعاملات الأخيرة",
+      "viewAll": "عرض الكل",
+      "noTransactions": "لا توجد معاملات بعد"
+    },
+    "quickActions": {
+      "title": "إجراءات سريعة"
+    },
     "stats": "الإحصائيات",
     "portfolio": "المحفظة",
-    "quickActions": "إجراءات سريعة",
     "premiumCTA": "Premium",
     "insights": "رؤى الذكاء الاصطناعي",
     "streaks": "السلاسل",
     "heatmap": "خريطة الحرارة",
     "charts": "الرسوم البيانية",
-    "spotWallet": "محفظة Spot",
     "viewAll": "عرض الكل",
     "tokens": "عملات",
     "newTrade": "صفقة جديدة",
     "importCSV": "استيراد CSV",
-    "viewAnalytics": "عرض التحليلات"
+    "viewAnalytics": "عرض التحليلات",
+    "thisWeek": "هذا الأسبوع",
+    "trades": "صفقات",
+    "assets": "الأصول",
+    "initialCapital": "رأس المال الأولي",
+    "currentCapital": "رأس المال الحالي",
+    "initial": "الأولي",
+    "current": "الحالي",
+    "growth": "النمو",
+    "balance": "الرصيد",
+    "setInitialCapital": "تعيين رأس المال الأولي",
+    "enterStartingCapital": "أدخل رأس المال الأولي لحساب ROI الدقيق",
+    "initialCapitalLabel": "رأس المال الأولي ($)",
+    "currentBalance": "الرصيد الحالي",
+    "tradingDays": "أيام التداول",
+    "avgROIAcross": "متوسط ROI عبر {{count}} صفقة",
+    "avgPnLDescription": "متوسط الربح/الخسارة لكل صفقة منفذة",
+    "noTransactions": "لا توجد معاملات بعد",
+    "noData": "لا توجد بيانات متاحة",
+    "unknown": "غير معروف"
   },
   "uploadPage": {
     "title": "رفع صفقة",

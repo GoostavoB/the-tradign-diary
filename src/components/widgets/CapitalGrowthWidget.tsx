@@ -33,7 +33,7 @@ export const CapitalGrowthWidget = memo(({
   return (
     <WidgetWrapper
       id={id}
-      title={t('widgets.capitalGrowth')}
+      title={t('widgets.capitalGrowth.title')}
       isEditMode={isEditMode}
       onRemove={onRemove}
     >

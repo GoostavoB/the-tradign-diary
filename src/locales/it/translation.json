@@ -749,7 +749,9 @@
     },
     "recentTransactions": {
       "title": "Transazioni Recenti",
-      "description": "La tua ultima attività di trading"
+      "description": "La tua ultima attività di trading",
+      "viewAll": "Vedi tutto",
+      "noTransactions": "Nessuna transazione ancora"
     },
     "quickActions": {
       "title": "Azioni Rapide",

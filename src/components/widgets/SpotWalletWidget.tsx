@@ -31,7 +31,7 @@ export const SpotWalletWidget = memo(({
   return (
     <WidgetWrapper
       id={id}
-      title={t('widgets.spotWallet')}
+      title={t('widgets.spotWallet.title')}
       isEditMode={isEditMode}
       onRemove={onRemove}
       onExpand={onExpand}

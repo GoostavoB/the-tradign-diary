@@ -229,25 +229,81 @@
     "closed": "क्लोज़्ड"
   },
   "widgets": {
-    "totalBalance": "कुल बैलेंस",
-    "winRate": "विन रेट",
-    "recentTransactions": "हाल के लेनदेन",
-    "topMovers": "टॉप मूवर्स",
-    "aiInsights": "AI इनसाइट्स",
+    "totalBalance": {
+      "title": "कुल बैलेंस"
+    },
+    "winRate": {
+      "title": "विन रेट"
+    },
+    "totalTrades": {
+      "title": "कुल ट्रेड्स"
+    },
+    "currentROI": {
+      "title": "वर्तमान ROI"
+    },
+    "avgPnLPerTrade": {
+      "title": "प्रति ट्रेड औसत P&L"
+    },
+    "avgPnLPerDay": {
+      "title": "प्रति दिन औसत P&L"
+    },
+    "avgROIPerTrade": {
+      "title": "प्रति ट्रेड औसत ROI"
+    },
+    "capitalGrowth": {
+      "title": "पूंजी वृद्धि"
+    },
+    "spotWallet": {
+      "title": "स्पॉट वॉलेट"
+    },
+    "portfolioOverview": {
+      "title": "पोर्टफोलियो अवलोकन"
+    },
+    "topMovers": {
+      "title": "टॉप मूवर्स"
+    },
+    "aiInsights": {
+      "title": "AI इनसाइट्स"
+    },
+    "recentTransactions": {
+      "title": "हाल के लेनदेन",
+      "viewAll": "सभी देखें",
+      "noTransactions": "अभी तक कोई लेनदेन नहीं"
+    },
+    "quickActions": {
+      "title": "त्वरित कार्य"
+    },
     "stats": "सांख्यिकी",
     "portfolio": "पोर्टफोलियो",
-    "quickActions": "त्वरित कार्य",
     "premiumCTA": "Premium",
     "insights": "AI इनसाइट्स",
     "streaks": "स्ट्रीक्स",
     "heatmap": "हीटमैप",
     "charts": "चार्ट्स",
-    "spotWallet": "स्पॉट वॉलेट",
     "viewAll": "सभी देखें",
     "tokens": "टोकन",
     "newTrade": "नया ट्रेड",
     "importCSV": "CSV इम्पोर्ट करें",
-    "viewAnalytics": "एनालिटिक्स देखें"
+    "viewAnalytics": "एनालिटिक्स देखें",
+    "thisWeek": "इस सप्ताह",
+    "trades": "ट्रेड्स",
+    "assets": "एसेट्स",
+    "initialCapital": "प्रारंभिक पूंजी",
+    "currentCapital": "वर्तमान पूंजी",
+    "initial": "प्रारंभिक",
+    "current": "वर्तमान",
+    "growth": "वृद्धि",
+    "balance": "बैलेंस",
+    "setInitialCapital": "प्रारंभिक पूंजी सेट करें",
+    "enterStartingCapital": "सटीक ROI गणना के लिए अपनी प्रारंभिक पूंजी दर्ज करें",
+    "initialCapitalLabel": "प्रारंभिक पूंजी ($)",
+    "currentBalance": "वर्तमान बैलेंस",
+    "tradingDays": "ट्रेडिंग दिन",
+    "avgROIAcross": "{{count}} ट्रेड्स में औसत ROI",
+    "avgPnLDescription": "प्रति निष्पादित ट्रेड औसत लाभ/हानि",
+    "noTransactions": "अभी तक कोई लेनदेन नहीं",
+    "noData": "कोई डेटा उपलब्ध नहीं",
+    "unknown": "अज्ञात"
   },
   "uploadPage": {
     "title": "ट्रेड अपलोड करें",

@@ -943,20 +943,50 @@
     }
   },
   "widgets": {
-    "totalBalance": "Balance Total",
-    "winRate": "Tasa de Éxito",
-    "totalTrades": "Total de Operaciones",
-    "currentROI": "ROI Actual",
-    "avgPnLPerTrade": "P&L Promedio por Operación",
-    "avgPnLPerDay": "P&L Promedio por Día",
-    "avgROIPerTrade": "ROI Promedio por Operación",
-    "capitalGrowth": "Crecimiento de Capital",
-    "spotWallet": "Cartera Spot",
-    "portfolioOverview": "Resumen de Cartera",
-    "topMovers": "Principales Movimientos",
-    "aiInsights": "Análisis IA",
-    "recentTransactions": "Transacciones Recientes",
-    "quickActions": "Acciones Rápidas",
+    "totalBalance": {
+      "title": "Balance Total"
+    },
+    "winRate": {
+      "title": "Tasa de Éxito"
+    },
+    "totalTrades": {
+      "title": "Total de Operaciones"
+    },
+    "currentROI": {
+      "title": "ROI Actual"
+    },
+    "avgPnLPerTrade": {
+      "title": "P&L Promedio por Operación"
+    },
+    "avgPnLPerDay": {
+      "title": "P&L Promedio por Día"
+    },
+    "avgROIPerTrade": {
+      "title": "ROI Promedio por Operación"
+    },
+    "capitalGrowth": {
+      "title": "Crecimiento de Capital"
+    },
+    "spotWallet": {
+      "title": "Cartera Spot"
+    },
+    "portfolioOverview": {
+      "title": "Resumen de Cartera"
+    },
+    "topMovers": {
+      "title": "Principales Movimientos"
+    },
+    "aiInsights": {
+      "title": "Análisis IA"
+    },
+    "recentTransactions": {
+      "title": "Transacciones Recientes",
+      "viewAll": "Ver todo",
+      "noTransactions": "Sin transacciones aún"
+    },
+    "quickActions": {
+      "title": "Acciones Rápidas"
+    },
     "viewAll": "Ver todo",
     "tokens": "tokens",
     "trades": "operaciones",

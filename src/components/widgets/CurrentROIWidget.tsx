@@ -77,7 +77,7 @@ export const CurrentROIWidget = memo(({
   return (
     <WidgetWrapper
       id={id}
-      title={t('widgets.currentROI')}
+      title={t('widgets.currentROI.title')}
       isEditMode={isEditMode}
       onRemove={onRemove}
     >

@@ -37,7 +37,7 @@ export const QuickActionCard = memo(({ className }: QuickActionCardProps) => {
   return (
     <GlassCard className={className} role="article" aria-labelledby="quick-actions-title">
       <div className="space-y-4 p-6 md:p-8">
-        <h3 id="quick-actions-title" className="text-lg font-semibold">{t('widgets.quickActions')}</h3>
+        <h3 id="quick-actions-title" className="text-lg font-semibold">{t('widgets.quickActions.title')}</h3>
         
         <div className="space-y-2">
           {actions.map((action, index) => {

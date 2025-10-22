@@ -33,7 +33,7 @@ export const TotalBalanceWidget = memo(({
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">{t('widgets.totalBalance')}</p>
+          <p className="text-sm font-medium text-muted-foreground">{t('widgets.totalBalance.title')}</p>
           <div className="p-2 rounded-xl bg-primary/10">
             <DollarSign className="h-4 w-4 text-primary" />
           </div>

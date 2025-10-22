@@ -26,7 +26,7 @@ export const AvgPnLPerDayWidget = memo(({
   return (
     <WidgetWrapper
       id={id}
-      title={t('widgets.avgPnLPerDay')}
+      title={t('widgets.avgPnLPerDay.title')}
       isEditMode={isEditMode}
       onRemove={onRemove}
     >

@@ -24,7 +24,7 @@ export const AvgPnLPerTradeWidget = memo(({
   return (
     <WidgetWrapper
       id={id}
-      title={t('widgets.avgPnLPerTrade')}
+      title={t('widgets.avgPnLPerTrade.title')}
       isEditMode={isEditMode}
       onRemove={onRemove}
     >

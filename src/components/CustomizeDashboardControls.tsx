@@ -42,12 +42,12 @@ export function CustomizeDashboardControls({
   const hiddenCount = widgets.filter(w => !w.visible).length;
 
   const widgetLabels: Record<string, string> = {
-    totalBalance: t('widgets.totalBalance'),
+    totalBalance: t('widgets.totalBalance.title'),
     stats: t('widgets.stats'),
     portfolio: t('widgets.portfolio'),
-    topMovers: t('widgets.topMovers'),
-    quickActions: t('widgets.quickActions'),
-    recentTransactions: t('widgets.recentTransactions'),
+    topMovers: t('widgets.topMovers.title'),
+    quickActions: t('widgets.quickActions.title'),
+    recentTransactions: t('widgets.recentTransactions.title'),
     premiumCTA: t('widgets.premiumCTA'),
     insights: t('widgets.insights'),
     streaks: t('widgets.streaks'),

@@ -29,7 +29,7 @@ export const TotalTradesWidget = memo(({
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">{t('widgets.totalTrades')}</p>
+          <p className="text-sm font-medium text-muted-foreground">{t('widgets.totalTrades.title')}</p>
           <div className="p-2 rounded-xl bg-primary/10">
             <BarChart3 className="h-4 w-4 text-primary" />
           </div>
