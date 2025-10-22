@@ -3,7 +3,7 @@ import {
   BarChart3, Upload, TrendingUp, Target, Brain, Trophy, Settings2, BookOpen, HelpCircle, 
   LineChart, LogOut, Zap, RefreshCw, Wallet, Receipt, BookMarked, Users, GitCompare, 
   Shield, FileBarChart, ClipboardList, Calendar, Bell, FileText, ChevronDown, Search,
-  Plus, Archive, Star, Flame, Award, PieChart
+  Plus, Archive, Star, Flame, Award, PieChart, Heart
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
@@ -26,12 +26,15 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useFavorites } from '@/hooks/useFavorites';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface MenuItem {
   title: string;
   url: string;
   icon: any;
   keywords?: string[]; // Semantic search keywords
+  iconName?: string; // For storing icon name in database
 }
 
 interface MenuGroup {
@@ -47,71 +50,72 @@ export function AppSidebar() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [archivedGroups, setArchivedGroups] = useState<string[]>([]);
+  const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
   const menuStructure: MenuGroup[] = [
     {
       label: 'Dashboard',
       defaultOpen: true,
       items: [
-        { title: t('navigation.dashboard'), url: '/dashboard', icon: BarChart3, keywords: ['home', 'overview', 'main', 'summary', 'stats', 'statistics', 'metrics', 'performance', 'snapshot', 'widgets', 'customize', 'view', 'monitor', 'landing', 'central', 'hub'] },
+        { title: t('navigation.dashboard'), url: '/dashboard', icon: BarChart3, iconName: 'BarChart3', keywords: ['home', 'overview', 'main', 'summary', 'stats', 'statistics', 'metrics', 'performance', 'snapshot', 'widgets', 'customize', 'view', 'monitor', 'landing', 'central', 'hub'] },
       ],
     },
     {
       label: 'Portfolio',
       defaultOpen: true,
       items: [
-        { title: t('navigation.spotWallet'), url: '/spot-wallet', icon: Wallet, keywords: ['wallet', 'balance', 'tokens', 'holdings', 'assets', 'portfolio', 'allocation', 'distribution', 'coins', 'cryptocurrencies', 'btc', 'eth', 'total', 'value', 'net worth', 'funds', 'money', 'cash', 'crypto'] },
-        { title: t('navigation.exchanges'), url: '/exchanges', icon: RefreshCw, keywords: ['binance', 'bybit', 'okx', 'api', 'connect', 'sync', 'integration', 'platform', 'broker', 'exchange', 'connection', 'link', 'import', 'automated', 'real-time', 'live'] },
-        { title: 'Trading Accounts', url: '/accounts', icon: PieChart, keywords: ['accounts', 'bank', 'capital', 'balance', 'funds', 'money', 'deposits', 'withdrawals', 'transactions', 'history', 'management', 'initial', 'current', 'wallets', 'manage', 'profiles', 'multiple', 'organize'] },
+        { title: t('navigation.spotWallet'), url: '/spot-wallet', icon: Wallet, iconName: 'Wallet', keywords: ['wallet', 'balance', 'tokens', 'holdings', 'assets', 'portfolio', 'allocation', 'distribution', 'coins', 'cryptocurrencies', 'btc', 'eth', 'total', 'value', 'net worth', 'funds', 'money', 'cash', 'crypto'] },
+        { title: t('navigation.exchanges'), url: '/exchanges', icon: RefreshCw, iconName: 'RefreshCw', keywords: ['binance', 'bybit', 'okx', 'api', 'connect', 'sync', 'integration', 'platform', 'broker', 'exchange', 'connection', 'link', 'import', 'automated', 'real-time', 'live'] },
+        { title: 'Trading Accounts', url: '/accounts', icon: PieChart, iconName: 'PieChart', keywords: ['accounts', 'bank', 'capital', 'balance', 'funds', 'money', 'deposits', 'withdrawals', 'transactions', 'history', 'management', 'initial', 'current', 'wallets', 'manage', 'profiles', 'multiple', 'organize'] },
       ],
     },
     {
       label: 'Trades',
       defaultOpen: true,
       items: [
-        { title: t('trades.addTrade'), url: '/upload', icon: Plus, keywords: ['upload', 'import', 'add', 'csv', 'file', 'broker', 'manual', 'entry', 'input', 'binance', 'bybit', 'okx', 'data', 'bulk', 'batch', 'new', 'create', 'log', 'record', 'enter'] },
-        { title: 'Trade Analysis', url: '/trade-analysis', icon: GitCompare, keywords: ['analysis', 'performance', 'insights', 'metrics', 'statistics', 'win', 'rate', 'profit', 'loss', 'ratio', 'setups', 'patterns', 'timing', 'duration', 'comparison', 'results', 'stats', 'pairs', 'review', 'analyze', 'study', 'examine', 'history'] },
-        { title: t('navigation.feeAnalysis'), url: '/fee-analysis', icon: Receipt, keywords: ['fees', 'costs', 'expenses', 'charges', 'commission', 'trading', 'costs', 'breakdown', 'efficiency', 'comparison', 'savings', 'optimization', 'red', 'flags', 'commissions', 'funding'] },
-        { title: 'Risk Management', url: '/risk-management', icon: Shield, keywords: ['risk', 'protection', 'safety', 'drawdown', 'position', 'size', 'calculator', 'limits', 'stop', 'loss', 'exposure', 'management', 'control', 'mitigation', 'leverage', 'max', 'risk per trade'] },
-        { title: 'Trading Journal', url: '/journal', icon: BookMarked, keywords: ['journal', 'notes', 'diary', 'log', 'thoughts', 'lessons', 'reflection', 'review', 'write', 'document', 'commentary', 'ideas', 'observations', 'learning'] },
+        { title: t('trades.addTrade'), url: '/upload', icon: Plus, iconName: 'Plus', keywords: ['upload', 'import', 'add', 'csv', 'file', 'broker', 'manual', 'entry', 'input', 'binance', 'bybit', 'okx', 'data', 'bulk', 'batch', 'new', 'create', 'log', 'record', 'enter'] },
+        { title: 'Trade Analysis', url: '/trade-analysis', icon: GitCompare, iconName: 'GitCompare', keywords: ['analysis', 'performance', 'insights', 'metrics', 'statistics', 'win', 'rate', 'profit', 'loss', 'ratio', 'setups', 'patterns', 'timing', 'duration', 'comparison', 'results', 'stats', 'pairs', 'review', 'analyze', 'study', 'examine', 'history'] },
+        { title: t('navigation.feeAnalysis'), url: '/fee-analysis', icon: Receipt, iconName: 'Receipt', keywords: ['fees', 'costs', 'expenses', 'charges', 'commission', 'trading', 'costs', 'breakdown', 'efficiency', 'comparison', 'savings', 'optimization', 'red', 'flags', 'commissions', 'funding'] },
+        { title: 'Risk Management', url: '/risk-management', icon: Shield, iconName: 'Shield', keywords: ['risk', 'protection', 'safety', 'drawdown', 'position', 'size', 'calculator', 'limits', 'stop', 'loss', 'exposure', 'management', 'control', 'mitigation', 'leverage', 'max', 'risk per trade'] },
+        { title: 'Trading Journal', url: '/journal', icon: BookMarked, iconName: 'BookMarked', keywords: ['journal', 'notes', 'diary', 'log', 'thoughts', 'lessons', 'reflection', 'review', 'write', 'document', 'commentary', 'ideas', 'observations', 'learning'] },
       ],
     },
     {
       label: 'Analytics',
       defaultOpen: false,
       items: [
-        { title: t('navigation.marketData'), url: '/market-data', icon: LineChart, keywords: ['market', 'prices', 'crypto', 'live', 'real-time', 'ticker', 'movers', 'gainers', 'losers', 'volume', '24h', 'change', 'top', 'coins', 'charts', 'data', 'volatility', 'btc', 'eth', 'trends'] },
-        { title: t('navigation.forecast'), url: '/forecast', icon: Target, keywords: ['forecast', 'prediction', 'future', 'projection', 'goals', 'targets', 'scenarios', 'simulation', 'planning', 'estimates', 'ai', 'predictions', 'what-if', 'models', 'signals', 'estimate', 'predict'] },
-        { title: 'Economic Calendar', url: '/economic-calendar', icon: Calendar, keywords: ['calendar', 'events', 'news', 'macro', 'economy', 'schedule', 'announcements', 'fed', 'inflation', 'cpi', 'fomc', 'rate', 'decisions', 'economic', 'data', 'releases'] },
-        { title: 'Performance Alerts', url: '/performance-alerts', icon: Bell, keywords: ['alerts', 'notifications', 'warnings', 'triggers', 'monitoring', 'notify', 'remind', 'alarm', 'watchlist', 'threshold', 'conditions', 'automated', 'email', 'push'] },
+        { title: t('navigation.marketData'), url: '/market-data', icon: LineChart, iconName: 'LineChart', keywords: ['market', 'prices', 'crypto', 'live', 'real-time', 'ticker', 'movers', 'gainers', 'losers', 'volume', '24h', 'change', 'top', 'coins', 'charts', 'data', 'volatility', 'btc', 'eth', 'trends'] },
+        { title: t('navigation.forecast'), url: '/forecast', icon: Target, iconName: 'Target', keywords: ['forecast', 'prediction', 'future', 'projection', 'goals', 'targets', 'scenarios', 'simulation', 'planning', 'estimates', 'ai', 'predictions', 'what-if', 'models', 'signals', 'estimate', 'predict'] },
+        { title: 'Economic Calendar', url: '/economic-calendar', icon: Calendar, iconName: 'Calendar', keywords: ['calendar', 'events', 'news', 'macro', 'economy', 'schedule', 'announcements', 'fed', 'inflation', 'cpi', 'fomc', 'rate', 'decisions', 'economic', 'data', 'releases'] },
+        { title: 'Performance Alerts', url: '/performance-alerts', icon: Bell, iconName: 'Bell', keywords: ['alerts', 'notifications', 'warnings', 'triggers', 'monitoring', 'notify', 'remind', 'alarm', 'watchlist', 'threshold', 'conditions', 'automated', 'email', 'push'] },
       ],
     },
     {
       label: 'Planning',
       defaultOpen: false,
       items: [
-        { title: 'Trading Plan', url: '/trading-plan', icon: ClipboardList, keywords: ['plan', 'strategy', 'rules', 'checklist', 'discipline', 'guidelines', 'framework', 'methodology', 'approach', 'system', 'process', 'routine', 'setup', 'prepare', 'playbook'] },
-        { title: 'Goals & Milestones', url: '/goals', icon: Target, keywords: ['goals', 'targets', 'objectives', 'milestones', 'achievements', 'ambitions', 'progress', 'tracking', 'completion', 'roadmap', 'plans', 'aim', 'ambition', 'success', 'kpi'] },
-        { title: 'Psychology', url: '/psychology', icon: Brain, keywords: ['psychology', 'emotions', 'mental', 'mindset', 'behavior', 'feelings', 'emotional', 'state', 'mood', 'trader', 'discipline', 'confidence', 'fear', 'greed', 'patience', 'stress', 'anxiety', 'timeline', 'log', 'patterns', 'analysis', 'bias', 'thinking', 'cognition', 'calm', 'mind', 'mental health', 'wellbeing', 'self-awareness'] },
+        { title: 'Trading Plan', url: '/trading-plan', icon: ClipboardList, iconName: 'ClipboardList', keywords: ['plan', 'strategy', 'rules', 'checklist', 'discipline', 'guidelines', 'framework', 'methodology', 'approach', 'system', 'process', 'routine', 'setup', 'prepare', 'playbook'] },
+        { title: 'Goals & Milestones', url: '/goals', icon: Target, iconName: 'Target', keywords: ['goals', 'targets', 'objectives', 'milestones', 'achievements', 'ambitions', 'progress', 'tracking', 'completion', 'roadmap', 'plans', 'aim', 'ambition', 'success', 'kpi'] },
+        { title: 'Psychology', url: '/psychology', icon: Brain, iconName: 'Brain', keywords: ['psychology', 'emotions', 'mental', 'mindset', 'behavior', 'feelings', 'emotional', 'state', 'mood', 'trader', 'discipline', 'confidence', 'fear', 'greed', 'patience', 'stress', 'anxiety', 'timeline', 'log', 'patterns', 'analysis', 'bias', 'thinking', 'cognition', 'calm', 'mind', 'mental health', 'wellbeing', 'self-awareness'] },
       ],
     },
     {
       label: 'Reports',
       defaultOpen: false,
       items: [
-        { title: 'Reports', url: '/reports', icon: FileBarChart, keywords: ['reports', 'documents', 'generate', 'pdf', 'export', 'monthly', 'weekly', 'custom', 'scheduled', 'automated', 'history', 'download', 'summary', 'kpi', 'metrics', 'analysis', 'period'] },
-        { title: 'Tax Reports', url: '/tax-reports', icon: FileText, keywords: ['tax', 'taxes', 'irs', 'filings', 'legal', 'compliance', 'capital', 'gains', 'losses', 'year', 'end', 'accountant', 'documentation', 'fifo', 'lifo', 'accounting', 'fiscal', 'revenue', 'income'] },
-        { title: 'My Metrics', url: '/my-metrics', icon: Star, keywords: ['metrics', 'custom', 'kpi', 'benchmarks', 'personal', 'indicators', 'measure', 'track', 'performance', 'own', 'create', 'define', 'personalized'] },
+        { title: 'Reports', url: '/reports', icon: FileBarChart, iconName: 'FileBarChart', keywords: ['reports', 'documents', 'generate', 'pdf', 'export', 'monthly', 'weekly', 'custom', 'scheduled', 'automated', 'history', 'download', 'summary', 'kpi', 'metrics', 'analysis', 'period'] },
+        { title: 'Tax Reports', url: '/tax-reports', icon: FileText, iconName: 'FileText', keywords: ['tax', 'taxes', 'irs', 'filings', 'legal', 'compliance', 'capital', 'gains', 'losses', 'year', 'end', 'accountant', 'documentation', 'fifo', 'lifo', 'accounting', 'fiscal', 'revenue', 'income'] },
+        { title: 'My Metrics', url: '/my-metrics', icon: Star, iconName: 'Star', keywords: ['metrics', 'custom', 'kpi', 'benchmarks', 'personal', 'indicators', 'measure', 'track', 'performance', 'own', 'create', 'define', 'personalized'] },
       ],
     },
     {
       label: 'Community',
       defaultOpen: false,
       items: [
-        { title: 'Social', url: '/social', icon: Users, keywords: ['social', 'community', 'feed', 'posts', 'share', 'friends', 'network', 'follow', 'followers', 'strategies', 'discussions', 'comments', 'likes', 'engagement', 'traders', 'public'] },
-        { title: 'Leaderboard', url: '/leaderboard', icon: Trophy, keywords: ['leaderboard', 'ranking', 'top', 'competition', 'scores', 'traders', 'best', 'performers', 'elite', 'standings', 'positions', 'compare', 'leaders', 'winners', 'rank', 'compete'] },
-        { title: t('navigation.achievements'), url: '/achievements', icon: Award, keywords: ['achievements', 'badges', 'rewards', 'unlocks', 'milestones', 'trophies', 'accomplishments', 'goals', 'completed', 'earned', 'collection', 'showcase', 'awards', 'earn', 'win', 'accomplish'] },
-        { title: 'Progress & XP', url: '/progress-analytics', icon: Zap, keywords: ['progress', 'xp', 'experience', 'level', 'achievements', 'gamification', 'points', 'rewards', 'streaks', 'challenges', 'daily', 'weekly', 'missions', 'unlock', 'growth', 'rank', 'leveling'] },
+        { title: 'Social', url: '/social', icon: Users, iconName: 'Users', keywords: ['social', 'community', 'feed', 'posts', 'share', 'friends', 'network', 'follow', 'followers', 'strategies', 'discussions', 'comments', 'likes', 'engagement', 'traders', 'public'] },
+        { title: 'Leaderboard', url: '/leaderboard', icon: Trophy, iconName: 'Trophy', keywords: ['leaderboard', 'ranking', 'top', 'competition', 'scores', 'traders', 'best', 'performers', 'elite', 'standings', 'positions', 'compare', 'leaders', 'winners', 'rank', 'compete'] },
+        { title: t('navigation.achievements'), url: '/achievements', icon: Award, iconName: 'Award', keywords: ['achievements', 'badges', 'rewards', 'unlocks', 'milestones', 'trophies', 'accomplishments', 'goals', 'completed', 'earned', 'collection', 'showcase', 'awards', 'earn', 'win', 'accomplish'] },
+        { title: 'Progress & XP', url: '/progress-analytics', icon: Zap, iconName: 'Zap', keywords: ['progress', 'xp', 'experience', 'level', 'achievements', 'gamification', 'points', 'rewards', 'streaks', 'challenges', 'daily', 'weekly', 'missions', 'unlock', 'growth', 'rank', 'leveling'] },
       ],
     },
   ];
@@ -181,6 +185,34 @@ export function AppSidebar() {
           </div>
         )}
 
+        {/* Favorites Section */}
+        {favorites.length > 0 && (
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-primary flex items-center gap-2">
+              <Star className="h-4 w-4 fill-primary" />
+              Favorites
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {favorites.map((fav) => (
+                  <SidebarMenuItem key={fav.page_url}>
+                    <SidebarMenuButton asChild tooltip={fav.page_title}>
+                      <NavLink 
+                        to={fav.page_url} 
+                        end 
+                        className={getNavCls}
+                      >
+                        <Star className="h-4 w-4 fill-primary text-primary" />
+                        {open && <span>{fav.page_title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
         {/* Main Menu Groups */}
         {filteredMenuStructure.map((group) => (
           <Collapsible 
@@ -216,21 +248,60 @@ export function AppSidebar() {
                   <SidebarMenu>
                     {group.items.map((item) => {
                       const isHighlighted = searchQuery !== '' && itemMatchesSearch(item);
+                      const itemIsFavorite = isFavorite(item.url);
+                      
                       return (
                         <SidebarMenuItem key={item.title}>
-                          <SidebarMenuButton asChild tooltip={item.title}>
-                            <NavLink 
-                              to={item.url} 
-                              end 
-                              className={cn(
-                                getNavCls,
-                                isHighlighted && "ring-2 ring-primary/50 bg-primary/10"
-                              )}
-                            >
-                              <item.icon className="h-4 w-4" />
-                              {open && <span>{item.title}</span>}
-                            </NavLink>
-                          </SidebarMenuButton>
+                          <div className="flex items-center group/item w-full">
+                            <SidebarMenuButton asChild tooltip={item.title} className="flex-1">
+                              <NavLink 
+                                to={item.url} 
+                                end 
+                                className={cn(
+                                  getNavCls,
+                                  isHighlighted && "ring-2 ring-primary/50 bg-primary/10"
+                                )}
+                              >
+                                <item.icon className="h-4 w-4" />
+                                {open && <span>{item.title}</span>}
+                              </NavLink>
+                            </SidebarMenuButton>
+                            
+                            {open && (
+                              <TooltipProvider delayDuration={0}>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className={cn(
+                                        "h-8 w-8 opacity-0 group-hover/item:opacity-100 transition-opacity",
+                                        itemIsFavorite && "opacity-100"
+                                      )}
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        toggleFavorite(item.url, item.title, item.iconName || 'Star');
+                                      }}
+                                      aria-pressed={itemIsFavorite}
+                                    >
+                                      <Heart 
+                                        className={cn(
+                                          "h-4 w-4 transition-all",
+                                          itemIsFavorite 
+                                            ? "fill-primary text-primary" 
+                                            : "text-muted-foreground hover:text-primary"
+                                        )}
+                                      />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="right">
+                                    {itemIsFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
                         </SidebarMenuItem>
                       );
                     })}
