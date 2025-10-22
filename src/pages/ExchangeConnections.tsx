@@ -10,6 +10,7 @@ import { ConnectExchangeModal } from '@/components/exchanges/ConnectExchangeModa
 import { SyncHistoryWidget } from '@/components/exchanges/SyncHistoryWidget';
 import { TradePreviewModal } from '@/components/exchanges/TradePreviewModal';
 import { SyncTradesDialog } from '@/components/exchanges/SyncTradesDialog';
+import { ExchangeLogo } from '@/components/ExchangeLogo';
 import { formatDistanceToNow } from 'date-fns';
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -154,77 +155,66 @@ export default function ExchangeConnections() {
       id: 'binance',
       name: 'Binance',
       description: 'World\'s largest crypto exchange - sync spot & futures trades',
-      icon: '🟡',
       comingSoon: false,
     },
     {
       id: 'bybit',
       name: 'Bybit',
       description: 'Leading derivatives exchange - sync spot & futures trades',
-      icon: '🟠',
       comingSoon: false,
     },
     {
       id: 'coinbase',
       name: 'Coinbase',
       description: 'US market leader - sync your trading activity',
-      icon: '🔵',
       comingSoon: false,
     },
     {
       id: 'kraken',
       name: 'Kraken',
       description: 'European leader - comprehensive trade history sync',
-      icon: '🟣',
       comingSoon: false,
     },
     {
       id: 'bitfinex',
       name: 'Bitfinex',
       description: 'OG exchange since 2012 - sync all your trades',
-      icon: '🟢',
       comingSoon: false,
     },
     {
       id: 'bingx',
       name: 'BingX',
       description: 'Copy trading platform - sync spot & futures',
-      icon: '🏦',
       comingSoon: false,
     },
     {
       id: 'mexc',
       name: 'MEXC',
       description: 'Altcoin specialist - sync your diverse portfolio',
-      icon: '⚫',
       comingSoon: false,
     },
     {
       id: 'kucoin',
       name: 'KuCoin',
       description: 'Popular in Asia - requires API passphrase',
-      icon: '🔷',
       comingSoon: false,
     },
     {
       id: 'okx',
       name: 'OKX',
       description: 'Major derivatives exchange - requires API passphrase',
-      icon: '⬛',
       comingSoon: false,
     },
     {
       id: 'gateio',
       name: 'Gate.io',
       description: 'Comprehensive trading platform - full sync support',
-      icon: '🔶',
       comingSoon: false,
     },
     {
       id: 'bitstamp',
       name: 'Bitstamp',
       description: 'Oldest exchange since 2011 - requires customer ID',
-      icon: '🟦',
       comingSoon: false,
     },
   ];
@@ -284,7 +274,13 @@ export default function ExchangeConnections() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-4xl">{exchange.icon}</span>
+                    <div className="p-2 rounded-lg bg-background/50 border border-primary/10">
+                      <ExchangeLogo
+                        exchangeId={exchange.id}
+                        exchangeName={exchange.name}
+                        size="lg"
+                      />
+                    </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <CardTitle>{exchange.name}</CardTitle>
