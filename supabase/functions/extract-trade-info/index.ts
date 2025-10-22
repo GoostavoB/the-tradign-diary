@@ -54,6 +54,37 @@ function extractJSON(text: string): any {
   return JSON.parse(cleaned);
 }
 
+function estimateTradeCount(ocrText: string): number {
+  if (!ocrText) return 1;
+  
+  // Count distinct symbols (BTCUSDT, ETHUSDT, etc.)
+  const symbolMatches = ocrText.match(/[A-Z]{3,6}USDT?/gi) || [];
+  const uniqueSymbols = new Set(symbolMatches.map(s => s.toUpperCase()));
+  
+  // Count Long/Short mentions
+  const sideMatches = ocrText.match(/\b(long|short)\b/gi) || [];
+  
+  // Count timestamp patterns (YYYY/MM/DD or similar)
+  const dateMatches = ocrText.match(/\d{4}[-\/]\d{2}[-\/]\d{2}/g) || [];
+  
+  // Use the maximum of these indicators
+  const estimate = Math.max(
+    uniqueSymbols.size,
+    Math.floor(sideMatches.length / 2), // Entry + Exit = 2 mentions per trade
+    Math.floor(dateMatches.length / 2)  // Opened + Closed = 2 dates per trade
+  );
+  
+  return Math.max(1, Math.min(estimate, 10)); // Cap at 10 trades
+}
+
+function calculateMaxTokens(estimatedTrades: number, route: 'lite' | 'deep'): number {
+  const baseTokens = route === 'lite' ? 300 : 500;
+  const tokensPerTrade = route === 'lite' ? 200 : 250;
+  
+  if (estimatedTrades <= 1) return baseTokens;
+  return baseTokens + (tokensPerTrade * (estimatedTrades - 1));
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -153,6 +184,10 @@ serve(async (req) => {
     // Calculate OCR quality score
     const ocrQualityScore = ocrText && ocrConfidence ? ocrConfidence : 0;
 
+    // Estimate trade count from OCR text
+    const estimatedTradeCount = estimateTradeCount(ocrText || '');
+    console.log(`📊 Estimated ${estimatedTradeCount} trade(s) from OCR analysis`);
+
     // Build context
     let annotationContext = '';
     if (annotations && annotations.length > 0) {
@@ -171,6 +206,10 @@ serve(async (req) => {
       route = 'lite';
       modelUsed = 'google/gemini-2.5-flash-lite';
 
+      // Dynamic token allocation
+      const maxTokens = calculateMaxTokens(estimatedTradeCount, 'lite');
+      console.log(`🎯 Allocating ${maxTokens} tokens for ${estimatedTradeCount} estimated trade(s)`);
+
       // Call lite model with OCR text
       const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -183,14 +222,14 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `Extract trades from OCR text. Output ONLY valid JSON array. Each trade must match schema: ${JSON.stringify(TRADE_SCHEMA)}. Calculate position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage (e.g., "10x" = 10) and position_size. Calculate duration and period_of_day. End with "\\n\\nEND".`
+              content: `Extract ALL trades from OCR text. Output ONLY valid JSON array. Each trade must match schema: ${JSON.stringify(TRADE_SCHEMA)}. Calculate position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage (e.g., "10x" = 10) and position_size. Calculate duration and period_of_day. IMPORTANT: If screenshot contains multiple trades, return array with ALL trades. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".`
             },
             {
               role: "user",
-              content: `OCR Text:\n${ocrText}${brokerContext}${annotationContext}\n\nExtract all trades as JSON array.`
+              content: `OCR Text:\n${ocrText}${brokerContext}${annotationContext}\n\nExtract ALL trades as JSON array.`
             }
           ],
-          max_tokens: 300,
+          max_tokens: maxTokens,
           stop: ["\\n\\nEND"]
         }),
       });
@@ -209,16 +248,93 @@ serve(async (req) => {
       // Parse JSON with robust extraction
       try {
         trades = extractJSON(aiResponse);
+        
+        // Check if we got fewer trades than expected - retry with deep model
+        if (Array.isArray(trades) && trades.length < estimatedTradeCount && estimatedTradeCount > 1) {
+          console.log(`⚠️ Expected ${estimatedTradeCount} trades but got ${trades.length}, retrying with vision model`);
+          // Fall through to deep route by not returning here
+        } else {
+          // Success - skip deep route
+        }
       } catch (parseError) {
         console.error('JSON parse error:', parseError, 'Raw response:', aiResponse);
         throw new Error('Failed to parse AI response. The model returned invalid JSON.');
       }
 
+      // If lite extraction was incomplete, fall through to deep route
+      if (!Array.isArray(trades) || trades.length < estimatedTradeCount) {
+        console.log('🔄 Falling back to deep vision model for complete extraction');
+        route = 'deep';
+        modelUsed = 'google/gemini-2.5-flash';
+        
+        const maxTokens = calculateMaxTokens(estimatedTradeCount, 'deep');
+        console.log(`🎯 Allocating ${maxTokens} tokens for ${estimatedTradeCount} estimated trade(s)`);
+
+        const deepResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: modelUsed,
+            messages: [
+              {
+                role: "system",
+                content: `Extract ALL trades from trading screenshot. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}. For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage and position_size. Calculate duration and period_of_day. IMPORTANT: If screenshot contains multiple trades, return array with ALL trades. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
+              },
+              {
+                role: "user",
+                content: [
+                  { type: "text", text: "Extract ALL trades from this screenshot." },
+                  { type: "image_url", image_url: { url: imageBase64 } }
+                ]
+              }
+            ],
+            max_tokens: maxTokens,
+            stop: ["\\n\\nEND"]
+          }),
+        });
+
+        if (!deepResponse.ok) {
+          if (deepResponse.status === 429) {
+            return new Response(
+              JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+              { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
+          if (deepResponse.status === 402) {
+            return new Response(
+              JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
+              { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
+          const errorText = await deepResponse.text();
+          console.error('Deep model failed:', deepResponse.status, errorText);
+          throw new Error(`Vision model failed: ${deepResponse.status}`);
+        }
+
+        const deepResult = await deepResponse.json();
+        const deepAiResponse = deepResult.choices?.[0]?.message?.content || '';
+        tokensIn = deepResult.usage?.prompt_tokens || 0;
+        tokensOut = deepResult.usage?.completion_tokens || 0;
+
+        try {
+          trades = extractJSON(deepAiResponse);
+        } catch (parseError) {
+          console.error('JSON parse error:', parseError, 'Raw response:', deepAiResponse);
+          throw new Error('Failed to parse AI response. The model returned invalid JSON.');
+        }
+      }
+
     } else {
-      // Fallback to deep vision model
+      // Direct to deep vision model
       console.log('👁️ Using vision + deep route', ocrText ? `(OCR quality too low: ${ocrQualityScore.toFixed(2)})` : '(no OCR data)');
       route = 'deep';
       modelUsed = 'google/gemini-2.5-flash';
+
+      const maxTokens = calculateMaxTokens(estimatedTradeCount, 'deep');
+      console.log(`🎯 Allocating ${maxTokens} tokens for ${estimatedTradeCount} estimated trade(s)`);
 
       const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
@@ -231,17 +347,17 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `Extract ALL trades from trading screenshot. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}. For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage and position_size. Calculate duration and period_of_day. End with "\\n\\nEND".${brokerContext}${annotationContext}`
+              content: `Extract ALL trades from trading screenshot. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}. For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage and position_size. Calculate duration and period_of_day. IMPORTANT: If screenshot contains multiple trades, return array with ALL trades. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
             },
             {
               role: "user",
               content: [
-                { type: "text", text: "Extract all trades from this screenshot." },
+                { type: "text", text: "Extract ALL trades from this screenshot." },
                 { type: "image_url", image_url: { url: imageBase64 } }
               ]
             }
           ],
-          max_tokens: 500,
+          max_tokens: maxTokens,
           stop: ["\\n\\nEND"]
         }),
       });
