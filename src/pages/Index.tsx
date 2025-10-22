@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Hero from "@/components/Hero";
 import DashboardShowcase from "@/components/DashboardShowcase";
 import Features from "@/components/Features";
@@ -12,18 +13,25 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeStudio } from "@/components/theme-studio/ThemeStudio";
 import { Logo } from "@/components/Logo";
 import { useTranslation } from "@/hooks/useTranslation";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import { updateLandingMeta, addStructuredData, trackLandingView, trackCTAClick } from "@/utils/i18nLandingMeta";
 
 const Index = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  usePageMeta({
-    title: 'The #1 Crypto Trading Journal | Track & Analyze Every Trade',
-    description: 'Track, analyze, and review every crypto trade with AI. Built exclusively for crypto traders. Advanced analytics, automated insights, and performance tracking.',
-    canonical: 'https://www.thetradingdiary.com/',
-    keywords: 'crypto trading journal, cryptocurrency trading, crypto trade tracker, bitcoin trading journal, crypto analytics, trading performance',
-  });
+  useEffect(() => {
+    // Update meta tags and SEO for English (USA)
+    updateLandingMeta('en');
+    addStructuredData('en');
+    
+    // Track landing view
+    trackLandingView('en');
+  }, []);
+
+  const handleCTAClick = (location: string) => {
+    trackCTAClick('en', location);
+    navigate('/auth?lang=en');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">
@@ -34,7 +42,7 @@ const Index = () => {
         <LanguageToggle />
         <ThemeStudio />
         <Button
-          onClick={() => navigate('/auth')}
+          onClick={() => handleCTAClick('header')}
           className="glass backdrop-blur-[10px] border border-primary/30 text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-xl px-5 py-2 font-medium shadow-sm hover:shadow-md"
           variant="ghost"
         >
