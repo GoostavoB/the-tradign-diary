@@ -23,14 +23,30 @@
     "success": "Erfolg",
     "noData": "Keine Daten verfügbar"
   },
-  "common": {
-    "cancel": "Abbrechen"
+  "sidebar": {
+    "groups": {
+      "dashboard": "Dashboard",
+      "portfolio": "Portfolio",
+      "trades": "Trades",
+      "analytics": "Analysen",
+      "planning": "Planung",
+      "reports": "Berichte",
+      "community": "Community"
+    },
+    "expandAll": "Alle Erweitern",
+    "collapseAll": "Alle Einklappen",
+    "searchPlaceholder": "Menü durchsuchen...",
+    "favorites": "Favoriten",
+    "archived": "Archiviert",
+    "restore": "Wiederherstellen",
+    "addToFavorites": "Zu Favoriten hinzufügen",
+    "removeFromFavorites": "Aus Favoriten entfernen"
   },
   "navigation": {
     "home": "Start",
     "dashboard": "Dashboard",
     "trades": "Trades",
-    "analytics": "Analytics",
+    "analytics": "Analysen",
     "goals": "Ziele",
     "social": "Social",
     "reports": "Berichte",
@@ -39,18 +55,31 @@
     "help": "Hilfe",
     "blog": "Blog",
     "faq": "FAQ",
-    "advancedAnalytics": "Erweiterte Analytics",
+    "advancedAnalytics": "Erweiterte Analysen",
     "tradeAnalysis": "Trade-Analyse",
     "feeAnalysis": "Gebührenanalyse",
     "riskManagement": "Risikomanagement",
     "psychology": "Psychologie",
     "tradingPlan": "Trading-Plan",
     "journal": "Journal",
-    "forecast": "Forecast",
+    "forecast": "Prognose",
     "exchanges": "Börsen",
     "quickAccess": "Schnellzugriff",
     "aiTools": "KI-Tools",
-    "achievements": "Erfolge"
+    "achievements": "Erfolge",
+    "upload": "Hochladen",
+    "spotWallet": "Spot-Wallet",
+    "marketData": "Marktdaten",
+    "economicCalendar": "Wirtschaftskalender",
+    "longShortRatio": "Long/Short-Verhältnis",
+    "tradingAccounts": "Trading-Konten",
+    "tradingJournal": "Trading-Journal",
+    "performanceAlerts": "Performance-Warnungen",
+    "taxReports": "Steuerberichte",
+    "myMetrics": "Meine Metriken",
+    "leaderboard": "Rangliste",
+    "progressXP": "Fortschritt & XP",
+    "userGuide": "Benutzerhandbuch"
   },
   "exchanges": {
     "title": "Börsenverbindungen",

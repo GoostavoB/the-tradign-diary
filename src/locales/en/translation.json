@@ -29,8 +29,24 @@
     "customize": "Customize",
     "settings": "Settings"
   },
-  "common": {
-    "cancel": "Cancel"
+  "sidebar": {
+    "groups": {
+      "dashboard": "Dashboard",
+      "portfolio": "Portfolio",
+      "trades": "Trades",
+      "analytics": "Analytics",
+      "planning": "Planning",
+      "reports": "Reports",
+      "community": "Community"
+    },
+    "expandAll": "Expand All",
+    "collapseAll": "Collapse All",
+    "searchPlaceholder": "Search menu...",
+    "favorites": "Favorites",
+    "archived": "Archived",
+    "restore": "Restore",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites"
   },
   "navigation": {
     "home": "Home",
@@ -51,7 +67,21 @@
     "feeAnalysis": "Fee Analysis",
     "blog": "Blog",
     "faq": "FAQ",
-    "quickAccess": "Quick Access"
+    "quickAccess": "Quick Access",
+    "tradingAccounts": "Trading Accounts",
+    "tradeAnalysis": "Trade Analysis",
+    "riskManagement": "Risk Management",
+    "tradingJournal": "Trading Journal",
+    "performanceAlerts": "Performance Alerts",
+    "tradingPlan": "Trading Plan",
+    "goals": "Goals",
+    "psychology": "Psychology",
+    "reports": "Reports",
+    "taxReports": "Tax Reports",
+    "myMetrics": "My Metrics",
+    "leaderboard": "Leaderboard",
+    "progressXP": "Progress & XP",
+    "userGuide": "User Guide"
   },
   "exchanges": {
     "title": "Exchange Connections",

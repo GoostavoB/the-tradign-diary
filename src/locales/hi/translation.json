@@ -23,8 +23,24 @@
     "success": "सफल",
     "noData": "डेटा उपलब्ध नहीं"
   },
-  "common": {
-    "cancel": "रद्द करें"
+  "sidebar": {
+    "groups": {
+      "dashboard": "डैशबोर्ड",
+      "portfolio": "पोर्टफोलियो",
+      "trades": "ट्रेड्स",
+      "analytics": "एनालिटिक्स",
+      "planning": "प्लानिंग",
+      "reports": "रिपोर्ट्स",
+      "community": "कम्युनिटी"
+    },
+    "expandAll": "सभी विस्तृत करें",
+    "collapseAll": "सभी संक्षिप्त करें",
+    "searchPlaceholder": "मेनू सर्च करें...",
+    "favorites": "पसंदीदा",
+    "archived": "आर्काइव किए गए",
+    "restore": "रिस्टोर करें",
+    "addToFavorites": "पसंदीदा में जोड़ें",
+    "removeFromFavorites": "पसंदीदा से हटाएं"
   },
   "navigation": {
     "home": "होम",
@@ -50,7 +66,20 @@
     "exchanges": "एक्सचेंज",
     "quickAccess": "क्विक एक्सेस",
     "aiTools": "AI टूल्स",
-    "achievements": "उपलब्धियाँ"
+    "achievements": "उपलब्धियाँ",
+    "upload": "अपलोड",
+    "spotWallet": "स्पॉट वॉलेट",
+    "marketData": "मार्केट डेटा",
+    "economicCalendar": "इकोनॉमिक कैलेंडर",
+    "longShortRatio": "Long/Short रेशियो",
+    "tradingAccounts": "ट्रेडिंग अकाउंट्स",
+    "tradingJournal": "ट्रेडिंग जर्नल",
+    "performanceAlerts": "परफॉर्मेंस अलर्ट्स",
+    "taxReports": "टैक्स रिपोर्ट्स",
+    "myMetrics": "मेरे मेट्रिक्स",
+    "leaderboard": "लीडरबोर्ड",
+    "progressXP": "प्रोग्रेस और XP",
+    "userGuide": "यूजर गाइड"
   },
   "exchanges": {
     "title": "एक्सचेंज कनेक्शंस",

@@ -29,8 +29,24 @@
     "customize": "Personalizar",
     "settings": "Configurações"
   },
-  "common": {
-    "cancel": "Cancelar"
+  "sidebar": {
+    "groups": {
+      "dashboard": "Painel",
+      "portfolio": "Portfólio",
+      "trades": "Operações",
+      "analytics": "Análises",
+      "planning": "Planejamento",
+      "reports": "Relatórios",
+      "community": "Comunidade"
+    },
+    "expandAll": "Expandir Tudo",
+    "collapseAll": "Recolher Tudo",
+    "searchPlaceholder": "Buscar no menu...",
+    "favorites": "Favoritos",
+    "archived": "Arquivados",
+    "restore": "Restaurar",
+    "addToFavorites": "Adicionar aos favoritos",
+    "removeFromFavorites": "Remover dos favoritos"
   },
   "navigation": {
     "home": "Início",
@@ -51,7 +67,21 @@
     "feeAnalysis": "Análise de Taxas",
     "blog": "Blog",
     "faq": "Perguntas Frequentes",
-    "quickAccess": "Acesso Rápido"
+    "quickAccess": "Acesso Rápido",
+    "tradingAccounts": "Contas de Trading",
+    "tradeAnalysis": "Análise de Operações",
+    "riskManagement": "Gestão de Risco",
+    "tradingJournal": "Diário de Trading",
+    "performanceAlerts": "Alertas de Desempenho",
+    "tradingPlan": "Plano de Trading",
+    "goals": "Objetivos",
+    "psychology": "Psicologia",
+    "reports": "Relatórios",
+    "taxReports": "Relatórios Fiscais",
+    "myMetrics": "Minhas Métricas",
+    "leaderboard": "Tabela de Classificação",
+    "progressXP": "Progresso e XP",
+    "userGuide": "Guia do Usuário"
   },
   "exchanges": {
     "title": "Conexões de Exchange",

@@ -23,8 +23,24 @@
     "success": "تم بنجاح",
     "noData": "لا توجد بيانات"
   },
-  "common": {
-    "cancel": "إلغاء"
+  "sidebar": {
+    "groups": {
+      "dashboard": "لوحة التحكم",
+      "portfolio": "المحفظة",
+      "trades": "الصفقات",
+      "analytics": "التحليلات",
+      "planning": "التخطيط",
+      "reports": "التقارير",
+      "community": "المجتمع"
+    },
+    "expandAll": "توسيع الكل",
+    "collapseAll": "طي الكل",
+    "searchPlaceholder": "البحث في القائمة...",
+    "favorites": "المفضلة",
+    "archived": "المؤرشف",
+    "restore": "استعادة",
+    "addToFavorites": "إضافة إلى المفضلة",
+    "removeFromFavorites": "إزالة من المفضلة"
   },
   "navigation": {
     "home": "الرئيسية",
@@ -50,7 +66,20 @@
     "exchanges": "البورصات",
     "quickAccess": "الوصول السريع",
     "aiTools": "أدوات الذكاء الاصطناعي",
-    "achievements": "الإنجازات"
+    "achievements": "الإنجازات",
+    "upload": "رفع",
+    "spotWallet": "محفظة Spot",
+    "marketData": "بيانات السوق",
+    "economicCalendar": "التقويم الاقتصادي",
+    "longShortRatio": "نسبة Long/Short",
+    "tradingAccounts": "حسابات التداول",
+    "tradingJournal": "دفتر التداول",
+    "performanceAlerts": "تنبيهات الأداء",
+    "taxReports": "التقارير الضريبية",
+    "myMetrics": "مقاييسي",
+    "leaderboard": "لوحة المتصدرين",
+    "progressXP": "التقدم و XP",
+    "userGuide": "دليل المستخدم"
   },
   "exchanges": {
     "title": "اتصالات البورصة",
