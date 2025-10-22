@@ -1066,5 +1066,29 @@
     "netPnLPercent": "P&L Neto %",
     "feeDollar": "Comisión $",
     "fundingDollar": "Financiación $"
+  },
+  "taxReports": {
+    "title": "Informes Fiscales",
+    "subtitle": "Genere informes fiscales para su actividad de trading",
+    "exportCsv": "Exportar CSV",
+    "netPnL": "P&L Neto",
+    "totalGains": "Ganancias Totales",
+    "totalLosses": "Pérdidas Totales",
+    "totalFees": "Comisiones Totales",
+    "summary": "Resumen",
+    "shortTerm": "Corto plazo",
+    "longTerm": "Largo plazo",
+    "disclaimerText": "Este informe es solo con fines informativos y no debe considerarse asesoramiento fiscal. Consulte a un profesional fiscal calificado."
+  },
+  "userGuide": {
+    "title": "Guía del Usuario",
+    "subtitle": "Todo lo que necesitas para dominar The Trading Diary",
+    "quickStart": "Inicio Rápido",
+    "searchGuide": "Buscar guía...",
+    "navigation": "Navegación",
+    "features": "Características",
+    "tips": "Consejos",
+    "troubleshooting": "Solución de Problemas",
+    "faq": "FAQ"
   }
 }

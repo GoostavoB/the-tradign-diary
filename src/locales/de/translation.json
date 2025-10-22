@@ -915,5 +915,29 @@
     "placeholder": "Fragen Sie nach Ihrer Trading-Performance...",
     "error": "Entschuldigung, es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
     "buttonLabel": "KI-Assistent öffnen"
+  },
+  "taxReports": {
+    "title": "Steuerberichte",
+    "subtitle": "Erstellen Sie Steuerberichte für Ihre Handelsaktivitäten",
+    "exportCsv": "CSV exportieren",
+    "netPnL": "Netto-P&L",
+    "totalGains": "Gesamtgewinne",
+    "totalLosses": "Gesamtverluste",
+    "totalFees": "Gesamtgebühren",
+    "summary": "Zusammenfassung",
+    "shortTerm": "Kurzfristig",
+    "longTerm": "Langfristig",
+    "disclaimerText": "Dieser Bericht dient nur zu Informationszwecken und sollte nicht als Steuerberatung angesehen werden. Konsultieren Sie einen qualifizierten Steuerberater."
+  },
+  "userGuide": {
+    "title": "Benutzerhandbuch",
+    "subtitle": "Alles, was Sie brauchen, um The Trading Diary zu meistern",
+    "quickStart": "Schnellstart",
+    "searchGuide": "Handbuch durchsuchen...",
+    "navigation": "Navigation",
+    "features": "Funktionen",
+    "tips": "Tipps",
+    "troubleshooting": "Fehlerbehebung",
+    "faq": "FAQ"
   }
 }

@@ -774,5 +774,29 @@
     "thisWeek": "इस सप्ताह",
     "thisMonth": "इस महीने",
     "thisYear": "इस वर्ष"
+  },
+  "taxReports": {
+    "title": "टैक्स रिपोर्ट्स",
+    "subtitle": "अपनी ट्रेडिंग गतिविधि के लिए टैक्स रिपोर्ट जेनरेट करें",
+    "exportCsv": "CSV एक्सपोर्ट करें",
+    "netPnL": "नेट P&L",
+    "totalGains": "कुल लाभ",
+    "totalLosses": "कुल हानि",
+    "totalFees": "कुल शुल्क",
+    "summary": "सारांश",
+    "shortTerm": "शॉर्ट-टर्म",
+    "longTerm": "लॉन्ग-टर्म",
+    "disclaimerText": "यह रिपोर्ट केवल सूचना के उद्देश्यों के लिए है और इसे टैक्स सलाह नहीं माना जाना चाहिए। कृपया योग्य टैक्स प्रोफेशनल से परामर्श करें।"
+  },
+  "userGuide": {
+    "title": "यूजर गाइड",
+    "subtitle": "The Trading Diary में महारत हासिल करने के लिए आपको जो कुछ भी चाहिए",
+    "quickStart": "क्विक स्टार्ट",
+    "searchGuide": "गाइड खोजें...",
+    "navigation": "नेविगेशन",
+    "features": "फीचर्स",
+    "tips": "टिप्स",
+    "troubleshooting": "ट्रबलशूटिंग",
+    "faq": "FAQ"
   }
 }

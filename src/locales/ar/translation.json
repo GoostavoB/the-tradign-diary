@@ -774,5 +774,29 @@
     "thisWeek": "هذا الأسبوع",
     "thisMonth": "هذا الشهر",
     "thisYear": "هذا العام"
+  },
+  "taxReports": {
+    "title": "التقارير الضريبية",
+    "subtitle": "إنشاء تقارير ضريبية لنشاط التداول الخاص بك",
+    "exportCsv": "تصدير CSV",
+    "netPnL": "صافي الربح والخسارة",
+    "totalGains": "إجمالي المكاسب",
+    "totalLosses": "إجمالي الخسائر",
+    "totalFees": "إجمالي الرسوم",
+    "summary": "الملخص",
+    "shortTerm": "قصير الأجل",
+    "longTerm": "طويل الأجل",
+    "disclaimerText": "هذا التقرير لأغراض إعلامية فقط ولا ينبغي اعتباره نصيحة ضريبية. يرجى استشارة محترف ضرائب مؤهل."
+  },
+  "userGuide": {
+    "title": "دليل المستخدم",
+    "subtitle": "كل ما تحتاجه لإتقان The Trading Diary",
+    "quickStart": "بداية سريعة",
+    "searchGuide": "بحث في الدليل...",
+    "navigation": "التنقل",
+    "features": "الميزات",
+    "tips": "نصائح",
+    "troubleshooting": "استكشاف الأخطاء",
+    "faq": "الأسئلة الشائعة"
   }
 }

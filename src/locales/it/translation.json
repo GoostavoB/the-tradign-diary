@@ -915,5 +915,29 @@
     "placeholder": "Chiedi delle tue performance di trading...",
     "error": "Spiacente, si è verificato un errore. Riprova.",
     "buttonLabel": "Apri Assistente AI"
+  },
+  "taxReports": {
+    "title": "Report Fiscali",
+    "subtitle": "Genera report fiscali per la tua attività di trading",
+    "exportCsv": "Esporta CSV",
+    "netPnL": "P&L Netto",
+    "totalGains": "Guadagni Totali",
+    "totalLosses": "Perdite Totali",
+    "totalFees": "Commissioni Totali",
+    "summary": "Riepilogo",
+    "shortTerm": "Breve termine",
+    "longTerm": "Lungo termine",
+    "disclaimerText": "Questo report è solo a scopo informativo e non deve essere considerato consulenza fiscale. Consultare un professionista fiscale qualificato."
+  },
+  "userGuide": {
+    "title": "Guida Utente",
+    "subtitle": "Tutto ciò di cui hai bisogno per padroneggiare The Trading Diary",
+    "quickStart": "Avvio Rapido",
+    "searchGuide": "Cerca guida...",
+    "navigation": "Navigazione",
+    "features": "Funzionalità",
+    "tips": "Suggerimenti",
+    "troubleshooting": "Risoluzione Problemi",
+    "faq": "FAQ"
   }
 }
