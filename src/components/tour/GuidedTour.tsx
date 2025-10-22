@@ -71,20 +71,20 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="trades-group"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Operações</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.tradesGroup.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Registre e analise suas operações:
+          {t('tour.tradesGroup.description')}
         </p>
         <div className="space-y-3 text-[15px] leading-relaxed">
-          <p><span className="font-bold text-foreground">Adicionar Trade</span> — Importe CSVs ou adicione operações manualmente</p>
+          <p><span className="font-bold text-foreground">Adicionar Trade</span> — {t('tour.tradesGroup.addTrade')}</p>
           
-          <p><span className="font-bold text-foreground">Trade Analysis</span> — Análise detalhada de performance, win rate e padrões de trading</p>
+          <p><span className="font-bold text-foreground">Trade Analysis</span> — {t('tour.tradesGroup.tradeAnalysis')}</p>
           
-          <p><span className="font-bold text-foreground">Fee Analysis</span> — Acompanhe custos, taxas e otimize eficiência operacional</p>
+          <p><span className="font-bold text-foreground">Fee Analysis</span> — {t('tour.tradesGroup.feeAnalysis')}</p>
           
-          <p><span className="font-bold text-foreground">Risk Management</span> — Calculadora de position size, controle de drawdown e limites</p>
+          <p><span className="font-bold text-foreground">Risk Management</span> — {t('tour.tradesGroup.riskManagement')}</p>
           
-          <p><span className="font-bold text-foreground">Trading Journal</span> — Registre observações, lições aprendidas e insights</p>
+          <p><span className="font-bold text-foreground">Trading Journal</span> — {t('tour.tradesGroup.tradingJournal')}</p>
         </div>
       </div>
     ),
@@ -94,18 +94,18 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="analytics-group"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Análises</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.analyticsGroup.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Dados e insights em tempo real:
+          {t('tour.analyticsGroup.description')}
         </p>
         <div className="space-y-3 text-[15px] leading-relaxed">
-          <p><span className="font-bold text-foreground">Market Data</span> — Dados em tempo real de criptomoedas e métricas de mercado</p>
+          <p><span className="font-bold text-foreground">Market Data</span> — {t('tour.analyticsGroup.marketData')}</p>
           
-          <p><span className="font-bold text-foreground">Forecast</span> — Projeções e simulações baseadas em IA para planejar metas</p>
+          <p><span className="font-bold text-foreground">Forecast</span> — {t('tour.analyticsGroup.forecast')}</p>
           
-          <p><span className="font-bold text-foreground">Economic Calendar</span> — Eventos macroeconômicos e impactos no mercado crypto</p>
+          <p><span className="font-bold text-foreground">Economic Calendar</span> — {t('tour.analyticsGroup.economicCalendar')}</p>
           
-          <p><span className="font-bold text-foreground">Performance Alerts</span> — Notificações automáticas sobre métricas e thresholds</p>
+          <p><span className="font-bold text-foreground">Performance Alerts</span> — {t('tour.analyticsGroup.performanceAlerts')}</p>
         </div>
       </div>
     ),
@@ -115,16 +115,16 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="planning-group"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Planejamento</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.planningGroup.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Estruture sua estratégia de trading:
+          {t('tour.planningGroup.description')}
         </p>
         <div className="space-y-3 text-[15px] leading-relaxed">
-          <p><span className="font-bold text-foreground">Trading Plan</span> — Defina regras, estratégias e checklists de entrada/saída</p>
+          <p><span className="font-bold text-foreground">Trading Plan</span> — {t('tour.planningGroup.tradingPlan')}</p>
           
-          <p><span className="font-bold text-foreground">Goals</span> — Estabeleça objetivos, acompanhe progresso e celebre conquistas</p>
+          <p><span className="font-bold text-foreground">Goals</span> — {t('tour.planningGroup.goals')}</p>
           
-          <p><span className="font-bold text-foreground">Psychology</span> — Monitore estado emocional, identifique padrões e melhore disciplina</p>
+          <p><span className="font-bold text-foreground">Psychology</span> — {t('tour.planningGroup.psychology')}</p>
         </div>
       </div>
     ),
@@ -134,16 +134,16 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="reports-group"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Relatórios</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.reportsGroup.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Documentação e análise de performance:
+          {t('tour.reportsGroup.description')}
         </p>
         <div className="space-y-3 text-[15px] leading-relaxed">
-          <p><span className="font-bold text-foreground">Reports</span> — Gere relatórios mensais, semanais ou personalizados automaticamente</p>
+          <p><span className="font-bold text-foreground">Reports</span> — {t('tour.reportsGroup.reports')}</p>
           
-          <p><span className="font-bold text-foreground">Tax Reports</span> — Documentação fiscal, cálculo de ganhos de capital e conformidade</p>
+          <p><span className="font-bold text-foreground">Tax Reports</span> — {t('tour.reportsGroup.taxReports')}</p>
           
-          <p><span className="font-bold text-foreground">My Metrics</span> — Crie KPIs personalizados e benchmarks específicos para seu estilo</p>
+          <p><span className="font-bold text-foreground">My Metrics</span> — {t('tour.reportsGroup.myMetrics')}</p>
         </div>
       </div>
     ),
@@ -153,18 +153,18 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="community-group"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Comunidade</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.communityGroup.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Conecte-se e evolua com outros traders:
+          {t('tour.communityGroup.description')}
         </p>
         <div className="space-y-3 text-[15px] leading-relaxed">
-          <p><span className="font-bold text-foreground">Social</span> — Feed social para compartilhar estratégias e resultados</p>
+          <p><span className="font-bold text-foreground">Social</span> — {t('tour.communityGroup.social')}</p>
           
-          <p><span className="font-bold text-foreground">Leaderboard</span> — Rankings de performance entre traders da plataforma</p>
+          <p><span className="font-bold text-foreground">Leaderboard</span> — {t('tour.communityGroup.leaderboard')}</p>
           
-          <p><span className="font-bold text-foreground">Achievements</span> — Badges, conquistas e sistema de gamificação</p>
+          <p><span className="font-bold text-foreground">Achievements</span> — {t('tour.communityGroup.achievements')}</p>
           
-          <p><span className="font-bold text-foreground">Progress XP</span> — Sistema de níveis, experiência e recompensas por consistência</p>
+          <p><span className="font-bold text-foreground">Progress XP</span> — {t('tour.communityGroup.progressXP')}</p>
         </div>
       </div>
     ),
@@ -174,12 +174,12 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="user-guide"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Guia do Usuário</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.userGuide.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Acesse tutoriais completos, documentação e dicas de uso da plataforma.
+          {t('tour.userGuide.description')}
         </p>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Aprenda sobre cada funcionalidade através de guias passo a passo, vídeos explicativos e melhores práticas de uso. Sempre disponível para consulta rápida.
+          {t('tour.userGuide.subtitle')}
         </p>
       </div>
     ),
@@ -189,18 +189,18 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="market-data-widget"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Market Data</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.marketDataWidget.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Acompanhe dados de mercado em tempo real:
+          {t('tour.marketDataWidget.description')}
         </p>
         <div className="space-y-3 text-[15px] leading-relaxed">
-          <p><span className="font-bold text-foreground">Long/Short Ratio</span> — Sentimento institucional do mercado</p>
+          <p><span className="font-bold text-foreground">Long/Short Ratio</span> — {t('tour.marketDataWidget.longShortRatio')}</p>
           
-          <p><span className="font-bold text-foreground">Live Prices</span> — Cotações atualizadas de BTC, ETH e principais altcoins</p>
+          <p><span className="font-bold text-foreground">Live Prices</span> — {t('tour.marketDataWidget.livePrices')}</p>
           
-          <p><span className="font-bold text-foreground">Open Interest</span> — Volume de contratos futuros abertos</p>
+          <p><span className="font-bold text-foreground">Open Interest</span> — {t('tour.marketDataWidget.openInterest')}</p>
           
-          <p><span className="font-bold text-foreground">Fear & Greed Index</span> — Sentimento geral do mercado</p>
+          <p><span className="font-bold text-foreground">Fear & Greed Index</span> — {t('tour.marketDataWidget.fearGreedIndex')}</p>
         </div>
       </div>
     ),
@@ -210,12 +210,12 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="live-prices"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Live Prices — Personalize Seus Ativos</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.livePrices.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Visualize cotações em tempo real das suas criptomoedas favoritas.
+          {t('tour.livePrices.description')}
         </p>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Clique para adicionar ou remover ativos da sua watchlist, reordene conforme sua preferência e acompanhe variações percentuais, volume 24h e capitalização de mercado de forma instantânea.
+          {t('tour.livePrices.subtitle')}
         </p>
       </div>
     ),
@@ -225,12 +225,12 @@ const createTourSteps = (t: any): Step[] => [
     target: '[data-tour="settings-capital"]',
     content: (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold tracking-tight">Configure seu Capital Inicial</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t('tour.settingsCapital.title')}</h3>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Defina o valor do seu capital inicial para cálculos precisos de ROI e desempenho. Este valor pode ser editado a qualquer momento.
+          {t('tour.settingsCapital.description')}
         </p>
         <p className="text-[15px] leading-relaxed text-muted-foreground">
-          Ao adicionar mais capital, o sistema calculará automaticamente a <span className="font-bold text-foreground">média ponderada</span> considerando as datas de depósito, garantindo métricas sempre atualizadas e proporcionais ao seu investimento real.
+          {t('tour.settingsCapital.subtitle')}
         </p>
       </div>
     ),
@@ -452,6 +452,8 @@ export const GuidedTour = () => {
           maxWidth: 440,
           minWidth: 320,
           transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          direction: isRTL ? 'rtl' : 'ltr',
+          textAlign: isRTL ? 'right' : 'left',
         },
         tooltipContainer: {
           textAlign: 'left',
