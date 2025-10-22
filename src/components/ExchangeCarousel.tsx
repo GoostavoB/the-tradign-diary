@@ -8,17 +8,17 @@ interface Exchange {
 }
 
 const exchanges: Exchange[] = [
-  { name: "Binance", logo: "/exchange-logos/binance.svg", alt: "Binance logo" },
-  { name: "Bybit", logo: "/exchange-logos/bybit.svg", alt: "Bybit logo" },
-  { name: "Coinbase", logo: "/exchange-logos/coinbase.svg", alt: "Coinbase logo" },
+  { name: "Binance", logo: "/exchange-logos/binance.png", alt: "Binance logo" },
+  { name: "Bybit", logo: "/exchange-logos/bybit.png", alt: "Bybit logo" },
+  { name: "Coinbase", logo: "/exchange-logos/coinbase.png", alt: "Coinbase logo" },
   { name: "OKX", logo: "/exchange-logos/okx.svg", alt: "OKX logo" },
   { name: "Kraken", logo: "/exchange-logos/kraken.svg", alt: "Kraken logo" },
-  { name: "KuCoin", logo: "/exchange-logos/kucoin.svg", alt: "KuCoin logo" },
+  { name: "KuCoin", logo: "/exchange-logos/kucoin.png", alt: "KuCoin logo" },
   { name: "Gate.io", logo: "/exchange-logos/gateio.svg", alt: "Gate.io logo" },
-  { name: "MEXC", logo: "/exchange-logos/mexc.svg", alt: "MEXC logo" },
-  { name: "Bitfinex", logo: "/exchange-logos/bitfinex.svg", alt: "Bitfinex logo" },
-  { name: "Bitstamp", logo: "/exchange-logos/bitstamp.svg", alt: "Bitstamp logo" },
-  { name: "BingX", logo: "/exchange-logos/bingx.svg", alt: "BingX logo" },
+  { name: "MEXC", logo: "/exchange-logos/mexc.png", alt: "MEXC logo" },
+  { name: "Bitfinex", logo: "/exchange-logos/bitfinex.png", alt: "Bitfinex logo" },
+  { name: "Bitstamp", logo: "/exchange-logos/bitstamp.png", alt: "Bitstamp logo" },
+  { name: "BingX", logo: "/exchange-logos/bingx.png", alt: "BingX logo" },
 ];
 
 export const ExchangeCarousel = () => {
@@ -97,8 +97,8 @@ export const ExchangeCarousel = () => {
       onTouchStart={handleTouchStart}
     >
       {/* Gradient overlays */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-900/30 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-900/30 to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
       <motion.div
         className="flex gap-6 md:gap-10"
@@ -108,7 +108,7 @@ export const ExchangeCarousel = () => {
         {duplicatedExchanges.map((exchange, index) => (
           <motion.div
             key={`${exchange.name}-${index}`}
-            className="flex-shrink-0 flex items-center justify-center p-3 md:p-4 rounded-lg bg-background/30 border border-primary/10 hover:border-primary/30 transition-colors duration-300 group"
+            className="flex-shrink-0 flex items-center justify-center p-4 md:p-5 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 hover:bg-card/80 transition-all duration-300 group"
             whileHover={{ scale: 1.05 }}
             tabIndex={0}
             role="img"
@@ -117,7 +117,7 @@ export const ExchangeCarousel = () => {
             <img
               src={exchange.logo}
               alt={exchange.alt}
-              className="h-6 md:h-8 w-auto object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+              className="h-7 md:h-9 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
               onError={(e) => {
                 // Fallback to text if image fails to load
                 const target = e.target as HTMLImageElement;

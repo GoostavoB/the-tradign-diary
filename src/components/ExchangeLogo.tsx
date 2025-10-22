@@ -9,17 +9,17 @@ interface ExchangeLogoProps {
 }
 
 const exchangeLogos: Record<string, { svg: string; png?: string }> = {
-  binance: { svg: "/exchange-logos/binance.svg", png: "/exchange-logos/binance.png" },
-  bybit: { svg: "/exchange-logos/bybit.svg", png: "/exchange-logos/bybit.png" },
-  coinbase: { svg: "/exchange-logos/coinbase.svg", png: "/exchange-logos/coinbase.png" },
-  okx: { svg: "/exchange-logos/okx.svg", png: "/exchange-logos/okx.png" },
-  kraken: { svg: "/exchange-logos/kraken.svg", png: "/exchange-logos/kraken.png" },
-  kucoin: { svg: "/exchange-logos/kucoin.svg", png: "/exchange-logos/kucoin.png" },
-  gateio: { svg: "/exchange-logos/gateio.svg", png: "/exchange-logos/gateio.png" },
-  mexc: { svg: "/exchange-logos/mexc.svg", png: "/exchange-logos/mexc.png" },
-  bitfinex: { svg: "/exchange-logos/bitfinex.svg", png: "/exchange-logos/bitfinex.png" },
-  bitstamp: { svg: "/exchange-logos/bitstamp.svg", png: "/exchange-logos/bitstamp.png" },
-  bingx: { svg: "/exchange-logos/bingx.svg", png: "/exchange-logos/bingx.png" },
+  binance: { svg: "/exchange-logos/binance.png" },
+  bybit: { svg: "/exchange-logos/bybit.png" },
+  coinbase: { svg: "/exchange-logos/coinbase.png" },
+  okx: { svg: "/exchange-logos/okx.svg" },
+  kraken: { svg: "/exchange-logos/kraken.svg" },
+  kucoin: { svg: "/exchange-logos/kucoin.png" },
+  gateio: { svg: "/exchange-logos/gateio.svg" },
+  mexc: { svg: "/exchange-logos/mexc.png" },
+  bitfinex: { svg: "/exchange-logos/bitfinex.png" },
+  bitstamp: { svg: "/exchange-logos/bitstamp.png" },
+  bingx: { svg: "/exchange-logos/bingx.png" },
 };
 
 const sizeClasses = {
