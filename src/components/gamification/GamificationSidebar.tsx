@@ -30,6 +30,8 @@ const GamificationSidebarComponent = () => {
       if (error) throw error;
       return data || [];
     },
+    staleTime: 5 * 60 * 1000, // Keep data fresh for 5 minutes
+    gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
   });
 
   const completedToday = challenges.filter(c => c.isCompleted).length;
@@ -76,19 +78,12 @@ const GamificationSidebarComponent = () => {
     }
   };
 
-  if (xpLoading || challengesLoading || badgesLoading) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-40 w-full" />
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
       {/* XP Progress Card */}
+      {xpLoading ? (
+        <Skeleton className="h-32 w-full rounded-lg" />
+      ) : (
       <Card className="p-4 glass-strong">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -126,8 +121,12 @@ const GamificationSidebarComponent = () => {
           </div>
         </div>
       </Card>
+      )}
 
       {/* Daily Challenges Summary */}
+      {challengesLoading ? (
+        <Skeleton className="h-40 w-full rounded-lg" />
+      ) : (
       <Card className="p-4 glass-strong">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -180,8 +179,12 @@ const GamificationSidebarComponent = () => {
           </div>
         </TooltipProvider>
       </Card>
+      )}
 
       {/* Badges Grid */}
+      {badgesLoading ? (
+        <Skeleton className="h-40 w-full rounded-lg" />
+      ) : (
       <Card className="p-4 glass-strong">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -228,6 +231,7 @@ const GamificationSidebarComponent = () => {
           </div>
         </TooltipProvider>
       </Card>
+      )}
     </div>
   );
 };

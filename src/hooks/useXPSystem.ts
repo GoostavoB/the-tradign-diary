@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface XPData {
   currentXP: number;
@@ -34,20 +35,20 @@ export const calculateLevelFromXP = (totalXP: number): { level: number; currentX
 
 export const useXPSystem = () => {
   const { user } = useAuth();
-  const [xpData, setXpData] = useState<XPData>({
+  const queryClient = useQueryClient();
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [newLevelRef, setNewLevelRef] = useState<number | null>(null);
+
+  const { data: xpData = {
     currentXP: 0,
     currentLevel: 1,
     totalXPEarned: 0,
     levelUpCount: 0
-  });
-  const [loading, setLoading] = useState(true);
-  const [showLevelUp, setShowLevelUp] = useState(false);
-  const [newLevelRef, setNewLevelRef] = useState<number | null>(null);
+  }, isLoading: loading } = useQuery({
+    queryKey: ['user-xp', user?.id],
+    queryFn: async () => {
+      if (!user) throw new Error('No user');
 
-  const fetchXPData = useCallback(async () => {
-    if (!user) return;
-
-    try {
       const { data, error } = await supabase
         .from('user_xp_levels')
         .select('*')
@@ -57,55 +58,38 @@ export const useXPSystem = () => {
       if (error && error.code !== 'PGRST116') throw error;
 
       if (data) {
-        setXpData({
+        return {
           currentXP: data.current_xp,
           currentLevel: data.current_level,
           totalXPEarned: data.total_xp_earned,
           levelUpCount: data.level_up_count
-        });
-      } else {
-        // Initialize XP data for new user
-        const { error: insertError } = await supabase
-          .from('user_xp_levels')
-          .insert({
-            user_id: user.id,
-            current_xp: 0,
-            current_level: 1,
-            total_xp_earned: 0,
-            level_up_count: 0
-          });
-
-        if (insertError) throw insertError;
+        };
       }
-    } catch (error) {
-      console.error('Error fetching XP data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
 
-  useEffect(() => {
-    fetchXPData();
-  }, [fetchXPData]);
+      // Initialize XP data for new user
+      const { error: insertError } = await supabase
+        .from('user_xp_levels')
+        .insert({
+          user_id: user.id,
+          current_xp: 0,
+          current_level: 1,
+          total_xp_earned: 0,
+          level_up_count: 0
+        });
 
-  // Realtime: keep XP data in sync across widgets
-  useEffect(() => {
-    if (!user) return;
+      if (insertError) throw insertError;
 
-    const channel = supabase
-      .channel(`xp-sync-${user.id}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'user_xp_levels', filter: `user_id=eq.${user.id}` }, () => {
-        fetchXPData();
-      })
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'xp_activity_log', filter: `user_id=eq.${user.id}` }, () => {
-        fetchXPData();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user, fetchXPData]);
+      return {
+        currentXP: 0,
+        currentLevel: 1,
+        totalXPEarned: 0,
+        levelUpCount: 0
+      };
+    },
+    enabled: !!user,
+    staleTime: 2 * 60 * 1000, // Consider data fresh for 2 minutes
+    gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+  });
 
   const addXP = useCallback(async (
     amount: number, 
@@ -163,7 +147,7 @@ export const useXPSystem = () => {
       if (logError) throw logError;
 
       // Update local state
-      setXpData({
+      queryClient.setQueryData(['user-xp', user.id], {
         currentXP: newCurrentXP,
         currentLevel: newLevel,
         totalXPEarned: newTotalXP,
@@ -224,6 +208,10 @@ export const useXPSystem = () => {
     }
   }, [user, xpData]);
 
+  const refresh = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['user-xp', user?.id] });
+  }, [queryClient, user]);
+
   const getXPForNextLevel = useCallback(() => {
     return calculateXPForLevel(xpData.currentLevel);
   }, [xpData.currentLevel]);
@@ -236,6 +224,6 @@ export const useXPSystem = () => {
     showLevelUp,
     setShowLevelUp,
     newLevel: newLevelRef,
-    refresh: fetchXPData
+    refresh
   };
 };

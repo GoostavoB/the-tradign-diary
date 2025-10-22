@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Target, TrendingUp, Zap, Trophy, Flame } from 'lucide-react';
 import { useXPSystem } from './useXPSystem';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface Challenge {
   id: string;
@@ -62,17 +63,17 @@ const CHALLENGE_TEMPLATES = [
 export const useDailyChallenges = () => {
   const { user } = useAuth();
   const { addXP } = useXPSystem();
-  const [challenges, setChallenges] = useState<Challenge[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const initializeChallenges = useCallback(async () => {
-    if (!user) return;
+  const { data: challenges = [], isLoading: loading } = useQuery({
+    queryKey: ['daily-challenges', user?.id],
+    queryFn: async () => {
+      if (!user) throw new Error('No user');
 
-    try {
       const today = new Date().toISOString().split('T')[0];
 
       // Check if challenges exist for today
-      const { data: existing } = await supabase
+      let { data: existing } = await supabase
         .from('daily_challenges')
         .select('*')
         .eq('user_id', user.id)
@@ -95,31 +96,18 @@ export const useDailyChallenges = () => {
         }));
 
         await supabase.from('daily_challenges').insert(newChallenges);
+
+        // Fetch the newly created challenges
+        const { data } = await supabase
+          .from('daily_challenges')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('challenge_date', today);
+
+        existing = data;
       }
 
-      await fetchChallenges();
-    } catch (error) {
-      console.error('Error initializing challenges:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [user]);
-
-  const fetchChallenges = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      const today = new Date().toISOString().split('T')[0];
-
-      const { data, error } = await supabase
-        .from('daily_challenges')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('challenge_date', today);
-
-      if (error) throw error;
-
-      const formattedChallenges: Challenge[] = (data || []).map(challenge => {
+      const formattedChallenges: Challenge[] = (existing || []).map(challenge => {
         const template = CHALLENGE_TEMPLATES.find(t => t.type === challenge.challenge_type);
         return {
           id: challenge.id,
@@ -134,15 +122,12 @@ export const useDailyChallenges = () => {
         };
       });
 
-      setChallenges(formattedChallenges);
-    } catch (error) {
-      console.error('Error fetching challenges:', error);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    initializeChallenges();
-  }, [initializeChallenges]);
+      return formattedChallenges;
+    },
+    enabled: !!user,
+    staleTime: 2 * 60 * 1000, // Fresh for 2 minutes
+    gcTime: 10 * 60 * 1000, // Cache for 10 minutes
+  });
 
   const updateChallengeProgress = useCallback(async (
     challengeType: string,
@@ -176,16 +161,21 @@ export const useDailyChallenges = () => {
         await addXP(challenge.xpReward, 'challenge_completed', challenge.title);
       }
 
-      await fetchChallenges();
+      // Refresh challenges
+      queryClient.invalidateQueries({ queryKey: ['daily-challenges', user.id] });
     } catch (error) {
       console.error('Error updating challenge:', error);
     }
-  }, [user, challenges, addXP, fetchChallenges]);
+  }, [user, challenges, addXP, queryClient]);
+
+  const refresh = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['daily-challenges', user?.id] });
+  }, [queryClient, user]);
 
   return {
     challenges,
     loading,
     updateChallengeProgress,
-    refresh: fetchChallenges
+    refresh
   };
 };
