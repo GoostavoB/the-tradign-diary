@@ -1,75 +1,89 @@
-import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addStructuredData } from "@/utils/seoHelpers";
+import PricingComparison from "./PricingComparison";
+import PricingRoadmap from "./PricingRoadmap";
 
 const Pricing = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
 
   const plans = [
     {
-      nameKey: "landing.pricing.starter.name",
-      priceKey: "landing.pricing.starter.price",
-      periodKey: "landing.pricing.starter.period",
-      descriptionKey: "landing.pricing.starter.description",
+      id: 'basic',
+      nameKey: "pricing.plans.basic.name",
+      descriptionKey: "pricing.plans.basic.description",
+      monthlyPrice: 15,
+      annualPrice: 12,
+      annualTotal: 144,
       featuresKeys: [
-        "landing.pricing.starter.features.trades",
-        "landing.pricing.starter.features.analytics",
-        "landing.pricing.starter.features.manualEntry",
-        "landing.pricing.starter.features.retention",
-        "landing.pricing.starter.features.support",
+        "pricing.plans.basic.features.uploads",
+        "pricing.plans.basic.features.manualUploads",
+        "pricing.plans.basic.features.dashboard",
+        "pricing.plans.basic.features.charts",
+        "pricing.plans.basic.features.basicJournal",
+        "pricing.plans.basic.features.feeAnalytics",
+        "pricing.plans.basic.features.csv",
+        "pricing.plans.basic.features.social",
       ],
-      ctaKey: "landing.pricing.starter.cta",
+      ctaKey: "pricing.plans.cta",
       popular: false,
-      price: "Free",
       priceCurrency: "USD",
-      priceValue: 0,
     },
     {
-      nameKey: "landing.pricing.pro.name",
-      priceKey: "landing.pricing.pro.price",
-      periodKey: "landing.pricing.pro.period",
-      descriptionKey: "landing.pricing.pro.description",
+      id: 'pro',
+      nameKey: "pricing.plans.pro.name",
+      descriptionKey: "pricing.plans.pro.description",
+      monthlyPrice: 35,
+      annualPrice: 28,
+      annualTotal: 336,
       featuresKeys: [
-        "landing.pricing.pro.features.unlimited",
-        "landing.pricing.pro.features.advancedAnalytics",
-        "landing.pricing.pro.features.aiExtraction",
-        "landing.pricing.pro.features.unlimitedRetention",
-        "landing.pricing.pro.features.prioritySupport",
-        "landing.pricing.pro.features.customSetups",
-        "landing.pricing.pro.features.exportReports",
+        "pricing.plans.pro.features.uploads",
+        "pricing.plans.pro.features.aiAnalysis",
+        "pricing.plans.pro.features.tradingPlan",
+        "pricing.plans.pro.features.goals",
+        "pricing.plans.pro.features.richJournal",
+        "pricing.plans.pro.features.customWidgets",
+        "pricing.plans.pro.features.fullSocial",
+        "pricing.plans.pro.features.everythingBasic",
       ],
-      ctaKey: "landing.pricing.pro.cta",
+      ctaKey: "pricing.plans.cta",
       popular: true,
-      price: "$29",
       priceCurrency: "USD",
-      priceValue: 29,
     },
     {
-      nameKey: "landing.pricing.elite.name",
-      priceKey: "landing.pricing.elite.price",
-      periodKey: "landing.pricing.elite.period",
-      descriptionKey: "landing.pricing.elite.description",
+      id: 'elite',
+      nameKey: "pricing.plans.elite.name",
+      descriptionKey: "pricing.plans.elite.description",
+      monthlyPrice: 79,
+      annualPrice: 63,
+      annualTotal: 756,
       featuresKeys: [
-        "landing.pricing.elite.features.everythingPro",
-        "landing.pricing.elite.features.multiAccount",
-        "landing.pricing.elite.features.apiAccess",
-        "landing.pricing.elite.features.whiteLabel",
-        "landing.pricing.elite.features.accountManager",
-        "landing.pricing.elite.features.earlyAccess",
-        "landing.pricing.elite.features.teamCollaboration",
+        "pricing.plans.elite.features.uploads",
+        "pricing.plans.elite.features.aiAnalysis",
+        "pricing.plans.elite.features.tradeReplay",
+        "pricing.plans.elite.features.positionCalculator",
+        "pricing.plans.elite.features.riskDashboard",
+        "pricing.plans.elite.features.advancedAlerts",
+        "pricing.plans.elite.features.everythingPro",
       ],
-      ctaKey: "landing.pricing.elite.cta",
+      ctaKey: "pricing.plans.cta",
       popular: false,
-      price: "$99",
       priceCurrency: "USD",
-      priceValue: 99,
     },
   ];
+
+  const getDisplayPrice = (plan: typeof plans[0]) => {
+    return billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice;
+  };
+
+  const getSavings = (plan: typeof plans[0]) => {
+    return (plan.monthlyPrice * 12) - plan.annualTotal;
+  };
   
   // Add Offer Schema for SEO
   useEffect(() => {
@@ -83,11 +97,12 @@ const Pricing = () => {
           "@type": "Offer",
           "name": t(plan.nameKey),
           "description": t(plan.descriptionKey),
-          "price": plan.priceValue,
+          "price": billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice,
           "priceCurrency": plan.priceCurrency,
           "availability": "https://schema.org/InStock",
           "url": "https://www.thetradingdiary.com/auth",
           "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+          "billingDuration": billingCycle === 'monthly' ? "P1M" : "P1Y",
           "seller": {
             "@type": "Organization",
             "name": "The Trading Diary"
@@ -97,83 +112,125 @@ const Pricing = () => {
     };
     
     addStructuredData(offersSchema, 'pricing-offers-schema');
-  }, [t]);
+  }, [t, billingCycle]);
 
   return (
-    <section className="py-16 md:py-20 px-6">
-      <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12 md:mb-16 animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            {t('landing.pricing.title').split('Transparent')[0]}
-            <span className="text-gradient-primary">Transparent</span>
-            {t('landing.pricing.title').split('Transparent')[1]}
-          </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('landing.pricing.subtitle')}
+    <>
+      <section className="py-16 md:py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-8 md:mb-12 animate-fade-in">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+              {t('pricing.title')}
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
+              {t('pricing.subtitle')}
+            </p>
+
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <button
+                onClick={() => setBillingCycle('monthly')}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  billingCycle === 'monthly'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {t('pricing.billing.monthly')}
+              </button>
+              <button
+                onClick={() => setBillingCycle('annual')}
+                className={`px-4 py-2 rounded-lg font-medium transition-all relative ${
+                  billingCycle === 'annual'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {t('pricing.billing.annual')}
+                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                  {t('pricing.billing.save20')}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+            {plans.map((plan, index) => (
+              <div
+                key={plan.id}
+                className={`glass backdrop-blur-[12px] rounded-2xl p-6 md:p-7 relative hover-lift transition-all shadow-sm animate-fade-in ${
+                  plan.popular ? "ring-2 ring-primary shadow-lg shadow-primary/20" : ""
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full flex items-center gap-1 shadow-md">
+                    <Sparkles size={12} />
+                    {t('pricing.mostPopular')}
+                  </div>
+                )}
+
+                <div className="mb-5">
+                  <h3 className="text-xl md:text-2xl font-bold mb-1.5">{t(plan.nameKey)}</h3>
+                  <p className="text-muted-foreground text-xs md:text-sm mb-3">
+                    {t(plan.descriptionKey)}
+                  </p>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="text-3xl md:text-4xl font-bold" style={{ color: 'hsl(var(--primary))' }}>
+                      ${getDisplayPrice(plan)}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      /{billingCycle === 'monthly' ? t('pricing.perMonth') : t('pricing.perMonthBilledAnnually')}
+                    </span>
+                  </div>
+                  {billingCycle === 'annual' && (
+                    <div className="text-xs text-green-600 dark:text-green-400 font-medium">
+                      {t('pricing.savingsAmount', { amount: getSavings(plan) })}
+                    </div>
+                  )}
+                </div>
+
+                <Button
+                  onClick={() => navigate('/auth')}
+                  className={`w-full mb-5 rounded-xl font-medium transition-all ${
+                    plan.popular
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
+                      : "glass border border-primary/30 hover:bg-primary/10 hover:border-primary/50"
+                  }`}
+                  variant={plan.popular ? "default" : "outline"}
+                >
+                  {t(plan.ctaKey)}
+                </Button>
+
+                <ul className="space-y-2.5">
+                  {plan.featuresKeys.map((featureKey, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <Check
+                        size={18}
+                        className={`mt-0.5 flex-shrink-0 ${
+                          plan.popular ? "text-primary" : "text-foreground"
+                        }`}
+                      />
+                      <span className="text-xs md:text-sm text-muted-foreground leading-relaxed">{t(featureKey)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-center text-muted-foreground text-xs md:text-sm mt-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            {t('pricing.trialNote')}
           </p>
         </div>
+      </section>
 
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              className={`glass backdrop-blur-[12px] rounded-2xl p-6 md:p-7 relative hover-lift transition-all shadow-sm animate-fade-in ${
-                plan.popular ? "ring-2 ring-primary shadow-lg shadow-primary/20" : ""
-              }`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full flex items-center gap-1 shadow-md">
-                  <Sparkles size={12} />
-                  {t('landing.pricing.mostPopular')}
-                </div>
-              )}
+      {/* Comparison Table */}
+      <PricingComparison />
 
-              <div className="mb-5">
-                <h3 className="text-xl md:text-2xl font-bold mb-1.5">{t(plan.nameKey)}</h3>
-                <p className="text-muted-foreground text-xs md:text-sm mb-3">
-                  {t(plan.descriptionKey)}
-                </p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl md:text-4xl font-bold" style={{ color: 'hsl(var(--primary))' }}>{t(plan.priceKey)}</span>
-                  <span className="text-sm text-muted-foreground">/{t(plan.periodKey)}</span>
-                </div>
-              </div>
-
-              <Button
-                onClick={() => navigate('/auth')}
-                className={`w-full mb-5 rounded-xl font-medium transition-all ${
-                  plan.popular
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
-                    : "glass border border-primary/30 hover:bg-primary/10 hover:border-primary/50"
-                }`}
-                variant={plan.popular ? "default" : "outline"}
-              >
-                {t(plan.ctaKey)}
-              </Button>
-
-              <ul className="space-y-2.5">
-                {plan.featuresKeys.map((featureKey, i) => (
-                  <li key={i} className="flex items-start gap-2.5">
-                    <Check
-                      size={18}
-                      className={`mt-0.5 flex-shrink-0 ${
-                        plan.popular ? "text-primary" : "text-foreground"
-                      }`}
-                    />
-                    <span className="text-xs md:text-sm text-muted-foreground leading-relaxed">{t(featureKey)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <p className="text-center text-muted-foreground text-xs md:text-sm mt-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          {t('landing.pricing.trialNote')}
-        </p>
-      </div>
-    </section>
+      {/* Roadmap */}
+      <PricingRoadmap />
+    </>
   );
 };
 

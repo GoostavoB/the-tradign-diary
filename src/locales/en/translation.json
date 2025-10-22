@@ -29,6 +29,125 @@
     "customize": "Customize",
     "settings": "Settings"
   },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "Start with a 7-day free trial. Credit card required, but you won't be charged until the trial ends.",
+    "mostPopular": "Most Popular",
+    "perMonth": "month",
+    "perMonthBilledAnnually": "month, billed annually",
+    "savingsAmount": "Save ${{amount}}/year",
+    "trialNote": "7-day free trial • Credit card required • Cancel anytime before Day 7 • No hidden fees",
+    "billing": {
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "save20": "Save 20%"
+    },
+    "plans": {
+      "cta": "Start Free Trial",
+      "basic": {
+        "name": "Basic",
+        "description": "Perfect for active traders building structure",
+        "features": {
+          "uploads": "50 AI trade uploads/month",
+          "manualUploads": "Unlimited manual uploads",
+          "dashboard": "Custom dashboard with 15+ widgets",
+          "charts": "Advanced charts & analytics",
+          "basicJournal": "Basic journal with emotional tracking",
+          "feeAnalytics": "Fee analytics with alerts",
+          "csv": "CSV import & export",
+          "social": "Social feed & leaderboard access"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "For serious traders improving discipline",
+        "features": {
+          "uploads": "100 AI trade uploads/month",
+          "aiAnalysis": "1 AI Performance Analysis per week",
+          "tradingPlan": "Trading Plan Builder with checklist",
+          "goals": "Goals tracking & progress",
+          "richJournal": "Rich journal with mood & pattern analysis",
+          "customWidgets": "Unlimited custom KPI widgets",
+          "fullSocial": "Full social features (posts, XP, badges)",
+          "everythingBasic": "Everything in Basic"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "description": "Professional traders & analysts",
+        "features": {
+          "uploads": "300 AI trade uploads/month",
+          "aiAnalysis": "5 AI Performance Analyses per week",
+          "tradeReplay": "Trade Replay (step-by-step review)",
+          "positionCalculator": "Advanced Position Size Calculator",
+          "riskDashboard": "Risk Dashboard with drawdown analysis",
+          "advancedAlerts": "Advanced performance & fee alerts",
+          "everythingPro": "Everything in Pro"
+        }
+      }
+    },
+    "comparison": {
+      "title": "Compare Plans in Detail",
+      "subtitle": "See exactly what's included in each plan",
+      "feature": "Feature",
+      "unlimited": "Unlimited",
+      "categories": {
+        "aiAnalytics": "AI & Analytics",
+        "tradingTools": "Trading Tools",
+        "journaling": "Journaling & Psychology",
+        "riskManagement": "Risk Management",
+        "integrations": "Integrations",
+        "social": "Social & Community"
+      },
+      "features": {
+        "aiUploads": "AI Trade Uploads",
+        "manualUploads": "Manual Trade Uploads",
+        "aiAnalysis": "AI Performance Analysis",
+        "customWidgets": "Custom KPI Widgets",
+        "advancedCharts": "Advanced Charts & Analytics",
+        "tradingPlan": "Trading Plan Builder",
+        "preTradeChecklist": "Pre-Trade Checklist",
+        "goalsTracking": "Goals Tracking",
+        "tradeReplay": "Trade Replay",
+        "positionCalculator": "Position Size Calculator",
+        "basicJournal": "Basic Journal",
+        "emotionalTimeline": "Emotional Timeline",
+        "richJournal": "Rich Journal with Mood Tracking",
+        "patternAnalysis": "Pattern Analysis",
+        "feeAnalytics": "Fee Analytics",
+        "riskDashboard": "Risk Dashboard",
+        "drawdownAnalysis": "Drawdown Analysis",
+        "performanceAlerts": "Performance Alerts",
+        "csvImport": "CSV Import/Export",
+        "exchangeConnections": "Exchange Connections",
+        "autoRefresh": "Auto-Refresh",
+        "viewFeed": "View Social Feed",
+        "createPosts": "Create Posts & Comments",
+        "leaderboard": "Leaderboard",
+        "xpBadges": "XP & Badges",
+        "challenges": "Daily/Weekly Challenges"
+      }
+    },
+    "roadmap": {
+      "title": "Coming Soon",
+      "subtitle": "Exciting new features we're building for you",
+      "targetQuarter": "Target",
+      "highPriority": "High Priority",
+      "mediumPriority": "Medium Priority",
+      "features": {
+        "bestAssetFinder": "Best Asset Finder - Identify your most profitable pairs",
+        "batchEdit": "Batch Edit - Edit multiple trades at once",
+        "valueAtRisk": "Value at Risk (VaR) Calculator",
+        "apiAccess": "Read-Only API Key Access",
+        "portfolioTracking": "Portfolio Analytics & Snapshots",
+        "inAppAlerts": "In-App Alert System",
+        "autosyncDelta": "Autosync Delta Imports",
+        "savedViews": "Fast Filters & Saved Views",
+        "teamCollaboration": "Team Collaboration Tools"
+      },
+      "disclaimer": "Features and timeline subject to change based on user feedback and development priorities"
+    }
+  },
   "blog": {
     "title": "Crypto Trading Blog",
     "subtitle": "Expert insights on AI-powered trading, psychology, risk management, and data-driven strategies",
