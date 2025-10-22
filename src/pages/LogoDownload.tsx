@@ -9,7 +9,7 @@ import heroBg from '@/assets/bull-bear-realistic.png';
 import wallpaperLogo from '@/assets/wallpaper-logo-center.png';
 import wallpaperTrading from '@/assets/wallpaper-trading-theme.png';
 import wallpaperCreative from '@/assets/wallpaper-creative.png';
-import tdLogoBlue from '@/assets/td-logo-blue.png';
+import tdLogoBlue from '@/assets/td-logo-official.png';
 
 const LogoDownload = () => {
   const navigate = useNavigate();
