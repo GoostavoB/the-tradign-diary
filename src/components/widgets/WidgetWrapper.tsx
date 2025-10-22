@@ -31,52 +31,35 @@ export const WidgetWrapper = memo(({
     <GlassCard 
       className={cn(
         "relative flex flex-col overflow-hidden",
-        "transition-all duration-200",
+        "transition-all duration-300",
         isEditMode && "animate-border-pulse",
         isCompact && "widget-compact",
         className
       )}
     >
-      {/* Enhanced Shimmer Effects for Edit Mode */}
+      {/* Elegant Shimmer Effect for Edit Mode */}
       {isEditMode && (
-        <>
-          {/* Background pulsing overlay */}
-          <div className="absolute inset-0 pointer-events-none rounded-lg bg-primary/5 animate-edit-pulse" />
-          
-          {/* Sweeping shimmer effect */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
-            <div 
-              className="absolute w-[200%] h-[200%] -left-[100%] -top-[100%] animate-shimmer"
-              style={{
-                background: 'linear-gradient(90deg, transparent, hsl(var(--primary) / 0.25) 30%, hsl(var(--primary) / 0.4) 50%, hsl(var(--primary) / 0.25) 70%, transparent)',
-                transform: 'rotate(45deg)',
-              }}
-            />
-          </div>
-
-          {/* Corner highlights */}
-          <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none">
-            <div className="absolute top-0 right-0 w-8 h-0.5 bg-gradient-to-l from-primary/60 to-transparent animate-edit-pulse" />
-            <div className="absolute top-0 right-0 w-0.5 h-8 bg-gradient-to-b from-primary/60 to-transparent animate-edit-pulse" />
-          </div>
-          <div className="absolute bottom-0 left-0 w-16 h-16 pointer-events-none">
-            <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-primary/60 to-transparent animate-edit-pulse" />
-            <div className="absolute bottom-0 left-0 w-0.5 h-8 bg-gradient-to-t from-primary/60 to-transparent animate-edit-pulse" />
-          </div>
-        </>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
+          <div 
+            className="absolute inset-y-0 w-1/2 -left-1/2 animate-shimmer opacity-30"
+            style={{
+              background: 'linear-gradient(90deg, transparent, hsl(var(--primary) / 0.12), transparent)',
+            }}
+          />
+        </div>
       )}
       
       {/* Edit Mode Controls */}
       {isEditMode && (
         <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 flex gap-1">
-          <div className="drag-handle cursor-move p-1.5 rounded bg-background/90 hover:bg-background shadow-lg border border-primary/30">
-            <GripVertical className="h-4 w-4 text-primary" />
+          <div className="drag-handle cursor-move p-1.5 rounded bg-background/90 hover:bg-background shadow-sm border border-primary/20">
+            <GripVertical className="h-4 w-4 text-primary/70" />
           </div>
           {onRemove && (
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 bg-background/90 hover:bg-destructive hover:text-destructive-foreground shadow-lg border border-primary/30"
+              className="h-7 w-7 bg-background/90 hover:bg-destructive hover:text-destructive-foreground shadow-sm border border-primary/20"
               onClick={onRemove}
             >
               <Trash2 className="h-3.5 w-3.5" />
