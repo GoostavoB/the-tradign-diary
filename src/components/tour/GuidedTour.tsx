@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import Joyride, { Step, CallBackProps, STATUS, ACTIONS } from 'react-joyride';
-import { useGuidedTour } from '@/hooks/useGuidedTour';
+import { useGuidedTour, TourMode } from '@/hooks/useGuidedTour';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
-const tourSteps: Step[] = [
+const fullTourSteps: Step[] = [
   {
     target: 'body',
     content: (
@@ -150,32 +151,83 @@ const tourSteps: Step[] = [
 ];
 
 export const GuidedTour = () => {
-  const { shouldShowTour, completeTour } = useGuidedTour();
+  const { shouldShowTour, tourMode, completeTour } = useGuidedTour();
   const [run, setRun] = useState(false);
+  const [steps, setSteps] = useState<Step[]>([]);
+  const [currentVersion, setCurrentVersion] = useState(1);
 
   useEffect(() => {
     if (shouldShowTour) {
+      loadTourSteps();
+    }
+  }, [shouldShowTour, tourMode]);
+
+  const loadTourSteps = async () => {
+    try {
+      // Load tour steps based on mode
+      if (tourMode === 'full' || tourMode === 'manual-full') {
+        setSteps(fullTourSteps);
+        
+        // Get latest full tour version
+        const { data } = await supabase
+          .from('tour_versions')
+          .select('version')
+          .eq('type', 'full')
+          .eq('active', true)
+          .order('version', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        
+        setCurrentVersion(data?.version || 1);
+      } else if (tourMode === 'updates' || tourMode === 'manual-updates') {
+        // Load update-specific steps
+        const { data } = await supabase
+          .from('tour_versions')
+          .select('version, steps')
+          .eq('type', 'update')
+          .eq('active', true)
+          .order('version', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (data && data.steps && Array.isArray(data.steps)) {
+          setSteps(data.steps as unknown as Step[]);
+          setCurrentVersion(data.version);
+        } else {
+          setSteps(fullTourSteps);
+        }
+      }
+
       // Small delay to ensure DOM is fully rendered
       const timer = setTimeout(() => {
         setRun(true);
       }, 800);
+      
       return () => clearTimeout(timer);
+    } catch (error) {
+      console.error('Error loading tour steps:', error);
+      setSteps(fullTourSteps);
+      setRun(true);
     }
-  }, [shouldShowTour]);
+  };
 
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status, action } = data;
 
     if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
       setRun(false);
-      completeTour();
-      toast.success('Tour concluído! Explore a plataforma à vontade 🎉');
+      completeTour(currentVersion);
+      
+      const message = tourMode.includes('updates') 
+        ? 'Novidades visualizadas' 
+        : 'Tour concluído';
+      toast.success(message);
     }
 
     // If user clicks outside or presses ESC
     if (action === ACTIONS.CLOSE) {
       setRun(false);
-      completeTour();
+      completeTour(currentVersion);
     }
   };
 
@@ -183,7 +235,7 @@ export const GuidedTour = () => {
 
   return (
     <Joyride
-      steps={tourSteps}
+      steps={steps}
       run={run}
       continuous
       showProgress

@@ -1951,6 +1951,39 @@ export type Database = {
         }
         Relationships: []
       }
+      tour_versions: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          description: string | null
+          id: number
+          steps: Json
+          title: string
+          type: string
+          version: number
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          steps: Json
+          title: string
+          type: string
+          version: number
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          steps?: Json
+          title?: string
+          type?: string
+          version?: number
+        }
+        Relationships: []
+      }
       trade_annotations: {
         Row: {
           annotation_type: string
@@ -2398,6 +2431,36 @@ export type Database = {
         }
         Relationships: []
       }
+      updates_log: {
+        Row: {
+          changes: Json
+          created_at: string | null
+          description: string
+          id: number
+          published: boolean | null
+          title: string
+          version: number
+        }
+        Insert: {
+          changes: Json
+          created_at?: string | null
+          description: string
+          id?: number
+          published?: boolean | null
+          title: string
+          version: number
+        }
+        Update: {
+          changes?: Json
+          created_at?: string | null
+          description?: string
+          id?: number
+          published?: boolean | null
+          title?: string
+          version?: number
+        }
+        Relationships: []
+      }
       upload_batches: {
         Row: {
           assets: string[]
@@ -2801,12 +2864,14 @@ export type Database = {
           guided_tour_completed: boolean | null
           id: string
           initial_investment: number | null
+          last_seen_updates_version: number | null
           layout_json: Json | null
           monthly_report: boolean | null
           onboarding_completed: boolean | null
           performance_alerts: boolean | null
           sidebar_style: string | null
           theme: string | null
+          tour_version_completed: number | null
           trade_reminders: boolean | null
           updated_at: string | null
           user_id: string
@@ -2821,12 +2886,14 @@ export type Database = {
           guided_tour_completed?: boolean | null
           id?: string
           initial_investment?: number | null
+          last_seen_updates_version?: number | null
           layout_json?: Json | null
           monthly_report?: boolean | null
           onboarding_completed?: boolean | null
           performance_alerts?: boolean | null
           sidebar_style?: string | null
           theme?: string | null
+          tour_version_completed?: number | null
           trade_reminders?: boolean | null
           updated_at?: string | null
           user_id: string
@@ -2841,12 +2908,14 @@ export type Database = {
           guided_tour_completed?: boolean | null
           id?: string
           initial_investment?: number | null
+          last_seen_updates_version?: number | null
           layout_json?: Json | null
           monthly_report?: boolean | null
           onboarding_completed?: boolean | null
           performance_alerts?: boolean | null
           sidebar_style?: string | null
           theme?: string | null
+          tour_version_completed?: number | null
           trade_reminders?: boolean | null
           updated_at?: string | null
           user_id?: string

@@ -13,6 +13,8 @@ import { QuickAddTrade } from '@/components/mobile/QuickAddTrade';
 import { InstallPrompt } from '@/components/mobile/InstallPrompt';
 import { GamificationSidebar } from '@/components/gamification/GamificationSidebar';
 import { GuidedTour } from '@/components/tour/GuidedTour';
+import { TourButton } from '@/components/tour/TourButton';
+import { UpdatesModal } from '@/components/tour/UpdatesModal';
 import { Button } from '@/components/ui/button';
 import { Zap, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,6 +32,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <SidebarProvider defaultOpen={!isCollapsed} onOpenChange={setIsCollapsed}>
       <ThemeUnlockNotification />
+      <UpdatesModal />
       <GuidedTour />
       <div className="min-h-screen flex w-full mobile-safe overflow-hidden">
         <div data-tour="sidebar-menu">
@@ -45,6 +48,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
             {/* Right: Icon Buttons */}
             <div className="flex items-center gap-2">
+              <TourButton />
               <KeyboardShortcutsHelp />
               <LanguageToggle />
               <div data-tour="theme-toggle">
@@ -62,6 +66,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
               <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
             </div>
             <div className="flex items-center gap-2">
+              <TourButton />
               <KeyboardShortcutsHelp />
               <LanguageToggle />
               <ThemeStudio />
