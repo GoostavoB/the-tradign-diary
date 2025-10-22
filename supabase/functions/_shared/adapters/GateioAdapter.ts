@@ -115,8 +115,62 @@ export class GateioAdapter extends BaseExchangeAdapter {
 
   async fetchTrades(options?: FetchOptions): Promise<Trade[]> {
     try {
-      // Gate.io requires currency_pair, so return empty for now
-      return [];
+      // First fetch all available trading pairs
+      const balances = await this.fetchBalances();
+      const currencies = balances.map(b => b.currency).filter(c => c);
+      
+      if (currencies.length === 0) {
+        return [];
+      }
+
+      const allTrades: Trade[] = [];
+      const params: Record<string, any> = {};
+      
+      if (options?.startTime) {
+        params.from = Math.floor(new Date(options.startTime).getTime() / 1000);
+      }
+      if (options?.endTime) {
+        params.to = Math.floor(new Date(options.endTime).getTime() / 1000);
+      }
+      if (options?.limit) {
+        params.limit = Math.min(options.limit, 1000);
+      }
+
+      // Fetch trades for common pairs with USDT
+      const commonPairs = currencies
+        .filter(c => c !== 'USDT')
+        .map(c => `${c}_USDT`)
+        .slice(0, 10); // Limit to 10 pairs to avoid rate limits
+
+      for (const pair of commonPairs) {
+        try {
+          const trades = await this.makeRequest<any[]>('GET', `/spot/my_trades`, {
+            ...params,
+            currency_pair: pair,
+          });
+
+          for (const trade of trades) {
+            allTrades.push({
+              id: trade.id,
+              orderId: trade.order_id,
+              symbol: trade.currency_pair.replace('_', ''),
+              side: trade.side as 'buy' | 'sell',
+              price: parseFloat(trade.price),
+              quantity: parseFloat(trade.amount),
+              fee: parseFloat(trade.fee),
+              feeCurrency: trade.fee_currency,
+              timestamp: new Date(parseInt(trade.create_time_ms)),
+              exchange: 'gateio',
+              role: trade.role,
+            });
+          }
+        } catch (error) {
+          console.error(`Error fetching trades for ${pair}:`, error);
+          continue;
+        }
+      }
+
+      return allTrades;
     } catch (error) {
       console.error('Error fetching Gate.io trades:', error);
       return [];

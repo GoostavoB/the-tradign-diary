@@ -102,7 +102,62 @@ export class BitstampAdapter extends BaseExchangeAdapter {
   }
 
   async fetchTrades(options?: FetchOptions): Promise<Trade[]> {
-    return [];
+    try {
+      const balances = await this.fetchBalances();
+      const currencies = balances.map(b => b.currency).filter(c => c && c !== 'USD' && c !== 'EUR');
+      
+      if (currencies.length === 0) {
+        return [];
+      }
+
+      const allTrades: Trade[] = [];
+      const params: Record<string, any> = { limit: '100' };
+      
+      if (options?.startTime) {
+        params.since_timestamp = Math.floor(new Date(options.startTime).getTime() / 1000).toString();
+      }
+      if (options?.limit) {
+        params.limit = Math.min(options.limit, 1000).toString();
+      }
+
+      // Fetch trades for common pairs
+      const commonPairs = currencies
+        .filter((c): c is string => c !== undefined && c !== 'USDT')
+        .map(c => `${c.toLowerCase()}usd`)
+        .slice(0, 10);
+
+      for (const pair of commonPairs) {
+        try {
+          const trades = await this.makeRequest<any[]>(`/user_transactions/${pair}/`, params);
+
+          for (const trade of trades) {
+            if (trade.type === 2) { // Type 2 = trade
+              const isBuy = parseFloat(trade[pair.replace('usd', '')]) > 0;
+              allTrades.push({
+                id: trade.id.toString(),
+                orderId: trade.order_id?.toString() || trade.id.toString(),
+                symbol: pair.toUpperCase(),
+                side: isBuy ? 'buy' : 'sell',
+                price: parseFloat(trade[`${pair}_price`] || trade.price || '0'),
+                quantity: Math.abs(parseFloat(trade[pair.replace('usd', '')] || '0')),
+                fee: parseFloat(trade.fee || '0'),
+                feeCurrency: 'USD',
+                timestamp: new Date(trade.datetime),
+                exchange: 'bitstamp',
+              });
+            }
+          }
+        } catch (error) {
+          console.error(`Error fetching trades for ${pair}:`, error);
+          continue;
+        }
+      }
+
+      return allTrades;
+    } catch (error) {
+      console.error('Error fetching Bitstamp trades:', error);
+      return [];
+    }
   }
 
   async fetchBalances(): Promise<Balance[]> {

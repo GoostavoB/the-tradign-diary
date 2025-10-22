@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
       ? new Date(startDate)
       : new Date(endTime.getTime() - 30 * 24 * 60 * 60 * 1000); // Default: last 30 days
 
-    // Initialize exchange service and fetch trades
+    // Initialize exchange service and fetch trades with timeout
     const exchangeService = new ExchangeService();
     const initialized = await exchangeService.initializeExchange(
       connection.exchange_name,
@@ -158,16 +158,41 @@ Deno.serve(async (req) => {
     );
 
     if (!initialized) {
+      await supabaseClient
+        .from('exchange_connections')
+        .update({
+          sync_status: 'error',
+          sync_error: 'Invalid API credentials. Please check your API key and secret.',
+        })
+        .eq('id', connectionId);
+
       throw new Error(`Failed to connect to ${connection.exchange_name}. Please check your credentials.`);
     }
 
-    const result = await exchangeService.syncExchange(connection.exchange_name, {
+    // Fetch trades with 60 second timeout
+    const fetchPromise = exchangeService.syncExchange(connection.exchange_name, {
       startDate: startTime,
       endDate: endTime,
     });
 
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Sync timed out. Please try again with a smaller date range.')), 60000)
+    );
+
+    const result = await Promise.race([fetchPromise, timeoutPromise]);
+
     if (!result.success || !result.trades) {
-      throw new Error(result.error || 'Failed to fetch trades');
+      const errorMessage = result.error || 'Failed to fetch trades. Please try again.';
+      
+      await supabaseClient
+        .from('exchange_connections')
+        .update({
+          sync_status: 'error',
+          sync_error: errorMessage,
+        })
+        .eq('id', connectionId);
+
+      throw new Error(errorMessage);
     }
 
     // Normalize trades for database
@@ -231,9 +256,39 @@ Deno.serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error in fetch-exchange-trades:', error);
+    
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    
+    // Update connection status with error
+    try {
+      const supabaseClient = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+        {
+          global: {
+            headers: { Authorization: req.headers.get('Authorization')! },
+          },
+        }
+      );
+
+      const { connectionId } = await req.json().catch(() => ({}));
+      
+      if (connectionId) {
+        await supabaseClient
+          .from('exchange_connections')
+          .update({
+            sync_status: 'error',
+            sync_error: errorMessage,
+          })
+          .eq('id', connectionId);
+      }
+    } catch (updateError) {
+      console.error('Failed to update connection status:', updateError);
+    }
+
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Internal server error' }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
