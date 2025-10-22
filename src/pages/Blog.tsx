@@ -4,17 +4,20 @@ import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, User } from 'lucide-react';
 import { blogArticles } from '@/data/blogArticles';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Blog = () => {
+  const { t } = useTranslation();
+  
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="text-center space-y-3">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            Trading Blog
+            {t('blog.title')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Expert insights, proven strategies, and practical tips to elevate your trading game
+            {t('blog.subtitle')}
           </p>
         </div>
 

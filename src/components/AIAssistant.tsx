@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import { supabase } from '@/integrations/supabase/client';
 import { preprocessUserMessage } from '@/utils/tradingGlossary';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -14,11 +15,12 @@ interface Message {
 }
 
 export const AIAssistant = () => {
+  const { t } = useTranslation();
   const { isOpen, setIsOpen, initialPrompt, clearInitialPrompt } = useAIAssistant();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: 'Hi! I\'m your AI trading coach. Ask me anything about your trading performance, patterns, or strategies!',
+      content: t('aiAssistant.greeting'),
     },
   ]);
   const [input, setInput] = useState('');
@@ -110,7 +112,7 @@ export const AIAssistant = () => {
       console.error('AI Assistant error:', error);
       setMessages((prev) => [...prev, {
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.'
+        content: t('aiAssistant.error')
       }]);
       setIsLoading(false);
     }
@@ -131,7 +133,7 @@ export const AIAssistant = () => {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <Bot className="h-5 w-5 text-accent" />
-            AI Trading Assistant
+            {t('aiAssistant.title')}
           </SheetTitle>
         </SheetHeader>
         <div className="flex flex-col h-full py-4">
@@ -176,7 +178,7 @@ export const AIAssistant = () => {
                   handleSend();
                 }
               }}
-              placeholder="Ask about your trading performance..."
+              placeholder={t('aiAssistant.placeholder')}
               className="resize-none glass border-accent/20"
               rows={2}
             />

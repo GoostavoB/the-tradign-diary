@@ -220,20 +220,108 @@
     }
   },
   "widgets": {
-    "totalBalance": "Total Balance",
-    "winRate": "Win Rate",
-    "totalTrades": "Total Trades",
-    "currentROI": "Current ROI",
-    "avgPnLPerTrade": "Avg P&L per Trade",
-    "avgPnLPerDay": "Avg P&L per Day",
-    "avgROIPerTrade": "Avg ROI per Trade",
-    "capitalGrowth": "Capital Growth",
-    "spotWallet": "Spot Wallet",
-    "portfolioOverview": "Portfolio Overview",
-    "topMovers": "Top Movers",
-    "aiInsights": "AI Insights",
-    "recentTransactions": "Recent Transactions",
-    "quickActions": "Quick Actions",
+    "totalBalance": {
+      "title": "Total Balance",
+      "description": "Your total trading account balance with 24h change"
+    },
+    "winRate": {
+      "title": "Win Rate",
+      "description": "Your win rate percentage and W/L ratio"
+    },
+    "totalTrades": {
+      "title": "Total Trades",
+      "description": "Total number of trades executed"
+    },
+    "spotWallet": {
+      "title": "Spot Wallet",
+      "description": "Quick overview of your spot wallet holdings"
+    },
+    "portfolioOverview": {
+      "title": "Portfolio Overview",
+      "description": "Portfolio value chart over time"
+    },
+    "topMovers": {
+      "title": "Top Movers",
+      "description": "Assets with biggest price movements"
+    },
+    "aiInsights": {
+      "title": "AI Insights",
+      "description": "AI-powered trading insights and recommendations"
+    },
+    "recentTransactions": {
+      "title": "Recent Transactions",
+      "description": "Your latest trading activity"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "description": "Fast access to common actions"
+    },
+    "avgPnLPerTrade": {
+      "title": "Avg P&L Per Trade",
+      "description": "Average profit/loss per executed trade"
+    },
+    "avgPnLPerDay": {
+      "title": "Avg P&L Per Day",
+      "description": "Average profit/loss per trading day"
+    },
+    "currentROI": {
+      "title": "Current ROI",
+      "description": "Return on investment from initial capital"
+    },
+    "avgROIPerTrade": {
+      "title": "Avg ROI Per Trade",
+      "description": "Average ROI across all trades"
+    },
+    "capitalGrowth": {
+      "title": "Capital Growth",
+      "description": "Visualize your capital growth over time"
+    },
+    "behaviorAnalytics": {
+      "title": "Behavior Analytics",
+      "description": "Analyze your trading patterns and behaviors"
+    },
+    "costEfficiency": {
+      "title": "Cost Efficiency",
+      "description": "Track fees and exchange cost analysis"
+    },
+    "performanceHighlights": {
+      "title": "Performance Highlights",
+      "description": "Best/worst trades and current streaks"
+    },
+    "tradingQuality": {
+      "title": "Trading Quality Metrics",
+      "description": "Win/loss analysis and profit factor"
+    },
+    "categories": {
+      "overview": {
+        "label": "Overview",
+        "description": "Essential dashboard metrics"
+      },
+      "trading": {
+        "label": "Trading",
+        "description": "Win rate, trades, and performance"
+      },
+      "portfolio": {
+        "label": "Portfolio",
+        "description": "Holdings and allocation"
+      },
+      "market": {
+        "label": "Market Data",
+        "description": "Price movements and market info"
+      },
+      "performance": {
+        "label": "Performance",
+        "description": "ROI, P&L, and analytics"
+      },
+      "insights": {
+        "label": "Insights",
+        "description": "Advanced trading analytics"
+      },
+      "ai": {
+        "label": "AI & Insights",
+        "description": "AI-powered recommendations"
+      }
+    },
     "viewAll": "View all",
     "tokens": "tokens",
     "trades": "trades",
@@ -472,5 +560,43 @@
     "netPnLPercent": "Net P&L %",
     "feeDollar": "Fee $",
     "fundingDollar": "Funding $"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about The Trading Diary",
+    "questions": {
+      "whatIsJournal": {
+        "question": "What is a trading journal and why do I need one?",
+        "answer": "A trading journal is a record of all your trades, including entry/exit prices, profit/loss, emotions, and strategies used. It helps you identify patterns, improve decision-making, and track your progress over time."
+      },
+      "howHelps": {
+        "question": "How does The Trading Diary help me become a better trader?",
+        "answer": "The Trading Diary provides analytics, performance tracking, and insights from your trading history. By analyzing your wins and losses, emotional patterns, and strategy effectiveness, you can make data-driven improvements to your trading approach."
+      },
+      "assetTypes": {
+        "question": "Can I track both crypto and stock trades?",
+        "answer": "Yes! The Trading Diary supports all asset types including cryptocurrencies, stocks, forex, commodities, and more. Simply enter the asset name when logging your trade."
+      },
+      "security": {
+        "question": "Is my trading data secure?",
+        "answer": "Absolutely. We use bank-level encryption to protect your data. Your trading information is private and only accessible to you."
+      },
+      "metrics": {
+        "question": "What metrics does the dashboard show?",
+        "answer": "The dashboard displays key metrics including total P&L, win rate, average trade duration, ROI, and more. You can also see charts showing your performance over time and by different strategies."
+      }
+    }
+  },
+  "blog": {
+    "title": "Trading Blog",
+    "subtitle": "Expert insights, proven strategies, and practical tips to elevate your trading game",
+    "readTime": "min read"
+  },
+  "aiAssistant": {
+    "title": "AI Trading Assistant",
+    "greeting": "Hi! I'm your AI trading coach. Ask me anything about your trading performance, patterns, or strategies!",
+    "placeholder": "Ask about your trading performance...",
+    "error": "Sorry, I encountered an error. Please try again.",
+    "buttonLabel": "Open AI Assistant"
   }
 }

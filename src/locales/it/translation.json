@@ -99,11 +99,108 @@
     "quickSetup": "Setup 2 min"
   },
   "widgets": {
-    "totalBalance": "Saldo totale",
-    "winRate": "Win rate",
-    "recentTransactions": "Transazioni recenti",
-    "topMovers": "Top mover",
-    "aiInsights": "Insights IA"
+    "totalBalance": {
+      "title": "Saldo Totale",
+      "description": "Il tuo saldo totale del conto di trading con variazione 24h"
+    },
+    "winRate": {
+      "title": "Win Rate",
+      "description": "La tua percentuale di win rate e rapporto W/L"
+    },
+    "totalTrades": {
+      "title": "Trade Totali",
+      "description": "Numero totale di trade eseguiti"
+    },
+    "spotWallet": {
+      "title": "Wallet Spot",
+      "description": "Panoramica rapida delle tue holdings spot"
+    },
+    "portfolioOverview": {
+      "title": "Panoramica Portfolio",
+      "description": "Grafico del valore del portfolio nel tempo"
+    },
+    "topMovers": {
+      "title": "Top Mover",
+      "description": "Asset con i maggiori movimenti di prezzo"
+    },
+    "aiInsights": {
+      "title": "Insights IA",
+      "description": "Insights e raccomandazioni di trading basati su IA"
+    },
+    "recentTransactions": {
+      "title": "Transazioni Recenti",
+      "description": "La tua ultima attività di trading"
+    },
+    "quickActions": {
+      "title": "Azioni Rapide",
+      "description": "Accesso veloce alle azioni comuni"
+    },
+    "avgPnLPerTrade": {
+      "title": "P&L Medio per Trade",
+      "description": "Profitto/perdita medio per trade eseguito"
+    },
+    "avgPnLPerDay": {
+      "title": "P&L Medio per Giorno",
+      "description": "Profitto/perdita medio per giorno di trading"
+    },
+    "currentROI": {
+      "title": "ROI Attuale",
+      "description": "Ritorno sull'investimento dal capitale iniziale"
+    },
+    "avgROIPerTrade": {
+      "title": "ROI Medio per Trade",
+      "description": "ROI medio su tutti i trade"
+    },
+    "capitalGrowth": {
+      "title": "Crescita Capitale",
+      "description": "Visualizza la crescita del tuo capitale nel tempo"
+    },
+    "behaviorAnalytics": {
+      "title": "Analytics Comportamentali",
+      "description": "Analizza i tuoi pattern e comportamenti di trading"
+    },
+    "costEfficiency": {
+      "title": "Efficienza dei Costi",
+      "description": "Traccia commissioni e analisi costi exchange"
+    },
+    "performanceHighlights": {
+      "title": "Highlights Performance",
+      "description": "Migliori/peggiori trade e streak attuali"
+    },
+    "tradingQuality": {
+      "title": "Metriche Qualità Trading",
+      "description": "Analisi vincite/perdite e profit factor"
+    },
+    "categories": {
+      "overview": {
+        "label": "Panoramica",
+        "description": "Metriche essenziali della dashboard"
+      },
+      "trading": {
+        "label": "Trading",
+        "description": "Win rate, trade e performance"
+      },
+      "portfolio": {
+        "label": "Portfolio",
+        "description": "Holdings e allocazione"
+      },
+      "market": {
+        "label": "Dati di Mercato",
+        "description": "Movimenti prezzi e info mercato"
+      },
+      "performance": {
+        "label": "Performance",
+        "description": "ROI, P&L e analytics"
+      },
+      "insights": {
+        "label": "Insights",
+        "description": "Analytics di trading avanzati"
+      },
+      "ai": {
+        "label": "IA & Insights",
+        "description": "Raccomandazioni basate su IA"
+      }
+    }
   },
   "settings": {
     "profile": "Profilo",
@@ -148,5 +245,43 @@
     "thisWeek": "Questa settimana",
     "thisMonth": "Questo mese",
     "thisYear": "Quest'anno"
+  },
+  "faq": {
+    "title": "Domande Frequenti",
+    "subtitle": "Trova risposte alle domande comuni su The Trading Diary",
+    "questions": {
+      "whatIsJournal": {
+        "question": "Cos'è un diario di trading e perché ne ho bisogno?",
+        "answer": "Un diario di trading è un registro di tutti i tuoi trade, inclusi prezzi di entrata/uscita, profitto/perdita, emozioni e strategie utilizzate. Ti aiuta a identificare i pattern, migliorare le decisioni e monitorare i tuoi progressi nel tempo."
+      },
+      "howHelps": {
+        "question": "Come mi aiuta The Trading Diary a diventare un trader migliore?",
+        "answer": "The Trading Diary fornisce analytics, monitoraggio delle performance e insights dalla tua cronologia di trading. Analizzando le tue vincite e perdite, pattern emotivi ed efficacia delle strategie, puoi apportare miglioramenti basati sui dati al tuo approccio di trading."
+      },
+      "assetTypes": {
+        "question": "Posso tracciare sia trade crypto che azionari?",
+        "answer": "Sì! The Trading Diary supporta tutti i tipi di asset inclusi criptovalute, azioni, forex, commodities e altro. Inserisci semplicemente il nome dell'asset quando registri il tuo trade."
+      },
+      "security": {
+        "question": "I miei dati di trading sono sicuri?",
+        "answer": "Assolutamente. Utilizziamo crittografia di livello bancario per proteggere i tuoi dati. Le tue informazioni di trading sono private e accessibili solo a te."
+      },
+      "metrics": {
+        "question": "Quali metriche mostra la dashboard?",
+        "answer": "La dashboard visualizza metriche chiave inclusi P&L totale, win rate, durata media dei trade, ROI e altro. Puoi anche vedere grafici che mostrano le tue performance nel tempo e per diverse strategie."
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog di Trading",
+    "subtitle": "Approfondimenti esperti, strategie comprovate e consigli pratici per elevare il tuo trading",
+    "readTime": "min di lettura"
+  },
+  "aiAssistant": {
+    "title": "Assistente AI Trading",
+    "greeting": "Ciao! Sono il tuo coach AI di trading. Chiedimi qualsiasi cosa sulle tue performance, pattern o strategie di trading!",
+    "placeholder": "Chiedi delle tue performance di trading...",
+    "error": "Spiacente, si è verificato un errore. Riprova.",
+    "buttonLabel": "Apri Assistente AI"
   }
 }

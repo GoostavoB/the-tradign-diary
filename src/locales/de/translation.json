@@ -99,11 +99,108 @@
     "quickSetup": "2-Min-Setup"
   },
   "widgets": {
-    "totalBalance": "Gesamtguthaben",
-    "winRate": "Win Rate",
-    "recentTransactions": "Letzte Transaktionen",
-    "topMovers": "Top Mover",
-    "aiInsights": "KI-Insights"
+    "totalBalance": {
+      "title": "Gesamtguthaben",
+      "description": "Ihr gesamtes Trading-Konto-Guthaben mit 24h-Änderung"
+    },
+    "winRate": {
+      "title": "Win Rate",
+      "description": "Ihre Win-Rate-Prozentsatz und W/L-Verhältnis"
+    },
+    "totalTrades": {
+      "title": "Gesamt-Trades",
+      "description": "Gesamtanzahl ausgeführter Trades"
+    },
+    "spotWallet": {
+      "title": "Spot-Wallet",
+      "description": "Schnellübersicht Ihrer Spot-Wallet-Bestände"
+    },
+    "portfolioOverview": {
+      "title": "Portfolio-Übersicht",
+      "description": "Portfolio-Wertdiagramm im Zeitverlauf"
+    },
+    "topMovers": {
+      "title": "Top Mover",
+      "description": "Assets mit den größten Preisbewegungen"
+    },
+    "aiInsights": {
+      "title": "KI-Insights",
+      "description": "KI-gestützte Trading-Insights und Empfehlungen"
+    },
+    "recentTransactions": {
+      "title": "Letzte Transaktionen",
+      "description": "Ihre neueste Trading-Aktivität"
+    },
+    "quickActions": {
+      "title": "Schnellaktionen",
+      "description": "Schnellzugriff auf häufige Aktionen"
+    },
+    "avgPnLPerTrade": {
+      "title": "Durchschn. P&L pro Trade",
+      "description": "Durchschnittlicher Gewinn/Verlust pro Trade"
+    },
+    "avgPnLPerDay": {
+      "title": "Durchschn. P&L pro Tag",
+      "description": "Durchschnittlicher Gewinn/Verlust pro Trading-Tag"
+    },
+    "currentROI": {
+      "title": "Aktueller ROI",
+      "description": "Return on Investment vom Anfangskapital"
+    },
+    "avgROIPerTrade": {
+      "title": "Durchschn. ROI pro Trade",
+      "description": "Durchschnittlicher ROI über alle Trades"
+    },
+    "capitalGrowth": {
+      "title": "Kapitalwachstum",
+      "description": "Visualisieren Sie Ihr Kapitalwachstum im Zeitverlauf"
+    },
+    "behaviorAnalytics": {
+      "title": "Verhaltensanalytik",
+      "description": "Analysieren Sie Ihre Trading-Muster und -Verhalten"
+    },
+    "costEfficiency": {
+      "title": "Kosteneffizienz",
+      "description": "Gebühren verfolgen und Exchange-Kostenanalyse"
+    },
+    "performanceHighlights": {
+      "title": "Performance-Highlights",
+      "description": "Beste/schlechteste Trades und aktuelle Streaks"
+    },
+    "tradingQuality": {
+      "title": "Trading-Qualitätsmetriken",
+      "description": "Gewinn/Verlust-Analyse und Profit Factor"
+    },
+    "categories": {
+      "overview": {
+        "label": "Übersicht",
+        "description": "Wesentliche Dashboard-Metriken"
+      },
+      "trading": {
+        "label": "Trading",
+        "description": "Win Rate, Trades und Performance"
+      },
+      "portfolio": {
+        "label": "Portfolio",
+        "description": "Bestände und Allokation"
+      },
+      "market": {
+        "label": "Marktdaten",
+        "description": "Preisbewegungen und Marktinfo"
+      },
+      "performance": {
+        "label": "Performance",
+        "description": "ROI, P&L und Analytics"
+      },
+      "insights": {
+        "label": "Insights",
+        "description": "Erweiterte Trading-Analytik"
+      },
+      "ai": {
+        "label": "KI & Insights",
+        "description": "KI-gestützte Empfehlungen"
+      }
+    }
   },
   "settings": {
     "profile": "Profil",
@@ -148,5 +245,43 @@
     "thisWeek": "Diese Woche",
     "thisMonth": "Diesen Monat",
     "thisYear": "Dieses Jahr"
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "subtitle": "Finden Sie Antworten auf häufige Fragen zu The Trading Diary",
+    "questions": {
+      "whatIsJournal": {
+        "question": "Was ist ein Trading-Journal und warum brauche ich eines?",
+        "answer": "Ein Trading-Journal ist eine Aufzeichnung all Ihrer Trades, einschließlich Ein-/Ausstiegspreisen, Gewinn/Verlust, Emotionen und verwendeten Strategien. Es hilft Ihnen, Muster zu erkennen, Entscheidungen zu verbessern und Ihren Fortschritt im Laufe der Zeit zu verfolgen."
+      },
+      "howHelps": {
+        "question": "Wie hilft mir The Trading Diary, ein besserer Trader zu werden?",
+        "answer": "The Trading Diary bietet Analytics, Performance-Tracking und Insights aus Ihrer Trading-Historie. Durch die Analyse Ihrer Gewinne und Verluste, emotionalen Muster und Strategieeffektivität können Sie datenbasierte Verbesserungen an Ihrem Trading-Ansatz vornehmen."
+      },
+      "assetTypes": {
+        "question": "Kann ich sowohl Krypto- als auch Aktien-Trades verfolgen?",
+        "answer": "Ja! The Trading Diary unterstützt alle Asset-Typen einschließlich Kryptowährungen, Aktien, Forex, Rohstoffe und mehr. Geben Sie einfach den Asset-Namen ein, wenn Sie Ihren Trade protokollieren."
+      },
+      "security": {
+        "question": "Sind meine Trading-Daten sicher?",
+        "answer": "Absolut. Wir verwenden Verschlüsselung auf Bankniveau, um Ihre Daten zu schützen. Ihre Trading-Informationen sind privat und nur für Sie zugänglich."
+      },
+      "metrics": {
+        "question": "Welche Metriken zeigt das Dashboard?",
+        "answer": "Das Dashboard zeigt wichtige Metriken wie Gesamt-P&L, Win Rate, durchschnittliche Trade-Dauer, ROI und mehr. Sie können auch Diagramme sehen, die Ihre Performance im Zeitverlauf und nach verschiedenen Strategien zeigen."
+      }
+    }
+  },
+  "blog": {
+    "title": "Trading-Blog",
+    "subtitle": "Experteneinblicke, bewährte Strategien und praktische Tipps für besseres Trading",
+    "readTime": "Min. Lesezeit"
+  },
+  "aiAssistant": {
+    "title": "KI-Trading-Assistent",
+    "greeting": "Hallo! Ich bin Ihr KI-Trading-Coach. Fragen Sie mich alles über Ihre Trading-Performance, Muster oder Strategien!",
+    "placeholder": "Fragen Sie nach Ihrer Trading-Performance...",
+    "error": "Entschuldigung, es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "buttonLabel": "KI-Assistent öffnen"
   }
 }
