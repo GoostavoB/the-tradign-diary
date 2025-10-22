@@ -282,7 +282,7 @@ const PricingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">
       {/* Hero Section */}
-      <section ref={heroRef} className="relative py-32 md:py-40 px-6">
+      <section ref={heroRef} className="relative py-20 md:py-24 px-6">
         <div className="container relative mx-auto max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -293,25 +293,17 @@ const PricingPage = () => {
               {t('pricing.hero.title')}
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               {t('pricing.hero.subtitle')}
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <MagneticButton
                 onClick={() => navigate('/auth')}
                 size="lg"
                 className="px-10 py-7"
               >
                 {t('pricing.hero.primaryCta')}
-              </MagneticButton>
-              <MagneticButton
-                onClick={() => {}}
-                variant="outline"
-                size="lg"
-                className="px-10 py-7"
-              >
-                {t('pricing.hero.secondaryCta')}
               </MagneticButton>
             </div>
           </motion.div>
