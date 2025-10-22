@@ -78,17 +78,13 @@ export const Logo = ({
           fill="url(#logoGradient)"
         />
         
-        {/* Curved part of D - using path for smooth curve */}
+        {/* D curve with transparent inner using even-odd */}
         <path
-          d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z"
+          d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z
+             M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z"
+          fillRule="evenodd"
+          clipRule="evenodd"
           fill="url(#logoGradient)"
-        />
-        
-        {/* Inner curve cutout of D */}
-        <path
-          d="M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z"
-          fill="currentColor"
-          className="text-background"
         />
         
         {/* Subtle border for definition */}

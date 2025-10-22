@@ -95,8 +95,11 @@ const LogoDownload = () => {
           <rect x="8" y="10" width="24" height="5" fill="url(#logoGradient)" />
           <rect x="17" y="10" width="6" height="28" fill="url(#logoGradient)" />
           <rect x="25" y="15" width="6" height="23" fill="url(#logoGradient)" />
-          <path d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z" fill="url(#logoGradient)" />
-          <path d="M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z" fill="#0f0f11" />
+          <path d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z
+                   M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                fill="url(#logoGradient)" />
           <rect x="7" y="9" width="36" height="30" rx="2" stroke="hsl(250, 80%, 75%)" stroke-width="0.5" fill="none" opacity="0.2" />
         </svg>
       `;
@@ -363,8 +366,13 @@ const LogoDownload = () => {
         <rect x="8" y="10" width="24" height="5" fill="url(#logoGradient)" />
         <rect x="17" y="10" width="6" height="28" fill="url(#logoGradient)" />
         <rect x="25" y="15" width="6" height="23" fill="url(#logoGradient)" />
-        <path d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z" fill="url(#logoGradient)" />
-        <path d="M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z" fill="white" />
+        <path
+          d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z
+             M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z"
+          fillRule="evenodd"
+          clipRule="evenodd"
+          fill="url(#logoGradient)"
+        />
         <rect x="7" y="9" width="36" height="30" rx="2" stroke="hsl(217, 91%, 60%)" strokeWidth="0.5" fill="none" opacity="0.2" />
       </svg>
     </div>
