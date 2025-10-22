@@ -2,6 +2,7 @@ import { Star, CheckCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const Testimonials = () => {
   const { t } = useTranslation();
@@ -29,6 +30,45 @@ const Testimonials = () => {
       textKey: "landing.testimonials.marcus.text",
     },
   ];
+
+  // Add Review Schema for SEO
+  useEffect(() => {
+    const reviewSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "The Trading Diary",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": testimonials.length
+      },
+      "review": testimonials.map(testimonial => ({
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": t(testimonial.nameKey)
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": testimonial.rating,
+          "bestRating": "5"
+        },
+        "reviewBody": t(testimonial.textKey)
+      }))
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'testimonials-schema';
+    script.textContent = JSON.stringify(reviewSchema);
+    document.head.appendChild(script);
+
+    return () => {
+      const existing = document.getElementById('testimonials-schema');
+      if (existing) existing.remove();
+    };
+  }, [t, testimonials]);
+
   return (
     <section className="py-20 md:py-28 px-6">
       <div className="container mx-auto max-w-6xl">
@@ -62,8 +102,12 @@ const Testimonials = () => {
                  <div className="flex items-start gap-3 mb-4">
                   <img
                     src={testimonial.image}
-                    alt={t(testimonial.nameKey)}
+                    alt={`${t(testimonial.nameKey)} - ${t(testimonial.roleKey)}`}
                     className="w-12 h-12 rounded-full flex-shrink-0"
+                    loading="lazy"
+                    decoding="async"
+                    width="48"
+                    height="48"
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">

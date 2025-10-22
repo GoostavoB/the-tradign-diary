@@ -62,6 +62,8 @@ const GamificationSidebar = lazy(() => import('@/components/gamification/Gamific
 import { TourCTAButton } from '@/components/tour/TourCTAButton';
 import { Zap, ChevronLeft } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { usePageMeta } from '@/hooks/usePageMeta';
+import { pageMeta } from '@/utils/seoHelpers';
 
 interface TradeStats {
   total_pnl: number;
@@ -93,6 +95,7 @@ function calculateCurrentStreak(trades: Trade[]): number {
 
 const Dashboard = () => {
   useKeyboardShortcuts();
+  usePageMeta(pageMeta.dashboard);
   const { user } = useAuth();
   const { t } = useTranslation();
   const [stats, setStats] = useState<TradeStats | null>(null);

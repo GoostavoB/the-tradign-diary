@@ -18,8 +18,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Trade } from "@/types/trade";
 import { BarChart3, TrendingUp, Clock, Target, DollarSign, Percent, Shield, Brain } from "lucide-react";
 import { useBadgeNotifications } from "@/hooks/useBadgeNotifications";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { pageMeta } from "@/utils/seoHelpers";
 
 export default function Analytics() {
+  usePageMeta(pageMeta.analytics);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTrades, setSelectedTrades] = useState<Trade[]>([]);

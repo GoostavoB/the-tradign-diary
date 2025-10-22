@@ -15,6 +15,7 @@ export interface PageMeta {
   canonical?: string;
   ogImage?: string;
   ogType?: string;
+  robots?: string;
 }
 
 /**
@@ -46,6 +47,10 @@ export const updatePageMeta = (meta: PageMeta) => {
 
   if (meta.ogType) {
     metaTags.push({ property: 'og:type', content: meta.ogType });
+  }
+
+  if (meta.robots) {
+    metaTags.push({ name: 'robots', content: meta.robots });
   }
 
   metaTags.forEach(({ name, property, content }) => {
@@ -117,23 +122,27 @@ export const pageMeta = {
     description: 'Your personalized trading analytics dashboard with real-time performance tracking and insights.',
     keywords: 'trading dashboard, analytics, performance tracking, trading metrics',
     canonical: 'https://www.thetradingdiary.com/dashboard',
+    robots: 'noindex,nofollow',
   },
   upload: {
     title: 'Upload Trades - The Trading Diary',
     description: 'Upload and analyze your trading data with our advanced trade import system.',
     keywords: 'upload trades, import trades, trade data, csv import',
     canonical: 'https://www.thetradingdiary.com/upload',
+    robots: 'noindex,nofollow',
   },
   analytics: {
     title: 'Advanced Analytics - The Trading Diary',
     description: 'Deep dive into your trading performance with comprehensive analytics and visualizations.',
     keywords: 'trading analytics, performance analysis, trading statistics, trade insights',
     canonical: 'https://www.thetradingdiary.com/analytics',
+    robots: 'noindex,nofollow',
   },
   tools: {
     title: 'Trading Tools - The Trading Diary',
     description: 'Access powerful trading tools including risk calculators, forecasts, and market data.',
     keywords: 'trading tools, risk calculator, trading forecast, market analysis',
     canonical: 'https://www.thetradingdiary.com/tools',
+    robots: 'noindex,nofollow',
   },
 };

@@ -4,8 +4,11 @@ import { RiskCalculator } from '@/components/RiskCalculator';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Calculator, Receipt } from 'lucide-react';
+import { usePageMeta } from '@/hooks/usePageMeta';
+import { pageMeta } from '@/utils/seoHelpers';
 
 const Tools = () => {
+  usePageMeta(pageMeta.tools);
   return (
     <AppLayout>
       <div className="space-y-6">

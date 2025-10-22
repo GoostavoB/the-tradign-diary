@@ -24,6 +24,8 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { ImageAnnotator, Annotation } from '@/components/upload/ImageAnnotator';
 import { BrokerSelect } from '@/components/upload/BrokerSelect';
 import { runOCR, type OCRResult } from '@/utils/ocrPipeline';
+import { usePageMeta } from '@/hooks/usePageMeta';
+import { pageMeta } from '@/utils/seoHelpers';
 
 interface ExtractedTrade {
   symbol: string;
@@ -53,6 +55,7 @@ interface ExtractedTrade {
 
 const Upload = () => {
   useKeyboardShortcuts();
+  usePageMeta(pageMeta.upload);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

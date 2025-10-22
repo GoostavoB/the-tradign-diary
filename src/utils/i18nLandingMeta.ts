@@ -8,6 +8,10 @@ export interface LandingMeta {
   ogImage: string;
   lang: string;
   alternates: { lang: string; url: string }[];
+  geo?: {
+    region: string;
+    placename: string;
+  };
 }
 
 export const landingMeta: Record<string, LandingMeta> = {
@@ -28,6 +32,10 @@ export const landingMeta: Record<string, LandingMeta> = {
       { lang: 'vi', url: 'https://www.thetradingdiary.com/vi' },
       { lang: 'x-default', url: 'https://www.thetradingdiary.com/' },
     ],
+    geo: {
+      region: 'US',
+      placename: 'United States'
+    }
   },
   pt: {
     title: 'Diário de Trading #1 para Cripto | Analise Cada Trade com IA',
@@ -46,6 +54,10 @@ export const landingMeta: Record<string, LandingMeta> = {
       { lang: 'vi', url: 'https://www.thetradingdiary.com/vi' },
       { lang: 'x-default', url: 'https://www.thetradingdiary.com/' },
     ],
+    geo: {
+      region: 'BR',
+      placename: 'Brazil'
+    }
   },
   es: {
     title: 'Diario de Trading #1 para Cripto | Analiza Cada Trade con IA',
@@ -64,6 +76,10 @@ export const landingMeta: Record<string, LandingMeta> = {
       { lang: 'vi', url: 'https://www.thetradingdiary.com/vi' },
       { lang: 'x-default', url: 'https://www.thetradingdiary.com/' },
     ],
+    geo: {
+      region: 'ES',
+      placename: 'Spain'
+    }
   },
   ar: {
     title: 'أفضل مجلة تداول للعملات الرقمية | تتبع وتحليل كل صفقة بالذكاء الاصطناعي',
@@ -82,6 +98,10 @@ export const landingMeta: Record<string, LandingMeta> = {
       { lang: 'vi', url: 'https://www.thetradingdiary.com/vi' },
       { lang: 'x-default', url: 'https://www.thetradingdiary.com/' },
     ],
+    geo: {
+      region: 'AE',
+      placename: 'United Arab Emirates'
+    }
   },
   vi: {
     title: 'Nhật Ký Trading Crypto #1 | Theo Dõi & Phân Tích Mọi Giao Dịch với AI',
@@ -100,6 +120,10 @@ export const landingMeta: Record<string, LandingMeta> = {
       { lang: 'vi', url: 'https://www.thetradingdiary.com/vi' },
       { lang: 'x-default', url: 'https://www.thetradingdiary.com/' },
     ],
+    geo: {
+      region: 'VN',
+      placename: 'Vietnam'
+    }
   },
 };
 
@@ -139,6 +163,12 @@ export const updateLandingMeta = (langCode: string) => {
   updateMetaTag('twitter:title', meta.ogTitle);
   updateMetaTag('twitter:description', meta.ogDescription);
   updateMetaTag('twitter:image', meta.ogImage);
+
+  // Update geo-targeting meta tags if available
+  if (meta.geo) {
+    updateMetaTag('geo.region', meta.geo.region);
+    updateMetaTag('geo.placename', meta.geo.placename);
+  }
 
   // Update canonical link
   let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
