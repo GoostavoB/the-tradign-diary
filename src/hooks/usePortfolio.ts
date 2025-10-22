@@ -9,17 +9,36 @@ import { getStartDateForRange } from '@/utils/timeframeReturns';
  * Enhanced portfolio data hook with comprehensive metrics
  */
 export const usePortfolio = (range: TimeRange = '1M') => {
-  // Fetch holdings
+  // Fetch holdings with category data from assets table
   const { data: holdings, isLoading: holdingsLoading } = useQuery({
     queryKey: ['spot_holdings'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: holdingsData, error } = await supabase
         .from('spot_holdings')
         .select('*')
         .order('token_symbol');
       
       if (error) throw error;
-      return data || [];
+      
+      // Fetch asset metadata for each holding
+      const enrichedHoldings = await Promise.all(
+        (holdingsData || []).map(async (holding) => {
+          const { data: assetData } = await supabase
+            .from('assets')
+            .select('primary_category, categories_json, coingecko_id')
+            .eq('symbol', holding.token_symbol)
+            .single();
+          
+          return {
+            ...holding,
+            primary_category: assetData?.primary_category,
+            categories_json: assetData?.categories_json,
+            coingecko_id: assetData?.coingecko_id,
+          };
+        })
+      );
+      
+      return enrichedHoldings;
     },
   });
 

@@ -28,3 +28,6 @@ schedule = "*/15 * * * *"  # Every 15 minutes
 
 [functions.economic-calendar-proxy]
 verify_jwt = true
+
+[functions.sync-coingecko-categories]
+verify_jwt = true
