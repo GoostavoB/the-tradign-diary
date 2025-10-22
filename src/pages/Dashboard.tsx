@@ -58,6 +58,7 @@ const SetupManager = lazy(() => import('@/components/SetupManager').then(m => ({
 const DrawdownAnalysis = lazy(() => import('@/components/DrawdownAnalysis').then(m => ({ default: m.DrawdownAnalysis })));
 const TradingHeatmap = lazy(() => import('@/components/TradingHeatmap').then(m => ({ default: m.TradingHeatmap })));
 const AIAssistant = lazy(() => import('@/components/AIAssistant').then(m => ({ default: m.AIAssistant })));
+import { TourCTAButton } from '@/components/tour/TourCTAButton';
 
 interface TradeStats {
   total_pnl: number;
@@ -985,6 +986,9 @@ const Dashboard = () => {
           onRemoveWidget={removeWidget}
           activeWidgets={activeWidgets}
         />
+        
+        {/* Tour CTA Button */}
+        <TourCTAButton />
       </div>
     </AppLayout>
   );
