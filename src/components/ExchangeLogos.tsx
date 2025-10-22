@@ -3,7 +3,7 @@ import { ExchangeCarousel } from "./ExchangeCarousel";
 
 const ExchangeLogos = () => {
   return (
-    <section className="py-16 md:py-20 px-6 relative overflow-hidden bg-background/50">
+    <section className="py-16 md:py-20 px-6 relative overflow-hidden">
       <div className="absolute inset-0 border-t border-b border-primary/10"></div>
       
       <div className="container mx-auto max-w-6xl relative z-10">
