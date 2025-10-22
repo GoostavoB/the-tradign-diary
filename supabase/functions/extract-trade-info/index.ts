@@ -265,10 +265,11 @@ serve(async (req) => {
         }
       } catch (parseError) {
         console.error('JSON parse error:', parseError, 'Raw response:', aiResponse);
-        throw new Error('Failed to parse AI response. The model returned invalid JSON.');
+        // Do not fail here; fallback to deep vision model for full extraction
+        trades = [] as any[];
       }
 
-      // If lite extraction was incomplete, fall through to deep route
+      // If lite extraction was incomplete or parsing failed, fall through to deep route
       if (!Array.isArray(trades) || trades.length < estimatedTradeCount) {
         console.log('🔄 Falling back to deep vision model for complete extraction');
         route = 'deep';
