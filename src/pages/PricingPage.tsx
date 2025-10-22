@@ -162,15 +162,21 @@ const PricingPage = () => {
 
       {/* Hero Section */}
       <section ref={heroRef} className="relative py-32 md:py-40 px-6 overflow-hidden">
-        <div className="container relative mx-auto max-w-4xl text-center">
+        <div className="container relative mx-auto max-w-4xl text-center z-50">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1 
-              className="text-5xl md:text-7xl font-bold mb-6 leading-tight tracking-tight" 
-              style={{ letterSpacing: '-0.02em', maxWidth: '64ch', margin: '0 auto' }}
+              className="text-6xl md:text-8xl font-bold mb-6 leading-tight tracking-tight" 
+              style={{ 
+                letterSpacing: '-0.02em', 
+                maxWidth: '64ch', 
+                margin: '0 auto',
+                textShadow: '0 2px 20px rgba(0,0,0,0.5)',
+                color: 'rgba(255,255,255,0.95)'
+              }}
             >
               {t('pricing.hero.title')}
             </h1>

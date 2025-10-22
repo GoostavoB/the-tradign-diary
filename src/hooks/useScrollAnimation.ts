@@ -12,7 +12,7 @@ interface UseScrollAnimationOptions {
  */
 export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   const {
-    threshold = 0.4,
+    threshold = 0.2,
     rootMargin = '0px',
     triggerOnce = true,
   } = options;

@@ -6,9 +6,10 @@ interface GlassCardProps {
   className?: string;
   elevated?: boolean;
   interactive?: boolean;
+  style?: React.CSSProperties;
 }
 
-export const GlassCard = ({ children, className = '', elevated = false, interactive = true }: GlassCardProps) => {
+export const GlassCard = ({ children, className = '', elevated = false, interactive = true, style }: GlassCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
   const [isHovered, setIsHovered] = useState(false);
@@ -43,14 +44,15 @@ export const GlassCard = ({ children, className = '', elevated = false, interact
     };
   }, [interactive]);
 
-  const tiltX = interactive && isHovered ? (mousePosition.y - 0.5) * -4 : 0;
-  const tiltY = interactive && isHovered ? (mousePosition.x - 0.5) * 4 : 0;
+  const tiltX = interactive && isHovered ? (mousePosition.y - 0.5) * -6 : 0;
+  const tiltY = interactive && isHovered ? (mousePosition.x - 0.5) * 6 : 0;
 
   return (
     <motion.div
       ref={cardRef}
       className={`glass-card relative overflow-hidden ${elevated ? 'elevated' : ''} ${className}`}
       style={{
+        ...style,
         transform: `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
         transition: 'transform 0.18s cubic-bezier(0.22, 1, 0.36, 1)',
       }}
@@ -58,9 +60,9 @@ export const GlassCard = ({ children, className = '', elevated = false, interact
       {/* Cursor proximity lighting */}
       {interactive && isHovered && (
         <div
-          className="pointer-events-none absolute inset-0 opacity-20 transition-opacity duration-300"
+          className="pointer-events-none absolute inset-0 opacity-30 transition-opacity duration-300"
           style={{
-            background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(255, 255, 255, 0.15) 0%, transparent 50%)`,
+            background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(255, 255, 255, 0.2) 0%, transparent 50%)`,
           }}
         />
       )}

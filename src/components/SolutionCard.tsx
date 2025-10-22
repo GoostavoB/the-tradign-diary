@@ -15,7 +15,7 @@ interface SolutionCardProps {
 }
 
 export const SolutionCard = ({ solution, index }: SolutionCardProps) => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.4, triggerOnce: true });
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.2, triggerOnce: true });
   const Icon = solution.icon;
   const isEven = index % 2 === 0;
   const [isHovered, setIsHovered] = useState(false);
@@ -28,16 +28,18 @@ export const SolutionCard = ({ solution, index }: SolutionCardProps) => {
       <motion.div
         initial={{ 
           opacity: 0, 
-          x: isEven ? -20 : 20,
-          y: 10
+          x: isEven ? -40 : 40,
+          y: 10,
+          scale: 0.9
         }}
         animate={{ 
           opacity: isVisible ? 1 : 0, 
-          x: isVisible ? 0 : (isEven ? -20 : 20),
-          y: isVisible ? 0 : 10
+          x: isVisible ? 0 : (isEven ? -40 : 40),
+          y: isVisible ? 0 : 10,
+          scale: isVisible ? 1 : 0.9
         }}
         transition={{ 
-          duration: 0.28,
+          duration: 0.45,
           delay: 0.09 * (index % 3),
           ease: [0.22, 1, 0.36, 1]
         }}

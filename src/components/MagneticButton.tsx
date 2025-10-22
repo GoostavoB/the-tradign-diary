@@ -20,7 +20,7 @@ export const MagneticButton = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const springConfig = { stiffness: 240, damping: 22 };
+  const springConfig = { stiffness: 200, damping: 18 };
   const x = useSpring(0, springConfig);
   const y = useSpring(0, springConfig);
 
@@ -37,12 +37,12 @@ export const MagneticButton = ({
       const distanceY = e.clientY - centerY;
       const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
       
-      const pullRadius = 6;
+      const pullRadius = 12;
       
       if (distance < rect.width / 2 + pullRadius) {
         const strength = 1 - distance / (rect.width / 2 + pullRadius);
-        x.set(distanceX * strength * 0.3);
-        y.set(distanceY * strength * 0.3);
+        x.set(distanceX * strength * 0.5);
+        y.set(distanceY * strength * 0.5);
       } else {
         x.set(0);
         y.set(0);
@@ -88,7 +88,7 @@ export const MagneticButton = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             style={{
-              background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0%, transparent 60%)',
+              background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.08) 0%, transparent 60%)',
             }}
           />
         )}

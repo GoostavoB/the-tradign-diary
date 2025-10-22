@@ -47,7 +47,10 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
     >
       <GlassCard 
         elevated={plan.popular}
-        className={`p-8 h-full flex flex-col ${plan.popular ? 'scale-105' : ''}`}
+        className={`p-8 h-full flex flex-col relative ${plan.popular ? 'scale-105' : ''}`}
+        style={plan.popular ? {
+          boxShadow: 'inset 0 -2px 0 0 rgba(255,255,255,0.15), 0 0 60px rgba(200, 220, 240, 0.08), 0 24px 70px -15px rgba(0, 0, 0, 0.5)'
+        } : undefined}
       >
         {plan.popular && (
           <motion.div

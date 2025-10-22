@@ -90,9 +90,9 @@ const fragmentShader = `
   void main() {
     vec2 uv = vUv;
     
-    // Perlin noise field with slow drift
+  // Perlin noise field with slow drift
     vec3 pos = vec3(uv * 2.0, uTime * 0.02);
-    float noise = snoise(pos) * 0.006;
+    float noise = snoise(pos) * 0.012;
     
     // Moving light sources
     vec2 light1 = vec2(0.5 + sin(uTime * 0.1) * 0.3, 0.5 + cos(uTime * 0.15) * 0.3);
@@ -101,7 +101,7 @@ const fragmentShader = `
     float dist1 = length(uv - light1);
     float dist2 = length(uv - light2);
     
-    float light = (1.0 - dist1) * 0.1 + (1.0 - dist2) * 0.1;
+    float light = (1.0 - dist1) * 0.18 + (1.0 - dist2) * 0.18;
     
     // Base color - near-black with blue-green undertone
     vec3 baseColor = vec3(0.02, 0.025, 0.03);
