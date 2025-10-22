@@ -12,6 +12,7 @@ import { MobileNav } from '@/components/mobile/MobileNav';
 import { QuickAddTrade } from '@/components/mobile/QuickAddTrade';
 import { InstallPrompt } from '@/components/mobile/InstallPrompt';
 import { GamificationSidebar } from '@/components/gamification/GamificationSidebar';
+import { GuidedTour } from '@/components/tour/GuidedTour';
 import { Button } from '@/components/ui/button';
 import { Zap, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,8 +30,11 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <SidebarProvider defaultOpen={!isCollapsed} onOpenChange={setIsCollapsed}>
       <ThemeUnlockNotification />
+      <GuidedTour />
       <div className="min-h-screen flex w-full mobile-safe overflow-hidden">
-        <AppSidebar />
+        <div data-tour="sidebar-menu">
+          <AppSidebar />
+        </div>
         <div className="flex-1 flex flex-col mobile-safe overflow-hidden h-screen relative">
           {/* Desktop Header */}
           <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6 sticky top-0 z-30">
@@ -43,8 +47,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             <div className="flex items-center gap-2">
               <KeyboardShortcutsHelp />
               <LanguageToggle />
-              <ThemeStudio />
-              <UserMenu />
+              <div data-tour="theme-toggle">
+                <ThemeStudio />
+              </div>
+              <div data-tour="settings">
+                <UserMenu />
+              </div>
             </div>
           </header>
 

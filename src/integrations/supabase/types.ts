@@ -2798,6 +2798,7 @@ export type Database = {
           created_at: string | null
           email_notifications: boolean | null
           event_reminders: boolean | null
+          guided_tour_completed: boolean | null
           id: string
           initial_investment: number | null
           layout_json: Json | null
@@ -2817,6 +2818,7 @@ export type Database = {
           created_at?: string | null
           email_notifications?: boolean | null
           event_reminders?: boolean | null
+          guided_tour_completed?: boolean | null
           id?: string
           initial_investment?: number | null
           layout_json?: Json | null
@@ -2836,6 +2838,7 @@ export type Database = {
           created_at?: string | null
           email_notifications?: boolean | null
           event_reminders?: boolean | null
+          guided_tour_completed?: boolean | null
           id?: string
           initial_investment?: number | null
           layout_json?: Json | null

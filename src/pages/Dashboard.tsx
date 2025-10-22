@@ -844,18 +844,20 @@ const Dashboard = () => {
 
         {/* Customize Dashboard Controls - Only show on Overview tab */}
         {!loading && stats && stats.total_trades > 0 && activeTab === 'overview' && (
-          <CustomizeDashboardControls
-            isCustomizing={isCustomizing}
-            hasChanges={hasLayoutChanges}
-            onStartCustomize={handleStartCustomize}
-            onSave={handleSaveLayout}
-            onCancel={handleCancelCustomize}
-            onReset={resetLayout}
-            onAddWidget={() => setShowWidgetLibrary(true)}
-            columnCount={selectedColumnCount}
-            onColumnCountChange={updateColumnCount}
-            widgetCount={positions.length}
-          />
+          <div data-tour="dashboard-customization">
+            <CustomizeDashboardControls
+              isCustomizing={isCustomizing}
+              hasChanges={hasLayoutChanges}
+              onStartCustomize={handleStartCustomize}
+              onSave={handleSaveLayout}
+              onCancel={handleCancelCustomize}
+              onReset={resetLayout}
+              onAddWidget={() => setShowWidgetLibrary(true)}
+              columnCount={selectedColumnCount}
+              onColumnCountChange={updateColumnCount}
+              widgetCount={positions.length}
+            />
+          </div>
         )}
 
         {loading ? (

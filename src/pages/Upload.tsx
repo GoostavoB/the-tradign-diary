@@ -733,7 +733,13 @@ const Upload = () => {
         toast.success(`Successfully saved ${extractedTrades.length} trade(s)!`);
         
         // Wait for success animation then navigate
-        setTimeout(() => {
+        setTimeout(async () => {
+          // Mark that user completed first upload - trigger guided tour
+          await supabase
+            .from('user_settings')
+            .update({ onboarding_completed: true })
+            .eq('user_id', user.id);
+          
           navigate('/dashboard');
         }, 1500);
       }

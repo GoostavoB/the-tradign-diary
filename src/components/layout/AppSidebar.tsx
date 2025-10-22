@@ -320,9 +320,12 @@ export function AppSidebar() {
                       const isHighlighted = searchQuery !== '' && itemMatchesSearch(item);
                       const itemIsFavorite = isFavorite(item.url);
                       
-                      return (
+                       return (
                         <SidebarMenuItem key={item.title}>
-                          <div className="flex items-center group/item w-full">
+                          <div 
+                            className="flex items-center group/item w-full"
+                            {...(item.url === '/market-data' ? { 'data-tour': 'market-data' } : {})}
+                          >
                             <SidebarMenuButton asChild tooltip={item.title} className="flex-1">
                               <NavLink 
                                 to={item.url} 
