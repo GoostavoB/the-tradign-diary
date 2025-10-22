@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import dashboardScreenshot from "@/assets/dashboard-screenshot.png";
+import { useTranslation } from "react-i18next";
 
 const DashboardShowcase = () => {
   const navigate = useNavigate();
   const [isImageOpen, setIsImageOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <section className="py-20 md:py-28 px-6 relative overflow-hidden bg-gradient-to-b from-background via-gray-900/30 to-background">
@@ -27,13 +29,16 @@ const DashboardShowcase = () => {
             className="space-y-6 lg:pr-8 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-              Other journals show numbers.{" "}
-              <span className="text-gradient-primary">This one shows progress.</span>
+              {t('landing.dashboardShowcase.title').split('This one shows progress.')[0]}
+              <span className="text-gradient-primary">
+                {t('landing.dashboardShowcase.title').includes('This one shows progress.') 
+                  ? 'This one shows progress.' 
+                  : t('landing.dashboardShowcase.title').split('.').pop()}
+              </span>
             </h2>
             
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl">
-              Every feature was designed by active traders to help you understand your decisions, 
-              not just record them. It's not a tool, it's your trading coach.
+              {t('landing.dashboardShowcase.subtitle')}
             </p>
             
             <Button 
@@ -41,7 +46,7 @@ const DashboardShowcase = () => {
               variant="outline"
               className="group border-primary/30 hover:bg-primary/10 hover:border-primary/50 transition-all"
             >
-              See it in action
+              {t('landing.dashboardShowcase.cta')}
               <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>

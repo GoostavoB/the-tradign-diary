@@ -163,17 +163,109 @@
       "tradesLogged": "Operaciones Registradas",
       "satisfaction": "Satisfacción"
     },
+    "dashboardShowcase": {
+      "title": "Otros journals muestran números. Este muestra progreso.",
+      "subtitle": "Cada función fue diseñada por traders activos para ayudarte a entender tus decisiones, no solo registrarlas. No es una herramienta, es tu coach de trading.",
+      "cta": "Verlo en acción"
+    },
     "features": {
-      "title": "Todo Lo Que Necesitas Para Dominar Tu Trading",
-      "subtitle": "Herramientas potentes diseñadas para traders serios"
+      "title": "Todo Lo Que Necesitas Para Operar Mejor",
+      "subtitle": "Funciones potentes diseñadas para ayudarte a tomar mejores decisiones.",
+      "smartLogging": {
+        "title": "Registro Inteligente",
+        "description": "Añade operaciones en segundos con detalles, capturas y notas."
+      },
+      "autoImports": {
+        "title": "Importación Automática",
+        "description": "Conecta tu exchange o broker para sincronización instantánea."
+      },
+      "advancedAnalytics": {
+        "title": "Análisis Avanzados",
+        "description": "Visualiza tasas de éxito, ratios de riesgo y rendimiento de estrategias."
+      },
+      "tagFilter": {
+        "title": "Etiqueta y Filtra Todo",
+        "description": "Rastrea setups, emociones y errores con métricas personalizadas."
+      },
+      "mobileFriendly": {
+        "title": "Amigable con Móviles",
+        "description": "Accede a tu journal en cualquier lugar: teléfono, tablet o escritorio."
+      }
     },
     "testimonials": {
-      "title": "Confiado Por Traders En Todo El Mundo",
-      "subtitle": "Mira lo que nuestros usuarios dicen"
+      "title": "Confiado por Miles de Traders",
+      "subtitle": "Resultados reales de traders reales.",
+      "alex": {
+        "name": "Alex Chen",
+        "role": "Day Trader",
+        "text": "La tasa de éxito pasó del 52% al 68% en 3 meses."
+      },
+      "sarah": {
+        "name": "Sarah Mitchell",
+        "role": "Inversora Crypto",
+        "text": "La función de etiquetas emocionales es genial... Mi consistencia nunca ha sido mejor."
+      },
+      "marcus": {
+        "name": "Marcus Rodriguez",
+        "role": "Swing Trader",
+        "text": "La extracción con IA me ahorra 2 horas por semana... Vale cada centavo."
+      }
+    },
+    "exchangeLogos": {
+      "title": "Construido para traders crypto que toman el rendimiento en serio.",
+      "subtitle": "Ya sea que hagas scalping, day trading o swing, rastrea lo que funciona y lo que te cuesta."
     },
     "pricing": {
-      "title": "Elige Tu Plan",
-      "subtitle": "Comienza gratis, actualiza cuando estés listo",
+      "title": "Precios Simples y Transparentes",
+      "subtitle": "Elige el plan que se ajuste a tu estilo de trading. Actualiza o degrada en cualquier momento.",
+      "mostPopular": "Más Popular",
+      "starter": {
+        "name": "Starter",
+        "price": "Gratis",
+        "period": "para siempre",
+        "description": "Perfecto para principiantes",
+        "cta": "Comenzar Gratis",
+        "features": {
+          "trades": "Hasta 50 operaciones al mes",
+          "analytics": "Análisis y gráficos básicos",
+          "manualEntry": "Entrada manual de operaciones",
+          "retention": "Retención de datos de 7 días",
+          "support": "Soporte por email"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$19",
+        "period": "por mes",
+        "description": "Para traders serios que necesitan más",
+        "cta": "Iniciar Prueba Gratuita",
+        "features": {
+          "unlimited": "Operaciones ilimitadas",
+          "advancedAnalytics": "Análisis avanzados y pronósticos",
+          "aiExtraction": "Extracción de operaciones con IA",
+          "unlimitedRetention": "Retención ilimitada de datos",
+          "prioritySupport": "Soporte prioritario",
+          "customSetups": "Setups y etiquetas personalizadas",
+          "exportReports": "Exportar informes"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "price": "$49",
+        "period": "por mes",
+        "description": "Para traders profesionales y equipos",
+        "cta": "Contactar Ventas",
+        "features": {
+          "everythingPro": "Todo en Pro",
+          "multiAccount": "Seguimiento de múltiples cuentas",
+          "apiAccess": "Acceso API",
+          "whiteLabel": "Informes de marca blanca",
+          "accountManager": "Gerente de cuenta dedicado",
+          "earlyAccess": "Acceso anticipado a funciones",
+          "teamCollaboration": "Herramientas de colaboración en equipo"
+        }
+      },
+      "trialNote": "Todos los planes incluyen prueba gratuita de 14 días • Sin tarjeta de crédito • Cancela en cualquier momento",
       "free": "Gratis",
       "pro": "Pro",
       "monthly": "Mensual",
@@ -207,6 +299,7 @@
     },
     "footer": {
       "tagline": "La plataforma completa de diario de trading",
+      "madeWith": "Hecho con ❤️ para traders en todo el mundo",
       "product": "Producto",
       "features": "Características",
       "pricing": "Precios",

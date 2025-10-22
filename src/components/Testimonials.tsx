@@ -1,32 +1,34 @@
 import { Star, CheckCircle } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { motion } from "framer-motion";
-
-const testimonials = [
-  {
-    name: "Alex Chen",
-    role: "Day Trader",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-    rating: 5,
-    text: "Win rate went from 52% to 68% in 3 months."
-  },
-  {
-    name: "Sarah Mitchell",
-    role: "Crypto Investor",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    rating: 5,
-    text: "The emotional tags feature is genius... My consistency has never been better."
-  },
-  {
-    name: "Marcus Rodriguez",
-    role: "Swing Trader",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
-    rating: 5,
-    text: "AI extraction saves me 2 hours per week... Worth every penny."
-  }
-];
+import { useTranslation } from "react-i18next";
 
 const Testimonials = () => {
+  const { t } = useTranslation();
+
+  const testimonials = [
+    {
+      nameKey: "landing.testimonials.alex.name",
+      roleKey: "landing.testimonials.alex.role",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+      rating: 5,
+      textKey: "landing.testimonials.alex.text",
+    },
+    {
+      nameKey: "landing.testimonials.sarah.name",
+      roleKey: "landing.testimonials.sarah.role",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+      rating: 5,
+      textKey: "landing.testimonials.sarah.text",
+    },
+    {
+      nameKey: "landing.testimonials.marcus.name",
+      roleKey: "landing.testimonials.marcus.role",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+      rating: 5,
+      textKey: "landing.testimonials.marcus.text",
+    },
+  ];
   return (
     <section className="py-20 md:py-28 px-6">
       <div className="container mx-auto max-w-6xl">
@@ -38,10 +40,12 @@ const Testimonials = () => {
           className="text-center mb-16 space-y-4"
         >
           <h2 className="text-3xl md:text-4xl font-bold leading-tight">
-            Trusted by <span className="text-gradient-primary">Thousands</span> of Traders
+            {t('landing.testimonials.title').split('Thousands')[0]}
+            <span className="text-gradient-primary">Thousands</span>
+            {t('landing.testimonials.title').split('Thousands')[1]}
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real results from real traders.
+            {t('landing.testimonials.subtitle')}
           </p>
         </motion.div>
 
@@ -55,18 +59,18 @@ const Testimonials = () => {
               viewport={{ once: true }}
             >
               <GlassCard className="p-6 h-full flex flex-col">
-                <div className="flex items-start gap-3 mb-4">
+                 <div className="flex items-start gap-3 mb-4">
                   <img
                     src={testimonial.image}
-                    alt={testimonial.name}
+                    alt={t(testimonial.nameKey)}
                     className="w-12 h-12 rounded-full flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h4 className="font-semibold text-sm truncate">{testimonial.name}</h4>
+                      <h4 className="font-semibold text-sm truncate">{t(testimonial.nameKey)}</h4>
                       <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
                     </div>
-                    <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                    <p className="text-xs text-muted-foreground">{t(testimonial.roleKey)}</p>
                   </div>
                 </div>
 
@@ -77,7 +81,7 @@ const Testimonials = () => {
                 </div>
 
                 <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                  "{testimonial.text}"
+                  "{t(testimonial.textKey)}"
                 </p>
               </GlassCard>
             </motion.div>

@@ -2,71 +2,75 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const plans = [
-  {
-    name: "Starter",
-    price: "Free",
-    period: "forever",
-    description: "Perfect for beginners getting started",
-    features: [
-      "Up to 50 trades per month",
-      "Basic analytics & charts",
-      "Manual trade entry",
-      "7-day data retention",
-      "Email support",
-    ],
-    cta: "Get Started Free",
-    popular: false,
-  },
-  {
-    name: "Pro",
-    price: "$19",
-    period: "per month",
-    description: "For serious traders who need more",
-    features: [
-      "Unlimited trades",
-      "Advanced analytics & forecasting",
-      "AI-powered trade extraction",
-      "Unlimited data retention",
-      "Priority support",
-      "Custom setups & tags",
-      "Export reports",
-    ],
-    cta: "Start Free Trial",
-    popular: true,
-  },
-  {
-    name: "Elite",
-    price: "$49",
-    period: "per month",
-    description: "For professional traders & teams",
-    features: [
-      "Everything in Pro",
-      "Multi-account tracking",
-      "API access",
-      "White-label reports",
-      "Dedicated account manager",
-      "Early access to features",
-      "Team collaboration tools",
-    ],
-    cta: "Contact Sales",
-    popular: false,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const plans = [
+    {
+      nameKey: "landing.pricing.starter.name",
+      priceKey: "landing.pricing.starter.price",
+      periodKey: "landing.pricing.starter.period",
+      descriptionKey: "landing.pricing.starter.description",
+      featuresKeys: [
+        "landing.pricing.starter.features.trades",
+        "landing.pricing.starter.features.analytics",
+        "landing.pricing.starter.features.manualEntry",
+        "landing.pricing.starter.features.retention",
+        "landing.pricing.starter.features.support",
+      ],
+      ctaKey: "landing.pricing.starter.cta",
+      popular: false,
+    },
+    {
+      nameKey: "landing.pricing.pro.name",
+      priceKey: "landing.pricing.pro.price",
+      periodKey: "landing.pricing.pro.period",
+      descriptionKey: "landing.pricing.pro.description",
+      featuresKeys: [
+        "landing.pricing.pro.features.unlimited",
+        "landing.pricing.pro.features.advancedAnalytics",
+        "landing.pricing.pro.features.aiExtraction",
+        "landing.pricing.pro.features.unlimitedRetention",
+        "landing.pricing.pro.features.prioritySupport",
+        "landing.pricing.pro.features.customSetups",
+        "landing.pricing.pro.features.exportReports",
+      ],
+      ctaKey: "landing.pricing.pro.cta",
+      popular: true,
+    },
+    {
+      nameKey: "landing.pricing.elite.name",
+      priceKey: "landing.pricing.elite.price",
+      periodKey: "landing.pricing.elite.period",
+      descriptionKey: "landing.pricing.elite.description",
+      featuresKeys: [
+        "landing.pricing.elite.features.everythingPro",
+        "landing.pricing.elite.features.multiAccount",
+        "landing.pricing.elite.features.apiAccess",
+        "landing.pricing.elite.features.whiteLabel",
+        "landing.pricing.elite.features.accountManager",
+        "landing.pricing.elite.features.earlyAccess",
+        "landing.pricing.elite.features.teamCollaboration",
+      ],
+      ctaKey: "landing.pricing.elite.cta",
+      popular: false,
+    },
+  ];
 
   return (
     <section className="py-16 md:py-20 px-6">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12 md:mb-16 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Simple, <span className="text-gradient-primary">Transparent</span> Pricing
+            {t('landing.pricing.title').split('Transparent')[0]}
+            <span className="text-gradient-primary">Transparent</span>
+            {t('landing.pricing.title').split('Transparent')[1]}
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Choose the plan that fits your trading style. Upgrade or downgrade anytime.
+            {t('landing.pricing.subtitle')}
           </p>
         </div>
 
@@ -82,18 +86,18 @@ const Pricing = () => {
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full flex items-center gap-1 shadow-md">
                   <Sparkles size={12} />
-                  Most Popular
+                  {t('landing.pricing.mostPopular')}
                 </div>
               )}
 
               <div className="mb-5">
-                <h3 className="text-xl md:text-2xl font-bold mb-1.5">{plan.name}</h3>
+                <h3 className="text-xl md:text-2xl font-bold mb-1.5">{t(plan.nameKey)}</h3>
                 <p className="text-muted-foreground text-xs md:text-sm mb-3">
-                  {plan.description}
+                  {t(plan.descriptionKey)}
                 </p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl md:text-4xl font-bold" style={{ color: 'hsl(var(--primary))' }}>{plan.price}</span>
-                  <span className="text-sm text-muted-foreground">/{plan.period}</span>
+                  <span className="text-3xl md:text-4xl font-bold" style={{ color: 'hsl(var(--primary))' }}>{t(plan.priceKey)}</span>
+                  <span className="text-sm text-muted-foreground">/{t(plan.periodKey)}</span>
                 </div>
               </div>
 
@@ -106,11 +110,11 @@ const Pricing = () => {
                 }`}
                 variant={plan.popular ? "default" : "outline"}
               >
-                {plan.cta}
+                {t(plan.ctaKey)}
               </Button>
 
               <ul className="space-y-2.5">
-                {plan.features.map((feature, i) => (
+                {plan.featuresKeys.map((featureKey, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <Check
                       size={18}
@@ -118,7 +122,7 @@ const Pricing = () => {
                         plan.popular ? "text-primary" : "text-foreground"
                       }`}
                     />
-                    <span className="text-xs md:text-sm text-muted-foreground leading-relaxed">{feature}</span>
+                    <span className="text-xs md:text-sm text-muted-foreground leading-relaxed">{t(featureKey)}</span>
                   </li>
                 ))}
               </ul>
@@ -127,7 +131,7 @@ const Pricing = () => {
         </div>
 
         <p className="text-center text-muted-foreground text-xs md:text-sm mt-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          All plans include 14-day free trial • No credit card required • Cancel anytime
+          {t('landing.pricing.trialNote')}
         </p>
       </div>
     </section>

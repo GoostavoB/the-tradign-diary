@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { ExchangeCarousel } from "./ExchangeCarousel";
+import { useTranslation } from "react-i18next";
 
 const ExchangeLogos = () => {
+  const { t } = useTranslation();
+  
   return (
     <section className="py-16 md:py-20 px-6 relative overflow-hidden">
       <div className="absolute inset-0 border-t border-b border-primary/10"></div>
@@ -15,11 +18,13 @@ const ExchangeLogos = () => {
           className="text-center space-y-8"
         >
           <h2 className="text-2xl md:text-3xl font-bold">
-            Built for <span className="text-gradient-primary">crypto traders</span> who take performance seriously.
+            {t('landing.exchangeLogos.title').split('crypto traders')[0]}
+            <span className="text-gradient-primary">crypto traders</span>
+            {t('landing.exchangeLogos.title').split('crypto traders')[1]}
           </h2>
           
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Whether you scalp, day trade, or swing — track what's working and what's costing you.
+            {t('landing.exchangeLogos.subtitle')}
           </p>
 
           {/* Premium Exchange Carousel */}

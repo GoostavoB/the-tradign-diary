@@ -1,36 +1,38 @@
-import { Upload, Zap, TrendingUp, Target, Smartphone } from "lucide-react";
+import { Upload, Repeat, TrendingUp, Filter, Smartphone } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { motion } from "framer-motion";
-
-const features = [
-  {
-    icon: Upload,
-    title: "Smart Trade Logging",
-    description: "Add trades in seconds with details, screenshots, and notes."
-  },
-  {
-    icon: Zap,
-    title: "Auto Imports",
-    description: "Connect your exchange or broker for instant sync."
-  },
-  {
-    icon: TrendingUp,
-    title: "Advanced Analytics",
-    description: "Visualize win rates, risk ratios, and strategy performance."
-  },
-  {
-    icon: Target,
-    title: "Tag and Filter Everything",
-    description: "Track setups, emotions, and mistakes with custom metrics."
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile Friendly",
-    description: "Access your journal anywhere — phone, tablet, or desktop."
-  }
-];
+import { useTranslation } from "react-i18next";
 
 const Features = () => {
+  const { t } = useTranslation();
+
+  const features = [
+    {
+      icon: <Upload className="w-6 h-6" />,
+      titleKey: "landing.features.smartLogging.title",
+      descriptionKey: "landing.features.smartLogging.description",
+    },
+    {
+      icon: <Repeat className="w-6 h-6" />,
+      titleKey: "landing.features.autoImports.title",
+      descriptionKey: "landing.features.autoImports.description",
+    },
+    {
+      icon: <TrendingUp className="w-6 h-6" />,
+      titleKey: "landing.features.advancedAnalytics.title",
+      descriptionKey: "landing.features.advancedAnalytics.description",
+    },
+    {
+      icon: <Filter className="w-6 h-6" />,
+      titleKey: "landing.features.tagFilter.title",
+      descriptionKey: "landing.features.tagFilter.description",
+    },
+    {
+      icon: <Smartphone className="w-6 h-6" />,
+      titleKey: "landing.features.mobileFriendly.title",
+      descriptionKey: "landing.features.mobileFriendly.description",
+    },
+  ];
   return (
     <section className="py-20 md:py-28 px-6">
       <div className="container mx-auto max-w-6xl">
@@ -42,10 +44,11 @@ const Features = () => {
           className="text-center mb-16 space-y-4"
         >
           <h2 className="text-3xl md:text-4xl font-bold leading-tight">
-            Everything You Need to <span className="text-gradient-primary">Trade Better</span>
+            {t('landing.features.title').split('Trade Better')[0]}
+            <span className="text-gradient-primary">Trade Better</span>
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Powerful features designed to help you make better decisions.
+            {t('landing.features.subtitle')}
           </p>
         </motion.div>
 
@@ -63,12 +66,12 @@ const Features = () => {
                 className="p-5 group hover:shadow-lg transition-all duration-300 h-full"
                 hover
               >
-                <div className="mb-3 inline-block p-2.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                  <feature.icon className="h-5 w-5 text-primary" />
+                 <div className="mb-3 inline-block p-2.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  {feature.icon}
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <h3 className="text-lg font-semibold mb-2">{t(feature.titleKey)}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  {feature.description}
+                  {t(feature.descriptionKey)}
                 </p>
               </GlassCard>
             </motion.div>
@@ -88,12 +91,12 @@ const Features = () => {
                 className="p-5 group hover:shadow-lg transition-all duration-300 h-full"
                 hover
               >
-                <div className="mb-3 inline-block p-2.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                  <feature.icon className="h-5 w-5 text-primary" />
+                 <div className="mb-3 inline-block p-2.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  {feature.icon}
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <h3 className="text-lg font-semibold mb-2">{t(feature.titleKey)}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  {feature.description}
+                  {t(feature.descriptionKey)}
                 </p>
               </GlassCard>
             </motion.div>

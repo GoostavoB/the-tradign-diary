@@ -111,7 +111,7 @@ const Footer = () => {
             © 2025 The Trading Diary. {t('landing.footer.allRightsReserved')}
           </p>
           <p className="text-muted-foreground text-xs md:text-sm">
-            Made with ❤️ for traders worldwide
+            {t('landing.footer.madeWith')}
           </p>
         </div>
       </div>

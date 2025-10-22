@@ -167,41 +167,109 @@
       "tradesLogged": "Trades Logged",
       "satisfaction": "Satisfaction"
     },
+    "dashboardShowcase": {
+      "title": "Other journals show numbers. This one shows progress.",
+      "subtitle": "Every feature was designed by active traders to help you understand your decisions, not just record them. It's not a tool, it's your trading coach.",
+      "cta": "See it in action"
+    },
     "features": {
-      "title": "Everything You Need to Master Your Trading",
-      "subtitle": "Powerful tools designed for serious traders"
+      "title": "Everything You Need to Trade Better",
+      "subtitle": "Powerful features designed to help you make better decisions.",
+      "smartLogging": {
+        "title": "Smart Trade Logging",
+        "description": "Add trades in seconds with details, screenshots, and notes."
+      },
+      "autoImports": {
+        "title": "Auto Imports",
+        "description": "Connect your exchange or broker for instant sync."
+      },
+      "advancedAnalytics": {
+        "title": "Advanced Analytics",
+        "description": "Visualize win rates, risk ratios, and strategy performance."
+      },
+      "tagFilter": {
+        "title": "Tag and Filter Everything",
+        "description": "Track setups, emotions, and mistakes with custom metrics."
+      },
+      "mobileFriendly": {
+        "title": "Mobile Friendly",
+        "description": "Access your journal anywhere — phone, tablet, or desktop."
+      }
     },
     "testimonials": {
-      "title": "Trusted by Traders Worldwide",
-      "subtitle": "See what our users have to say"
+      "title": "Trusted by Thousands of Traders",
+      "subtitle": "Real results from real traders.",
+      "alex": {
+        "name": "Alex Chen",
+        "role": "Day Trader",
+        "text": "Win rate went from 52% to 68% in 3 months."
+      },
+      "sarah": {
+        "name": "Sarah Mitchell",
+        "role": "Crypto Investor",
+        "text": "The emotional tags feature is genius... My consistency has never been better."
+      },
+      "marcus": {
+        "name": "Marcus Rodriguez",
+        "role": "Swing Trader",
+        "text": "AI extraction saves me 2 hours per week... Worth every penny."
+      }
+    },
+    "exchangeLogos": {
+      "title": "Built for crypto traders who take performance seriously.",
+      "subtitle": "Whether you scalp, day trade, or swing — track what's working and what's costing you."
     },
     "pricing": {
-      "title": "Choose Your Plan",
-      "subtitle": "Start free, upgrade when you're ready",
-      "free": "Free",
-      "pro": "Pro",
-      "monthly": "Monthly",
-      "yearly": "Yearly",
-      "freePlan": {
-        "price": "$0",
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the plan that fits your trading style. Upgrade or downgrade anytime.",
+      "mostPopular": "Most Popular",
+      "starter": {
+        "name": "Starter",
+        "price": "Free",
         "period": "forever",
+        "description": "Perfect for beginners getting started",
+        "cta": "Get Started Free",
         "features": {
-          "trades": "Up to 100 trades",
-          "analytics": "Basic analytics",
-          "support": "Community support"
+          "trades": "Up to 50 trades per month",
+          "analytics": "Basic analytics & charts",
+          "manualEntry": "Manual trade entry",
+          "retention": "7-day data retention",
+          "support": "Email support"
         }
       },
-      "proPlan": {
+      "pro": {
+        "name": "Pro",
         "price": "$19",
         "period": "per month",
+        "description": "For serious traders who need more",
+        "cta": "Start Free Trial",
         "features": {
-          "trades": "Unlimited trades",
-          "analytics": "Advanced analytics",
-          "ai": "AI insights",
-          "support": "Priority support",
-          "exchanges": "Exchange integration"
+          "unlimited": "Unlimited trades",
+          "advancedAnalytics": "Advanced analytics & forecasting",
+          "aiExtraction": "AI-powered trade extraction",
+          "unlimitedRetention": "Unlimited data retention",
+          "prioritySupport": "Priority support",
+          "customSetups": "Custom setups & tags",
+          "exportReports": "Export reports"
         }
-      }
+      },
+      "elite": {
+        "name": "Elite",
+        "price": "$49",
+        "period": "per month",
+        "description": "For professional traders & teams",
+        "cta": "Contact Sales",
+        "features": {
+          "everythingPro": "Everything in Pro",
+          "multiAccount": "Multi-account tracking",
+          "apiAccess": "API access",
+          "whiteLabel": "White-label reports",
+          "accountManager": "Dedicated account manager",
+          "earlyAccess": "Early access to features",
+          "teamCollaboration": "Team collaboration tools"
+        }
+      },
+      "trialNote": "All plans include 14-day free trial • No credit card required • Cancel anytime"
     },
     "cta": {
       "title": "Start journaling smarter today.",
@@ -211,6 +279,7 @@
     },
     "footer": {
       "tagline": "The comprehensive trading journal platform",
+      "madeWith": "Made with ❤️ for traders worldwide",
       "product": "Product",
       "features": "Features",
       "pricing": "Pricing",
