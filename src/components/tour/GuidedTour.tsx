@@ -155,75 +155,111 @@ export const GuidedTour = () => {
   const [run, setRun] = useState(false);
   const [steps, setSteps] = useState<Step[]>([]);
   const [currentVersion, setCurrentVersion] = useState(1);
+  const [isLoadingSteps, setIsLoadingSteps] = useState(false);
 
   useEffect(() => {
-    console.log('🎯 GuidedTour useEffect triggered:', { shouldShowTour, tourMode });
-    if (shouldShowTour) {
+    console.log('🎯 GuidedTour useEffect triggered:', { shouldShowTour, tourMode, isLoadingSteps });
+    
+    if (shouldShowTour && !isLoadingSteps) {
       console.log('✅ Starting tour load...');
-      loadTourSteps();
-    } else {
+      setIsLoadingSteps(true);
+      const cleanup = loadTourSteps();
+      return () => {
+        if (cleanup) cleanup();
+      };
+    } else if (!shouldShowTour) {
       console.log('❌ Tour should not show, resetting run state');
       setRun(false);
+      setIsLoadingSteps(false);
     }
   }, [shouldShowTour, tourMode]);
 
-  const loadTourSteps = async () => {
+  const loadTourSteps = () => {
     console.log('🔄 Loading tour steps for mode:', tourMode);
-    try {
-      // Load tour steps based on mode
-      if (tourMode === 'full' || tourMode === 'manual-full') {
-        console.log('📋 Setting full tour steps');
-        setSteps(fullTourSteps);
-        
-        // Get latest full tour version
-        const { data } = await supabase
-          .from('tour_versions')
-          .select('version')
-          .eq('type', 'full')
-          .eq('active', true)
-          .order('version', { ascending: false })
-          .limit(1)
-          .maybeSingle();
-        
-        setCurrentVersion(data?.version || 1);
-      } else if (tourMode === 'updates' || tourMode === 'manual-updates') {
-        // Load update-specific steps
-        const { data } = await supabase
-          .from('tour_versions')
-          .select('version, steps')
-          .eq('type', 'update')
-          .eq('active', true)
-          .order('version', { ascending: false })
-          .limit(1)
-          .maybeSingle();
+    let isCancelled = false;
+    
+    const load = async () => {
+      try {
+        // Load tour steps based on mode
+        if (tourMode === 'full' || tourMode === 'manual-full') {
+          console.log('📋 Setting full tour steps');
+          if (!isCancelled) {
+            setSteps(fullTourSteps);
+          }
+          
+          // Get latest full tour version
+          const { data } = await supabase
+            .from('tour_versions')
+            .select('version')
+            .eq('type', 'full')
+            .eq('active', true)
+            .order('version', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+          
+          if (!isCancelled) {
+            setCurrentVersion(data?.version || 1);
+          }
+        } else if (tourMode === 'updates' || tourMode === 'manual-updates') {
+          // Load update-specific steps
+          const { data } = await supabase
+            .from('tour_versions')
+            .select('version, steps')
+            .eq('type', 'update')
+            .eq('active', true)
+            .order('version', { ascending: false })
+            .limit(1)
+            .maybeSingle();
 
-        if (data && data.steps && Array.isArray(data.steps)) {
-          setSteps(data.steps as unknown as Step[]);
-          setCurrentVersion(data.version);
-        } else {
+          if (!isCancelled) {
+            if (data && data.steps && Array.isArray(data.steps)) {
+              setSteps(data.steps as unknown as Step[]);
+              setCurrentVersion(data.version);
+            } else {
+              setSteps(fullTourSteps);
+            }
+          }
+        }
+
+        // Small delay to ensure DOM is fully rendered
+        const timer = setTimeout(() => {
+          if (!isCancelled) {
+            console.log('▶️ Starting tour run');
+            setRun(true);
+            setIsLoadingSteps(false);
+          }
+        }, 800);
+        
+        return () => {
+          clearTimeout(timer);
+          isCancelled = true;
+        };
+      } catch (error) {
+        console.error('Error loading tour steps:', error);
+        if (!isCancelled) {
           setSteps(fullTourSteps);
+          setRun(true);
+          setIsLoadingSteps(false);
         }
       }
-
-      // Small delay to ensure DOM is fully rendered
-      const timer = setTimeout(() => {
-        console.log('▶️ Starting tour run');
-        setRun(true);
-      }, 800);
-      
-      return () => clearTimeout(timer);
-    } catch (error) {
-      console.error('Error loading tour steps:', error);
-      setSteps(fullTourSteps);
-      setRun(true);
-    }
+    };
+    
+    load();
+    
+    return () => {
+      isCancelled = true;
+    };
   };
 
   const handleJoyrideCallback = (data: CallBackProps) => {
     const { status, action } = data;
+    
+    console.log('🎮 Joyride callback:', { status, action, step: data.index });
 
     if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
+      console.log('🏁 Tour finished or skipped');
       setRun(false);
+      setIsLoadingSteps(false);
       completeTour(currentVersion);
       
       const message = tourMode.includes('updates') 
@@ -234,7 +270,9 @@ export const GuidedTour = () => {
 
     // If user clicks outside or presses ESC
     if (action === ACTIONS.CLOSE) {
+      console.log('❌ Tour closed by user');
       setRun(false);
+      setIsLoadingSteps(false);
       completeTour(currentVersion);
     }
   };
