@@ -18,7 +18,8 @@ const BlogPost = () => {
   // SEO Meta Tags and Structured Data
   useEffect(() => {
     if (article) {
-      // Article Schema
+      // Article Schema with author URL
+      const authorSlug = article.author.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
       const articleSchema = {
         "@context": "https://schema.org",
         "@type": "Article",
@@ -27,7 +28,8 @@ const BlogPost = () => {
         "image": article.heroImage ? `https://www.thetradingdiary.com${article.heroImage}` : "https://www.thetradingdiary.com/og-image-en.png",
         "author": {
           "@type": "Person",
-          "name": article.author
+          "name": article.author,
+          "url": `https://www.thetradingdiary.com/author/${authorSlug}`
         },
         "publisher": {
           "@type": "Organization",
@@ -188,10 +190,13 @@ const BlogPost = () => {
             {/* Meta Information */}
             <div className="flex items-center justify-between border-t border-b border-border py-4">
               <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                <span className="flex items-center gap-2">
+                <Link 
+                  to={`/author/${article.author.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`}
+                  className="flex items-center gap-2 hover:text-primary transition-colors"
+                >
                   <User className="w-4 h-4" />
                   {article.author}
-                </span>
+                </Link>
                 <span className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   {new Date(article.date).toLocaleDateString('en-US', { 

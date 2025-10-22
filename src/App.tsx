@@ -35,6 +35,7 @@ const MarketData = lazy(() => import("./pages/MarketData"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const Author = lazy(() => import("./pages/Author"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const CryptoTradingFAQ = lazy(() => import("./pages/CryptoTradingFAQ"));
 const Social = lazy(() => import("./pages/Social"));
@@ -115,8 +116,16 @@ const App = () => (
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/logo-download" element={<LogoDownload />} />
                       <Route path="/crypto-trading-faq" element={<CryptoTradingFAQ />} />
+                      
+                      {/* Blog routes with language support */}
                       <Route path="/blog" element={<Blog />} />
                       <Route path="/blog/:slug" element={<BlogPost />} />
+                      <Route path="/author/:authorSlug" element={<Author />} />
+                      
+                      {/* Language-specific blog routes */}
+                      <Route path="/:lang/blog" element={<Blog />} />
+                      <Route path="/:lang/blog/:slug" element={<BlogPost />} />
+                      
                       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                       <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
                       <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
