@@ -238,16 +238,42 @@ export function AppSidebar() {
                   <SidebarMenu>
                     {favorites.map((fav) => (
                       <SidebarMenuItem key={fav.page_url}>
-                        <SidebarMenuButton asChild tooltip={fav.page_title}>
-                          <NavLink 
-                            to={fav.page_url} 
-                            end 
-                            className={getNavCls}
-                          >
-                            <Star className="h-4 w-4 fill-primary text-primary" />
-                            {open && <span>{fav.page_title}</span>}
-                          </NavLink>
-                        </SidebarMenuButton>
+                        <div className="flex items-center group/fav w-full">
+                          <SidebarMenuButton asChild tooltip={fav.page_title} className="flex-1">
+                            <NavLink 
+                              to={fav.page_url} 
+                              end 
+                              className={getNavCls}
+                            >
+                              <Star className="h-4 w-4 fill-primary text-primary" />
+                              {open && <span>{fav.page_title}</span>}
+                            </NavLink>
+                          </SidebarMenuButton>
+                          
+                          {open && (
+                            <TooltipProvider delayDuration={0}>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 opacity-0 group-hover/fav:opacity-100 transition-opacity"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      toggleFavorite(fav.page_url, fav.page_title, 'Star');
+                                    }}
+                                  >
+                                    <Star className="h-4 w-4 fill-primary text-primary" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                  Remove from favorites
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
                       </SidebarMenuItem>
                     ))}
                   </SidebarMenu>

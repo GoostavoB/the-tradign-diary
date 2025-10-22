@@ -285,7 +285,7 @@ export default function ExchangeConnections() {
               <CardHeader>
                   <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-background/50 border border-primary/10">
+                    <div className="p-2 rounded-lg bg-background/50 dark:bg-gray-200 border border-primary/10">
                       <div style={{ transform: `scale(${exchange.sizeScale})` }}>
                         <ExchangeLogo
                           exchangeId={exchange.id}
