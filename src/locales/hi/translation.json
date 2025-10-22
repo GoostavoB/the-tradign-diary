@@ -1,0 +1,152 @@
+{
+  "common": {
+    "save": "सेव",
+    "cancel": "रद्द करें",
+    "delete": "डिलीट",
+    "edit": "एडिट",
+    "add": "ऐड",
+    "remove": "हटाएं",
+    "submit": "सबमिट",
+    "confirm": "कन्फर्म",
+    "close": "बंद करें",
+    "back": "वापस",
+    "next": "अगला",
+    "search": "सर्च",
+    "filter": "फिल्टर",
+    "export": "एक्सपोर्ट",
+    "import": "इम्पोर्ट",
+    "loading": "लोड हो रहा है...",
+    "processing": "प्रोसेस हो रहा है...",
+    "saved": "सेव किया गया",
+    "updated": "अपडेट हुआ",
+    "error": "एरर",
+    "success": "सफल",
+    "noData": "डेटा उपलब्ध नहीं"
+  },
+  "navigation": {
+    "home": "होम",
+    "dashboard": "डैशबोर्ड",
+    "trades": "ट्रेड्स",
+    "analytics": "एनालिटिक्स",
+    "goals": "लक्ष्य",
+    "social": "सोशल",
+    "reports": "रिपोर्ट्स",
+    "tools": "टूल्स",
+    "settings": "सेटिंग्स",
+    "help": "हेल्प",
+    "blog": "ब्लॉग",
+    "faq": "FAQ",
+    "advancedAnalytics": "एडवांस्ड एनालिटिक्स",
+    "tradeAnalysis": "ट्रेड एनालिसिस",
+    "feeAnalysis": "फीस एनालिसिस",
+    "riskManagement": "रिस्क मैनेजमेंट",
+    "psychology": "साइकोलॉजी",
+    "tradingPlan": "ट्रेडिंग प्लान",
+    "journal": "जर्नल",
+    "forecast": "फोरकास्ट"
+  },
+  "auth": {
+    "signIn": "साइन इन",
+    "signUp": "साइन अप",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "createAccount": "अपना अकाउंट बनाएँ",
+    "fullName": "पूरा नाम",
+    "confirmPassword": "पासवर्ड कन्फर्म करें",
+    "welcomeBack": "वापसी पर स्वागत है"
+  },
+  "dashboard": {
+    "welcome": "स्वागत है",
+    "overview": "ओवरव्यू",
+    "quickActions": "क्विक एक्शंस",
+    "addTrade": "ट्रेड जोड़ें",
+    "recentActivity": "हाल की गतिविधि",
+    "performanceSummary": "परफॉर्मेंस समरी",
+    "totalBalance": "कुल बैलेंस",
+    "winRate": "विन रेट",
+    "totalPnL": "कुल P&L",
+    "maxDrawdown": "अधिकतम ड्रॉडाउन",
+    "totalROI": "कुल ROI"
+  },
+  "trades": {
+    "addTrade": "ट्रेड जोड़ें",
+    "editTrade": "ट्रेड एडिट करें",
+    "tradeHistory": "ट्रेड हिस्ट्री",
+    "symbol": "सिंबल",
+    "asset": "एसेट",
+    "entryPrice": "एंट्री प्राइस",
+    "exitPrice": "एग्ज़िट प्राइस",
+    "quantity": "क्वांटिटी",
+    "direction": "डायरेक्शन",
+    "long": "Long",
+    "short": "Short",
+    "notes": "नोट्स",
+    "fees": "फीस",
+    "pnl": "P&L",
+    "roi": "ROI",
+    "win": "लाभ",
+    "loss": "हानि",
+    "open": "ओपन",
+    "closed": "क्लोज़्ड"
+  },
+  "landing": {
+    "title": "हर ट्रेड रिकॉर्ड करें। अपनी स्ट्रैटेजी मास्टर करें।",
+    "subtitle": "सीरियस क्रिप्टो ट्रेडर्स के लिए सबसे शक्तिशाली ट्रेडिंग जर्नल और एनालिटिक्स प्लेटफॉर्म।",
+    "ctaButton": "स्मार्ट तरीके से ट्रेड करना शुरू करें",
+    "freeForever": "हमेशा फ्री",
+    "noCard": "कार्ड नहीं चाहिए",
+    "quickSetup": "2-मिन सेटअप"
+  },
+  "widgets": {
+    "totalBalance": "कुल बैलेंस",
+    "winRate": "विन रेट",
+    "recentTransactions": "हाल के लेनदेन",
+    "topMovers": "टॉप मूवर्स",
+    "aiInsights": "AI इनसाइट्स"
+  },
+  "settings": {
+    "profile": "प्रोफाइल",
+    "account": "अकाउंट",
+    "notifications": "नोटिफिकेशन",
+    "security": "सिक्योरिटी",
+    "preferences": "प्राथमिकताएं",
+    "dataManagement": "डेटा मैनेजमेंट"
+  },
+  "analytics": {
+    "analytics": "एनालिटिक्स",
+    "performance": "परफॉर्मेंस",
+    "insights": "इनसाइट्स",
+    "charts": "चार्ट्स",
+    "timeframe": "टाइमफ्रेम"
+  },
+  "insights": {
+    "performanceHighlights": "परफॉर्मेंस हाइलाइट्स",
+    "bestTrades": "बेस्ट ट्रेड्स",
+    "worstTrades": "वर्स्ट ट्रेड्स"
+  },
+  "upload": {
+    "uploadTrade": "ट्रेड अपलोड",
+    "dragDrop": "यहाँ ड्रैग और ड्रॉप करें",
+    "manualEntry": "मैन्युअल एंट्री"
+  },
+  "errors": {
+    "generic": "एक एरर हुआ",
+    "networkError": "नेटवर्क एरर",
+    "notFound": "नहीं मिला",
+    "unauthorized": "अनाधिकृत"
+  },
+  "success": {
+    "saved": "सफलतापूर्वक सेव हुआ",
+    "updated": "सफलतापूर्वक अपडेट हुआ",
+    "deleted": "सफलतापूर्वक डिलीट हुआ",
+    "created": "सफलतापूर्वक बनाया गया"
+  },
+  "time": {
+    "today": "आज",
+    "yesterday": "कल",
+    "thisWeek": "इस सप्ताह",
+    "thisMonth": "इस महीने",
+    "thisYear": "इस वर्ष"
+  }
+}

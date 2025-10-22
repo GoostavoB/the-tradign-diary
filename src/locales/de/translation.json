@@ -1,0 +1,152 @@
+{
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "add": "Hinzufügen",
+    "remove": "Entfernen",
+    "submit": "Senden",
+    "confirm": "Bestätigen",
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "loading": "Wird geladen...",
+    "processing": "Wird verarbeitet...",
+    "saved": "Gespeichert",
+    "updated": "Aktualisiert",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "noData": "Keine Daten verfügbar"
+  },
+  "navigation": {
+    "home": "Start",
+    "dashboard": "Dashboard",
+    "trades": "Trades",
+    "analytics": "Analytics",
+    "goals": "Ziele",
+    "social": "Social",
+    "reports": "Berichte",
+    "tools": "Tools",
+    "settings": "Einstellungen",
+    "help": "Hilfe",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "advancedAnalytics": "Erweiterte Analytics",
+    "tradeAnalysis": "Trade-Analyse",
+    "feeAnalysis": "Gebührenanalyse",
+    "riskManagement": "Risikomanagement",
+    "psychology": "Psychologie",
+    "tradingPlan": "Trading-Plan",
+    "journal": "Journal",
+    "forecast": "Forecast"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "createAccount": "Konto erstellen",
+    "fullName": "Vollständiger Name",
+    "confirmPassword": "Passwort bestätigen",
+    "welcomeBack": "Willkommen zurück"
+  },
+  "dashboard": {
+    "welcome": "Willkommen",
+    "overview": "Übersicht",
+    "quickActions": "Schnellaktionen",
+    "addTrade": "Trade hinzufügen",
+    "recentActivity": "Letzte Aktivitäten",
+    "performanceSummary": "Performance-Übersicht",
+    "totalBalance": "Gesamtguthaben",
+    "winRate": "Win Rate",
+    "totalPnL": "Gesamt-P&L",
+    "maxDrawdown": "Max. Drawdown",
+    "totalROI": "Gesamt-ROI"
+  },
+  "trades": {
+    "addTrade": "Trade hinzufügen",
+    "editTrade": "Trade bearbeiten",
+    "tradeHistory": "Trade-Historie",
+    "symbol": "Symbol",
+    "asset": "Asset",
+    "entryPrice": "Einstiegspreis",
+    "exitPrice": "Ausstiegspreis",
+    "quantity": "Menge",
+    "direction": "Richtung",
+    "long": "Long",
+    "short": "Short",
+    "notes": "Notizen",
+    "fees": "Gebühren",
+    "pnl": "P&L",
+    "roi": "ROI",
+    "win": "Gewinn",
+    "loss": "Verlust",
+    "open": "Offen",
+    "closed": "Geschlossen"
+  },
+  "landing": {
+    "title": "Jeden Trade tracken. Deine Strategie meistern.",
+    "subtitle": "Das leistungsstarke Trading-Journal und Analytics für ernsthafte Krypto-Trader.",
+    "ctaButton": "Smarter traden starten",
+    "freeForever": "Für immer gratis",
+    "noCard": "Keine Karte",
+    "quickSetup": "2-Min-Setup"
+  },
+  "widgets": {
+    "totalBalance": "Gesamtguthaben",
+    "winRate": "Win Rate",
+    "recentTransactions": "Letzte Transaktionen",
+    "topMovers": "Top Mover",
+    "aiInsights": "KI-Insights"
+  },
+  "settings": {
+    "profile": "Profil",
+    "account": "Konto",
+    "notifications": "Benachrichtigungen",
+    "security": "Sicherheit",
+    "preferences": "Einstellungen",
+    "dataManagement": "Datenverwaltung"
+  },
+  "analytics": {
+    "analytics": "Analytics",
+    "performance": "Performance",
+    "insights": "Insights",
+    "charts": "Diagramme",
+    "timeframe": "Zeitraum"
+  },
+  "insights": {
+    "performanceHighlights": "Performance-Highlights",
+    "bestTrades": "Beste Trades",
+    "worstTrades": "Schlechteste Trades"
+  },
+  "upload": {
+    "uploadTrade": "Trade hochladen",
+    "dragDrop": "Hier ablegen",
+    "manualEntry": "Manuelle Eingabe"
+  },
+  "errors": {
+    "generic": "Ein Fehler ist aufgetreten",
+    "networkError": "Netzwerkfehler",
+    "notFound": "Nicht gefunden",
+    "unauthorized": "Nicht autorisiert"
+  },
+  "success": {
+    "saved": "Erfolgreich gespeichert",
+    "updated": "Erfolgreich aktualisiert",
+    "deleted": "Erfolgreich gelöscht",
+    "created": "Erfolgreich erstellt"
+  },
+  "time": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "thisWeek": "Diese Woche",
+    "thisMonth": "Diesen Monat",
+    "thisYear": "Dieses Jahr"
+  }
+}

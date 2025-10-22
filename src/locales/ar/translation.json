@@ -1,0 +1,152 @@
+{
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "remove": "إزالة",
+    "submit": "إرسال",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "next": "التالي",
+    "search": "بحث",
+    "filter": "فلترة",
+    "export": "تصدير",
+    "import": "استيراد",
+    "loading": "جارٍ التحميل...",
+    "processing": "جارٍ المعالجة...",
+    "saved": "تم الحفظ",
+    "updated": "تم التحديث",
+    "error": "خطأ",
+    "success": "تم بنجاح",
+    "noData": "لا توجد بيانات"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "trades": "الصفقات",
+    "analytics": "التحليلات",
+    "goals": "الأهداف",
+    "social": "اجتماعي",
+    "reports": "التقارير",
+    "tools": "الأدوات",
+    "settings": "الإعدادات",
+    "help": "المساعدة",
+    "blog": "المدونة",
+    "faq": "الأسئلة الشائعة",
+    "advancedAnalytics": "تحليلات متقدمة",
+    "tradeAnalysis": "تحليل الصفقات",
+    "feeAnalysis": "تحليل الرسوم",
+    "riskManagement": "إدارة المخاطر",
+    "psychology": "علم نفس التداول",
+    "tradingPlan": "خطة التداول",
+    "journal": "دفتر",
+    "forecast": "توقعات"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "createAccount": "أنشئ حسابك",
+    "fullName": "الاسم الكامل",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "welcomeBack": "مرحبًا بعودتك"
+  },
+  "dashboard": {
+    "welcome": "مرحبًا",
+    "overview": "نظرة عامة",
+    "quickActions": "إجراءات سريعة",
+    "addTrade": "إضافة صفقة",
+    "recentActivity": "النشاط الأخير",
+    "performanceSummary": "ملخص الأداء",
+    "totalBalance": "إجمالي الرصيد",
+    "winRate": "Win Rate",
+    "totalPnL": "إجمالي P&L",
+    "maxDrawdown": "أكبر سحب",
+    "totalROI": "إجمالي ROI"
+  },
+  "trades": {
+    "addTrade": "إضافة صفقة",
+    "editTrade": "تعديل صفقة",
+    "tradeHistory": "سجل الصفقات",
+    "symbol": "الرمز",
+    "asset": "الأصل",
+    "entryPrice": "سعر الدخول",
+    "exitPrice": "سعر الخروج",
+    "quantity": "الكمية",
+    "direction": "الاتجاه",
+    "long": "Long",
+    "short": "Short",
+    "notes": "ملاحظات",
+    "fees": "رسوم",
+    "pnl": "P&L",
+    "roi": "ROI",
+    "win": "ربح",
+    "loss": "خسارة",
+    "open": "مفتوحة",
+    "closed": "مغلقة"
+  },
+  "landing": {
+    "title": "سجّل كل صفقة. أتقن استراتيجيتك.",
+    "subtitle": "أقوى دفتر تداول وتحليلات لمتداولي الكريبتو.",
+    "ctaButton": "ابدأ تداولك بذكاء",
+    "freeForever": "مجاني دائمًا",
+    "noCard": "بلا بطاقة",
+    "quickSetup": "إعداد دقيقتين"
+  },
+  "widgets": {
+    "totalBalance": "إجمالي الرصيد",
+    "winRate": "Win Rate",
+    "recentTransactions": "المعاملات الأخيرة",
+    "topMovers": "الأكثر حركة",
+    "aiInsights": "رؤى الذكاء الاصطناعي"
+  },
+  "settings": {
+    "profile": "الملف الشخصي",
+    "account": "الحساب",
+    "notifications": "إشعارات",
+    "security": "أمان",
+    "preferences": "التفضيلات",
+    "dataManagement": "إدارة البيانات"
+  },
+  "analytics": {
+    "analytics": "التحليلات",
+    "performance": "الأداء",
+    "insights": "رؤى",
+    "charts": "الرسوم البيانية",
+    "timeframe": "الإطار الزمني"
+  },
+  "insights": {
+    "performanceHighlights": "أبرز الأداء",
+    "bestTrades": "أفضل الصفقات",
+    "worstTrades": "أسوأ الصفقات"
+  },
+  "upload": {
+    "uploadTrade": "رفع صفقة",
+    "dragDrop": "اسحب وأفلت الملف هنا",
+    "manualEntry": "إدخال يدوي"
+  },
+  "errors": {
+    "generic": "حدث خطأ",
+    "networkError": "خطأ في الشبكة",
+    "notFound": "غير موجود",
+    "unauthorized": "غير مصرح"
+  },
+  "success": {
+    "saved": "تم الحفظ بنجاح",
+    "updated": "تم التحديث بنجاح",
+    "deleted": "تم الحذف بنجاح",
+    "created": "تم الإنشاء بنجاح"
+  },
+  "time": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "thisWeek": "هذا الأسبوع",
+    "thisMonth": "هذا الشهر",
+    "thisYear": "هذا العام"
+  }
+}

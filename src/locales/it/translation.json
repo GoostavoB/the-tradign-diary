@@ -1,0 +1,152 @@
+{
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "add": "Aggiungi",
+    "remove": "Rimuovi",
+    "submit": "Invia",
+    "confirm": "Conferma",
+    "close": "Chiudi",
+    "back": "Indietro",
+    "next": "Avanti",
+    "search": "Cerca",
+    "filter": "Filtra",
+    "export": "Esporta",
+    "import": "Importa",
+    "loading": "Caricamento...",
+    "processing": "Elaborazione...",
+    "saved": "Salvato",
+    "updated": "Aggiornato",
+    "error": "Errore",
+    "success": "Successo",
+    "noData": "Nessun dato disponibile"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "trades": "Trades",
+    "analytics": "Analytics",
+    "goals": "Obiettivi",
+    "social": "Social",
+    "reports": "Report",
+    "tools": "Strumenti",
+    "settings": "Impostazioni",
+    "help": "Aiuto",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "advancedAnalytics": "Analytics avanzati",
+    "tradeAnalysis": "Analisi trade",
+    "feeAnalysis": "Analisi commissioni",
+    "riskManagement": "Gestione del rischio",
+    "psychology": "Psicologia",
+    "tradingPlan": "Piano di trading",
+    "journal": "Diario",
+    "forecast": "Forecast"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signUp": "Registrati",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Password dimenticata?",
+    "createAccount": "Crea il tuo account",
+    "fullName": "Nome e cognome",
+    "confirmPassword": "Conferma password",
+    "welcomeBack": "Bentornato"
+  },
+  "dashboard": {
+    "welcome": "Benvenuto",
+    "overview": "Panoramica",
+    "quickActions": "Azioni rapide",
+    "addTrade": "Aggiungi trade",
+    "recentActivity": "Attività recenti",
+    "performanceSummary": "Riepilogo performance",
+    "totalBalance": "Saldo totale",
+    "winRate": "Win rate",
+    "totalPnL": "P&L totale",
+    "maxDrawdown": "Max drawdown",
+    "totalROI": "ROI totale"
+  },
+  "trades": {
+    "addTrade": "Aggiungi trade",
+    "editTrade": "Modifica trade",
+    "tradeHistory": "Storico trade",
+    "symbol": "Simbolo",
+    "asset": "Asset",
+    "entryPrice": "Prezzo di entrata",
+    "exitPrice": "Prezzo di uscita",
+    "quantity": "Quantità",
+    "direction": "Direzione",
+    "long": "Long",
+    "short": "Short",
+    "notes": "Note",
+    "fees": "Commissioni",
+    "pnl": "P&L",
+    "roi": "ROI",
+    "win": "Vincita",
+    "loss": "Perdita",
+    "open": "Aperto",
+    "closed": "Chiuso"
+  },
+  "landing": {
+    "title": "Traccia ogni trade. Padroneggia la strategia.",
+    "subtitle": "Il diario e la piattaforma di analytics per trader cripto seri.",
+    "ctaButton": "Inizia a tradare meglio",
+    "freeForever": "Gratis per sempre",
+    "noCard": "Nessuna carta",
+    "quickSetup": "Setup 2 min"
+  },
+  "widgets": {
+    "totalBalance": "Saldo totale",
+    "winRate": "Win rate",
+    "recentTransactions": "Transazioni recenti",
+    "topMovers": "Top mover",
+    "aiInsights": "Insights IA"
+  },
+  "settings": {
+    "profile": "Profilo",
+    "account": "Account",
+    "notifications": "Notifiche",
+    "security": "Sicurezza",
+    "preferences": "Preferenze",
+    "dataManagement": "Gestione dati"
+  },
+  "analytics": {
+    "analytics": "Analytics",
+    "performance": "Performance",
+    "insights": "Insights",
+    "charts": "Grafici",
+    "timeframe": "Periodo"
+  },
+  "insights": {
+    "performanceHighlights": "Highlights performance",
+    "bestTrades": "Migliori trade",
+    "worstTrades": "Peggiori trade"
+  },
+  "upload": {
+    "uploadTrade": "Carica trade",
+    "dragDrop": "Trascina e rilascia qui",
+    "manualEntry": "Inserimento manuale"
+  },
+  "errors": {
+    "generic": "Si è verificato un errore",
+    "networkError": "Errore di rete",
+    "notFound": "Non trovato",
+    "unauthorized": "Non autorizzato"
+  },
+  "success": {
+    "saved": "Salvato con successo",
+    "updated": "Aggiornato con successo",
+    "deleted": "Eliminato con successo",
+    "created": "Creato con successo"
+  },
+  "time": {
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "thisWeek": "Questa settimana",
+    "thisMonth": "Questo mese",
+    "thisYear": "Quest'anno"
+  }
+}
