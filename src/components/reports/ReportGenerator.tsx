@@ -15,7 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
 type ReportType = "monthly" | "quarterly" | "yearly" | "custom";
-type ReportFormat = "pdf" | "excel" | "json";
+type ReportFormat = "excel" | "json";
 
 interface ReportSection {
   id: string;
@@ -27,7 +27,7 @@ export function ReportGenerator() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [reportType, setReportType] = useState<ReportType>("monthly");
-  const [reportFormat, setReportFormat] = useState<ReportFormat>("pdf");
+  const [reportFormat, setReportFormat] = useState<ReportFormat>("excel");
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [isGenerating, setIsGenerating] = useState(false);
@@ -236,7 +236,6 @@ export function ReportGenerator() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="pdf">PDF Document</SelectItem>
                 <SelectItem value="excel">Excel Spreadsheet</SelectItem>
                 <SelectItem value="json">JSON Data</SelectItem>
               </SelectContent>

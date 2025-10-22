@@ -19,7 +19,7 @@ export function ScheduledReports() {
     name: "",
     frequency: "weekly",
     reportType: "monthly",
-    format: "pdf",
+    format: "excel",
     emailEnabled: false,
     emailAddress: "",
   });
@@ -81,7 +81,7 @@ export function ScheduledReports() {
         name: "",
         frequency: "weekly",
         reportType: "monthly",
-        format: "pdf",
+        format: "excel",
         emailEnabled: false,
         emailAddress: "",
       });
@@ -227,7 +227,6 @@ export function ScheduledReports() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="pdf">PDF</SelectItem>
                       <SelectItem value="excel">Excel</SelectItem>
                       <SelectItem value="json">JSON</SelectItem>
                     </SelectContent>

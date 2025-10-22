@@ -44,10 +44,6 @@ export default function UserGuide() {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm">
-                <Download className="mr-2 h-4 w-4" />
-                Download PDF
-              </Button>
-              <Button variant="outline" size="sm">
                 Quick Start
               </Button>
             </div>
@@ -482,7 +478,7 @@ export default function UserGuide() {
                     number: 9,
                     title: "Export monthly reports for tax records",
                     description: "Keep organized records for accountant or tax software.",
-                    example: "Reports → Generate Monthly → Download PDF. Store in tax folder."
+                    example: "Reports → Generate Monthly → Export as Excel. Store in tax folder."
                   },
                   {
                     number: 10,
@@ -643,7 +639,7 @@ export default function UserGuide() {
                     { q: "Can I use this offline?", a: "The app works offline for viewing data. New trades and syncing require internet connection." },
                     { q: "Which exchanges are supported?", a: "Binance, Bybit, Coinbase, OKX, Kraken, KuCoin, Gate.io, MEXC, Bitfinex, Bitstamp, BingX. More coming soon." },
                     { q: "How do I delete a trade?", a: "Go to Trade Analysis, find the trade, click the three-dot menu, select Delete. Soft-deleted for 48 hours before permanent removal." },
-                    { q: "Can I export my data?", a: "Yes. Reports → Export trades as CSV, PDF, or Excel. Choose date range and export format." },
+                    { q: "Can I export my data?", a: "Yes. Reports → Export trades as CSV or Excel. Choose date range and export format." },
                     { q: "What's the maximum number of trades?", a: "No limit. The app handles thousands of trades efficiently." },
                     { q: "How are fees calculated?", a: "Automatically from CSV imports or manual entry. Fee Analysis page shows breakdown by exchange and trade type." },
                     { q: "Can I share my performance?", a: "Yes. Social tab lets you share trade cards and connect with other traders. Choose public or private settings." },

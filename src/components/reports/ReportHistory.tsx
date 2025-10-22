@@ -70,8 +70,6 @@ export function ReportHistory() {
 
   const getFormatBadgeColor = (format: string) => {
     switch (format) {
-      case "pdf":
-        return "bg-red-500/10 text-red-500 hover:bg-red-500/20";
       case "excel":
         return "bg-green-500/10 text-green-500 hover:bg-green-500/20";
       case "json":

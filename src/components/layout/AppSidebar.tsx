@@ -105,7 +105,7 @@ export function AppSidebar() {
       label: 'Reports',
       defaultOpen: false,
       items: [
-        { title: 'Reports', url: '/reports', icon: FileBarChart, iconName: 'FileBarChart', keywords: ['reports', 'documents', 'generate', 'pdf', 'export', 'monthly', 'weekly', 'custom', 'scheduled', 'automated', 'history', 'download', 'summary', 'kpi', 'metrics', 'analysis', 'period'] },
+        { title: 'Reports', url: '/reports', icon: FileBarChart, iconName: 'FileBarChart', keywords: ['reports', 'documents', 'generate', 'export', 'monthly', 'weekly', 'custom', 'scheduled', 'automated', 'history', 'download', 'summary', 'kpi', 'metrics', 'analysis', 'period', 'excel', 'csv'] },
         { title: 'Tax Reports', url: '/tax-reports', icon: FileText, iconName: 'FileText', keywords: ['tax', 'taxes', 'irs', 'filings', 'legal', 'compliance', 'capital', 'gains', 'losses', 'year', 'end', 'accountant', 'documentation', 'fifo', 'lifo', 'accounting', 'fiscal', 'revenue', 'income'] },
         { title: 'My Metrics', url: '/my-metrics', icon: Star, iconName: 'Star', keywords: ['metrics', 'custom', 'kpi', 'benchmarks', 'personal', 'indicators', 'measure', 'track', 'performance', 'own', 'create', 'define', 'personalized'] },
       ],
