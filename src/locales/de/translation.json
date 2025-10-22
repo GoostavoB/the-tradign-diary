@@ -283,6 +283,131 @@
       "activeTraders": "Aktive Trader",
       "tradesLogged": "Erfasste Trades",
       "satisfaction": "Zufriedenheit"
+    },
+    "dashboardShowcase": {
+      "title": "Andere Journals zeigen Zahlen. Dieses zeigt Fortschritt.",
+      "subtitle": "Jede Funktion wurde von aktiven Tradern entwickelt, um Ihnen zu helfen, Ihre Entscheidungen zu verstehen, nicht nur aufzuzeichnen. Es ist kein Tool, es ist Ihr Trading-Coach.",
+      "cta": "In Aktion sehen"
+    },
+    "features": {
+      "title": "Alles, Was Sie Brauchen, Um Besser Zu Handeln",
+      "subtitle": "Leistungsstarke Funktionen entwickelt, um Ihnen zu helfen, bessere Entscheidungen zu treffen.",
+      "smartLogging": {
+        "title": "Intelligente Trade-Erfassung",
+        "description": "Fügen Sie Trades in Sekunden mit Details, Screenshots und Notizen hinzu."
+      },
+      "autoImports": {
+        "title": "Automatische Importe",
+        "description": "Verbinden Sie Ihre Exchange oder Ihren Broker für sofortige Synchronisierung."
+      },
+      "advancedAnalytics": {
+        "title": "Erweiterte Analytics",
+        "description": "Visualisieren Sie Win Rates, Risikoquoten und Strategieperformance."
+      },
+      "tagFilter": {
+        "title": "Alles Taggen und Filtern",
+        "description": "Verfolgen Sie Setups, Emotionen und Fehler mit benutzerdefinierten Metriken."
+      },
+      "mobileFriendly": {
+        "title": "Mobilfreundlich",
+        "description": "Greifen Sie überall auf Ihr Journal zu — Telefon, Tablet oder Desktop."
+      }
+    },
+    "testimonials": {
+      "title": "Vertraut von Tausenden Tradern",
+      "subtitle": "Echte Ergebnisse von echten Tradern.",
+      "alex": {
+        "name": "Alex Chen",
+        "role": "Day Trader",
+        "text": "Die Win Rate stieg in 3 Monaten von 52% auf 68%."
+      },
+      "sarah": {
+        "name": "Sarah Mitchell",
+        "role": "Krypto-Investorin",
+        "text": "Die emotionalen Tags-Funktion ist genial... Meine Konsistenz war noch nie besser."
+      },
+      "marcus": {
+        "name": "Marcus Rodriguez",
+        "role": "Swing Trader",
+        "text": "KI-Extraktion spart mir 2 Stunden pro Woche... Jeden Cent wert."
+      }
+    },
+    "exchangeLogos": {
+      "title": "Gebaut für Krypto-Trader, die Performance ernst nehmen.",
+      "subtitle": "Ob Sie scalpen, day traden oder swingen — verfolgen Sie, was funktioniert und was Sie kostet."
+    },
+    "pricing": {
+      "title": "Einfache, Transparente Preise",
+      "subtitle": "Wählen Sie den Plan, der zu Ihrem Trading-Stil passt. Jederzeit upgraden oder downgraden.",
+      "mostPopular": "Am Beliebtesten",
+      "starter": {
+        "name": "Starter",
+        "price": "Kostenlos",
+        "period": "für immer",
+        "description": "Perfekt für Anfänger",
+        "cta": "Kostenlos Starten",
+        "features": {
+          "trades": "Bis zu 50 Trades pro Monat",
+          "analytics": "Basis-Analytics & Diagramme",
+          "manualEntry": "Manuelle Trade-Eingabe",
+          "retention": "7-Tage Datenspeicherung",
+          "support": "E-Mail-Support"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$19",
+        "period": "pro Monat",
+        "description": "Für ernsthafte Trader, die mehr brauchen",
+        "cta": "Kostenlose Testversion Starten",
+        "features": {
+          "unlimited": "Unbegrenzte Trades",
+          "advancedAnalytics": "Erweiterte Analytics & Prognosen",
+          "aiExtraction": "KI-gestützte Trade-Extraktion",
+          "unlimitedRetention": "Unbegrenzte Datenspeicherung",
+          "prioritySupport": "Priority-Support",
+          "customSetups": "Benutzerdefinierte Setups & Tags",
+          "exportReports": "Berichte exportieren"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "price": "$49",
+        "period": "pro Monat",
+        "description": "Für professionelle Trader & Teams",
+        "cta": "Vertrieb Kontaktieren",
+        "features": {
+          "everythingPro": "Alles in Pro",
+          "multiAccount": "Multi-Account-Tracking",
+          "apiAccess": "API-Zugang",
+          "whiteLabel": "White-Label-Berichte",
+          "accountManager": "Dedizierter Account Manager",
+          "earlyAccess": "Frühzeitiger Zugang zu Funktionen",
+          "teamCollaboration": "Team-Kollaborationstools"
+        }
+      },
+      "trialNote": "Alle Pläne beinhalten 14-tägige kostenlose Testversion • Keine Kreditkarte erforderlich • Jederzeit kündbar"
+    },
+    "cta": {
+      "title": "Beginnen Sie heute intelligenter zu journalisieren.",
+      "subtitle": "Erstellen Sie Ihr kostenloses Konto und sehen Sie Ihr Trading mit Klarheit.",
+      "button": "Kostenlos Starten",
+      "note": "Für immer kostenlos • Keine Kreditkarte • 2-Minuten-Setup"
+    },
+    "footer": {
+      "tagline": "Die umfassende Trading-Journal-Plattform",
+      "madeWith": "Mit ❤️ für Trader weltweit gemacht",
+      "product": "Produkt",
+      "features": "Funktionen",
+      "pricing": "Preise",
+      "support": "Support",
+      "help": "Hilfe-Center",
+      "documentation": "Dokumentation",
+      "contact": "Kontakt",
+      "legal": "Rechtliches",
+      "privacy": "Datenschutz",
+      "terms": "Nutzungsbedingungen",
+      "allRightsReserved": "Alle Rechte vorbehalten"
     }
   },
   "blog": {

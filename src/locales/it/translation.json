@@ -283,6 +283,131 @@
       "activeTraders": "Trader Attivi",
       "tradesLogged": "Operazioni Registrate",
       "satisfaction": "Soddisfazione"
+    },
+    "dashboardShowcase": {
+      "title": "Altri journal mostrano numeri. Questo mostra progressi.",
+      "subtitle": "Ogni funzionalità è stata progettata da trader attivi per aiutarti a comprendere le tue decisioni, non solo registrarle. Non è uno strumento, è il tuo coach di trading.",
+      "cta": "Vedi in azione"
+    },
+    "features": {
+      "title": "Tutto Ciò Che Serve Per Operare Meglio",
+      "subtitle": "Funzionalità potenti progettate per aiutarti a prendere decisioni migliori.",
+      "smartLogging": {
+        "title": "Registrazione Intelligente",
+        "description": "Aggiungi trade in secondi con dettagli, screenshot e note."
+      },
+      "autoImports": {
+        "title": "Importazioni Automatiche",
+        "description": "Connetti il tuo exchange o broker per la sincronizzazione istantanea."
+      },
+      "advancedAnalytics": {
+        "title": "Analytics Avanzati",
+        "description": "Visualizza win rate, rapporti di rischio e performance delle strategie."
+      },
+      "tagFilter": {
+        "title": "Etichetta e Filtra Tutto",
+        "description": "Traccia setup, emozioni ed errori con metriche personalizzate."
+      },
+      "mobileFriendly": {
+        "title": "Mobile Friendly",
+        "description": "Accedi al tuo journal ovunque — telefono, tablet o desktop."
+      }
+    },
+    "testimonials": {
+      "title": "Scelto da Migliaia di Trader",
+      "subtitle": "Risultati reali da trader reali.",
+      "alex": {
+        "name": "Alex Chen",
+        "role": "Day Trader",
+        "text": "Il win rate è passato dal 52% al 68% in 3 mesi."
+      },
+      "sarah": {
+        "name": "Sarah Mitchell",
+        "role": "Investitrice Crypto",
+        "text": "La funzione tag emozionali è geniale... La mia consistenza non è mai stata migliore."
+      },
+      "marcus": {
+        "name": "Marcus Rodriguez",
+        "role": "Swing Trader",
+        "text": "L'estrazione AI mi fa risparmiare 2 ore a settimana... Vale ogni centesimo."
+      }
+    },
+    "exchangeLogos": {
+      "title": "Costruito per trader crypto che prendono sul serio le performance.",
+      "subtitle": "Che tu faccia scalping, day trading o swing — traccia ciò che funziona e ciò che ti costa."
+    },
+    "pricing": {
+      "title": "Prezzi Semplici e Trasparenti",
+      "subtitle": "Scegli il piano adatto al tuo stile di trading. Aggiorna o declassa in qualsiasi momento.",
+      "mostPopular": "Più Popolare",
+      "starter": {
+        "name": "Starter",
+        "price": "Gratis",
+        "period": "per sempre",
+        "description": "Perfetto per principianti",
+        "cta": "Inizia Gratis",
+        "features": {
+          "trades": "Fino a 50 trade al mese",
+          "analytics": "Analytics e grafici di base",
+          "manualEntry": "Inserimento manuale trade",
+          "retention": "Conservazione dati di 7 giorni",
+          "support": "Supporto via email"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$19",
+        "period": "al mese",
+        "description": "Per trader seri che hanno bisogno di più",
+        "cta": "Inizia Prova Gratuita",
+        "features": {
+          "unlimited": "Trade illimitati",
+          "advancedAnalytics": "Analytics avanzati e previsioni",
+          "aiExtraction": "Estrazione trade con IA",
+          "unlimitedRetention": "Conservazione dati illimitata",
+          "prioritySupport": "Supporto prioritario",
+          "customSetups": "Setup e tag personalizzati",
+          "exportReports": "Esporta report"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "price": "$49",
+        "period": "al mese",
+        "description": "Per trader professionisti e team",
+        "cta": "Contatta Vendite",
+        "features": {
+          "everythingPro": "Tutto in Pro",
+          "multiAccount": "Tracciamento multi-account",
+          "apiAccess": "Accesso API",
+          "whiteLabel": "Report white-label",
+          "accountManager": "Account manager dedicato",
+          "earlyAccess": "Accesso anticipato alle funzionalità",
+          "teamCollaboration": "Strumenti di collaborazione team"
+        }
+      },
+      "trialNote": "Tutti i piani includono prova gratuita di 14 giorni • Nessuna carta di credito richiesta • Annulla in qualsiasi momento"
+    },
+    "cta": {
+      "title": "Inizia a registrare in modo più intelligente oggi.",
+      "subtitle": "Crea il tuo account gratuito e guarda il tuo trading con chiarezza.",
+      "button": "Inizia Gratis",
+      "note": "Gratis per sempre • Nessuna carta di credito • Setup di 2 minuti"
+    },
+    "footer": {
+      "tagline": "La piattaforma completa di diario di trading",
+      "madeWith": "Fatto con ❤️ per trader in tutto il mondo",
+      "product": "Prodotto",
+      "features": "Funzionalità",
+      "pricing": "Prezzi",
+      "support": "Supporto",
+      "help": "Centro Assistenza",
+      "documentation": "Documentazione",
+      "contact": "Contatto",
+      "legal": "Legale",
+      "privacy": "Privacy Policy",
+      "terms": "Termini di Servizio",
+      "allRightsReserved": "Tutti i diritti riservati"
     }
   },
   "blog": {
