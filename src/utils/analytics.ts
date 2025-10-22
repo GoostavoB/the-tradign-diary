@@ -24,13 +24,10 @@ interface AnalyticsEvent {
   timestamp?: number;
 }
 
-class Analytics {
+export class Analytics {
   private enabled = false;
   private queue: AnalyticsEvent[] = [];
 
-  /**
-   * Initialize analytics
-   */
   init() {
     if (import.meta.env.PROD) {
       this.enabled = true;
@@ -38,9 +35,6 @@ class Analytics {
     }
   }
 
-  /**
-   * Track an event
-   */
   track(event: string, properties?: Record<string, any>) {
     const analyticsEvent: AnalyticsEvent = {
       event,
@@ -54,29 +48,19 @@ class Analytics {
       this.queue.push(analyticsEvent);
     }
 
-    // Log in development
     if (import.meta.env.DEV) {
       console.log('[Analytics]', event, properties);
     }
   }
 
-  /**
-   * Track page view
-   */
   page(path: string, properties?: Record<string, any>) {
     this.track('page_view', { path, ...properties });
   }
 
-  /**
-   * Identify user
-   */
   identify(userId: string, traits?: Record<string, any>) {
     this.track('identify', { userId, ...traits });
   }
 
-  /**
-   * Track performance metric
-   */
   performance(metric: string, value: number, properties?: Record<string, any>) {
     this.track('performance', {
       metric,
@@ -85,9 +69,6 @@ class Analytics {
     });
   }
 
-  /**
-   * Track error
-   */
   error(error: Error, context?: Record<string, any>) {
     this.track('error', {
       message: error.message,
@@ -96,9 +77,6 @@ class Analytics {
     });
   }
 
-  /**
-   * Track article view
-   */
   trackArticleView(articleSlug: string, articleTitle: string, category: string) {
     this.track('view_item', {
       content_type: 'article',
@@ -117,9 +95,6 @@ class Analytics {
     }
   }
 
-  /**
-   * Track article reading progress
-   */
   trackArticleProgress(articleSlug: string, progressPercent: number) {
     if (progressPercent === 25 || progressPercent === 50 || progressPercent === 75 || progressPercent === 100) {
       this.track('article_progress', {
@@ -129,9 +104,6 @@ class Analytics {
     }
   }
 
-  /**
-   * Track custom event with category
-   */
   trackEvent({ action, category, label, value, ...params }: {
     action: string;
     category: EventCategory;
@@ -156,9 +128,6 @@ class Analytics {
     }
   }
 
-  /**
-   * Set user properties for segmentation
-   */
   setUserProperties(properties: Record<string, any>) {
     if (typeof window.gtag === 'function') {
       window.gtag('set', 'user_properties', properties);
@@ -167,19 +136,12 @@ class Analytics {
     this.track('user_properties_set', properties);
   }
 
-  /**
-   * Send event to analytics service
-   */
   private sendEvent(event: AnalyticsEvent) {
-    // Google Analytics 4 via gtag
     if (typeof window.gtag === 'function') {
       window.gtag('event', event.event, event.properties);
     }
   }
 
-  /**
-   * Flush queued events
-   */
   private flushQueue() {
     this.queue.forEach(event => this.sendEvent(event));
     this.queue = [];
@@ -188,7 +150,5 @@ class Analytics {
 
 export const analytics = new Analytics();
 
-// Export convenience functions
 export const trackPageView = (path: string, title?: string) => analytics.page(path, { page_title: title });
-export const trackArticleView = (slug: string, title: string, category: string) => 
-  analytics.trackArticleView(slug, title, category);
+export const trackArticleView = (slug: string, title: string, category: string) => analytics.trackArticleView(slug, title, category);
