@@ -62,7 +62,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           </header>
 
           <div className="flex-1 flex overflow-hidden relative">
-            <main className="flex-1 p-3 md:p-6 overflow-auto pb-20 md:pb-6 custom-scrollbar mobile-safe">
+            <main className="flex-1 p-3 md:p-6 overflow-y-auto overflow-x-hidden pb-20 md:pb-6 custom-scrollbar mobile-safe">
               {children}
             </main>
             
