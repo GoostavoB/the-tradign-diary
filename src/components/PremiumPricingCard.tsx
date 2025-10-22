@@ -96,9 +96,11 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               transition={{ duration: 0.28 }}
-              className="text-xs text-primary font-semibold"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20"
             >
-              {t('pricing.savingsAmount', { amount: getSavings() })}
+              <span className="text-sm font-bold text-primary">
+                {t('pricing.savingsAmount', { amount: getSavings() })}
+              </span>
             </motion.div>
           )}
         </div>
