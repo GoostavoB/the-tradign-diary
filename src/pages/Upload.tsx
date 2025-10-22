@@ -863,9 +863,9 @@ const Upload = () => {
                     <div 
                       ref={brokerFieldRef}
                       className={cn(
-                        "mb-4 p-4 border rounded-lg bg-muted/30 transition-colors",
+                        "mb-4 p-4 border-2 rounded-lg bg-muted/30 transition-all duration-300",
                         brokerError 
-                          ? "border-destructive bg-destructive/5" 
+                          ? "border-destructive bg-destructive/5 animate-shake animate-pulse-error" 
                           : "border-border"
                       )}
                     >

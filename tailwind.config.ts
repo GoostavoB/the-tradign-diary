@@ -161,6 +161,25 @@ export default {
             opacity: "0",
           },
         },
+        "shake": {
+          "0%, 100%": {
+            transform: "translateX(0)",
+          },
+          "10%, 30%, 50%, 70%, 90%": {
+            transform: "translateX(-4px)",
+          },
+          "20%, 40%, 60%, 80%": {
+            transform: "translateX(4px)",
+          },
+        },
+        "pulse-error": {
+          "0%, 100%": {
+            boxShadow: "0 0 0 0 hsl(var(--destructive) / 0.4)",
+          },
+          "50%": {
+            boxShadow: "0 0 0 8px hsl(var(--destructive) / 0), 0 0 20px hsl(var(--destructive) / 0.3)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -173,6 +192,8 @@ export default {
         "pulse-glow": "pulse-glow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "breathing-ring": "breathing-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "shimmer": "shimmer 8s ease-in-out infinite",
+        "shake": "shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97)",
+        "pulse-error": "pulse-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },
