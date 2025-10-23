@@ -11,6 +11,8 @@
     "success": "Thành công",
     "inDevelopment": "Đang Phát Triển",
     "comingSoon": "Sắp Ra Mắt",
+    "inDevelopment": "Đang Phát Triển",
+    "comingSoon": "Sắp Ra Mắt",
     "confirm": "Xác nhận",
     "close": "Đóng",
     "back": "Quay lại",
@@ -30,6 +32,21 @@
     "view": "Xem",
     "customize": "Tùy chỉnh",
     "settings": "Cài đặt"
+  },
+  "contact": {
+    "title": "Liên Hệ",
+    "subtitle": "Liên hệ với đội ngũ của chúng tôi",
+    "name": "Tên",
+    "email": "Email",
+    "company": "Công ty",
+    "message": "Tin nhắn",
+    "send": "Gửi Tin Nhắn",
+    "namePlaceholder": "Tên của bạn",
+    "emailPlaceholder": "email@example.com",
+    "companyPlaceholder": "Công ty của bạn (tùy chọn)",
+    "messagePlaceholder": "Cho chúng tôi biết chúng tôi có thể giúp gì...",
+    "success": "Đã gửi tin nhắn thành công!",
+    "error": "Không thể gửi tin nhắn. Vui lòng thử lại."
   },
   "sidebar": {
     "groups": {

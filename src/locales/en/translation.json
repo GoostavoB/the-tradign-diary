@@ -29,7 +29,24 @@
     "upload": "Upload",
     "view": "View",
     "customize": "Customize",
-    "settings": "Settings"
+    "settings": "Settings",
+    "inDevelopment": "In Development",
+    "comingSoon": "Coming Soon"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with our team",
+    "name": "Name",
+    "email": "Email",
+    "company": "Company",
+    "message": "Message",
+    "send": "Send Message",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "your@email.com",
+    "companyPlaceholder": "Your company (optional)",
+    "messagePlaceholder": "Tell us how we can help...",
+    "success": "Message sent successfully!",
+    "error": "Failed to send message. Please try again."
   },
   "pricing": {
     "title": "Simple, Transparent Pricing",

@@ -29,7 +29,24 @@
     "upload": "Subir",
     "view": "Ver",
     "customize": "Personalizar",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "inDevelopment": "En Desarrollo",
+    "comingSoon": "Próximamente"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "Ponte en contacto con nuestro equipo",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "company": "Empresa",
+    "message": "Mensaje",
+    "send": "Enviar Mensaje",
+    "namePlaceholder": "Tu nombre",
+    "emailPlaceholder": "tu@correo.com",
+    "companyPlaceholder": "Tu empresa (opcional)",
+    "messagePlaceholder": "Cuéntanos cómo podemos ayudarte...",
+    "success": "¡Mensaje enviado correctamente!",
+    "error": "Error al enviar mensaje. Por favor, inténtalo de nuevo."
   },
   "sidebar": {
     "groups": {

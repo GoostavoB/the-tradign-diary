@@ -29,7 +29,24 @@
     "upload": "Enviar",
     "view": "Ver",
     "customize": "Personalizar",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "inDevelopment": "Em Desenvolvimento",
+    "comingSoon": "Em Breve"
+  },
+  "contact": {
+    "title": "Fale Conosco",
+    "subtitle": "Entre em contato com nossa equipe",
+    "name": "Nome",
+    "email": "E-mail",
+    "company": "Empresa",
+    "message": "Mensagem",
+    "send": "Enviar Mensagem",
+    "namePlaceholder": "Seu nome",
+    "emailPlaceholder": "seu@email.com",
+    "companyPlaceholder": "Sua empresa (opcional)",
+    "messagePlaceholder": "Conte-nos como podemos ajudar...",
+    "success": "Mensagem enviada com sucesso!",
+    "error": "Falha ao enviar mensagem. Por favor, tente novamente."
   },
   "sidebar": {
     "groups": {

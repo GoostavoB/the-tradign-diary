@@ -25,6 +25,21 @@
     "inDevelopment": "قيد التطوير",
     "comingSoon": "قريباً"
   },
+  "contact": {
+    "title": "اتصل بنا",
+    "subtitle": "تواصل مع فريقنا",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "company": "الشركة",
+    "message": "الرسالة",
+    "send": "إرسال الرسالة",
+    "namePlaceholder": "اسمك",
+    "emailPlaceholder": "your@email.com",
+    "companyPlaceholder": "شركتك (اختياري)",
+    "messagePlaceholder": "أخبرنا كيف يمكننا المساعدة...",
+    "success": "تم إرسال الرسالة بنجاح!",
+    "error": "فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى."
+  },
   "sidebar": {
     "groups": {
       "dashboard": "لوحة التحكم",
