@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useHreflang } from "@/hooks/useHreflang";
+import { SUPPORTED_LANGUAGES } from "@/utils/languageRouting";
 import { motion } from "framer-motion";
 import PricingComparison from "@/components/PricingComparison";
 import { WideOutcomeCard } from "@/components/premium/WideOutcomeCard";
@@ -18,21 +20,22 @@ import googlePlaySoon from "@/assets/google-play-coming-soon.png";
 const PricingPage = () => {
   const navigate = useNavigate();
   const { t, changeLanguage } = useTranslation();
+  
+  // Add hreflang tags for SEO
+  useHreflang({
+    languages: [...SUPPORTED_LANGUAGES],
+    defaultLanguage: 'en'
+  });
+  
   const heroRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLDivElement>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
 
-  // Detect language from URL and set it
+  // Sync language with URL
   useEffect(() => {
-    const path = window.location.pathname;
-    if (path.startsWith('/pt/')) {
-      changeLanguage('pt');
-    } else if (path.startsWith('/es/')) {
-      changeLanguage('es');
-    } else if (path.startsWith('/ar/')) {
-      changeLanguage('ar');
-    } else if (path.startsWith('/vi/')) {
-      changeLanguage('vi');
+    const pathLang = window.location.pathname.split('/')[1];
+    if (['pt', 'es', 'ar', 'vi'].includes(pathLang)) {
+      changeLanguage(pathLang);
     }
   }, [changeLanguage]);
 

@@ -8,7 +8,10 @@ import { toast } from 'sonner';
 import { Mail, Building2, User, MessageSquare } from 'lucide-react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useHreflang } from '@/hooks/useHreflang';
+import { SUPPORTED_LANGUAGES } from '@/utils/languageRouting';
 import { z } from 'zod';
+import { useEffect } from 'react';
 
 const contactSchema = z.object({
   name: z.string()
@@ -30,7 +33,22 @@ const contactSchema = z.object({
 });
 
 const Contact = () => {
-  const { t } = useTranslation();
+  const { t, changeLanguage } = useTranslation();
+  
+  // Add hreflang tags for SEO
+  useHreflang({
+    languages: [...SUPPORTED_LANGUAGES],
+    defaultLanguage: 'en'
+  });
+  
+  // Sync language with URL
+  useEffect(() => {
+    const pathLang = window.location.pathname.split('/')[1];
+    if (['pt', 'es', 'ar', 'vi'].includes(pathLang)) {
+      changeLanguage(pathLang);
+    }
+  }, [changeLanguage]);
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',

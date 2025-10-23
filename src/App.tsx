@@ -159,6 +159,7 @@ const AppRoutes = () => {
         <Route path="/crypto-trading-faq" element={<CryptoTradingFAQ />} />
         <Route path="/sitemap" element={<Sitemap />} />
         <Route path="/about" element={<About />} />
+        <Route path="/:lang/about" element={<About />} />
         <Route path="/seo-dashboard" element={<SEODashboard />} />
         
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
