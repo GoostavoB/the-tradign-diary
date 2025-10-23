@@ -4,6 +4,8 @@ import { AdvancedMetricsCard } from '@/components/analytics/AdvancedMetricsCard'
 import { ABTestingPanel } from '@/components/analytics/ABTestingPanel';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PremiumFeatureLock } from '@/components/PremiumFeatureLock';
+import { usePremiumFeatures } from '@/hooks/usePremiumFeatures';
 
 // Mock data
 const performanceData = Array.from({ length: 30 }, (_, i) => ({
@@ -22,6 +24,9 @@ const profitData = Array.from({ length: 30 }, (_, i) => ({
 }));
 
 export default function AdvancedAnalytics() {
+  const { isFeatureLocked } = usePremiumFeatures();
+  const isPremiumLocked = isFeatureLocked('pro');
+
   return (
     <>
       <Helmet>
@@ -30,13 +35,14 @@ export default function AdvancedAnalytics() {
       </Helmet>
 
       <AppLayout>
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Advanced Analytics</h1>
-            <p className="text-muted-foreground">
-              Detailed performance insights and experimentation tools
-            </p>
-          </div>
+        <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Advanced Analytics</h1>
+              <p className="text-muted-foreground">
+                Detailed performance insights and experimentation tools
+              </p>
+            </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <AdvancedMetricsCard
@@ -142,6 +148,7 @@ export default function AdvancedAnalytics() {
             </TabsContent>
           </Tabs>
         </div>
+        </PremiumFeatureLock>
       </AppLayout>
     </>
   );

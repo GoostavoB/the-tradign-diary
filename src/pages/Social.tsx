@@ -8,8 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import AppLayout from "@/components/layout/AppLayout";
+import { PremiumFeatureLock } from "@/components/PremiumFeatureLock";
+import { usePremiumFeatures } from "@/hooks/usePremiumFeatures";
 
 export default function Social() {
+  const { isFeatureLocked } = usePremiumFeatures();
+  const isPremiumLocked = isFeatureLocked('pro');
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [followingPosts, setFollowingPosts] = useState<SocialPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +93,8 @@ export default function Social() {
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
+      <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+        <div className="max-w-4xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Trading Community</h1>
           <p className="text-muted-foreground mt-1">Connect, share, and learn from fellow traders</p>
@@ -136,6 +141,7 @@ export default function Social() {
           </TabsContent>
         </Tabs>
       </div>
+      </PremiumFeatureLock>
     </AppLayout>
   );
 }

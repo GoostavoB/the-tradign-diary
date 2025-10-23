@@ -4,11 +4,17 @@ import { EmotionalStateLogger } from "@/components/psychology/EmotionalStateLogg
 import { EmotionalTimeline } from "@/components/psychology/EmotionalTimeline";
 import { BehaviorPatternAnalysis } from "@/components/psychology/BehaviorPatternAnalysis";
 import { Brain, Clock, BarChart3, Lightbulb } from "lucide-react";
+import { PremiumFeatureLock } from "@/components/PremiumFeatureLock";
+import { usePremiumFeatures } from "@/hooks/usePremiumFeatures";
 
 export default function Psychology() {
+  const { isFeatureLocked } = usePremiumFeatures();
+  const isPremiumLocked = isFeatureLocked('pro');
+
   return (
     <AppLayout>
-      <div className="container mx-auto p-6 max-w-7xl">
+      <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+        <div className="container mx-auto p-6 max-w-7xl">
         <div className="flex items-center gap-2 mb-6">
           <Brain className="h-8 w-8" />
           <div>
@@ -63,6 +69,7 @@ export default function Psychology() {
           </TabsContent>
         </Tabs>
       </div>
+      </PremiumFeatureLock>
     </AppLayout>
   );
 }

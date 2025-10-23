@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { AIAssistantProvider } from "@/contexts/AIAssistantContext";
 import { CalmModeProvider } from "@/contexts/CalmModeContext";
 import { ThemeProvider } from "next-themes";
@@ -222,16 +223,18 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
-              <CalmModeProvider>
-                <AIAssistantProvider>
-                  <AppRoutes />
-                  <ConversionTracking />
-                  <PerformanceMonitor />
-                  <GlobalSearch />
-                  <OfflineIndicator />
-                  <InstallPrompt />
-                </AIAssistantProvider>
-              </CalmModeProvider>
+              <SubscriptionProvider>
+                <CalmModeProvider>
+                  <AIAssistantProvider>
+                    <AppRoutes />
+                    <ConversionTracking />
+                    <PerformanceMonitor />
+                    <GlobalSearch />
+                    <OfflineIndicator />
+                    <InstallPrompt />
+                  </AIAssistantProvider>
+                </CalmModeProvider>
+              </SubscriptionProvider>
             </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>

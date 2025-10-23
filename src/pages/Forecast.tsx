@@ -16,10 +16,14 @@ import { calculateAdvancedStats, AdvancedStats } from '@/lib/forecastCalculation
 import { calculateGrowth } from '@/utils/growthFormatting';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Sparkles, Settings2, TrendingDown } from 'lucide-react';
+import { PremiumFeatureLock } from '@/components/PremiumFeatureLock';
+import { usePremiumFeatures } from '@/hooks/usePremiumFeatures';
 
 const Forecast = () => {
   useKeyboardShortcuts();
   const { user } = useAuth();
+  const { isFeatureLocked } = usePremiumFeatures();
+  const isPremiumLocked = isFeatureLocked('pro');
   const [days, setDays] = useState([30]);
   const [avgDailyPnl, setAvgDailyPnl] = useState(0);
   const [projectedEquity, setProjectedEquity] = useState(0);
@@ -118,7 +122,8 @@ const Forecast = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
+      <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+        <div className="max-w-4xl mx-auto space-y-6">
         <div>
           <h1 className="text-4xl font-bold mb-2">Equity Forecast</h1>
           <p className="text-muted-foreground">Project your future equity based on historical performance</p>
@@ -425,6 +430,7 @@ const Forecast = () => {
         open={showCalculationModal}
         onOpenChange={setShowCalculationModal}
       />
+      </PremiumFeatureLock>
     </AppLayout>
   );
 };

@@ -2,6 +2,8 @@ import AppLayout from '@/components/layout/AppLayout';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   BarChart3, Upload, Brain, TrendingUp, Shield, Users, 
   Smartphone, Globe, Zap, FileText, Bell, Calendar,
@@ -157,6 +159,20 @@ const features = [
 ];
 
 export default function FeaturesPage() {
+  const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+
+  const handleStartTrial = () => {
+    const authPath = currentLang === 'en' ? '/auth' : `/${currentLang}/auth`;
+    navigate(authPath);
+  };
+
+  const handleComparePlans = () => {
+    const pricingPath = currentLang === 'en' ? '/pricing' : `/${currentLang}/pricing`;
+    navigate(pricingPath);
+  };
+
   return (
     <AppLayout>
       <div className="max-w-7xl mx-auto space-y-16">
@@ -210,11 +226,11 @@ export default function FeaturesPage() {
             Get access to all essential features with our free plan, or upgrade to Premium for advanced tools
           </p>
           <div className="flex gap-4 justify-center">
-            <Button size="lg" asChild>
-              <a href="/auth">Start Free Trial</a>
+            <Button size="lg" onClick={handleStartTrial}>
+              Start Free Trial
             </Button>
-            <Button size="lg" variant="outline" asChild>
-              <a href="/pricing">Compare Plans</a>
+            <Button size="lg" variant="outline" onClick={handleComparePlans}>
+              Compare Plans
             </Button>
           </div>
         </Card>

@@ -13,11 +13,15 @@ import { FileText, Download, TrendingUp, TrendingDown, Calendar } from "lucide-r
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency, formatNumber } from "@/utils/formatNumber";
+import { PremiumFeatureLock } from "@/components/PremiumFeatureLock";
+import { usePremiumFeatures } from "@/hooks/usePremiumFeatures";
 
 const TaxReports = () => {
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
   const { toast } = useToast();
+  const { isFeatureLocked } = usePremiumFeatures();
+  const isPremiumLocked = isFeatureLocked('pro');
 
   const { data: trades = [], isLoading } = useQuery({
     queryKey: ["trades-tax", selectedYear],
@@ -139,7 +143,8 @@ const TaxReports = () => {
 
   return (
     <AppLayout>
-      <div className="space-y-6">
+      <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+        <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Tax Reports</h1>
@@ -383,6 +388,7 @@ const TaxReports = () => {
           </TabsContent>
         </Tabs>
       </div>
+      </PremiumFeatureLock>
     </AppLayout>
   );
 };

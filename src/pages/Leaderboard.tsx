@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
+import { PremiumFeatureLock } from '@/components/PremiumFeatureLock';
+import { usePremiumFeatures } from '@/hooks/usePremiumFeatures';
 
 interface LeaderboardEntry {
   user_id: string;
@@ -25,6 +27,8 @@ interface LeaderboardEntry {
 
 const Leaderboard = () => {
   const { user } = useAuth();
+  const { isFeatureLocked } = usePremiumFeatures();
+  const isPremiumLocked = isFeatureLocked('pro');
   const [currentSeason, setCurrentSeason] = useState<any>(null);
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [userRank, setUserRank] = useState<LeaderboardEntry | null>(null);
@@ -105,7 +109,8 @@ const Leaderboard = () => {
 
   return (
     <AppLayout>
-      <div className="container mx-auto p-6 max-w-7xl space-y-6">
+      <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+        <div className="container mx-auto p-6 max-w-7xl space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -262,6 +267,7 @@ const Leaderboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+      </PremiumFeatureLock>
     </AppLayout>
   );
 };
