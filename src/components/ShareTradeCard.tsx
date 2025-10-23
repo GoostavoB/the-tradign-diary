@@ -10,6 +10,7 @@ import { toPng } from 'html-to-image';
 import bullNeon from '@/assets/bull-neon.png';
 import bearNeon from '@/assets/bear-neon.png';
 import { format } from 'date-fns';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 interface Trade {
   id: string;
@@ -175,7 +176,11 @@ export function ShareTradeCard({ open, onOpenChange, trade }: ShareTradeCardProp
               {/* Main Value */}
               <div className="text-center">
                 <div className={`text-7xl font-bold ${isProfit ? 'text-neon-green' : 'text-neon-red'}`}>
-                  {mode === 'roi' ? `${value?.toFixed(2)}%` : `$${value?.toFixed(2)}`}
+                  {mode === 'roi' ? (
+                    <BlurredPercent value={value || 0} className="inline" />
+                  ) : (
+                    <BlurredCurrency amount={value || 0} className="inline" />
+                  )}
                 </div>
                 <div className="text-xl text-white/70 mt-2">
                   {mode === 'roi' ? 'Return on Investment' : 'Profit & Loss'}
@@ -188,11 +193,11 @@ export function ShareTradeCard({ open, onOpenChange, trade }: ShareTradeCardProp
                   <div className="flex gap-4">
                     <div>
                       <span className="text-white/60">Entry: </span>
-                      <span className="font-semibold">${trade.entry_price?.toFixed(2)}</span>
+                      <span className="font-semibold"><BlurredCurrency amount={trade.entry_price || 0} className="inline" /></span>
                     </div>
                     <div>
                       <span className="text-white/60">Exit: </span>
-                      <span className="font-semibold">${trade.exit_price?.toFixed(2)}</span>
+                      <span className="font-semibold"><BlurredCurrency amount={trade.exit_price || 0} className="inline" /></span>
                     </div>
                   </div>
                   <div className="text-white/60">

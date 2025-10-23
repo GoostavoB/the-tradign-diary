@@ -14,6 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { BlurredCurrency } from '@/components/ui/BlurredValue';
 
 interface CapitalLogEntry {
   id: string;
@@ -247,7 +248,7 @@ export const CapitalManagement = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Current Capital</p>
-              <p className="text-2xl font-bold">${currentCapital.toLocaleString()}</p>
+              <p className="text-2xl font-bold"><BlurredCurrency amount={currentCapital} /></p>
             </div>
           </div>
         </Card>
@@ -259,7 +260,7 @@ export const CapitalManagement = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total Added</p>
-              <p className="text-2xl font-bold">${totalAdded.toLocaleString()}</p>
+              <p className="text-2xl font-bold"><BlurredCurrency amount={totalAdded} /></p>
             </div>
           </div>
         </Card>
@@ -295,10 +296,10 @@ export const CapitalManagement = () => {
                 <TableRow key={entry.id}>
                   <TableCell>{format(new Date(entry.log_date), 'MMM dd, yyyy')}</TableCell>
                   <TableCell className="font-medium text-accent">
-                    +${entry.amount_added.toLocaleString()}
+                    +<BlurredCurrency amount={entry.amount_added} className="inline" />
                   </TableCell>
                   <TableCell className="font-semibold">
-                    ${entry.total_after.toLocaleString()}
+                    <BlurredCurrency amount={entry.total_after} />
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {entry.notes || '—'}

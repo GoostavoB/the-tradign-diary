@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Shield, Calculator, AlertTriangle, TrendingUp, DollarSign, CheckCircle2, ThumbsUp } from 'lucide-react';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 export const RiskCalculator = () => {
   // Position Size Calculator
@@ -159,7 +160,7 @@ export const RiskCalculator = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Risk Amount</span>
                   <span className="text-lg font-bold text-neon-red">
-                    ${positionCalc.riskAmount.toFixed(2)}
+                    <BlurredCurrency amount={positionCalc.riskAmount} />
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -171,13 +172,13 @@ export const RiskCalculator = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Position Value</span>
                   <span className="text-lg font-bold">
-                    ${positionCalc.positionValue.toFixed(2)}
+                    <BlurredCurrency amount={positionCalc.positionValue} />
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Price Risk</span>
                   <span className="text-lg font-bold">
-                    ${positionCalc.priceRisk.toFixed(2)}
+                    <BlurredCurrency amount={positionCalc.priceRisk} />
                   </span>
                 </div>
               </div>
@@ -186,7 +187,7 @@ export const RiskCalculator = () => {
                   <AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5" />
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Never risk more than {riskPercentage}% of your account on a single trade.
-                    This position will risk ${positionCalc.riskAmount.toFixed(2)} if your stop
+                    This position will risk <BlurredCurrency amount={positionCalc.riskAmount} className="inline" /> if your stop
                     loss is hit.
                   </p>
                 </div>
@@ -238,13 +239,13 @@ export const RiskCalculator = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Risk ($)</span>
                   <span className="text-lg font-bold text-neon-red">
-                    ${rrCalc.risk.toFixed(2)} ({rrCalc.riskPercent.toFixed(2)}%)
+                    <BlurredCurrency amount={rrCalc.risk} className="inline" /> (<BlurredPercent value={rrCalc.riskPercent} className="inline" />)
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Reward ($)</span>
                   <span className="text-lg font-bold text-neon-green">
-                    ${rrCalc.reward.toFixed(2)} ({rrCalc.rewardPercent.toFixed(2)}%)
+                    <BlurredCurrency amount={rrCalc.reward} className="inline" /> (<BlurredPercent value={rrCalc.rewardPercent} className="inline" />)
                   </span>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-border">

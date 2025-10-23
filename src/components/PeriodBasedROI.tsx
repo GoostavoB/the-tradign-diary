@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { calculatePeriodBasedROI } from '@/utils/capitalCalculations';
 import { format } from 'date-fns';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 interface Trade {
   pnl?: number | null;
@@ -100,7 +101,7 @@ export const PeriodBasedROI = () => {
                 <TrendingDown className="h-6 w-6 text-negative" />
               )}
               <span className={weightedROI >= 0 ? 'text-positive' : 'text-negative'}>
-                {weightedROI.toFixed(2)}%
+                <BlurredPercent value={weightedROI} />
               </span>
             </p>
           </div>
@@ -151,7 +152,7 @@ export const PeriodBasedROI = () => {
                     <div className="flex items-center gap-1">
                       <DollarSign className="h-4 w-4 text-muted-foreground" />
                       <span className="font-semibold">
-                        {period.startingCapital.toLocaleString()}
+                        <BlurredCurrency amount={period.startingCapital} className="inline" />
                       </span>
                     </div>
                   </TableCell>
@@ -161,7 +162,7 @@ export const PeriodBasedROI = () => {
                         period.profit >= 0 ? 'text-positive' : 'text-negative'
                       }`}
                     >
-                      {period.profit >= 0 ? '+' : ''}${period.profit.toLocaleString()}
+                      {period.profit >= 0 ? '+' : ''}<BlurredCurrency amount={Math.abs(period.profit)} className="inline" />
                     </span>
                   </TableCell>
                   <TableCell>
@@ -176,7 +177,7 @@ export const PeriodBasedROI = () => {
                           period.roi >= 0 ? 'text-positive' : 'text-negative'
                         }`}
                       >
-                        {period.roi.toFixed(2)}%
+                        <BlurredPercent value={period.roi} className="inline" />
                       </span>
                     </div>
                   </TableCell>
