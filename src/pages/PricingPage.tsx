@@ -44,34 +44,6 @@ const PricingPage = () => {
 
   const solutions = [
     {
-      headline: t('pricing.solutions.seePatterns.headline'),
-      subhead: t('pricing.solutions.seePatterns.subhead'),
-      metric: t('pricing.solutions.seePatterns.metric'),
-      metricValue: 3,
-      proofPoint: t('pricing.solutions.seePatterns.proofPoint'),
-      visual: (
-        <div className="relative w-full h-48 bg-gradient-to-br from-primary/10 to-accent/5 rounded-2xl overflow-hidden">
-          <div className="absolute inset-0 grid grid-cols-5 grid-rows-4 gap-2 p-4">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="rounded bg-primary/20"
-                animate={{
-                  opacity: [0.2, 0.8, 0.2],
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  delay: i * 0.1,
-                  repeat: Infinity,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      ),
-    },
-    {
       headline: t('pricing.solutions.knowEdge.headline'),
       subhead: t('pricing.solutions.knowEdge.subhead'),
       metric: t('pricing.solutions.knowEdge.metric'),
