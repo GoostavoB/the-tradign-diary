@@ -37,7 +37,38 @@
     "socialSharerDesc": "شارك على جميع منصات التواصل الاجتماعي"
   },
   "dashboard": {
-    "marketSentiment": "معنويات السوق"
+    "marketSentiment": "معنويات السوق",
+    "totalPnL": "إجمالي الربح والخسارة",
+    "winRate": "معدل الفوز",
+    "totalTrades": "إجمالي الصفقات",
+    "avgProfit": "متوسط الربح"
+  },
+  "journal": {
+    "title": "دفتر التداول",
+    "newEntry": "إدخال جديد",
+    "tradePair": "زوج التداول",
+    "notes": "ملاحظات",
+    "notesPlaceholder": "ماذا حدث مع هذه الصفقة؟",
+    "emotions": "المشاعر",
+    "emotionsPlaceholder": "كيف شعرت؟",
+    "lessons": "الدروس المستفادة",
+    "lessonsPlaceholder": "ماذا تعلمت؟",
+    "entrySaved": "تم حفظ إدخال الدفتر بنجاح",
+    "fillRequired": "يرجى ملء الحقول المطلوبة",
+    "noEntries": "لا توجد إدخالات في الدفتر بعد. ابدأ في توثيق صفقاتك!"
+  },
+  "quickActions": {
+    "title": "إجراءات سريعة",
+    "uploadTrades": "تحميل الصفقات",
+    "viewReports": "عرض التقارير",
+    "portfolioSnapshot": "لقطة المحفظة",
+    "logError": "تسجيل خطأ التداول",
+    "tradeJournal": "دفتر التداول",
+    "shareResults": "مشاركة النتائج",
+    "exportData": "تصدير البيانات"
+  },
+  "charts": {
+    "performance": "الأداء عبر الزمن"
   },
   "premium": {
     "proFeature": "ميزة احترافية",

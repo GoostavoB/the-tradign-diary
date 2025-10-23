@@ -138,7 +138,38 @@
     "socialSharerDesc": "Comparte en todas las plataformas sociales"
   },
   "dashboard": {
-    "marketSentiment": "Sentimiento del Mercado"
+    "marketSentiment": "Sentimiento del Mercado",
+    "totalPnL": "P&L Total",
+    "winRate": "Tasa de Éxito",
+    "totalTrades": "Total de Operaciones",
+    "avgProfit": "Beneficio Promedio"
+  },
+  "journal": {
+    "title": "Diario de Trading",
+    "newEntry": "Nueva Entrada",
+    "tradePair": "Par de Trading",
+    "notes": "Notas",
+    "notesPlaceholder": "¿Qué pasó con esta operación?",
+    "emotions": "Emociones",
+    "emotionsPlaceholder": "¿Cómo te sentiste?",
+    "lessons": "Lecciones Aprendidas",
+    "lessonsPlaceholder": "¿Qué aprendiste?",
+    "entrySaved": "Entrada del diario guardada exitosamente",
+    "fillRequired": "Por favor completa los campos requeridos",
+    "noEntries": "No hay entradas en el diario todavía. ¡Comienza a documentar tus operaciones!"
+  },
+  "quickActions": {
+    "title": "Acciones Rápidas",
+    "uploadTrades": "Subir Operaciones",
+    "viewReports": "Ver Reportes",
+    "portfolioSnapshot": "Captura del Portafolio",
+    "logError": "Registrar Error de Trading",
+    "tradeJournal": "Diario de Trading",
+    "shareResults": "Compartir Resultados",
+    "exportData": "Exportar Datos"
+  },
+  "charts": {
+    "performance": "Rendimiento en el Tiempo"
   },
   "sidebar": {
     "groups": {

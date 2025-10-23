@@ -60,7 +60,38 @@
     "socialSharerDesc": "Chia sẻ trên tất cả các nền tảng xã hội"
   },
   "dashboard": {
-    "marketSentiment": "Tâm lý thị trường"
+    "marketSentiment": "Tâm lý thị trường",
+    "totalPnL": "Tổng P&L",
+    "winRate": "Tỷ lệ thắng",
+    "totalTrades": "Tổng giao dịch",
+    "avgProfit": "Lợi nhuận trung bình"
+  },
+  "journal": {
+    "title": "Nhật ký giao dịch",
+    "newEntry": "Mục mới",
+    "tradePair": "Cặp giao dịch",
+    "notes": "Ghi chú",
+    "notesPlaceholder": "Điều gì đã xảy ra với giao dịch này?",
+    "emotions": "Cảm xúc",
+    "emotionsPlaceholder": "Bạn cảm thấy thế nào?",
+    "lessons": "Bài học rút ra",
+    "lessonsPlaceholder": "Bạn đã học được gì?",
+    "entrySaved": "Mục nhật ký đã được lưu thành công",
+    "fillRequired": "Vui lòng điền vào các trường bắt buộc",
+    "noEntries": "Chưa có mục nhật ký nào. Bắt đầu ghi chép các giao dịch của bạn!"
+  },
+  "quickActions": {
+    "title": "Hành động nhanh",
+    "uploadTrades": "Tải lên giao dịch",
+    "viewReports": "Xem báo cáo",
+    "portfolioSnapshot": "Ảnh chụp danh mục đầu tư",
+    "logError": "Ghi lỗi giao dịch",
+    "tradeJournal": "Nhật ký giao dịch",
+    "shareResults": "Chia sẻ kết quả",
+    "exportData": "Xuất dữ liệu"
+  },
+  "charts": {
+    "performance": "Hiệu suất theo thời gian"
   },
   "sidebar": {
     "groups": {

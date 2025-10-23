@@ -316,7 +316,38 @@
     "socialSharerDesc": "Share on all social platforms"
   },
   "dashboard": {
-    "marketSentiment": "Market Sentiment"
+    "marketSentiment": "Market Sentiment",
+    "totalPnL": "Total P&L",
+    "winRate": "Win Rate",
+    "totalTrades": "Total Trades",
+    "avgProfit": "Avg Profit"
+  },
+  "journal": {
+    "title": "Trade Journal",
+    "newEntry": "New Entry",
+    "tradePair": "Trade Pair",
+    "notes": "Notes",
+    "notesPlaceholder": "What happened with this trade?",
+    "emotions": "Emotions",
+    "emotionsPlaceholder": "How did you feel?",
+    "lessons": "Lessons Learned",
+    "lessonsPlaceholder": "What did you learn?",
+    "entrySaved": "Journal entry saved successfully",
+    "fillRequired": "Please fill in required fields",
+    "noEntries": "No journal entries yet. Start documenting your trades!"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "uploadTrades": "Upload Trades",
+    "viewReports": "View Reports",
+    "portfolioSnapshot": "Portfolio Snapshot",
+    "logError": "Log Trading Error",
+    "tradeJournal": "Trade Journal",
+    "shareResults": "Share Results",
+    "exportData": "Export Data"
+  },
+  "charts": {
+    "performance": "Performance Over Time"
   },
   "blog": {
     "title": "Crypto Trading Blog",
