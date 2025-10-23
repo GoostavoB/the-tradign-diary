@@ -74,24 +74,49 @@ export class BingXAdapter extends BaseExchangeAdapter {
 
   async fetchTrades(options?: FetchOptions): Promise<Trade[]> {
     try {
-      const params: Record<string, any> = { limit: options?.limit || 500 };
-      const response = await this.makeRequest<{ orders: any[] }>('/openApi/spot/v1/trade/query', params);
+      const params: Record<string, any> = { 
+        limit: Math.min(options?.limit || 500, 1000)
+      };
+
+      // Add time filters if provided
+      if (options?.startTime) {
+        params.startTime = options.startTime.getTime();
+      }
+      if (options?.endTime) {
+        params.endTime = options.endTime.getTime();
+      }
+      if (options?.symbol) {
+        params.symbol = options.symbol.replace('/', '-');
+      }
+
+      // BingX uses /openApi/spot/v2/trade/query for historical trades
+      const response = await this.makeRequest<{ orders: any[] }>(
+        '/openApi/spot/v2/trade/query', 
+        params
+      );
       
-      return response.orders.map(trade => ({
-        id: trade.orderId?.toString() || '',
-        exchange: 'bingx',
-        symbol: trade.symbol?.replace('-', '/') || '',
-        side: trade.side?.toLowerCase() as 'buy' | 'sell',
-        price: parseFloat(trade.price || '0'),
-        quantity: parseFloat(trade.quantity || trade.origQty || '0'),
-        fee: parseFloat(trade.fee || '0'),
-        feeCurrency: trade.feeAsset || 'USDT',
-        timestamp: new Date(trade.time || Date.now()),
-        orderId: trade.orderId?.toString(),
-      }));
+      if (!response.orders || !Array.isArray(response.orders)) {
+        console.warn('BingX returned no trades or invalid format');
+        return [];
+      }
+
+      return response.orders
+        .filter(trade => trade && trade.orderId)
+        .map(trade => ({
+          id: trade.orderId?.toString() || trade.tradeId?.toString() || '',
+          exchange: 'bingx',
+          symbol: trade.symbol?.replace('-', '/') || '',
+          side: trade.side?.toLowerCase() as 'buy' | 'sell',
+          price: parseFloat(trade.price || '0'),
+          quantity: parseFloat(trade.executedQty || trade.quantity || trade.origQty || '0'),
+          fee: parseFloat(trade.commission || trade.fee || '0'),
+          feeCurrency: trade.commissionAsset || trade.feeAsset || 'USDT',
+          timestamp: new Date(parseInt(trade.time || trade.transactTime) || Date.now()),
+          orderId: trade.orderId?.toString(),
+        }));
     } catch (error) {
       console.error('Error fetching BingX trades:', error);
-      return [];
+      throw error;
     }
   }
 

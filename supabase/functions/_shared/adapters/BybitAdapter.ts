@@ -107,7 +107,7 @@ export class BybitAdapter extends BaseExchangeAdapter {
     try {
       const params: Record<string, any> = {
         category: 'spot',
-        limit: options?.limit || 100,
+        limit: Math.min(options?.limit || 50, 100), // Bybit max is 100
       };
 
       if (options?.startTime) {
@@ -118,20 +118,42 @@ export class BybitAdapter extends BaseExchangeAdapter {
         params.endTime = options.endTime.getTime();
       }
 
+      if (options?.symbol) {
+        // Convert symbol format: BTC/USDT -> BTCUSDT
+        params.symbol = options.symbol.replace('/', '');
+      }
+
       const response = await this.makeRequest<{ list: BybitTrade[] }>('/v5/execution/list', params);
-      return response.list.map(trade => ({
-        id: trade.id,
-        exchange: 'bybit',
-        symbol: trade.symbol.replace(/([A-Z]+)([A-Z]{3,4})$/, '$1/$2'),
-        side: trade.isBuyer === '1' ? 'buy' : 'sell',
-        price: parseFloat(trade.orderPrice),
-        quantity: parseFloat(trade.orderQty),
-        fee: parseFloat(trade.execFee),
-        feeCurrency: trade.feeTokenId,
-        timestamp: new Date(parseInt(trade.executionTime)),
-        orderId: trade.orderId,
-        role: trade.isMaker === '1' ? 'maker' : 'taker',
-      }));
+      
+      if (!response.list || !Array.isArray(response.list)) {
+        console.warn('Bybit returned no trades or invalid format');
+        return [];
+      }
+
+      return response.list
+        .filter(trade => trade && trade.id)
+        .map(trade => {
+          // Better symbol parsing - handle various formats
+          let symbol = trade.symbol;
+          if (symbol && !symbol.includes('/')) {
+            // Try to split common patterns like BTCUSDT -> BTC/USDT
+            symbol = symbol.replace(/([A-Z]{3,})(USDT|USDC|BTC|ETH|EUR|USD)$/, '$1/$2');
+          }
+
+          return {
+            id: trade.id || trade.tradeId,
+            exchange: 'bybit',
+            symbol,
+            side: trade.isBuyer === '1' ? 'buy' : 'sell',
+            price: parseFloat(trade.orderPrice || '0'),
+            quantity: parseFloat(trade.orderQty || '0'),
+            fee: parseFloat(trade.execFee || '0'),
+            feeCurrency: trade.feeTokenId || 'USDT',
+            timestamp: new Date(parseInt(trade.executionTime || trade.creatTime)),
+            orderId: trade.orderId,
+            role: trade.isMaker === '1' ? 'maker' : 'taker',
+          };
+        });
     } catch (error) {
       console.error('Error fetching Bybit trades:', error);
       throw error;
