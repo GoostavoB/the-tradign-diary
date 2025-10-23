@@ -16,6 +16,7 @@ import { DataManagement } from '@/components/DataManagement';
 import { CapitalManagement } from '@/components/CapitalManagement';
 import { ThemeSelector } from '@/components/ThemeSelector';
 import { CurrencySelector } from '@/components/settings/CurrencySelector';
+import { BlurSettings } from '@/components/settings/BlurSettings';
 import { SocialShareRewards } from '@/components/SocialShareRewards';
 import { ReferralProgram } from '@/components/ReferralProgram';
 import { useCalmMode } from '@/contexts/CalmModeContext';
@@ -387,22 +388,6 @@ const Settings = () => {
 
           <TabsContent value="trading" className="space-y-6">
             <CapitalManagement />
-
-            <Card className="p-6 glass">
-              <h2 className="text-xl font-semibold mb-4">Display Preferences</h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Blur Sensitive Data</p>
-                    <p className="text-sm text-muted-foreground">Hide financial numbers by default</p>
-                  </div>
-                  <Switch
-                    checked={settings.blur_enabled}
-                    onCheckedChange={handleToggleBlur}
-                  />
-                </div>
-              </div>
-            </Card>
           </TabsContent>
 
           <TabsContent value="setups" className="space-y-6">
@@ -520,6 +505,8 @@ const Settings = () => {
             </Card>
 
             <CurrencySelector />
+
+            <BlurSettings />
 
             <Card className="p-6 glass">
               <h2 className="text-xl font-semibold mb-4">Animation & Sound</h2>

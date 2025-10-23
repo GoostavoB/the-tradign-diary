@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { AIAssistantProvider } from "@/contexts/AIAssistantContext";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { BlurProvider } from "@/contexts/BlurContext";
 import { CalmModeProvider } from "@/contexts/CalmModeContext";
 import { ThemeProvider } from "next-themes";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
@@ -229,14 +230,16 @@ const App = () => (
               <SubscriptionProvider>
               <CalmModeProvider>
                 <CurrencyProvider>
-                  <AIAssistantProvider>
-                    <AppRoutes />
-                    <ConversionTracking />
-                    <PerformanceMonitor />
-                    <GlobalSearch />
-                    <OfflineIndicator />
-                    <InstallPrompt />
-                  </AIAssistantProvider>
+                  <BlurProvider>
+                    <AIAssistantProvider>
+                      <AppRoutes />
+                      <ConversionTracking />
+                      <PerformanceMonitor />
+                      <GlobalSearch />
+                      <OfflineIndicator />
+                      <InstallPrompt />
+                    </AIAssistantProvider>
+                  </BlurProvider>
                 </CurrencyProvider>
               </CalmModeProvider>
               </SubscriptionProvider>
