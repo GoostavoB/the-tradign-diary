@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
-import html2canvas from 'html-to-image';
+import { toPng } from 'html-to-image';
 import { toast } from 'sonner';
 
 interface ReportData {
@@ -39,7 +39,7 @@ export const PDFReportPreview = ({ data, onDownload, isGenerating = false }: PDF
     try {
       toast.info('Generating report image...');
       
-      const dataUrl = await html2canvas.toPng(reportRef.current, {
+      const dataUrl = await toPng(reportRef.current, {
         quality: 1,
         pixelRatio: 2,
         backgroundColor: '#ffffff',
