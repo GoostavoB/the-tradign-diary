@@ -222,11 +222,11 @@ const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true} storageKey="app-theme">
-        <ThemeInitializer />
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ThemeInitializer />
             <AuthProvider>
               <SubscriptionProvider>
               <CalmModeProvider>
