@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RiskMetricsCard } from "@/components/risk/RiskMetricsCard";
 import { PositionSizeCalculator } from "@/components/risk/PositionSizeCalculator";
 import { DrawdownChart } from "@/components/risk/DrawdownChart";
+import { BlurToggleButton } from "@/components/ui/BlurToggleButton";
 import { Shield, Calculator, TrendingDown, BarChart3 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -121,12 +122,15 @@ export default function RiskManagement() {
   return (
     <AppLayout>
       <div className="container mx-auto p-6 max-w-7xl">
-        <div className="flex items-center gap-2 mb-6">
-          <Shield className="h-8 w-8" />
-          <div>
-            <h1 className="text-3xl font-bold">Risk Management</h1>
-            <p className="text-muted-foreground">Monitor and control your trading risk exposure</p>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Shield className="h-8 w-8" />
+            <div>
+              <h1 className="text-3xl font-bold">Risk Management</h1>
+              <p className="text-muted-foreground">Monitor and control your trading risk exposure</p>
+            </div>
           </div>
+          <BlurToggleButton />
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">

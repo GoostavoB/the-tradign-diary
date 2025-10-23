@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, TrendingUp, Shield, AlertCircle } from "lucide-react";
+import { BlurredCurrency } from "@/components/ui/BlurredValue";
 
 interface RiskMetricsCardProps {
   title: string;
@@ -49,7 +50,7 @@ export function RiskMetricsCard({ title, value, maxValue, status, description, u
         <div>
           <h3 className="font-semibold text-sm text-muted-foreground mb-1">{title}</h3>
           <div className={`text-3xl font-bold ${getStatusColor()}`}>
-            {value.toFixed(2)}{unit}
+            <BlurredCurrency amount={value} className="inline" />{unit}
           </div>
         </div>
         {getStatusIcon()}
@@ -61,7 +62,9 @@ export function RiskMetricsCard({ title, value, maxValue, status, description, u
       />
       
       <div className="flex items-center justify-between text-xs mb-2">
-        <span className="text-muted-foreground">Limit: {maxValue}{unit}</span>
+        <span className="text-muted-foreground">
+          Limit: <BlurredCurrency amount={maxValue} className="inline" />{unit}
+        </span>
         <Badge variant="outline" className={getStatusBg()}>
           {percentage.toFixed(0)}%
         </Badge>

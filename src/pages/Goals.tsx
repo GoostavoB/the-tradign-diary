@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { BlurredCurrency } from "@/components/ui/BlurredValue";
 import { GoalCard } from "@/components/goals/GoalCard";
 import { CreateGoalDialog } from "@/components/goals/CreateGoalDialog";
 import { GoalProjection } from "@/components/goals/GoalProjection";
@@ -336,7 +337,7 @@ export default function Goals() {
                                 </div>
                               </div>
                               <Badge className="bg-emerald-500/20 text-emerald-500 border-emerald-500/30">
-                                +${Math.abs(trade.pnl || 0).toFixed(2)}
+                                +<BlurredCurrency amount={Math.abs(trade.pnl || 0)} className="inline" />
                               </Badge>
                             </div>
                           ))}

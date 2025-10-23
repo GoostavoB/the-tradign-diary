@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Target, TrendingUp, Calendar, Award, Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
+import { BlurredCurrency, BlurredPercent } from "@/components/ui/BlurredValue";
 
 interface GoalCardProps {
   goal: {
@@ -46,9 +47,11 @@ export function GoalCard({ goal, onEdit, onDelete }: GoalCardProps) {
   const formatValue = (value: number, type: string) => {
     switch (type) {
       case 'profit':
-        return `$${value.toFixed(2)}`;
+        return <BlurredCurrency amount={value} className="inline" />;
       case 'win_rate':
-        return `${value.toFixed(1)}%`;
+        return <BlurredPercent value={value} className="inline" />;
+      case 'roi':
+        return <BlurredPercent value={value} className="inline" />;
       case 'trades':
         return `${Math.floor(value)} trades`;
       case 'streak':
