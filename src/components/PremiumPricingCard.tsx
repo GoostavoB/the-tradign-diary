@@ -128,7 +128,7 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
         </div>
 
         <MagneticButton
-          onClick={plan.comingSoon ? undefined : () => navigate('/auth')}
+          onClick={plan.comingSoon ? undefined : () => navigate('/auth?mode=signup')}
           variant={plan.popular ? 'default' : 'outline'}
           className={`w-full mb-8 py-6 text-base font-medium ${plan.comingSoon ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}`}
         >
