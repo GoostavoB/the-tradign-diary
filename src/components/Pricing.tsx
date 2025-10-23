@@ -9,8 +9,14 @@ import PricingRoadmap from "./PricingRoadmap";
 
 const Pricing = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
+  const currentLang = i18n.language;
+  
+  const handleAuthNavigate = () => {
+    const authPath = currentLang === 'en' ? '/auth' : `/${currentLang}/auth`;
+    navigate(authPath);
+  };
 
   const plans = [
     {
@@ -191,7 +197,7 @@ const Pricing = () => {
                 </div>
 
                 <Button
-                  onClick={() => navigate('/auth')}
+                  onClick={handleAuthNavigate}
                   className={`w-full mb-5 rounded-xl font-medium transition-all ${
                     plan.popular
                       ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"

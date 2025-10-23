@@ -2,6 +2,7 @@ import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useTranslation as useI18n } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 interface PremiumFeatureLockProps {
@@ -21,11 +22,18 @@ export const PremiumFeatureLock = ({
 }: PremiumFeatureLockProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { i18n } = useI18n();
+  const currentLang = i18n.language;
 
   const blurClass = {
     sm: "blur-[2px]",
     md: "blur-[4px]",
     lg: "blur-[8px]"
+  };
+  
+  const handleUpgrade = () => {
+    const pricingPath = currentLang === 'en' ? '/pricing' : `/${currentLang}/pricing`;
+    navigate(pricingPath);
   };
 
   if (!isLocked) {
@@ -56,7 +64,7 @@ export const PremiumFeatureLock = ({
             </p>
           </div>
           <Button
-            onClick={() => navigate('/pricing')}
+            onClick={handleUpgrade}
             className="gap-2"
           >
             <Lock className="h-4 w-4" />

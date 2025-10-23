@@ -1,13 +1,24 @@
 import { memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 interface PremiumCTACardProps {
   className?: string;
 }
 
 export const PremiumCTACard = memo(({ className }: PremiumCTACardProps) => {
+  const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+  
+  const handleUpgrade = () => {
+    const pricingPath = currentLang === 'en' ? '/pricing' : `/${currentLang}/pricing`;
+    navigate(pricingPath);
+  };
+
   return (
     <GlassCard className={className} role="article" aria-labelledby="premium-cta-title">
       <div className="space-y-4 text-center p-6 md:p-8 pb-8">
@@ -23,6 +34,7 @@ export const PremiumCTACard = memo(({ className }: PremiumCTACardProps) => {
         </div>
         
         <Button 
+          onClick={handleUpgrade}
           className="w-full gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
           size="sm"
           aria-label="Upgrade to Pro plan"

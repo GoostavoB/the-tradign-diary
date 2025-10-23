@@ -3,6 +3,7 @@ import { Check } from 'lucide-react';
 import { GlassCard } from './GlassCard';
 import { MagneticButton } from './MagneticButton';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface PricingPlan {
   id: string;
@@ -26,6 +27,14 @@ interface PremiumPricingCardProps {
 
 export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPricingCardProps) => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+  
+  const handleCTA = () => {
+    if (plan.comingSoon) return;
+    const authPath = currentLang === 'en' ? '/auth?mode=signup' : `/${currentLang}/auth?mode=signup`;
+    navigate(authPath);
+  };
   
   const getDisplayPrice = () => {
     if (plan.monthlyPrice === null || plan.annualPrice === null) return null;
@@ -128,7 +137,7 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
         </div>
 
         <MagneticButton
-          onClick={plan.comingSoon ? undefined : () => navigate('/auth?mode=signup')}
+          onClick={handleCTA}
           variant={plan.popular ? 'default' : 'outline'}
           className={`w-full mb-8 py-6 text-base font-medium ${plan.comingSoon ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}`}
         >
