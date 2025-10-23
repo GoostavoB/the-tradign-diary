@@ -13,6 +13,7 @@ import {
   LineChart,
   Percent,
   Calendar,
+  Grid3x3,
 } from 'lucide-react';
 import { WidgetConfig, WIDGET_SIZES } from '@/types/widget';
 import { TotalBalanceWidget } from '@/components/widgets/TotalBalanceWidget';
@@ -33,6 +34,7 @@ import { BehaviorAnalytics } from '@/components/insights/BehaviorAnalytics';
 import { CostEfficiencyPanel } from '@/components/insights/CostEfficiencyPanel';
 import { PerformanceHighlights } from '@/components/insights/PerformanceHighlights';
 import { TradingQualityMetrics } from '@/components/insights/TradingQualityMetrics';
+import { TradingHeatmap } from '@/components/TradingHeatmap';
 
 /**
  * Widget Catalog - Registry of all available dashboard widgets
@@ -234,6 +236,17 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'medium',
     component: TradingQualityMetrics as any,
     requiresData: ['stats'],
+  },
+
+  heatmap: {
+    id: 'heatmap',
+    title: 'Trading Heatmap',
+    description: 'Visualize trading performance by day and hour',
+    category: 'insights',
+    icon: Grid3x3,
+    defaultSize: 'large',
+    component: TradingHeatmap as any,
+    requiresData: ['trades'],
   },
 };
 

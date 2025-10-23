@@ -793,6 +793,9 @@ const Dashboard = () => {
         widgetProps.totalCapitalAdditions = totalCapitalAdditions;
         widgetProps.currentBalance = baseCapitalForGrowth + (stats?.total_pnl || 0);
         break;
+      case 'heatmap':
+        widgetProps.trades = processedTrades;
+        break;
     }
 
     return (
@@ -974,8 +977,13 @@ const Dashboard = () => {
                     <BehaviorAnalytics trades={processedTrades} />
                   </div>
 
-                  {/* Existing components */}
-                  <DrawdownAnalysis trades={processedTrades} initialInvestment={initialInvestment} />
+                  {/* Layer 4: Heatmap + Drawdown */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <TradingHeatmap trades={processedTrades} />
+                    <DrawdownAnalysis trades={processedTrades} initialInvestment={initialInvestment} />
+                  </div>
+
+                  {/* Trading Streaks */}
                   <TradingStreaks trades={processedTrades} />
                 </Suspense>
               </TabsContent>
