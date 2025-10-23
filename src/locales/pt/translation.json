@@ -33,6 +33,82 @@
     "inDevelopment": "Em Desenvolvimento",
     "comingSoon": "Em Breve"
   },
+  "landing": {
+    "hero": {
+      "title": "Negocie com clareza.",
+      "subtitle": "Um diário de trading impulsionado por IA para investidores de cripto. Capture cada negociação, encontre padrões e rastreie sua vantagem.",
+      "cta": "Começar Teste Grátis"
+    },
+    "stats": {
+      "activeTraders": "Traders Ativos",
+      "tradesLogged": "Negociações Registradas",
+      "satisfaction": "Taxa de Satisfação"
+    },
+    "dashboardShowcase": {
+      "title": "Suas negociações, organizadas. Esta mostra o progresso.",
+      "subtitle": "Rastreie tudo em um só lugar—P&L, emoções, erros. Encontre o que funciona.",
+      "cta": "Começar a Rastrear"
+    },
+    "exchangeLogos": {
+      "title": "Confiado por mais de 10.000 traders de cripto em todo o mundo",
+      "subtitle": "Conecte suas exchanges favoritas e importe negociações automaticamente"
+    },
+    "features": {
+      "title": "Negocie Melhor com Dados",
+      "subtitle": "Tudo o que você precisa para melhorar seu desempenho de trading",
+      "smartLogging": {
+        "title": "Registro Inteligente",
+        "description": "Capture capturas de tela, adicione tags emocionais, rastreie erros—tudo em um lugar.",
+        "blogLinkText": "Saiba Mais"
+      },
+      "autoImports": {
+        "title": "Importação Automática",
+        "description": "Conecte Binance, Bybit e mais. Sincronize negociações automaticamente.",
+        "blogLinkText": "Ver Exchanges"
+      },
+      "advancedAnalytics": {
+        "title": "Análise Avançada",
+        "description": "Taxa de vitórias, expectativa, sequências—veja o que é realmente lucrativo.",
+        "blogLinkText": "Explorar Análises"
+      },
+      "tagFilter": {
+        "title": "Etiquetar e Filtrar",
+        "description": "Organize por configuração, período de tempo, emoção. Encontre padrões instantaneamente.",
+        "blogLinkText": "Como Funciona"
+      },
+      "mobileFriendly": {
+        "title": "Compatível com Celular",
+        "description": "Registre negociações em movimento. Experiência completa em qualquer dispositivo.",
+        "blogLinkText": "Começar"
+      },
+      "learnMore": "Saiba Mais",
+      "readMoreInsights": "Leia Mais Insights de Trading"
+    },
+    "testimonials": {
+      "approvedByTraders": "Aprovado por Traders"
+    },
+    "cta": {
+      "title": "Pronto para Melhorar Seu Trading?",
+      "subtitle": "Junte-se a milhares de traders melhorando sua disciplina e lucratividade.",
+      "button": "Começar Teste Grátis",
+      "note": "Não é necessário cartão de crédito"
+    },
+    "footer": {
+      "tagline": "Rastreie de forma mais inteligente. Negocie melhor.",
+      "product": "Produto",
+      "features": "Recursos",
+      "pricing": "Preços",
+      "support": "Suporte",
+      "help": "Central de Ajuda",
+      "documentation": "Documentação",
+      "contact": "Contato",
+      "legal": "Legal",
+      "terms": "Termos",
+      "privacy": "Privacidade",
+      "allRightsReserved": "Todos os direitos reservados.",
+      "madeWith": "Feito com ❤️ para traders"
+    }
+  },
   "contact": {
     "title": "Fale Conosco",
     "subtitle": "Entre em contato com nossa equipe",

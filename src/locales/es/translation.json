@@ -33,6 +33,82 @@
     "inDevelopment": "En Desarrollo",
     "comingSoon": "Próximamente"
   },
+  "landing": {
+    "hero": {
+      "title": "Opera con claridad.",
+      "subtitle": "Un diario de trading impulsado por IA para inversores de cripto. Captura cada operación, encuentra patrones y rastrea tu ventaja.",
+      "cta": "Comenzar Prueba Gratis"
+    },
+    "stats": {
+      "activeTraders": "Traders Activos",
+      "tradesLogged": "Operaciones Registradas",
+      "satisfaction": "Tasa de Satisfacción"
+    },
+    "dashboardShowcase": {
+      "title": "Tus operaciones, organizadas. Este muestra el progreso.",
+      "subtitle": "Rastrea todo en un solo lugar: P&L, emociones, errores. Encuentra lo que funciona.",
+      "cta": "Comenzar a Rastrear"
+    },
+    "exchangeLogos": {
+      "title": "Confiado por más de 10,000 traders de cripto en todo el mundo",
+      "subtitle": "Conecta tus exchanges favoritos e importa operaciones automáticamente"
+    },
+    "features": {
+      "title": "Opera Mejor con Datos",
+      "subtitle": "Todo lo que necesitas para mejorar tu rendimiento de trading",
+      "smartLogging": {
+        "title": "Registro Inteligente",
+        "description": "Captura capturas de pantalla, añade etiquetas emocionales, rastrea errores—todo en un lugar.",
+        "blogLinkText": "Saber Más"
+      },
+      "autoImports": {
+        "title": "Importación Automática",
+        "description": "Conecta Binance, Bybit y más. Sincroniza operaciones automáticamente.",
+        "blogLinkText": "Ver Exchanges"
+      },
+      "advancedAnalytics": {
+        "title": "Análisis Avanzado",
+        "description": "Tasa de éxito, expectativa, rachas—ve qué es realmente rentable.",
+        "blogLinkText": "Explorar Análisis"
+      },
+      "tagFilter": {
+        "title": "Etiquetar y Filtrar",
+        "description": "Organiza por configuración, marco temporal, emoción. Encuentra patrones al instante.",
+        "blogLinkText": "Cómo Funciona"
+      },
+      "mobileFriendly": {
+        "title": "Compatible con Móviles",
+        "description": "Registra operaciones sobre la marcha. Experiencia completa en cualquier dispositivo.",
+        "blogLinkText": "Comenzar"
+      },
+      "learnMore": "Saber Más",
+      "readMoreInsights": "Leer Más Perspectivas de Trading"
+    },
+    "testimonials": {
+      "approvedByTraders": "Aprobado por Traders"
+    },
+    "cta": {
+      "title": "¿Listo para Mejorar Tu Trading?",
+      "subtitle": "Únete a miles de traders mejorando su disciplina y rentabilidad.",
+      "button": "Comenzar Prueba Gratis",
+      "note": "No se requiere tarjeta de crédito"
+    },
+    "footer": {
+      "tagline": "Rastrea más inteligente. Opera mejor.",
+      "product": "Producto",
+      "features": "Características",
+      "pricing": "Precios",
+      "support": "Soporte",
+      "help": "Centro de Ayuda",
+      "documentation": "Documentación",
+      "contact": "Contacto",
+      "legal": "Legal",
+      "terms": "Términos",
+      "privacy": "Privacidad",
+      "allRightsReserved": "Todos los derechos reservados.",
+      "madeWith": "Hecho con ❤️ para traders"
+    }
+  },
   "contact": {
     "title": "Contáctanos",
     "subtitle": "Ponte en contacto con nuestro equipo",

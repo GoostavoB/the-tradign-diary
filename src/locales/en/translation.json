@@ -33,6 +33,82 @@
     "inDevelopment": "In Development",
     "comingSoon": "Coming Soon"
   },
+  "landing": {
+    "hero": {
+      "title": "Trade with clarity.",
+      "subtitle": "An AI-powered trading diary for crypto investors. Capture every trade, find patterns, and track your edge.",
+      "cta": "Start Free Trial"
+    },
+    "stats": {
+      "activeTraders": "Active Traders",
+      "tradesLogged": "Trades Logged",
+      "satisfaction": "Satisfaction Rate"
+    },
+    "dashboardShowcase": {
+      "title": "Your trades, organized. This one shows progress.",
+      "subtitle": "Track everything in one place—P&L, emotions, errors. Find what works.",
+      "cta": "Start Tracking"
+    },
+    "exchangeLogos": {
+      "title": "Trusted by 10,000+ crypto traders worldwide",
+      "subtitle": "Connect your favorite exchanges and import trades automatically"
+    },
+    "features": {
+      "title": "Trade Better with Data",
+      "subtitle": "Everything you need to improve your trading performance",
+      "smartLogging": {
+        "title": "Smart Logging",
+        "description": "Capture screenshots, add emotional tags, track errors—all in one place.",
+        "blogLinkText": "Learn More"
+      },
+      "autoImports": {
+        "title": "Auto Imports",
+        "description": "Connect Binance, Bybit, and more. Sync trades automatically.",
+        "blogLinkText": "View Exchanges"
+      },
+      "advancedAnalytics": {
+        "title": "Advanced Analytics",
+        "description": "Win rate, expectancy, streaks—see what's actually profitable.",
+        "blogLinkText": "Explore Analytics"
+      },
+      "tagFilter": {
+        "title": "Tag & Filter",
+        "description": "Organize by setup, timeframe, emotion. Find patterns instantly.",
+        "blogLinkText": "How It Works"
+      },
+      "mobileFriendly": {
+        "title": "Mobile Friendly",
+        "description": "Log trades on the go. Full experience on any device.",
+        "blogLinkText": "Get Started"
+      },
+      "learnMore": "Learn More",
+      "readMoreInsights": "Read More Trading Insights"
+    },
+    "testimonials": {
+      "approvedByTraders": "Approved by Traders"
+    },
+    "cta": {
+      "title": "Ready to Level Up Your Trading?",
+      "subtitle": "Join thousands of traders improving their discipline and profitability.",
+      "button": "Start Free Trial",
+      "note": "No credit card required"
+    },
+    "footer": {
+      "tagline": "Track smarter. Trade better.",
+      "product": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "support": "Support",
+      "help": "Help Center",
+      "documentation": "Documentation",
+      "contact": "Contact",
+      "legal": "Legal",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "allRightsReserved": "All rights reserved.",
+      "madeWith": "Made with ❤️ for traders"
+    }
+  },
   "contact": {
     "title": "Contact Us",
     "subtitle": "Get in touch with our team",

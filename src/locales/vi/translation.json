@@ -33,6 +33,82 @@
     "customize": "Tùy chỉnh",
     "settings": "Cài đặt"
   },
+  "landing": {
+    "hero": {
+      "title": "Giao dịch với sự rõ ràng.",
+      "subtitle": "Nhật ký giao dịch được hỗ trợ bởi AI cho nhà đầu tư tiền điện tử. Ghi lại mọi giao dịch, tìm kiếm mẫu và theo dõi lợi thế của bạn.",
+      "cta": "Bắt Đầu Dùng Thử Miễn Phí"
+    },
+    "stats": {
+      "activeTraders": "Trader Hoạt động",
+      "tradesLogged": "Giao dịch Đã Ghi",
+      "satisfaction": "Tỷ Lệ Hài Lòng"
+    },
+    "dashboardShowcase": {
+      "title": "Các giao dịch của bạn, được tổ chức. Cái này cho thấy tiến độ.",
+      "subtitle": "Theo dõi mọi thứ ở một nơi—P&L, cảm xúc, lỗi. Tìm những gì hiệu quả.",
+      "cta": "Bắt Đầu Theo Dõi"
+    },
+    "exchangeLogos": {
+      "title": "Được tin tưởng bởi hơn 10.000 trader tiền điện tử trên toàn thế giới",
+      "subtitle": "Kết nối các sàn giao dịch yêu thích của bạn và nhập giao dịch tự động"
+    },
+    "features": {
+      "title": "Giao Dịch Tốt Hơn với Dữ Liệu",
+      "subtitle": "Mọi thứ bạn cần để cải thiện hiệu suất giao dịch của bạn",
+      "smartLogging": {
+        "title": "Ghi Nhật Ký Thông Minh",
+        "description": "Chụp ảnh màn hình, thêm thẻ cảm xúc, theo dõi lỗi—tất cả ở một nơi.",
+        "blogLinkText": "Tìm Hiểu Thêm"
+      },
+      "autoImports": {
+        "title": "Nhập Tự Động",
+        "description": "Kết nối Binance, Bybit và hơn thế nữa. Đồng bộ giao dịch tự động.",
+        "blogLinkText": "Xem Sàn Giao Dịch"
+      },
+      "advancedAnalytics": {
+        "title": "Phân Tích Nâng Cao",
+        "description": "Tỷ lệ thắng, kỳ vọng, chuỗi—xem những gì thực sự có lợi nhuận.",
+        "blogLinkText": "Khám Phá Phân Tích"
+      },
+      "tagFilter": {
+        "title": "Gắn Thẻ và Lọc",
+        "description": "Sắp xếp theo thiết lập, khung thời gian, cảm xúc. Tìm mẫu ngay lập tức.",
+        "blogLinkText": "Cách Hoạt Động"
+      },
+      "mobileFriendly": {
+        "title": "Thân Thiện với Di Động",
+        "description": "Ghi nhật ký giao dịch khi di chuyển. Trải nghiệm đầy đủ trên mọi thiết bị.",
+        "blogLinkText": "Bắt Đầu"
+      },
+      "learnMore": "Tìm Hiểu Thêm",
+      "readMoreInsights": "Đọc Thêm Insights Giao Dịch"
+    },
+    "testimonials": {
+      "approvedByTraders": "Được Trader Chấp Thuận"
+    },
+    "cta": {
+      "title": "Sẵn Sàng Nâng Cấp Giao Dịch của Bạn?",
+      "subtitle": "Tham gia hàng nghìn trader đang cải thiện kỷ luật và lợi nhuận của họ.",
+      "button": "Bắt Đầu Dùng Thử Miễn Phí",
+      "note": "Không yêu cầu thẻ tín dụng"
+    },
+    "footer": {
+      "tagline": "Theo dõi thông minh hơn. Giao dịch tốt hơn.",
+      "product": "Sản Phẩm",
+      "features": "Tính Năng",
+      "pricing": "Giá Cả",
+      "support": "Hỗ Trợ",
+      "help": "Trung Tâm Trợ Giúp",
+      "documentation": "Tài Liệu",
+      "contact": "Liên Hệ",
+      "legal": "Pháp Lý",
+      "terms": "Điều Khoản",
+      "privacy": "Quyền Riêng Tư",
+      "allRightsReserved": "Đã đăng ký bản quyền.",
+      "madeWith": "Được tạo với ❤️ cho trader"
+    }
+  },
   "contact": {
     "title": "Liên Hệ",
     "subtitle": "Liên hệ với đội ngũ của chúng tôi",
