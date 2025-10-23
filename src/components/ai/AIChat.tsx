@@ -38,11 +38,22 @@ export const AIChat = () => {
     setLoading(true);
 
     try {
+      // Fetch user context
+      const { data: trades } = await supabase
+        .from('trades')
+        .select('profit_loss, win_rate, opened_at')
+        .order('opened_at', { ascending: false })
+        .limit(5);
+
       const response = await aiQueue.enqueue(async () => {
         return await supabase.functions.invoke('ai-chat', {
           body: { 
             messages: [...messages, userMessage],
-            context: { type: 'general_coaching' }
+            context: { 
+              type: 'general_coaching',
+              recentTrades: trades || [],
+              conversationHistory: messages.slice(-5)
+            }
           }
         });
       });
@@ -62,7 +73,6 @@ export const AIChat = () => {
       } else {
         toast.error("Failed to get response");
       }
-      // Remove the user message if failed
       setMessages(prev => prev.slice(0, -1));
     } finally {
       setLoading(false);

@@ -51,7 +51,7 @@ const Journal = lazy(() => import("./pages/Journal"));
 const TradeAnalysis = lazy(() => import("./pages/TradeAnalysis"));
 const Goals = lazy(() => import("./pages/Goals"));
 const RiskManagement = lazy(() => import("./pages/RiskManagement"));
-const Reports = lazy(() => import("./pages/Reports"));
+// const Reports = lazy(() => import("./pages/Reports")); // TODO: Re-implement after types regenerate
 const Psychology = lazy(() => import("./pages/Psychology"));
 const TradingPlan = lazy(() => import("./pages/TradingPlan"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -182,7 +182,7 @@ const AppRoutes = () => {
         <Route path="/trade-analysis" element={<ProtectedRoute><TradeAnalysis /></ProtectedRoute>} />
         <Route path="/goals" element={<ProtectedRoute><Goals /></ProtectedRoute>} />
         <Route path="/risk-management" element={<ProtectedRoute><RiskManagement /></ProtectedRoute>} />
-        <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+        {/* <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} /> */}
         <Route path="/psychology" element={<ProtectedRoute><Psychology /></ProtectedRoute>} />
         <Route path="/trading-plan" element={<ProtectedRoute><TradingPlan /></ProtectedRoute>} />
         <Route path="/exchanges" element={<ProtectedRoute><ExchangeConnections /></ProtectedRoute>} />
