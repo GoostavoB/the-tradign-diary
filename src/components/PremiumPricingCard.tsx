@@ -50,7 +50,7 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
     >
       <GlassCard 
         elevated={plan.popular}
-        className={`p-8 h-full flex flex-col relative ${plan.popular ? 'scale-105' : ''}`}
+        className={`group p-8 h-full flex flex-col relative ${plan.popular ? 'scale-105' : ''}`}
         style={plan.popular ? {
           boxShadow: 'inset 0 -2px 0 0 rgba(255,255,255,0.15), 0 0 60px rgba(200, 220, 240, 0.08), 0 24px 70px -15px rgba(0, 0, 0, 0.5)'
         } : undefined}
@@ -146,7 +146,7 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
                 delay: index * 0.09 + i * 0.05,
                 ease: [0.22, 1, 0.36, 1]
               }}
-              className="flex items-start gap-3 group"
+              className="flex items-start gap-3"
             >
               <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center group-hover:bg-accent/30 transition-all duration-280 ease-premium">
                 <Check size={14} className="text-accent" />
