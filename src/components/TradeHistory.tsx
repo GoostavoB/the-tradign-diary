@@ -54,6 +54,7 @@ import { TradeTableRow } from '@/components/trade-history/TradeTableRow';
 import { BulkActionsToolbar } from '@/components/trade-history/BulkActionsToolbar';
 import { useTradePagination } from '@/components/trade-history/useTradePagination';
 import { PaginationControls } from '@/components/trade-history/PaginationControls';
+import { useBrokerPreferences } from '@/hooks/useBrokerPreferences';
 
 type ColumnKey = 'date' | 'symbol' | 'setup' | 'broker' | 'type' | 'entry' | 'exit' | 'size' | 'pnl' | 'roi' | 'fundingFee' | 'tradingFee';
 
@@ -84,6 +85,7 @@ interface TradeHistoryProps {
 
 export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) => {
   const { user } = useAuth();
+  const { sortedBrokers, incrementUsage: incrementBrokerUsage } = useBrokerPreferences();
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -107,7 +109,6 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
   const [editingBroker, setEditingBroker] = useState<string | null>(null);
   const [brokerSearch, setBrokerSearch] = useState('');
   const [brokerPopoverOpen, setBrokerPopoverOpen] = useState(false);
-  const [userBrokers, setUserBrokers] = useState<string[]>([]);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [tradeToShare, setTradeToShare] = useState<Trade | null>(null);
 
@@ -168,7 +169,6 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
     if (user) {
       fetchTrades();
       fetchUserSetups();
-      fetchUserBrokers();
     }
   }, [user, showDeleted]);
 
@@ -435,20 +435,6 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
     }
   };
 
-  const fetchUserBrokers = async () => {
-    if (!user) return;
-    
-    const { data } = await supabase
-      .from('trades')
-      .select('broker')
-      .eq('user_id', user.id)
-      .not('broker', 'is', null);
-    
-    if (data) {
-      const uniqueBrokers = [...new Set(data.map(t => t.broker).filter(Boolean))];
-      setUserBrokers(uniqueBrokers as string[]);
-    }
-  };
 
   const handleSetupUpdate = async (tradeId: string, setup: string) => {
     const { error } = await supabase
@@ -487,9 +473,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
     if (error) {
       toast.error('Failed to update broker');
     } else {
-      if (broker && !userBrokers.includes(broker)) {
-        setUserBrokers([...userBrokers, broker]);
-      }
+      // Track usage of this broker
+      incrementBrokerUsage(broker);
       
       setTrades(trades.map(t => t.id === tradeId ? { ...t, broker } : t));
       toast.success('Broker updated');
@@ -713,7 +698,7 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                               <Pencil size={12} />
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0 bg-card border-border z-50" align="start">
+                          <PopoverContent className="w-[240px] p-0 bg-card border-border z-50" align="start">
                             <Command>
                               <CommandInput 
                                 placeholder="Search or add broker..." 
@@ -721,33 +706,31 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                                 onValueChange={setBrokerSearch}
                               />
                               <CommandList>
-                                <CommandEmpty>
-                                  <button
-                                    className="w-full text-left px-2 py-1.5 text-sm hover:bg-accent rounded-sm"
-                                    onClick={() => {
-                                      if (brokerSearch.trim()) {
-                                        handleBrokerUpdate(trade.id, brokerSearch.trim());
-                                      }
-                                    }}
-                                  >
-                                    + Add "{brokerSearch}"
-                                  </button>
-                                </CommandEmpty>
-                                {userBrokers.filter(b => 
-                                  b.toLowerCase().includes(brokerSearch.toLowerCase())
-                                ).length > 0 && (
-                                  <CommandGroup heading="Existing Brokers">
-                                    {userBrokers
-                                      .filter(b => b.toLowerCase().includes(brokerSearch.toLowerCase()))
-                                      .map(broker => (
-                                        <CommandItem
-                                          key={broker}
-                                          onSelect={() => handleBrokerUpdate(trade.id, broker)}
-                                        >
-                                          {broker}
-                                        </CommandItem>
-                                      ))
-                                    }
+                                <CommandGroup>
+                                  {sortedBrokers
+                                    .filter(b => b.toLowerCase().includes(brokerSearch.toLowerCase()))
+                                    .map(broker => (
+                                      <CommandItem
+                                        key={broker}
+                                        onSelect={() => handleBrokerUpdate(trade.id, broker)}
+                                      >
+                                        {broker}
+                                      </CommandItem>
+                                    ))
+                                  }
+                                </CommandGroup>
+                                {brokerSearch && !sortedBrokers.some(b => b.toLowerCase() === brokerSearch.toLowerCase()) && (
+                                  <CommandGroup>
+                                    <CommandItem
+                                      onSelect={() => {
+                                        if (brokerSearch.trim()) {
+                                          handleBrokerUpdate(trade.id, brokerSearch.trim());
+                                        }
+                                      }}
+                                      className="text-primary"
+                                    >
+                                      + Add "{brokerSearch}"
+                                    </CommandItem>
                                   </CommandGroup>
                                 )}
                               </CommandList>
