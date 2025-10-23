@@ -3,6 +3,7 @@ import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '@/utils/formatNumber';
 import { useThemeMode } from '@/hooks/useThemeMode';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 interface SpotWalletCardProps {
   totalValue: number;
@@ -38,7 +39,7 @@ export const SpotWalletCard = ({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{formatCurrency(totalValue)}</div>
+        <div className="text-2xl font-bold"><BlurredCurrency amount={totalValue} /></div>
         
         <div className="flex items-center gap-2 mt-2">
           {isPositive ? (
@@ -47,7 +48,7 @@ export const SpotWalletCard = ({
             <TrendingDown className="h-4 w-4" style={{ color: colors.negative }} />
           )}
           <span style={{ color: isPositive ? colors.positive : colors.negative }}>
-            {isPositive ? '+' : ''}{changePercent24h.toFixed(2)}% (24h)
+            {isPositive ? '+' : ''}<BlurredPercent value={changePercent24h} className="inline" /> (24h)
           </span>
         </div>
 
@@ -58,7 +59,7 @@ export const SpotWalletCard = ({
             </p>
             {bestPerformer && (
               <p className="text-xs mt-1" style={{ color: colors.positive }}>
-                Top: {bestPerformer.symbol} +{bestPerformer.changePercent.toFixed(2)}%
+                Top: {bestPerformer.symbol} +<BlurredPercent value={bestPerformer.changePercent} className="inline" />
               </p>
             )}
           </div>

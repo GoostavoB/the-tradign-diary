@@ -7,6 +7,7 @@ import { ExplainMetricButton } from "@/components/ExplainMetricButton";
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import { formatCurrency, formatPercent } from "@/utils/formatNumber";
 import { Trade } from "@/types/trade";
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 interface TotalBalanceCardProps {
   balance: number;
@@ -94,7 +95,7 @@ export const TotalBalanceCard = memo(({
               isPositive ? 'text-primary' : 'text-secondary'
             }`}
           >
-            {isPositive ? '+' : ''}{formatCurrency(change)} today
+            {isPositive ? '+' : ''}<BlurredCurrency amount={change} className="inline" /> today
           </p>
         </div>
 
@@ -126,7 +127,7 @@ export const TotalBalanceCard = memo(({
                             backdropFilter: 'blur(12px)'
                           }}
                         >
-                          {formatCurrency(payload[0].value as number)}
+                          <BlurredCurrency amount={payload[0].value as number} />
                         </div>
                       );
                     }
