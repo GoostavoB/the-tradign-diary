@@ -15,6 +15,7 @@ import { TrendingUp, TrendingDown, Target, DollarSign, Edit, Trophy } from 'luci
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Trade } from '@/types/trade';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 interface AdvancedAnalyticsProps {
   trades: Trade[];
@@ -255,16 +256,16 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
             <div className="flex-1">
               <p className="text-sm text-muted-foreground mb-2">Total Assets</p>
               <p className={`text-5xl font-bold ${totalAssets === 0 ? 'text-foreground' : totalAssets > initialInvestment ? 'text-neon-green' : 'text-neon-red'}`}>
-                ${totalAssets.toFixed(2)}
+                <BlurredCurrency amount={totalAssets} />
               </p>
               <p className="text-sm text-muted-foreground mt-2">
-                Initial Capital: ${initialInvestment.toFixed(2)} + Total P&L: ${totalPnl.toFixed(2)} - Fees: ${totalFees.toFixed(2)}
+                Initial Capital: <BlurredCurrency amount={initialInvestment} className="inline" /> + Total P&L: <BlurredCurrency amount={totalPnl} className="inline" /> - Fees: <BlurredCurrency amount={totalFees} className="inline" />
               </p>
             </div>
             <div className="text-right">
               <p className="text-sm text-muted-foreground mb-2">ROI</p>
               <p className={`text-3xl font-bold ${totalROI === 0 ? 'text-foreground' : totalROI > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-                {totalROI > 0 ? '+' : ''}{totalROI.toFixed(2)}%
+                {totalROI > 0 ? '+' : ''}<BlurredPercent value={totalROI} />
               </p>
               <p className="text-xs text-muted-foreground mt-2">
                 From initial capital
@@ -283,10 +284,10 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
               />
             </div>
             <p className={`text-2xl font-bold mb-1 ${totalROI === 0 ? 'text-foreground' : totalROI > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-              {totalROI.toFixed(2)}%
+              <BlurredPercent value={totalROI} />
             </p>
             <p className="text-xs text-muted-foreground mb-3">
-              Based on initial investment of ${initialInvestment.toFixed(2)}
+              Based on initial investment of <BlurredCurrency amount={initialInvestment} className="inline" />
             </p>
             
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -351,7 +352,7 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
               />
             </div>
             <p className={`text-2xl font-bold ${avgROI === 0 ? 'text-foreground' : avgROI > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-              {avgROI.toFixed(2)}%
+              <BlurredPercent value={avgROI} />
             </p>
           </Card>
           <Card className="p-6 bg-card border-border hover:border-foreground/20 transition-all duration-300">
@@ -363,7 +364,7 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
               />
             </div>
             <p className={`text-2xl font-bold ${avgRevenuePerDay === 0 ? 'text-foreground' : avgRevenuePerDay > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-              ${avgRevenuePerDay.toFixed(2)}
+              <BlurredCurrency amount={avgRevenuePerDay} />
             </p>
           </Card>
         </div>
@@ -376,7 +377,7 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
               <DollarSign className="text-neon-red" size={24} />
             </div>
             <p className="text-2xl font-bold text-neon-red">
-              ${totalFundingFees.toFixed(2)}
+              <BlurredCurrency amount={totalFundingFees} />
             </p>
           </Card>
 
@@ -387,7 +388,7 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
               <DollarSign className="text-neon-red" size={24} />
             </div>
             <p className="text-2xl font-bold text-neon-red">
-              ${totalTradingFees.toFixed(2)}
+              <BlurredCurrency amount={totalTradingFees} />
             </p>
           </Card>
 
@@ -398,7 +399,7 @@ export const AdvancedAnalytics = ({ trades, initialInvestment, userId, onInitial
               <DollarSign className="text-neon-red" size={24} />
             </div>
             <p className="text-2xl font-bold text-neon-red">
-              ${totalFees.toFixed(2)}
+              <BlurredCurrency amount={totalFees} />
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Funding + Trading fees

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Sparkles, TrendingUp, TrendingDown } from 'lucide-react';
 import { formatPercent } from '@/utils/formatNumber';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 interface DashboardInsightBannerProps {
   totalPnL: number;
@@ -69,13 +70,29 @@ export const DashboardInsightBanner = ({ totalPnL, winRate, totalTrades }: Dashb
     if (totalTrades === 0) return "Start trading to see your insights! 🚀";
     
     if (winRate >= 70 && totalPnL > 0) {
-      return `Excellent Performance! 🎯 You're up $${Math.abs(totalPnL).toFixed(2)} with a ${winRate.toFixed(1)}% win rate. Your consistency is paying off—keep following your strategy!`;
+      return (
+        <>
+          Excellent Performance! 🎯 You're up <BlurredCurrency amount={Math.abs(totalPnL)} className="inline" /> with a <BlurredPercent value={winRate} className="inline" /> win rate. Your consistency is paying off—keep following your strategy!
+        </>
+      );
     } else if (winRate >= 55 && totalPnL > 0) {
-      return `Great Trading! 💪 You're profitable with a ${winRate.toFixed(1)}% win rate. Stay disciplined and manage your risk wisely.`;
+      return (
+        <>
+          Great Trading! 💪 You're profitable with a <BlurredPercent value={winRate} className="inline" /> win rate. Stay disciplined and manage your risk wisely.
+        </>
+      );
     } else if (totalPnL > 0) {
-      return `Positive Results! ✨ You're up $${Math.abs(totalPnL).toFixed(2)}. Focus on improving consistency to boost that win rate.`;
+      return (
+        <>
+          Positive Results! ✨ You're up <BlurredCurrency amount={Math.abs(totalPnL)} className="inline" />. Focus on improving consistency to boost that win rate.
+        </>
+      );
     } else if (winRate >= 50) {
-      return `Good Win Rate! 📊 ${winRate.toFixed(1)}% wins shows potential. Review your position sizing and risk management to turn this around.`;
+      return (
+        <>
+          Good Win Rate! 📊 <BlurredPercent value={winRate} className="inline" /> wins shows potential. Review your position sizing and risk management to turn this around.
+        </>
+      );
     } else {
       return `Stay Focused! 💡 Trading is a journey. Review your strategy, manage risk carefully, and keep learning from each trade.`;
     }

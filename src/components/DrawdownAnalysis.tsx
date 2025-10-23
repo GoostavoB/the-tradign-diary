@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { TrendingDown, AlertTriangle, TrendingUp, Activity } from 'lucide-react';
 import type { Trade } from '@/types/trade';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 interface DrawdownPeriod {
   startDate: string;
@@ -183,10 +184,10 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
               <div className={`text-2xl font-bold ${
                 totalReturn >= 0 ? 'text-neon-green' : 'text-neon-red'
               }`}>
-                ${currentBalance.toFixed(2)}
+                <BlurredCurrency amount={currentBalance} />
               </div>
               <div className="text-xs text-muted-foreground mt-1">
-                {totalReturn >= 0 ? '+' : ''}{totalReturn.toFixed(2)}% total return
+                {totalReturn >= 0 ? '+' : ''}<BlurredPercent value={totalReturn} className="inline" /> total return
               </div>
             </Card>
 
@@ -200,11 +201,11 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
                 <span className="text-xs text-muted-foreground">Max Drawdown</span>
               </div>
               <div className="text-2xl font-bold text-neon-red">
-                {maxDrawdown ? `${maxDrawdown.drawdownPercent.toFixed(2)}%` : '0%'}
+                {maxDrawdown ? <BlurredPercent value={maxDrawdown.drawdownPercent} /> : '0%'}
               </div>
               {maxDrawdown && (
                 <div className="text-xs text-muted-foreground mt-1">
-                  -${maxDrawdown.drawdownAmount.toFixed(2)}
+                  -<BlurredCurrency amount={maxDrawdown.drawdownAmount} className="inline" />
                 </div>
               )}
             </Card>
@@ -222,18 +223,18 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
                     <div className="text-xs text-muted-foreground mb-1">Peak Value</div>
-                    <div className="font-semibold">${currentDrawdown.peakValue.toFixed(2)}</div>
+                    <div className="font-semibold"><BlurredCurrency amount={currentDrawdown.peakValue} className="inline" /></div>
                   </div>
                   <div>
                     <div className="text-xs text-muted-foreground mb-1">Current Value</div>
                     <div className="font-semibold text-neon-red">
-                      ${currentDrawdown.troughValue.toFixed(2)}
+                      <BlurredCurrency amount={currentDrawdown.troughValue} className="inline" />
                     </div>
                   </div>
                   <div>
                     <div className="text-xs text-muted-foreground mb-1">Drawdown</div>
                     <div className="font-semibold text-neon-red">
-                      -{currentDrawdown.drawdownPercent.toFixed(2)}%
+                      -<BlurredPercent value={currentDrawdown.drawdownPercent} className="inline" />
                     </div>
                   </div>
                   <div>
@@ -243,7 +244,7 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
                 </div>
                 <div>
                   <div className="text-xs text-muted-foreground mb-2">
-                    Recovery Progress: Need ${currentDrawdown.drawdownAmount.toFixed(2)} to reach peak
+                    Recovery Progress: Need <BlurredCurrency amount={currentDrawdown.drawdownAmount} className="inline" /> to reach peak
                   </div>
                   <Progress 
                     value={0} 
@@ -283,9 +284,9 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg font-bold text-neon-red">
-                          -${dd.drawdownAmount.toFixed(2)}
-                        </div>
+                      <div className="text-lg font-bold text-neon-red">
+                        -<BlurredCurrency amount={dd.drawdownAmount} className="inline" />
+                      </div>
                         <div className="text-xs text-muted-foreground">
                           {dd.daysInDrawdown} days
                         </div>
@@ -293,10 +294,10 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
                     </div>
                     <div className="grid grid-cols-3 gap-3 text-xs">
                       <div>
-                        <span className="text-muted-foreground">Peak:</span> ${dd.peakValue.toFixed(2)}
+                        <span className="text-muted-foreground">Peak:</span> <BlurredCurrency amount={dd.peakValue} className="inline" />
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Trough:</span> ${dd.troughValue.toFixed(2)}
+                        <span className="text-muted-foreground">Trough:</span> <BlurredCurrency amount={dd.troughValue} className="inline" />
                       </div>
                       <div>
                         <span className="text-muted-foreground">Trades:</span> {dd.tradesInDrawdown}
