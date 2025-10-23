@@ -44,12 +44,17 @@ const Footer = () => {
             <h4 className="font-semibold mb-3 text-sm">{t('landing.footer.product')}</h4>
             <ul className="space-y-2.5">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <a href="/features" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.features')}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <a href="/how-it-works" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  How It Works
+                </a>
+              </li>
+              <li>
+                <a href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.pricing')}
                 </a>
               </li>
