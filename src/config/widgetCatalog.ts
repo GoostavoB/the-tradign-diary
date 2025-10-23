@@ -264,6 +264,7 @@ export const DEFAULT_DASHBOARD_LAYOUT = [
   'avgROIPerTrade',
   'capitalGrowth',
   'portfolioOverview',
+  'heatmap',
   'recentTransactions',
   'topMovers',
   'aiInsights',
