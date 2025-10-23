@@ -3,8 +3,9 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Download, ArrowLeft, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
+import { toPng } from 'html-to-image';
 import heroBg from '@/assets/bull-bear-realistic.png';
 import wallpaperLogo from '@/assets/wallpaper-logo-center.png';
 import wallpaperTrading from '@/assets/wallpaper-trading-theme.png';
@@ -14,38 +15,39 @@ import tdLogoBlue from '@/assets/td-logo-official.png';
 const LogoDownload = () => {
   const navigate = useNavigate();
   const [selectedBg, setSelectedBg] = useState<'transparent' | 'white' | 'dark'>('transparent');
+  const logoRef = useRef<HTMLDivElement>(null);
 
-  const downloadLogo = (size: number, bgColor: 'transparent' | 'white') => {
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+  const downloadLogo = async (width: number, height: number, bgColor: 'transparent' | 'white' | 'dark') => {
+    if (!logoRef.current) return;
 
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      // Set background
-      if (bgColor === 'white') {
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, size, size);
-      }
+    try {
+      const backgroundColor = 
+        bgColor === 'white' ? '#FFFFFF' :
+        bgColor === 'dark' ? '#0F0F11' :
+        'transparent';
 
-      // Draw logo
-      ctx.drawImage(img, 0, 0, size, size);
+      const dataUrl = await toPng(logoRef.current, {
+        backgroundColor,
+        width,
+        height,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left',
+          width: `${width}px`,
+          height: `${height}px`,
+        },
+        pixelRatio: 2,
+      });
 
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const link = document.createElement('a');
-        link.download = `trading-diary-logo-${size}x${size}-${bgColor}.png`;
-        link.href = URL.createObjectURL(blob);
-        link.click();
-        URL.revokeObjectURL(link.href);
-        toast.success(`Downloaded ${size}x${size} PNG`);
-      }, 'image/png');
-    };
-
-    img.src = tdLogoBlue;
+      const link = document.createElement('a');
+      link.download = `trading-diary-logo-${width}x${height}-${bgColor}.png`;
+      link.href = dataUrl;
+      link.click();
+      toast.success(`Downloaded ${width}×${height} PNG`);
+    } catch (error) {
+      console.error('Failed to download logo:', error);
+      toast.error('Failed to download logo');
+    }
   };
 
   const downloadThumbnail = (width: number, height: number) => {
@@ -210,28 +212,37 @@ const LogoDownload = () => {
             style={{
               backgroundColor: 
                 selectedBg === 'white' ? '#FFFFFF' :
-                selectedBg === 'dark' ? '#0A0A0A' :
+                selectedBg === 'dark' ? '#0F0F11' :
                 'transparent',
               border: selectedBg === 'transparent' ? '1px dashed hsl(var(--border))' : 'none'
             }}
           >
-            <div className="flex flex-col items-center gap-3">
-              <img src={tdLogoBlue} alt="The Trading Diary Logo" className="w-32 h-32" />
-              <span className="text-lg font-semibold">The Trading Diary</span>
+            <div 
+              ref={logoRef}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '24px 32px',
+              }}
+            >
+              <Logo size="xl" variant="horizontal" className={selectedBg === 'white' ? 'text-foreground' : 'text-white'} />
             </div>
           </div>
 
-          {/* Copy SVG Button - Hidden since we're using PNG */}
-          <div className="mt-6 flex justify-center">
-            <Button onClick={() => {
-              const link = document.createElement('a');
-              link.download = 'trading-diary-logo-1024x1024.png';
-              link.href = tdLogoBlue;
-              link.click();
-              toast.success('Downloaded original logo PNG');
-            }} variant="outline">
+          {/* Download Buttons */}
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Button onClick={() => downloadLogo(800, 200, selectedBg)} variant="outline">
               <Download className="mr-2 h-4 w-4" />
-              Download Original (1024×1024)
+              Standard (800×200)
+            </Button>
+            <Button onClick={() => downloadLogo(1600, 400, selectedBg)} variant="outline">
+              <Download className="mr-2 h-4 w-4" />
+              Large (1600×400)
+            </Button>
+            <Button onClick={() => downloadLogo(2400, 600, selectedBg)}>
+              <Download className="mr-2 h-4 w-4" />
+              HD (2400×600)
             </Button>
           </div>
         </GlassCard>
@@ -298,84 +309,64 @@ const LogoDownload = () => {
           </div>
         </GlassCard>
 
-        {/* Download Options */}
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          {/* Transparent Background */}
-          <GlassCard className="p-6">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="h-4 w-4 rounded border-2 border-dashed border-muted-foreground" />
-              Transparent Background
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Best for overlaying on any background
-            </p>
-            <div className="space-y-3">
-              {[192, 512, 1024].map((size) => (
-                <Button
-                  key={`transparent-${size}`}
-                  onClick={() => downloadLogo(size, 'transparent')}
-                  variant="outline"
-                  className="w-full justify-between hover:bg-primary/10"
-                >
-                  <span>{size}x{size} PNG</span>
-                  <Download className="h-4 w-4" />
-                </Button>
-              ))}
-            </div>
-          </GlassCard>
-
-          {/* White Background */}
-          <GlassCard className="p-6">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="h-4 w-4 rounded bg-white border border-border" />
-              White Background
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Best for dark themed websites or apps
-            </p>
-            <div className="space-y-3">
-              {[192, 512, 1024].map((size) => (
-                <Button
-                  key={`white-${size}`}
-                  onClick={() => downloadLogo(size, 'white')}
-                  variant="outline"
-                  className="w-full justify-between hover:bg-primary/10"
-                >
-                  <span>{size}x{size} PNG</span>
-                  <Download className="h-4 w-4" />
-                </Button>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-
-        {/* Larger Sizes Section */}
+        {/* Additional Sizes Section */}
         <GlassCard className="p-6 mb-6">
-          <h3 className="text-xl font-semibold mb-4">High Resolution Logos</h3>
+          <h3 className="text-xl font-semibold mb-4">Additional Sizes & Backgrounds</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            Ultra high-resolution versions for professional use, billboards, and large format printing
+            Download the complete logo in various sizes with different backgrounds
           </p>
-          <div className="grid md:grid-cols-2 gap-3">
-            {[2048, 4096].map((size) => (
-              <div key={size} className="space-y-2">
-                <Button
-                  onClick={() => downloadLogo(size, 'transparent')}
-                  variant="outline"
-                  className="w-full justify-between hover:bg-primary/10"
-                >
-                  <span>{size}x{size} PNG (Transparent)</span>
-                  <Download className="h-4 w-4" />
-                </Button>
-                <Button
-                  onClick={() => downloadLogo(size, 'white')}
-                  variant="outline"
-                  className="w-full justify-between hover:bg-primary/10"
-                >
-                  <span>{size}x{size} PNG (White BG)</span>
-                  <Download className="h-4 w-4" />
-                </Button>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div>
+              <h4 className="text-sm font-medium mb-3">Transparent</h4>
+              <div className="space-y-2">
+                {[[600, 150], [1200, 300], [2400, 600]].map(([w, h]) => (
+                  <Button
+                    key={`transparent-${w}x${h}`}
+                    onClick={() => downloadLogo(w, h, 'transparent')}
+                    variant="outline"
+                    size="sm"
+                    className="w-full justify-between"
+                  >
+                    <span>{w}×{h}</span>
+                    <Download className="h-3 w-3" />
+                  </Button>
+                ))}
               </div>
-            ))}
+            </div>
+            <div>
+              <h4 className="text-sm font-medium mb-3">White Background</h4>
+              <div className="space-y-2">
+                {[[600, 150], [1200, 300], [2400, 600]].map(([w, h]) => (
+                  <Button
+                    key={`white-${w}x${h}`}
+                    onClick={() => downloadLogo(w, h, 'white')}
+                    variant="outline"
+                    size="sm"
+                    className="w-full justify-between"
+                  >
+                    <span>{w}×{h}</span>
+                    <Download className="h-3 w-3" />
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium mb-3">Dark Background</h4>
+              <div className="space-y-2">
+                {[[600, 150], [1200, 300], [2400, 600]].map(([w, h]) => (
+                  <Button
+                    key={`dark-${w}x${h}`}
+                    onClick={() => downloadLogo(w, h, 'dark')}
+                    variant="outline"
+                    size="sm"
+                    className="w-full justify-between"
+                  >
+                    <span>{w}×{h}</span>
+                    <Download className="h-3 w-3" />
+                  </Button>
+                ))}
+              </div>
+            </div>
           </div>
         </GlassCard>
 
