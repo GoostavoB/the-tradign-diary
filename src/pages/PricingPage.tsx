@@ -12,7 +12,7 @@ import { PremiumBillingToggle } from "@/components/premium/PremiumBillingToggle"
 import { Logo } from "@/components/Logo";
 import { GlassCard } from "@/components/GlassCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import appStoreSoon from "@/assets/app-store-coming-soon.png";
+import appStoreSoon from "@/assets/coming_soon_appstore.png";
 import googlePlaySoon from "@/assets/google-play-coming-soon.png";
 
 const PricingPage = () => {
