@@ -443,6 +443,49 @@ serve(async (req) => {
       );
     }
 
+    // Update user trade patterns for AI learning
+    if (normalizedTrades.length > 0) {
+      try {
+        const closeTimes = normalizedTrades
+          .filter(t => t.closed_at)
+          .map(t => new Date(t.closed_at).getHours());
+        
+        const leverages = normalizedTrades
+          .filter(t => t.leverage)
+          .map(t => t.leverage);
+        
+        const longTrades = normalizedTrades.filter(t => t.side === 'long').length;
+        const totalTrades = normalizedTrades.length;
+        
+        const symbols = normalizedTrades
+          .filter(t => t.symbol)
+          .map(t => t.symbol);
+
+        const patternData = {
+          close_times: closeTimes,
+          leverages: leverages,
+          long_ratio: longTrades / totalTrades,
+          favorite_symbols: symbols,
+          last_updated: new Date().toISOString()
+        };
+
+        await supabaseClient
+          .from('user_trade_patterns')
+          .upsert({
+            user_id: user.id,
+            pattern_type: 'trading_preferences',
+            pattern_data: patternData,
+            confidence_score: Math.min(0.9, 0.5 + (normalizedTrades.length * 0.05)),
+            last_updated_at: new Date().toISOString()
+          }, { onConflict: 'user_id,pattern_type' });
+        
+        console.log('✅ Updated user trade patterns');
+      } catch (patternError) {
+        console.error('Failed to update patterns:', patternError);
+        // Don't fail the request if pattern update fails
+      }
+    }
+
     // Cache result
     if (imageHash) {
       await supabaseClient.from('ai_image_cache').insert({

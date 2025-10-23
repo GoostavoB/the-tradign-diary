@@ -42,37 +42,17 @@ export function GoalWidget() {
     queryFn: async () => {
       const results = await Promise.all(
         goals.map(async (goal) => {
-          // Call the function directly using SQL
-          const { data, error } = await supabase
-            .from('trading_goals')
-            .select('*')
-            .eq('id', goal.id)
-            .single();
+          const { data, error } = await supabase.rpc('calculate_goal_projection', {
+            p_goal_id: goal.id,
+            p_user_id: user!.id
+          });
           
-          if (error || !data) return { goalId: goal.id, projection: null };
-
-          // Calculate projection on client side
-          const daysElapsed = Math.floor((Date.now() - new Date(data.created_at).getTime()) / (1000 * 60 * 60 * 24));
-          const daysRemaining = Math.floor((new Date(data.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-          const dailyProgress = daysElapsed > 0 ? data.current_value / daysElapsed : 0;
-          const requiredDailyRate = daysRemaining > 0 ? (data.target_value - data.current_value) / daysRemaining : 0;
-          const onTrack = dailyProgress >= requiredDailyRate;
-          const probability = onTrack 
-            ? Math.min(95, 50 + (dailyProgress / requiredDailyRate) * 45)
-            : Math.max(5, 50 * (dailyProgress / requiredDailyRate));
-
-          const projection: GoalProjection = {
-            daily_progress: dailyProgress,
-            projected_completion: dailyProgress > 0 
-              ? new Date(Date.now() + ((data.target_value - data.current_value) / dailyProgress) * 24 * 60 * 60 * 1000).toISOString()
-              : null,
-            required_daily_rate: requiredDailyRate,
-            days_remaining: daysRemaining,
-            on_track: onTrack,
-            probability: probability
-          };
-
-          return { goalId: goal.id, projection };
+          if (error) {
+            console.error('Projection error:', error);
+            return { goalId: goal.id, projection: null };
+          }
+          
+          return { goalId: goal.id, projection: data };
         })
       );
       return results;
