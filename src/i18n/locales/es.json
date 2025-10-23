@@ -1,0 +1,64 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "features": "Características",
+    "pricing": "Precios",
+    "contact": "Contacto",
+    "dashboard": "Panel",
+    "trades": "Operaciones",
+    "analytics": "Análisis",
+    "learn": "Aprender",
+    "profile": "Perfil"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "submit": "Enviar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar Sesión",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu Contraseña?",
+    "rememberMe": "Recuérdame"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido a The Trading Diary",
+    "totalTrades": "Total de Operaciones",
+    "winRate": "Tasa de Éxito",
+    "profitLoss": "Ganancia/Pérdida",
+    "activePositions": "Posiciones Activas"
+  },
+  "trades": {
+    "addTrade": "Agregar Operación",
+    "editTrade": "Editar Operación",
+    "deleteTrade": "Eliminar Operación",
+    "symbol": "Símbolo",
+    "entryPrice": "Precio de Entrada",
+    "exitPrice": "Precio de Salida",
+    "quantity": "Cantidad",
+    "date": "Fecha",
+    "notes": "Notas",
+    "profit": "Ganancia",
+    "loss": "Pérdida"
+  },
+  "contact": {
+    "title": "Contáctenos",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "send": "Enviar Mensaje",
+    "success": "¡Mensaje enviado exitosamente!",
+    "error": "Error al enviar mensaje"
+  }
+}

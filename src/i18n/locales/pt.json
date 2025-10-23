@@ -1,0 +1,64 @@
+{
+  "nav": {
+    "home": "Início",
+    "features": "Recursos",
+    "pricing": "Preços",
+    "contact": "Contato",
+    "dashboard": "Painel",
+    "trades": "Negociações",
+    "analytics": "Análises",
+    "learn": "Aprender",
+    "profile": "Perfil"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "submit": "Enviar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar"
+  },
+  "auth": {
+    "login": "Entrar",
+    "signup": "Registrar",
+    "logout": "Sair",
+    "email": "E-mail",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu a Senha?",
+    "rememberMe": "Lembrar-me"
+  },
+  "dashboard": {
+    "welcome": "Bem-vindo ao The Trading Diary",
+    "totalTrades": "Total de Negociações",
+    "winRate": "Taxa de Vitória",
+    "profitLoss": "Lucro/Prejuízo",
+    "activePositions": "Posições Ativas"
+  },
+  "trades": {
+    "addTrade": "Adicionar Negociação",
+    "editTrade": "Editar Negociação",
+    "deleteTrade": "Excluir Negociação",
+    "symbol": "Símbolo",
+    "entryPrice": "Preço de Entrada",
+    "exitPrice": "Preço de Saída",
+    "quantity": "Quantidade",
+    "date": "Data",
+    "notes": "Notas",
+    "profit": "Lucro",
+    "loss": "Prejuízo"
+  },
+  "contact": {
+    "title": "Contate-nos",
+    "name": "Nome",
+    "email": "E-mail",
+    "subject": "Assunto",
+    "message": "Mensagem",
+    "send": "Enviar Mensagem",
+    "success": "Mensagem enviada com sucesso!",
+    "error": "Falha ao enviar mensagem"
+  }
+}

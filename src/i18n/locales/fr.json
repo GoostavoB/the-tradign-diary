@@ -1,0 +1,64 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "contact": "Contact",
+    "dashboard": "Tableau de Bord",
+    "trades": "Transactions",
+    "analytics": "Analyses",
+    "learn": "Apprendre",
+    "profile": "Profil"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "submit": "Soumettre",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "import": "Importer"
+  },
+  "auth": {
+    "login": "Se Connecter",
+    "signup": "S'inscrire",
+    "logout": "Se Déconnecter",
+    "email": "E-mail",
+    "password": "Mot de Passe",
+    "forgotPassword": "Mot de Passe Oublié?",
+    "rememberMe": "Se Souvenir de Moi"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue sur The Trading Diary",
+    "totalTrades": "Total des Transactions",
+    "winRate": "Taux de Réussite",
+    "profitLoss": "Profit/Perte",
+    "activePositions": "Positions Actives"
+  },
+  "trades": {
+    "addTrade": "Ajouter une Transaction",
+    "editTrade": "Modifier la Transaction",
+    "deleteTrade": "Supprimer la Transaction",
+    "symbol": "Symbole",
+    "entryPrice": "Prix d'Entrée",
+    "exitPrice": "Prix de Sortie",
+    "quantity": "Quantité",
+    "date": "Date",
+    "notes": "Notes",
+    "profit": "Profit",
+    "loss": "Perte"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "name": "Nom",
+    "email": "E-mail",
+    "subject": "Sujet",
+    "message": "Message",
+    "send": "Envoyer le Message",
+    "success": "Message envoyé avec succès!",
+    "error": "Échec de l'envoi du message"
+  }
+}

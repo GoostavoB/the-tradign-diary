@@ -77,6 +77,7 @@ const BlogArticle = lazy(() => import("./pages/BlogArticle"));
 const Learn = lazy(() => import("./pages/Learn"));
 const ApiDocs = lazy(() => import("./pages/ApiDocs"));
 const AdvancedAnalytics = lazy(() => import("./pages/AdvancedAnalytics"));
+const SocialFeed = lazy(() => import("./pages/SocialFeed"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -183,6 +184,7 @@ const AppRoutes = () => {
         <Route path="/learn" element={<ProtectedRoute><Learn /></ProtectedRoute>} />
         <Route path="/api-docs" element={<ProtectedRoute><ApiDocs /></ProtectedRoute>} />
         <Route path="/advanced-analytics" element={<ProtectedRoute><AdvancedAnalytics /></ProtectedRoute>} />
+        <Route path="/social-feed" element={<ProtectedRoute><SocialFeed /></ProtectedRoute>} />
         <Route path="/custom/:pageId" element={<ProtectedRoute><CustomPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
