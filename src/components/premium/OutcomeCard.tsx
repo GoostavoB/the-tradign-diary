@@ -113,7 +113,7 @@ export const OutcomeCard = ({
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ duration: 0.3, delay: index * 0.12 + 0.5 }}
-              className="text-[11px] text-primary leading-relaxed tracking-wide"
+              className="text-sm text-primary leading-relaxed tracking-wide"
             >
               {proofPoint}
             </motion.p>
