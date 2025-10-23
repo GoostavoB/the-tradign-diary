@@ -21,13 +21,15 @@ export const ThemeInitializer = () => {
       '/', '/pt', '/es', '/ar', '/vi',
       '/pricing', '/contact', '/legal', '/terms', '/privacy',
       '/blog', '/about', '/testimonials', '/how-it-works', '/features',
-      '/changelog', '/cookie-policy', '/sitemap'
+      '/changelog', '/cookie-policy', '/sitemap', '/logo-download', 
+      '/logo-generator', '/crypto-trading-faq', '/seo-dashboard', '/author'
     ];
     
-    // Check if current route is public or a blog post
+    // Check if current route is public or a blog/author post
     const isPublicRoute = publicRoutes.some(route => 
       location.pathname === route || 
       location.pathname.startsWith('/blog/') ||
+      location.pathname.startsWith('/author/') ||
       location.pathname.match(/^\/(pt|es|ar|vi)\/(pricing|contact|legal|terms|privacy|blog|about|cookie-policy)/)
     );
     

@@ -157,16 +157,16 @@ const AppRoutes = () => {
         <Route path="/:lang/blog" element={<PublicPageThemeWrapper><Blog /></PublicPageThemeWrapper>} />
         <Route path="/blog/:slug" element={<PublicPageThemeWrapper><BlogPost /></PublicPageThemeWrapper>} />
         <Route path="/:lang/blog/:slug" element={<PublicPageThemeWrapper><BlogPost /></PublicPageThemeWrapper>} />
-        <Route path="/author/:authorSlug" element={<Author />} />
+        <Route path="/author/:authorSlug" element={<PublicPageThemeWrapper><Author /></PublicPageThemeWrapper>} />
         
         {/* Other public pages - wrapped with default theme */}
-        <Route path="/logo-download" element={<LogoDownload />} />
-        <Route path="/logo-generator" element={<LogoGenerator />} />
-        <Route path="/crypto-trading-faq" element={<CryptoTradingFAQ />} />
-        <Route path="/sitemap" element={<Sitemap />} />
+        <Route path="/logo-download" element={<PublicPageThemeWrapper><LogoDownload /></PublicPageThemeWrapper>} />
+        <Route path="/logo-generator" element={<PublicPageThemeWrapper><LogoGenerator /></PublicPageThemeWrapper>} />
+        <Route path="/crypto-trading-faq" element={<PublicPageThemeWrapper><CryptoTradingFAQ /></PublicPageThemeWrapper>} />
+        <Route path="/sitemap" element={<PublicPageThemeWrapper><Sitemap /></PublicPageThemeWrapper>} />
         <Route path="/about" element={<PublicPageThemeWrapper><About /></PublicPageThemeWrapper>} />
         <Route path="/:lang/about" element={<PublicPageThemeWrapper><About /></PublicPageThemeWrapper>} />
-        <Route path="/seo-dashboard" element={<SEODashboard />} />
+        <Route path="/seo-dashboard" element={<PublicPageThemeWrapper><SEODashboard /></PublicPageThemeWrapper>} />
         
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/upload" element={<ProtectedRoute><Upload /></ProtectedRoute>} />
@@ -201,7 +201,7 @@ const AppRoutes = () => {
         <Route path="/user-guide" element={<ProtectedRoute><UserGuide /></ProtectedRoute>} />
         <Route path="/cookie-policy" element={<PublicPageThemeWrapper><CookiePolicy /></PublicPageThemeWrapper>} />
         <Route path="/:lang/cookie-policy" element={<PublicPageThemeWrapper><CookiePolicy /></PublicPageThemeWrapper>} />
-        <Route path="/blog/article/:slug" element={<BlogArticle />} />
+        <Route path="/blog/article/:slug" element={<PublicPageThemeWrapper><BlogArticle /></PublicPageThemeWrapper>} />
         <Route path="/learn" element={<ProtectedRoute><Learn /></ProtectedRoute>} />
         <Route path="/api-docs" element={<ProtectedRoute><ApiDocs /></ProtectedRoute>} />
         <Route path="/advanced-analytics" element={<ProtectedRoute><AdvancedAnalytics /></ProtectedRoute>} />
