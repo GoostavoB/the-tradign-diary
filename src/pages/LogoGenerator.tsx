@@ -24,20 +24,41 @@ const variations: LogoVariation[] = [
   { id: 'brazil', name: 'Brazil Colors', description: 'Green, yellow, and blue tropical design' },
 ];
 
+const getBase64FromImage = async (imagePath: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Failed to get canvas context'));
+        return;
+      }
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = () => reject(new Error('Failed to load image'));
+    img.src = imagePath;
+  });
+};
+
 export default function LogoGenerator() {
   const [generating, setGenerating] = useState<string | null>(null);
   const [generatedLogos, setGeneratedLogos] = useState<Record<string, string>>({});
-  
-  // Use the original logo from the public folder
-  const originalLogoUrl = `${window.location.origin}/original-logo.png`;
 
   const generateLogo = async (variation: LogoVariation) => {
     setGenerating(variation.id);
     try {
+      // Convert logo to base64
+      const base64Image = await getBase64FromImage('/original-logo.png');
+      
       const { data, error } = await supabase.functions.invoke('generate-logo-variations', {
         body: { 
           variation: variation.id,
-          imageUrl: originalLogoUrl
+          imageUrl: base64Image
         }
       });
 
