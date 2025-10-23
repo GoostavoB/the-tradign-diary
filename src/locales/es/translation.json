@@ -126,6 +126,20 @@
     "shareNotSupported": "Compartir no es compatible con este navegador",
     "snapshotNote": "Las capturas ayudan a rastrear el crecimiento de tu portafolio con el tiempo"
   },
+  "achievements": {
+    "title": "Logros",
+    "firstUpload": "Primera Carga",
+    "firstUploadDesc": "Sube tu primer documento de operación",
+    "tradeMaster": "Maestro del Trading",
+    "tradeMasterDesc": "Procesa 100 operaciones",
+    "errorTracker": "Aprendiendo de Errores",
+    "errorTrackerDesc": "Rastrea 10 errores de trading",
+    "socialSharer": "Mariposa Social",
+    "socialSharerDesc": "Comparte en todas las plataformas sociales"
+  },
+  "dashboard": {
+    "marketSentiment": "Sentimiento del Mercado"
+  },
   "sidebar": {
     "groups": {
       "dashboard": "Panel",

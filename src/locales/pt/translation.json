@@ -126,6 +126,20 @@
     "shareNotSupported": "Compartilhamento não suportado neste navegador",
     "snapshotNote": "Snapshots ajudam a rastrear o crescimento do seu portfólio ao longo do tempo"
   },
+  "achievements": {
+    "title": "Conquistas",
+    "firstUpload": "Primeiro Upload",
+    "firstUploadDesc": "Envie seu primeiro documento de negociação",
+    "tradeMaster": "Mestre dos Negócios",
+    "tradeMasterDesc": "Processe 100 negociações",
+    "errorTracker": "Aprendendo com Erros",
+    "errorTrackerDesc": "Rastreie 10 erros de negociação",
+    "socialSharer": "Borboleta Social",
+    "socialSharerDesc": "Compartilhe em todas as plataformas sociais"
+  },
+  "dashboard": {
+    "marketSentiment": "Sentimento do Mercado"
+  },
   "sidebar": {
     "groups": {
       "dashboard": "Painel",

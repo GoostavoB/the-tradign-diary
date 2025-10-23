@@ -304,6 +304,20 @@
       "disclaimer": "Features and timeline subject to change based on user feedback and development priorities"
     }
   },
+  "achievements": {
+    "title": "Achievements",
+    "firstUpload": "First Upload",
+    "firstUploadDesc": "Upload your first trade document",
+    "tradeMaster": "Trade Master",
+    "tradeMasterDesc": "Process 100 trades",
+    "errorTracker": "Learning from Mistakes",
+    "errorTrackerDesc": "Track 10 trading errors",
+    "socialSharer": "Social Butterfly",
+    "socialSharerDesc": "Share on all social platforms"
+  },
+  "dashboard": {
+    "marketSentiment": "Market Sentiment"
+  },
   "blog": {
     "title": "Crypto Trading Blog",
     "subtitle": "Expert insights on AI-powered trading, psychology, risk management, and data-driven strategies",

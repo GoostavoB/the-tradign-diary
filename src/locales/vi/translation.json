@@ -48,6 +48,20 @@
     "success": "Đã gửi tin nhắn thành công!",
     "error": "Không thể gửi tin nhắn. Vui lòng thử lại."
   },
+  "achievements": {
+    "title": "Thành tích",
+    "firstUpload": "Tải lên đầu tiên",
+    "firstUploadDesc": "Tải lên tài liệu giao dịch đầu tiên của bạn",
+    "tradeMaster": "Bậc thầy giao dịch",
+    "tradeMasterDesc": "Xử lý 100 giao dịch",
+    "errorTracker": "Học từ sai lầm",
+    "errorTrackerDesc": "Theo dõi 10 lỗi giao dịch",
+    "socialSharer": "Bướm xã hội",
+    "socialSharerDesc": "Chia sẻ trên tất cả các nền tảng xã hội"
+  },
+  "dashboard": {
+    "marketSentiment": "Tâm lý thị trường"
+  },
   "sidebar": {
     "groups": {
       "dashboard": "Bảng điều khiển",

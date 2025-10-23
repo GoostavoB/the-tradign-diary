@@ -25,6 +25,83 @@
     "inDevelopment": "قيد التطوير",
     "comingSoon": "قريباً"
   },
+  "achievements": {
+    "title": "الإنجازات",
+    "firstUpload": "أول تحميل",
+    "firstUploadDesc": "قم بتحميل أول مستند تداول",
+    "tradeMaster": "سيد التداول",
+    "tradeMasterDesc": "معالجة 100 صفقة",
+    "errorTracker": "التعلم من الأخطاء",
+    "errorTrackerDesc": "تتبع 10 أخطاء تداول",
+    "socialSharer": "فراشة اجتماعية",
+    "socialSharerDesc": "شارك على جميع منصات التواصل الاجتماعي"
+  },
+  "dashboard": {
+    "marketSentiment": "معنويات السوق"
+  },
+  "premium": {
+    "proFeature": "ميزة احترافية",
+    "eliteFeature": "ميزة النخبة",
+    "upgradeMessage": "قم بالترقية إلى {{plan}} لإلغاء قفل هذه الميزة",
+    "upgradeCTA": "الترقية الآن"
+  },
+  "social": {
+    "title": "شارك واربح المكافآت",
+    "earnedRewards": "المكافآت المكتسبة",
+    "uploads": "تحميلات",
+    "shareLimit": "يمكنك المشاركة مرة واحدة على كل منصة"
+  },
+  "referral": {
+    "title": "برنامج الإحالة",
+    "description": "قم بدعوة الأصدقاء واحصل على مكافآت",
+    "yourLink": "رابط الإحالة الخاص بك",
+    "copyLink": "نسخ الرابط",
+    "shareLink": "مشاركة الرابط",
+    "rewards": "المكافآت",
+    "friendGets": "صديقك يحصل على",
+    "youGet": "أنت تحصل على",
+    "stats": "إحصائيات الإحالة",
+    "totalReferrals": "إجمالي الإحالات",
+    "pendingRewards": "المكافآت المعلقة",
+    "linkCopied": "تم نسخ الرابط!",
+    "linkShared": "تمت المشاركة!"
+  },
+  "errors": {
+    "title": "تتبع أخطاء التداول",
+    "description": "تعلم من أخطائك وتحسن بمرور الوقت",
+    "logError": "تسجيل الخطأ",
+    "errorType": "نوع الخطأ",
+    "selectType": "اختر نوع الخطأ",
+    "errorDescription": "الوصف",
+    "descriptionPlaceholder": "اشرح ما حدث...",
+    "recentErrors": "الأخطاء الأخيرة",
+    "noErrors": "لم يتم تسجيل أخطاء بعد",
+    "types": {
+      "fomo": "FOMO (الخوف من الضياع)",
+      "panic": "بيع الذعر",
+      "overleveraged": "إفراط في الرافعة المالية",
+      "no_stop_loss": "عدم وجود وقف خسارة",
+      "emotional": "تداول عاطفي",
+      "overtrading": "إفراط في التداول"
+    }
+  },
+  "fearGreed": {
+    "title": "مؤشر الخوف والجشع",
+    "lastUpdate": "آخر تحديث",
+    "extreme_fear": "خوف شديد",
+    "fear": "خوف",
+    "neutral": "محايد",
+    "greed": "جشع",
+    "extreme_greed": "جشع شديد"
+  },
+  "portfolio": {
+    "snapshot": "لقطة المحفظة",
+    "capture": "التقاط لقطة",
+    "share": "مشاركة",
+    "performance": "الأداء",
+    "totalValue": "القيمة الإجمالية",
+    "change24h": "التغيير 24 ساعة"
+  },
   "contact": {
     "title": "اتصل بنا",
     "subtitle": "تواصل مع فريقنا",
