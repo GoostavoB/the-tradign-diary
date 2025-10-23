@@ -46,7 +46,9 @@
     "companyPlaceholder": "Your company (optional)",
     "messagePlaceholder": "Tell us how we can help...",
     "success": "Message sent successfully!",
-    "error": "Failed to send message. Please try again."
+    "error": "Failed to send message. Please try again.",
+    "messageSent": "Email client opened. Please send the message.",
+    "orEmail": "Or email us directly at:"
   },
   "premium": {
     "proFeature": "Pro Feature",
@@ -80,6 +82,31 @@
     "totalReferrals": "Total Referrals",
     "uploadsEarned": "Uploads Earned",
     "terms": "Both parties receive rewards once the referred user completes signup"
+  },
+  "errors": {
+    "title": "Trading Errors",
+    "description": "Track mistakes to learn and improve your trading discipline",
+    "addError": "Add Error",
+    "errorType": "Error Type",
+    "notes": "Notes",
+    "notesPlaceholder": "What happened and what can you learn from it?",
+    "save": "Save Error",
+    "added": "Error logged successfully",
+    "removed": "Error removed",
+    "selectType": "Please select an error type",
+    "noErrors": "No errors tracked for this trade",
+    "totalErrors": "Total Errors: {{count}}",
+    "optional": "(optional)"
+  },
+  "fearGreed": {
+    "title": "Fear & Greed Index",
+    "description": "Market sentiment indicator for crypto",
+    "crypto": "Crypto",
+    "extremeFear": "Extreme Fear",
+    "neutral": "Neutral",
+    "extremeGreed": "Extreme Greed",
+    "lastUpdate": "Last updated",
+    "error": "Unable to load Fear & Greed Index"
   },
   "pricing": {
     "title": "Simple, Transparent Pricing",

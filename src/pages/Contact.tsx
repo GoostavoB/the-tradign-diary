@@ -11,10 +11,22 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { z } from 'zod';
 
 const contactSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100),
-  email: z.string().trim().email("Invalid email address").max(255),
-  company: z.string().trim().max(100).optional(),
-  message: z.string().trim().min(1, "Message is required").max(1000),
+  name: z.string()
+    .trim()
+    .min(1, { message: "Name is required" })
+    .max(100, { message: "Name must be less than 100 characters" }),
+  email: z.string()
+    .trim()
+    .email({ message: "Invalid email address" })
+    .max(255, { message: "Email must be less than 255 characters" }),
+  company: z.string()
+    .trim()
+    .max(100, { message: "Company name must be less than 100 characters" })
+    .optional(),
+  message: z.string()
+    .trim()
+    .min(10, { message: "Message must be at least 10 characters" })
+    .max(1000, { message: "Message must be less than 1000 characters" })
 });
 
 const Contact = () => {
@@ -163,7 +175,7 @@ const Contact = () => {
 
         <div className="text-center space-y-4 pt-8">
           <p className="text-sm text-muted-foreground">
-            {t('contact.directEmail')}
+            {t('contact.orEmail')}
           </p>
           <a
             href="mailto:contact@thetradingdiary.com"
