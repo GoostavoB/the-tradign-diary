@@ -102,13 +102,18 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/legal" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <a href="/terms" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  {t('landing.footer.terms')}
+                </a>
+              </li>
+              <li>
+                <a href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.privacy')}
                 </a>
               </li>
               <li>
-                <a href="/legal" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  {t('landing.footer.terms')}
+                <a href="/cookie-policy" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  Cookie Policy
                 </a>
               </li>
             </ul>

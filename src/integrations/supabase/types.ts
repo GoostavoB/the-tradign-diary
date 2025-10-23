@@ -1275,6 +1275,33 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_subscriptions: {
+        Row: {
+          confirmation_token: string | null
+          confirmed: boolean | null
+          confirmed_at: string | null
+          created_at: string | null
+          email: string
+          id: string
+        }
+        Insert: {
+          confirmation_token?: string | null
+          confirmed?: boolean | null
+          confirmed_at?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+        }
+        Update: {
+          confirmation_token?: string | null
+          confirmed?: boolean | null
+          confirmed_at?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
       performance_alerts: {
         Row: {
           alert_name: string
