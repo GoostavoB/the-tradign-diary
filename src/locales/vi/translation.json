@@ -513,5 +513,19 @@
       "subtitle": "Khám phá và nâng giao dịch của bạn lên cấp độ tiếp theo.",
       "footer": "Bạn có thể xem lại tour này bất cứ lúc nào trong cài đặt."
     }
+  },
+  "dateRange": {
+    "pickDateRange": "Chọn khoảng ngày",
+    "quickSelect": "Chọn Nhanh",
+    "presets": {
+      "today": "Hôm nay",
+      "last7Days": "7 ngày qua",
+      "last30Days": "30 ngày qua",
+      "last90Days": "90 ngày qua",
+      "thisMonth": "Tháng này"
+    },
+    "cancel": "Hủy",
+    "apply": "Áp dụng",
+    "showingData": "Hiển thị dữ liệu cho"
   }
 }

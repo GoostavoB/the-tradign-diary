@@ -25,6 +25,17 @@ export const DateRangeFilter = ({ dateRange, onDateRangeChange }: DateRangeFilte
 
   const presetRanges = [
     {
+      label: t('dateRange.presets.today'),
+      getValue: () => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return {
+          from: today,
+          to: today,
+        };
+      },
+    },
+    {
       label: t('dateRange.presets.last7Days'),
       getValue: () => ({
         from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
@@ -64,10 +75,20 @@ export const DateRangeFilter = ({ dateRange, onDateRangeChange }: DateRangeFilte
   };
 
   const handleApply = () => {
-    onDateRangeChange(tempRange);
+    // If only 'from' is selected, treat it as a single-day range
+    const finalRange = tempRange?.from && !tempRange?.to 
+      ? { from: tempRange.from, to: tempRange.from }
+      : tempRange;
+    
+    onDateRangeChange(finalRange);
     setIsOpen(false);
-    if (tempRange?.from && tempRange?.to) {
-      toast.success(`${t('dateRange.showingData')} ${format(tempRange.from, 'MMM dd')} - ${format(tempRange.to, 'MMM dd, yyyy')}`);
+    
+    if (finalRange?.from && finalRange?.to) {
+      const isSingleDay = finalRange.from.toDateString() === finalRange.to.toDateString();
+      const message = isSingleDay
+        ? `${t('dateRange.showingData')} ${format(finalRange.from, 'MMM dd, yyyy')}`
+        : `${t('dateRange.showingData')} ${format(finalRange.from, 'MMM dd')} - ${format(finalRange.to, 'MMM dd, yyyy')}`;
+      toast.success(message);
     }
   };
 
@@ -93,7 +114,7 @@ export const DateRangeFilter = ({ dateRange, onDateRangeChange }: DateRangeFilte
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {dateRange?.from ? (
-              dateRange.to ? (
+              dateRange.to && dateRange.from.toDateString() !== dateRange.to.toDateString() ? (
                 <>
                   {format(dateRange.from, 'LLL dd, y')} -{' '}
                   {format(dateRange.to, 'LLL dd, y')}
@@ -143,7 +164,7 @@ export const DateRangeFilter = ({ dateRange, onDateRangeChange }: DateRangeFilte
                   size="sm"
                   onClick={handleApply}
                   className="flex-1 bg-primary hover:bg-primary/90"
-                  disabled={!tempRange?.from || !tempRange?.to}
+                  disabled={!tempRange?.from}
                 >
                   {t('dateRange.apply')}
                 </Button>

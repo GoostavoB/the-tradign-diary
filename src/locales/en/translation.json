@@ -1825,6 +1825,7 @@
     "pickDateRange": "Pick a date range",
     "quickSelect": "Quick Select",
     "presets": {
+      "today": "Today",
       "last7Days": "Last 7 days",
       "last30Days": "Last 30 days",
       "last90Days": "Last 90 days",

@@ -999,6 +999,20 @@
     "asset": "Ativo",
     "status": "Status"
   },
+  "dateRange": {
+    "pickDateRange": "Escolha o intervalo de datas",
+    "quickSelect": "Seleção Rápida",
+    "presets": {
+      "today": "Hoje",
+      "last7Days": "Últimos 7 dias",
+      "last30Days": "Últimos 30 dias",
+      "last90Days": "Últimos 90 dias",
+      "thisMonth": "Este Mês"
+    },
+    "cancel": "Cancelar",
+    "apply": "Aplicar",
+    "showingData": "Mostrando dados para"
+  },
   "landing": {
     "hero": {
       "title": "O Diário de Trading Cripto #1",
