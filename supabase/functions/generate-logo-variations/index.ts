@@ -11,24 +11,28 @@ serve(async (req) => {
   }
 
   try {
-    const { variation } = await req.json();
+    const { variation, imageUrl: originalImageUrl } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY not configured');
     }
 
-    // Define prompts for each variation
+    if (!originalImageUrl) {
+      throw new Error('Original logo image URL is required');
+    }
+
+    // Define color change prompts for each variation - ONLY recolor, keep design identical
     const prompts: Record<string, string> = {
-      'all-white': 'Generate a professional logo with "TD" icon and "The Trading Diary" text, all in pure white color on transparent background. Modern, clean design, high resolution 2048x512px, ultra sharp, vector-style quality',
-      'all-black': 'Generate a professional logo with "TD" icon and "The Trading Diary" text, all in pure black color on transparent background. Modern, clean design, high resolution 2048x512px, ultra sharp, vector-style quality',
-      'blue-white': 'Generate a professional logo with "TD" icon in vibrant blue (#3B82F6) and "The Trading Diary" text in white on transparent background. Modern, clean design, high resolution 2048x512px, ultra sharp, vector-style quality',
-      'blue-black': 'Generate a professional logo with "TD" icon in vibrant blue (#3B82F6) and "The Trading Diary" text in black on transparent background. Modern, clean design, high resolution 2048x512px, ultra sharp, vector-style quality',
-      'blue-gray': 'Generate a professional logo with "TD" icon in vibrant blue (#3B82F6) and "The Trading Diary" text in dark gray (#374151) on transparent background. Modern, clean design, high resolution 2048x512px, ultra sharp, vector-style quality',
-      'vietnam': 'Generate a creative professional logo with "TD" icon and "The Trading Diary" text using Vietnam flag colors (vibrant red and golden yellow). The icon could have red background with yellow star elements, text in golden yellow. Modern, patriotic, high resolution 2048x512px, transparent background, ultra sharp',
-      'usa': 'Generate a creative professional logo with "TD" icon and "The Trading Diary" text using American flag colors (red #B22234, white #FFFFFF, blue #3C3B6E). Bold patriotic design with stars and stripes inspiration. Modern, premium, high resolution 2048x512px, transparent background, ultra sharp',
-      'uae': 'Generate a creative professional logo with "TD" icon and "The Trading Diary" text using UAE flag colors (red, green, white, black). Elegant Arabic-inspired design. Modern, luxurious, high resolution 2048x512px, transparent background, ultra sharp',
-      'brazil': 'Generate a creative professional logo with "TD" icon and "The Trading Diary" text using Brazilian flag colors (vibrant green, golden yellow, deep blue, white). Dynamic tropical design. Modern, energetic, high resolution 2048x512px, transparent background, ultra sharp'
+      'all-white': 'Recolor this logo to be all pure white. Keep the exact same design, shapes, and layout. Only change the colors to pure white (#FFFFFF). Maintain transparency.',
+      'all-black': 'Recolor this logo to be all pure black. Keep the exact same design, shapes, and layout. Only change the colors to pure black (#000000). Maintain transparency.',
+      'blue-white': 'Recolor this logo: make the circular icon and TR symbol vibrant blue (#3B82F6), and the text pure white (#FFFFFF). Keep the exact same design and shapes, only change colors. Maintain transparency.',
+      'blue-black': 'Recolor this logo: make the circular icon and TR symbol vibrant blue (#3B82F6), and the text pure black (#000000). Keep the exact same design and shapes, only change colors. Maintain transparency.',
+      'blue-gray': 'Recolor this logo: make the circular icon and TR symbol vibrant blue (#3B82F6), and the text dark gray (#374151). Keep the exact same design and shapes, only change colors. Maintain transparency.',
+      'vietnam': 'Recolor this logo using Vietnam flag colors: the circular icon should be vibrant red (#DA251D), and the TR symbol and text should be golden yellow (#FFCD00). Keep the exact same design and shapes, only change colors. Maintain transparency.',
+      'usa': 'Recolor this logo using USA flag colors: use red (#B22234), white (#FFFFFF), and blue (#3C3B6E). Keep the exact same design and shapes, only change colors to these patriotic colors. Maintain transparency.',
+      'uae': 'Recolor this logo using UAE flag colors: use red (#FF0000), green (#00732F), white (#FFFFFF), and black (#000000). Keep the exact same design and shapes, only change colors. Maintain transparency.',
+      'brazil': 'Recolor this logo using Brazil flag colors: vibrant green (#009739), golden yellow (#FEDD00), and blue (#002776). Keep the exact same design and shapes, only change colors. Maintain transparency.'
     };
 
     const prompt = prompts[variation];
@@ -36,7 +40,7 @@ serve(async (req) => {
       throw new Error('Invalid variation specified');
     }
 
-    console.log(`Generating logo variation: ${variation}`);
+    console.log(`Recoloring logo for variation: ${variation}`);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -49,7 +53,18 @@ serve(async (req) => {
         messages: [
           {
             role: "user",
-            content: prompt
+            content: [
+              {
+                type: "text",
+                text: prompt
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: originalImageUrl
+                }
+              }
+            ]
           }
         ],
         modalities: ["image", "text"]
@@ -69,7 +84,7 @@ serve(async (req) => {
       throw new Error('No image generated in response');
     }
 
-    console.log(`Successfully generated ${variation} logo`);
+    console.log(`Successfully recolored ${variation} logo`);
 
     return new Response(
       JSON.stringify({ 

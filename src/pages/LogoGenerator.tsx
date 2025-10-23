@@ -27,12 +27,18 @@ const variations: LogoVariation[] = [
 export default function LogoGenerator() {
   const [generating, setGenerating] = useState<string | null>(null);
   const [generatedLogos, setGeneratedLogos] = useState<Record<string, string>>({});
+  
+  // Use the original logo from the public folder
+  const originalLogoUrl = `${window.location.origin}/original-logo.png`;
 
   const generateLogo = async (variation: LogoVariation) => {
     setGenerating(variation.id);
     try {
       const { data, error } = await supabase.functions.invoke('generate-logo-variations', {
-        body: { variation: variation.id }
+        body: { 
+          variation: variation.id,
+          imageUrl: originalLogoUrl
+        }
       });
 
       if (error) throw error;
@@ -160,9 +166,10 @@ export default function LogoGenerator() {
         <Card className="p-6 bg-muted">
           <h3 className="font-semibold mb-2">Instructions</h3>
           <ul className="text-sm text-muted-foreground space-y-1">
+            <li>• Your original logo design is preserved - only colors are changed</li>
             <li>• Click "Generate All" to create all logo variations at once</li>
             <li>• Or generate individual variations by clicking "Generate" on each card</li>
-            <li>• All logos are generated in high resolution (2048x512px)</li>
+            <li>• All logos maintain the same design with different color schemes</li>
             <li>• Download individual logos using the download button</li>
             <li>• All logos have transparent backgrounds (PNG format)</li>
           </ul>
