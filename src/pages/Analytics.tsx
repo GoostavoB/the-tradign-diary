@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BlurToggleButton } from "@/components/ui/BlurToggleButton";
 import { InteractivePnLChart } from "@/components/charts/InteractivePnLChart";
 import { AssetPerformanceRadar } from "@/components/charts/AssetPerformanceRadar";
 import { WinsByHourChart } from "@/components/charts/WinsByHourChart";
@@ -83,9 +84,12 @@ export default function Analytics() {
   return (
     <AppLayout>
       <div className="container mx-auto p-4 max-w-7xl space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Advanced Analytics</h1>
-          <p className="text-muted-foreground mt-1">Deep dive into your trading performance</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Advanced Analytics</h1>
+            <p className="text-muted-foreground mt-1">Deep dive into your trading performance</p>
+          </div>
+          <BlurToggleButton />
         </div>
 
         <Tabs defaultValue="charts" className="space-y-6">

@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/select';
 import { Pencil, Trash2, Eye, Search, Settings2, X, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { BlurToggleButton } from '@/components/ui/BlurToggleButton';
+import { BlurredCurrency } from '@/components/ui/BlurredValue';
 import { format } from 'date-fns';
 import {
   Dialog,
@@ -490,6 +492,11 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">Trade History</h2>
+        <BlurToggleButton />
+      </div>
+      
       <div className="flex flex-col md:flex-row gap-4">
         <TradeFilters
           searchTerm={searchTerm}

@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Trade } from '@/types/trade';
 import { getFinancialColor } from '@/lib/utils';
 import { TokenIcon } from '@/components/TokenIcon';
+import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
 
 type ColumnKey = 'date' | 'symbol' | 'setup' | 'broker' | 'type' | 'entry' | 'exit' | 'size' | 'pnl' | 'roi' | 'fundingFee' | 'tradingFee';
 
@@ -75,29 +76,39 @@ export const TradeTableRow = memo(({
         </TableCell>
       )}
       {columns.find(c => c.key === 'entry')?.visible && (
-        <TableCell>${trade.entry_price?.toLocaleString()}</TableCell>
+        <TableCell>
+          <BlurredCurrency amount={trade.entry_price || 0} />
+        </TableCell>
       )}
       {columns.find(c => c.key === 'exit')?.visible && (
-        <TableCell>${trade.exit_price?.toLocaleString()}</TableCell>
+        <TableCell>
+          <BlurredCurrency amount={trade.exit_price || 0} />
+        </TableCell>
       )}
       {columns.find(c => c.key === 'size')?.visible && (
-        <TableCell>{trade.position_size?.toLocaleString()}</TableCell>
+        <TableCell>
+          <BlurredCurrency amount={trade.position_size || 0} />
+        </TableCell>
       )}
       {columns.find(c => c.key === 'pnl')?.visible && (
         <TableCell className={getFinancialColor(trade.pnl || 0)}>
-          ${trade.pnl?.toFixed(2)}
+          <BlurredCurrency amount={trade.pnl || 0} />
         </TableCell>
       )}
       {columns.find(c => c.key === 'roi')?.visible && (
         <TableCell className={getFinancialColor(trade.roi || 0)}>
-          {trade.roi?.toFixed(2)}%
+          <BlurredPercent value={trade.roi || 0} />
         </TableCell>
       )}
       {columns.find(c => c.key === 'fundingFee')?.visible && (
-        <TableCell>${trade.funding_fee?.toFixed(2)}</TableCell>
+        <TableCell>
+          <BlurredCurrency amount={trade.funding_fee || 0} />
+        </TableCell>
       )}
       {columns.find(c => c.key === 'tradingFee')?.visible && (
-        <TableCell>${trade.trading_fee?.toFixed(2)}</TableCell>
+        <TableCell>
+          <BlurredCurrency amount={trade.trading_fee || 0} />
+        </TableCell>
       )}
       <TableCell className="text-right">
         <div className="flex justify-end gap-2">
