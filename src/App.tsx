@@ -70,6 +70,13 @@ const Sitemap = lazy(() => import("./pages/Sitemap"));
 const About = lazy(() => import("./pages/About"));
 const SEODashboard = lazy(() => import("./pages/SEODashboard"));
 const PricingPage = lazy(() => import("./pages/PricingPage"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const BlogArticle = lazy(() => import("./pages/BlogArticle"));
+const Learn = lazy(() => import("./pages/Learn"));
+const ApiDocs = lazy(() => import("./pages/ApiDocs"));
+const AdvancedAnalytics = lazy(() => import("./pages/AdvancedAnalytics"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -169,6 +176,13 @@ const AppRoutes = () => {
         <Route path="/user-guide" element={<ProtectedRoute><UserGuide /></ProtectedRoute>} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/legal" element={<Legal />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
+        <Route path="/blog/article/:slug" element={<BlogArticle />} />
+        <Route path="/learn" element={<ProtectedRoute><Learn /></ProtectedRoute>} />
+        <Route path="/api-docs" element={<ProtectedRoute><ApiDocs /></ProtectedRoute>} />
+        <Route path="/advanced-analytics" element={<ProtectedRoute><AdvancedAnalytics /></ProtectedRoute>} />
         <Route path="/custom/:pageId" element={<ProtectedRoute><CustomPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
