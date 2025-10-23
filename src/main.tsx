@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import "./i18n"; // Initialize i18n before App
-import "./i18n/config"; // Initialize multi-language support
+// Removed duplicate i18n config to prevent overriding resources
 import App from "./App.tsx";
 import "./index.css";
 import { reportWebVitals, sendVitalsToAnalytics } from "./utils/webVitals";
