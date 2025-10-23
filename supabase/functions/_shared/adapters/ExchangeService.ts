@@ -119,4 +119,126 @@ export class ExchangeService {
       };
     }
   }
+
+  async syncOrders(
+    exchange: string,
+    options?: {
+      startDate?: Date;
+      endDate?: Date;
+    }
+  ): Promise<{
+    success: boolean;
+    orders?: Order[];
+    error?: string;
+  }> {
+    const adapter = this.getAdapter(exchange);
+
+    if (!adapter) {
+      return {
+        success: false,
+        error: `Exchange ${exchange} not initialized`,
+      };
+    }
+
+    try {
+      const orders = await adapter.fetchOrders({
+        startTime: options?.startDate,
+        endTime: options?.endDate,
+      });
+
+      return { success: true, orders };
+    } catch (error) {
+      console.error(`Error syncing orders from ${exchange}:`, error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async syncDeposits(
+    exchange: string,
+    options?: {
+      startDate?: Date;
+      endDate?: Date;
+    }
+  ): Promise<{
+    success: boolean;
+    deposits?: Deposit[];
+    error?: string;
+  }> {
+    const adapter = this.getAdapter(exchange);
+
+    if (!adapter) {
+      return {
+        success: false,
+        error: `Exchange ${exchange} not initialized`,
+      };
+    }
+
+    try {
+      const deposits = await adapter.fetchDeposits({
+        startTime: options?.startDate,
+        endTime: options?.endDate,
+      });
+
+      return { success: true, deposits };
+    } catch (error) {
+      console.error(`Error syncing deposits from ${exchange}:`, error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async syncWithdrawals(
+    exchange: string,
+    options?: {
+      startDate?: Date;
+      endDate?: Date;
+    }
+  ): Promise<{
+    success: boolean;
+    withdrawals?: Withdrawal[];
+    error?: string;
+  }> {
+    const adapter = this.getAdapter(exchange);
+
+    if (!adapter) {
+      return {
+        success: false,
+        error: `Exchange ${exchange} not initialized`,
+      };
+    }
+
+    try {
+      const withdrawals = await adapter.fetchWithdrawals({
+        startTime: options?.startDate,
+        endTime: options?.endDate,
+      });
+
+      return { success: true, withdrawals };
+    } catch (error) {
+      console.error(`Error syncing withdrawals from ${exchange}:`, error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async performHealthCheck(exchange: string): Promise<{
+    status: 'healthy' | 'degraded' | 'down';
+    latency: number;
+    lastError?: string;
+  } | null> {
+    const adapter = this.getAdapter(exchange);
+
+    if (!adapter) {
+      return null;
+    }
+
+    return await adapter.healthCheck();
+  }
 }

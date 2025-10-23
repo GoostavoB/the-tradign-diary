@@ -201,14 +201,138 @@ export class GateioAdapter extends BaseExchangeAdapter {
   }
 
   async fetchOrders(options?: FetchOptions): Promise<Order[]> {
-    return [];
+    try {
+      const params: Record<string, any> = { status: 'finished' };
+      
+      if (options?.startTime) {
+        params.from = Math.floor(new Date(options.startTime).getTime() / 1000);
+      }
+      if (options?.endTime) {
+        params.to = Math.floor(new Date(options.endTime).getTime() / 1000);
+      }
+      if (options?.limit) {
+        params.limit = Math.min(options.limit, 1000);
+      }
+
+      const allOrders: Order[] = [];
+      
+      // Fetch balances to determine trading pairs
+      const balances = await this.fetchBalances();
+      const currencies = balances.map(b => b.currency).filter(c => c && c !== 'USDT');
+      
+      if (currencies.length === 0) {
+        return [];
+      }
+
+      // Fetch orders for common pairs
+      const commonPairs = currencies
+        .map(c => `${c}_USDT`)
+        .slice(0, 10);
+
+      for (const pair of commonPairs) {
+        try {
+          const orders = await this.retryRequest(
+            () => this.makeRequest<any[]>('GET', '/spot/orders', {
+              ...params,
+              currency_pair: pair,
+            })
+          );
+
+          for (const order of orders) {
+            allOrders.push({
+              id: order.id,
+              symbol: order.currency_pair.replace('_', ''),
+              type: order.type,
+              side: order.side as 'buy' | 'sell',
+              price: parseFloat(order.price),
+              quantity: parseFloat(order.amount),
+              filled: parseFloat(order.filled_total || order.filled_amount || '0'),
+              executedQuantity: parseFloat(order.filled_total || order.filled_amount || '0'),
+              remaining: parseFloat(order.left || '0'),
+              status: order.status,
+              timestamp: new Date(parseInt(order.create_time_ms || order.create_time) * (order.create_time_ms ? 1 : 1000)),
+              exchange: 'gateio',
+            });
+          }
+        } catch (error) {
+          console.error(`Error fetching orders for ${pair}:`, error);
+          continue;
+        }
+      }
+
+      return allOrders;
+    } catch (error) {
+      console.error('Error fetching Gate.io orders:', error);
+      return [];
+    }
   }
 
   async fetchDeposits(options?: FetchOptions): Promise<Deposit[]> {
-    return [];
+    try {
+      const params: Record<string, any> = { type: 'deposit' };
+      
+      if (options?.startTime) {
+        params.from = Math.floor(new Date(options.startTime).getTime() / 1000);
+      }
+      if (options?.endTime) {
+        params.to = Math.floor(new Date(options.endTime).getTime() / 1000);
+      }
+      if (options?.limit) {
+        params.limit = Math.min(options.limit, 1000);
+      }
+
+      const deposits = await this.retryRequest(
+        () => this.makeRequest<any[]>('GET', '/wallet/deposits', params)
+      );
+
+      return deposits.map(deposit => ({
+        id: deposit.id,
+        currency: deposit.currency,
+        amount: parseFloat(deposit.amount),
+        status: deposit.status,
+        timestamp: new Date(parseInt(deposit.timestamp) * 1000),
+        txId: deposit.txid,
+        network: deposit.chain,
+        exchange: 'gateio',
+      }));
+    } catch (error) {
+      console.error('Error fetching Gate.io deposits:', error);
+      return [];
+    }
   }
 
   async fetchWithdrawals(options?: FetchOptions): Promise<Withdrawal[]> {
-    return [];
+    try {
+      const params: Record<string, any> = { type: 'withdraw' };
+      
+      if (options?.startTime) {
+        params.from = Math.floor(new Date(options.startTime).getTime() / 1000);
+      }
+      if (options?.endTime) {
+        params.to = Math.floor(new Date(options.endTime).getTime() / 1000);
+      }
+      if (options?.limit) {
+        params.limit = Math.min(options.limit, 1000);
+      }
+
+      const withdrawals = await this.retryRequest(
+        () => this.makeRequest<any[]>('GET', '/wallet/withdrawals', params)
+      );
+
+      return withdrawals.map(withdrawal => ({
+        id: withdrawal.id,
+        currency: withdrawal.currency,
+        amount: parseFloat(withdrawal.amount),
+        fee: parseFloat(withdrawal.fee || '0'),
+        status: withdrawal.status,
+        timestamp: new Date(parseInt(withdrawal.timestamp) * 1000),
+        txId: withdrawal.txid,
+        network: withdrawal.chain,
+        exchange: 'gateio',
+      }));
+    } catch (error) {
+      console.error('Error fetching Gate.io withdrawals:', error);
+      return [];
+    }
   }
 }

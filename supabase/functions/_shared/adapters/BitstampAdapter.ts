@@ -199,14 +199,147 @@ export class BitstampAdapter extends BaseExchangeAdapter {
   }
 
   async fetchOrders(options?: FetchOptions): Promise<Order[]> {
-    return [];
+    try {
+      const balances = await this.fetchBalances();
+      const currencies = balances.map(b => b.currency).filter(c => c && c !== 'USD' && c !== 'EUR');
+      
+      if (currencies.length === 0) {
+        return [];
+      }
+
+      const allOrders: Order[] = [];
+      
+      // Fetch orders for common pairs
+      const commonPairs = currencies
+        .filter((c): c is string => c !== undefined)
+        .map(c => `${c.toLowerCase()}usd`)
+        .slice(0, 10);
+
+      for (const pair of commonPairs) {
+        try {
+          // Fetch open orders
+          const openOrders = await this.retryRequest(
+            () => this.makeRequest<any[]>(`/open_orders/${pair}/`)
+          );
+
+          for (const order of openOrders) {
+            allOrders.push({
+              id: order.id.toString(),
+              symbol: pair.toUpperCase(),
+              type: order.type === '0' ? 'buy' : 'sell',
+              side: order.type === '0' ? 'buy' : 'sell',
+              price: parseFloat(order.price),
+              quantity: parseFloat(order.amount),
+              filled: 0,
+              executedQuantity: 0,
+              remaining: parseFloat(order.amount),
+              status: 'open',
+              timestamp: new Date(order.datetime),
+              exchange: 'bitstamp',
+            });
+          }
+        } catch (error) {
+          console.error(`Error fetching orders for ${pair}:`, error);
+          continue;
+        }
+      }
+
+      return allOrders;
+    } catch (error) {
+      console.error('Error fetching Bitstamp orders:', error);
+      return [];
+    }
   }
 
   async fetchDeposits(options?: FetchOptions): Promise<Deposit[]> {
-    return [];
+    try {
+      const params: Record<string, any> = { limit: '100' };
+      
+      if (options?.startTime) {
+        params.since_timestamp = Math.floor(new Date(options.startTime).getTime() / 1000).toString();
+      }
+      if (options?.limit) {
+        params.limit = Math.min(options.limit, 1000).toString();
+      }
+
+      // Fetch all user transactions
+      const transactions = await this.retryRequest(
+        () => this.makeRequest<any[]>('/user_transactions/', params)
+      );
+
+      // Filter for deposits (type 0)
+      const deposits = transactions
+        .filter(tx => tx.type === 0)
+        .map(tx => {
+          // Find the currency that was deposited (positive amount)
+          const currency = Object.keys(tx).find(key => 
+            key !== 'type' && 
+            key !== 'datetime' && 
+            key !== 'id' &&
+            parseFloat(tx[key] || '0') > 0
+          ) || 'USD';
+
+          return {
+            id: tx.id.toString(),
+            currency: currency.toUpperCase(),
+            amount: Math.abs(parseFloat(tx[currency] || '0')),
+            status: 'completed',
+            timestamp: new Date(tx.datetime),
+            exchange: 'bitstamp',
+          };
+        });
+
+      return deposits;
+    } catch (error) {
+      console.error('Error fetching Bitstamp deposits:', error);
+      return [];
+    }
   }
 
   async fetchWithdrawals(options?: FetchOptions): Promise<Withdrawal[]> {
-    return [];
+    try {
+      const params: Record<string, any> = { limit: '100' };
+      
+      if (options?.startTime) {
+        params.since_timestamp = Math.floor(new Date(options.startTime).getTime() / 1000).toString();
+      }
+      if (options?.limit) {
+        params.limit = Math.min(options.limit, 1000).toString();
+      }
+
+      // Fetch all user transactions
+      const transactions = await this.retryRequest(
+        () => this.makeRequest<any[]>('/user_transactions/', params)
+      );
+
+      // Filter for withdrawals (type 1)
+      const withdrawals = transactions
+        .filter(tx => tx.type === 1)
+        .map(tx => {
+          // Find the currency that was withdrawn (negative amount)
+          const currency = Object.keys(tx).find(key => 
+            key !== 'type' && 
+            key !== 'datetime' && 
+            key !== 'id' &&
+            key !== 'fee' &&
+            parseFloat(tx[key] || '0') < 0
+          ) || 'USD';
+
+          return {
+            id: tx.id.toString(),
+            currency: currency.toUpperCase(),
+            amount: Math.abs(parseFloat(tx[currency] || '0')),
+            fee: parseFloat(tx.fee || '0'),
+            status: 'completed',
+            timestamp: new Date(tx.datetime),
+            exchange: 'bitstamp',
+          };
+        });
+
+      return withdrawals;
+    } catch (error) {
+      console.error('Error fetching Bitstamp withdrawals:', error);
+      return [];
+    }
   }
 }

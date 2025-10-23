@@ -18,6 +18,8 @@ export abstract class BaseExchangeAdapter {
   protected abstract name: string;
   protected abstract rateLimitDelay: number;
   protected lastRequestTime: number = 0;
+  protected requestQueue: Array<() => Promise<void>> = [];
+  protected isProcessingQueue = false;
 
   constructor(credentials: ExchangeCredentials) {
     this.credentials = credentials;
@@ -36,6 +38,101 @@ export abstract class BaseExchangeAdapter {
     }
 
     this.lastRequestTime = Date.now();
+  }
+
+  /**
+   * Retry logic with exponential backoff
+   */
+  protected async retryRequest<T>(
+    fn: () => Promise<T>,
+    maxRetries: number = 3,
+    baseDelay: number = 1000
+  ): Promise<T> {
+    let lastError: Error | undefined;
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        
+        if (attempt < maxRetries) {
+          const delay = baseDelay * Math.pow(2, attempt);
+          console.log(`Retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+    
+    throw lastError || new Error('Request failed after retries');
+  }
+
+  /**
+   * Add request to queue for rate limiting
+   */
+  protected async queueRequest<T>(fn: () => Promise<T>): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.requestQueue.push(async () => {
+        try {
+          const result = await fn();
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      if (!this.isProcessingQueue) {
+        this.processQueue();
+      }
+    });
+  }
+
+  /**
+   * Process queued requests
+   */
+  private async processQueue(): Promise<void> {
+    if (this.isProcessingQueue || this.requestQueue.length === 0) {
+      return;
+    }
+
+    this.isProcessingQueue = true;
+
+    while (this.requestQueue.length > 0) {
+      const request = this.requestQueue.shift();
+      if (request) {
+        await this.rateLimit();
+        await request();
+      }
+    }
+
+    this.isProcessingQueue = false;
+  }
+
+  /**
+   * Health check for exchange connection
+   */
+  async healthCheck(): Promise<{
+    status: 'healthy' | 'degraded' | 'down';
+    latency: number;
+    lastError?: string;
+  }> {
+    const startTime = Date.now();
+    
+    try {
+      const isConnected = await this.testConnection();
+      const latency = Date.now() - startTime;
+      
+      return {
+        status: isConnected ? (latency > 3000 ? 'degraded' : 'healthy') : 'down',
+        latency,
+      };
+    } catch (error) {
+      return {
+        status: 'down',
+        latency: Date.now() - startTime,
+        lastError: error instanceof Error ? error.message : String(error),
+      };
+    }
   }
 
   /**

@@ -669,9 +669,16 @@ export type Database = {
           api_secret_encrypted: string
           created_at: string | null
           exchange_name: string
+          failed_sync_count: number | null
+          health_status: string | null
           id: string
           is_active: boolean | null
+          last_deposit_sync_at: string | null
+          last_order_sync_at: string | null
           last_synced_at: string | null
+          last_trade_sync_at: string | null
+          last_withdrawal_sync_at: string | null
+          sync_cursor: Json | null
           sync_error: string | null
           sync_status: string | null
           updated_at: string | null
@@ -683,9 +690,16 @@ export type Database = {
           api_secret_encrypted: string
           created_at?: string | null
           exchange_name: string
+          failed_sync_count?: number | null
+          health_status?: string | null
           id?: string
           is_active?: boolean | null
+          last_deposit_sync_at?: string | null
+          last_order_sync_at?: string | null
           last_synced_at?: string | null
+          last_trade_sync_at?: string | null
+          last_withdrawal_sync_at?: string | null
+          sync_cursor?: Json | null
           sync_error?: string | null
           sync_status?: string | null
           updated_at?: string | null
@@ -697,15 +711,131 @@ export type Database = {
           api_secret_encrypted?: string
           created_at?: string | null
           exchange_name?: string
+          failed_sync_count?: number | null
+          health_status?: string | null
           id?: string
           is_active?: boolean | null
+          last_deposit_sync_at?: string | null
+          last_order_sync_at?: string | null
           last_synced_at?: string | null
+          last_trade_sync_at?: string | null
+          last_withdrawal_sync_at?: string | null
+          sync_cursor?: Json | null
           sync_error?: string | null
           sync_status?: string | null
           updated_at?: string | null
           user_id?: string
         }
         Relationships: []
+      }
+      exchange_deposits: {
+        Row: {
+          amount: number
+          connection_id: string
+          created_at: string | null
+          currency: string
+          exchange_deposit_id: string
+          id: string
+          network: string | null
+          status: string
+          timestamp: string
+          tx_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          connection_id: string
+          created_at?: string | null
+          currency: string
+          exchange_deposit_id: string
+          id?: string
+          network?: string | null
+          status: string
+          timestamp: string
+          tx_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          connection_id?: string
+          created_at?: string | null
+          currency?: string
+          exchange_deposit_id?: string
+          id?: string
+          network?: string | null
+          status?: string
+          timestamp?: string
+          tx_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchange_deposits_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "exchange_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exchange_orders: {
+        Row: {
+          connection_id: string
+          created_at: string | null
+          exchange_order_id: string
+          filled: number | null
+          id: string
+          price: number
+          quantity: number
+          side: string
+          status: string
+          symbol: string
+          timestamp: string
+          type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string | null
+          exchange_order_id: string
+          filled?: number | null
+          id?: string
+          price: number
+          quantity: number
+          side: string
+          status: string
+          symbol: string
+          timestamp: string
+          type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string | null
+          exchange_order_id?: string
+          filled?: number | null
+          id?: string
+          price?: number
+          quantity?: number
+          side?: string
+          status?: string
+          symbol?: string
+          timestamp?: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchange_orders_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "exchange_connections"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       exchange_pending_trades: {
         Row: {
@@ -794,6 +924,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "exchange_sync_history_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "exchange_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exchange_withdrawals: {
+        Row: {
+          amount: number
+          connection_id: string
+          created_at: string | null
+          currency: string
+          exchange_withdrawal_id: string
+          fee: number
+          id: string
+          network: string | null
+          status: string
+          timestamp: string
+          tx_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          connection_id: string
+          created_at?: string | null
+          currency: string
+          exchange_withdrawal_id: string
+          fee: number
+          id?: string
+          network?: string | null
+          status: string
+          timestamp: string
+          tx_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          connection_id?: string
+          created_at?: string | null
+          currency?: string
+          exchange_withdrawal_id?: string
+          fee?: number
+          id?: string
+          network?: string | null
+          status?: string
+          timestamp?: string
+          tx_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchange_withdrawals_connection_id_fkey"
             columns: ["connection_id"]
             isOneToOne: false
             referencedRelation: "exchange_connections"
