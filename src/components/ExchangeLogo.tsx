@@ -54,10 +54,10 @@ export const ExchangeLogo = ({
   if (imgError || !logoData) {
     return showFallback ? (
       <div
-        className={`${sizeClasses[size]} w-auto px-4 py-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 dark:bg-gray-200 border border-primary/30 flex items-center justify-center ${className}`}
+        className={`${sizeClasses[size]} w-auto px-4 py-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/30 flex items-center justify-center ${className}`}
         aria-label={`${exchangeName} logo`}
       >
-        <span className="text-sm font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent dark:text-foreground uppercase tracking-wider">
+        <span className="text-sm font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent uppercase tracking-wider">
           {exchangeName.slice(0, 4)}
         </span>
       </div>
@@ -70,7 +70,7 @@ export const ExchangeLogo = ({
     <img
       src={imgSrc}
       alt={`${exchangeName} logo`}
-      className={`${sizeClasses[size]} w-auto object-contain ${className}`}
+      className={`${sizeClasses[size]} w-auto object-contain dark:bg-white dark:rounded-lg dark:p-2 ${className}`}
       onError={handleError}
       loading="lazy"
       decoding="async"

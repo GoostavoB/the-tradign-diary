@@ -813,6 +813,21 @@
     "dragDrop": "اسحب وأفلت الملف هنا",
     "manualEntry": "إدخال يدوي"
   },
+  "contact": {
+    "title": "اتصل بنا",
+    "subtitle": "هل لديك سؤال أو ملاحظات؟ نود أن نسمع منك.",
+    "name": "الاسم",
+    "namePlaceholder": "أحمد محمد",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "you@example.com",
+    "company": "الشركة (اختياري)",
+    "companyPlaceholder": "اسم شركتك",
+    "message": "الرسالة",
+    "messagePlaceholder": "أخبرنا كيف يمكننا مساعدتك...",
+    "send": "إرسال الرسالة",
+    "messageSent": "تم إرسال الرسالة! سنتواصل معك قريبًا.",
+    "directEmail": "أو أرسل لنا بريدًا إلكترونيًا مباشرة على:"
+  },
   "errors": {
     "generic": "حدث خطأ",
     "networkError": "خطأ في الشبكة",
@@ -869,6 +884,7 @@
     "testimonials": {
       "title": "موثوق به من قبل آلاف المتداولين",
       "subtitle": "نتائج حقيقية من متداولين حقيقيين.",
+      "approvedByTraders": "معتمد من قبل آلاف المتداولين",
       "alex": {
         "name": "Alex Chen",
         "role": "متداول يومي",

@@ -64,6 +64,7 @@ const PerformanceAlerts = lazy(() => import("./pages/PerformanceAlerts"));
 const ProgressAnalytics = lazy(() => import("./pages/ProgressAnalytics"));
 const MyMetrics = lazy(() => import("./pages/MyMetrics"));
 const UserGuide = lazy(() => import("./pages/UserGuide"));
+const Contact = lazy(() => import("./pages/Contact"));
 const Sitemap = lazy(() => import("./pages/Sitemap"));
 const About = lazy(() => import("./pages/About"));
 const SEODashboard = lazy(() => import("./pages/SEODashboard"));
@@ -165,6 +166,7 @@ const AppRoutes = () => {
         <Route path="/progress-analytics" element={<ProtectedRoute><ProgressAnalytics /></ProtectedRoute>} />
         <Route path="/my-metrics" element={<ProtectedRoute><MyMetrics /></ProtectedRoute>} />
         <Route path="/user-guide" element={<ProtectedRoute><UserGuide /></ProtectedRoute>} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/custom/:pageId" element={<ProtectedRoute><CustomPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -125,7 +125,7 @@
           "tradingPlan": "Trading Plan Builder with checklist",
           "goals": "Goals tracking & progress",
           "richJournal": "Rich journal with mood & pattern analysis",
-          "customWidgets": "5 custom KPI widgets",
+          "customWidgets": "3 custom KPI widgets",
           "fullSocial": "Full social features (posts, XP, badges)",
           "everythingBasic": "Everything in Basic"
         }
@@ -140,7 +140,7 @@
           "positionCalculator": "Advanced Position Size Calculator",
           "riskDashboard": "Risk Dashboard with drawdown analysis",
           "advancedAlerts": "Advanced performance & fee alerts",
-          "customWidgets": "Unlimited custom KPI widgets",
+          "customWidgets": "10 custom KPI widgets",
           "everythingPro": "Everything in Pro"
         }
       }
@@ -1034,6 +1034,7 @@
     "testimonials": {
       "title": "Trusted by Thousands of Traders",
       "subtitle": "Real results from real traders.",
+      "approvedByTraders": "Approved by thousands of traders",
       "alex": {
         "name": "Alex Chen",
         "role": "Day Trader",
@@ -1417,6 +1418,21 @@
     "history": "History",
     "noTrades": "No trades yet",
     "uploadFirst": "Upload your first trade to get started"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question or feedback? We'd love to hear from you.",
+    "name": "Name",
+    "namePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "company": "Company (Optional)",
+    "companyPlaceholder": "Your company name",
+    "message": "Message",
+    "messagePlaceholder": "Tell us how we can help you...",
+    "send": "Send Message",
+    "messageSent": "Message sent! We'll get back to you soon.",
+    "directEmail": "Or email us directly at:"
   },
   "errors": {
     "generic": "Something went wrong",

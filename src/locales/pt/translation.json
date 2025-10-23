@@ -825,6 +825,7 @@
     "testimonials": {
       "title": "Confiado por Milhares de Traders",
       "subtitle": "Resultados reais de traders reais.",
+      "approvedByTraders": "Aprovado por milhares de traders",
       "alex": {
         "name": "Alex Chen",
         "role": "Day Trader",
@@ -1296,6 +1297,21 @@
     "history": "Histórico",
     "noTrades": "Nenhuma operação ainda",
     "uploadFirst": "Envie sua primeira operação para começar"
+  },
+  "contact": {
+    "title": "Entre em Contato",
+    "subtitle": "Tem alguma dúvida ou feedback? Adoraríamos ouvir você.",
+    "name": "Nome",
+    "namePlaceholder": "João Silva",
+    "email": "E-mail",
+    "emailPlaceholder": "voce@exemplo.com",
+    "company": "Empresa (Opcional)",
+    "companyPlaceholder": "Nome da sua empresa",
+    "message": "Mensagem",
+    "messagePlaceholder": "Conte-nos como podemos ajudá-lo...",
+    "send": "Enviar Mensagem",
+    "messageSent": "Mensagem enviada! Entraremos em contato em breve.",
+    "directEmail": "Ou envie um e-mail diretamente para:"
   },
   "errors": {
     "generic": "Algo deu errado",
