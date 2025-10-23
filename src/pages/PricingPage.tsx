@@ -4,7 +4,6 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { motion } from "framer-motion";
 import PricingComparison from "@/components/PricingComparison";
-import PricingRoadmap from "@/components/PricingRoadmap";
 import CTA from "@/components/CTA";
 import { OutcomeCard } from "@/components/premium/OutcomeCard";
 import { ParallaxTradingElements } from "@/components/premium/ParallaxTradingElements";
@@ -12,6 +11,8 @@ import { PremiumPricingCard } from "@/components/PremiumPricingCard";
 import { MagneticButton } from "@/components/MagneticButton";
 import { PremiumBillingToggle } from "@/components/premium/PremiumBillingToggle";
 import { Logo } from "@/components/Logo";
+import appStoreSoon from "@/assets/app-store-coming-soon.png";
+import googlePlaySoon from "@/assets/google-play-coming-soon.png";
 
 const PricingPage = () => {
   const navigate = useNavigate();
@@ -278,6 +279,26 @@ const PricingPage = () => {
       ctaKey: "pricing.plans.cta",
       popular: false,
     },
+    {
+      id: 'enterprise',
+      nameKey: "Enterprise",
+      descriptionKey: "Team collaboration, powerful reports & white label",
+      monthlyPrice: null,
+      annualPrice: null,
+      annualTotal: null,
+      featuresKeys: [
+        "Team Collaboration Tools",
+        "Advanced Reporting & Analytics",
+        "White Label Solution",
+        "Priority Support",
+        "Custom Integrations",
+        "Dedicated Account Manager",
+        "Everything in Elite",
+      ],
+      ctaKey: "Coming Soon",
+      popular: false,
+      comingSoon: true,
+    },
   ];
 
   return (
@@ -417,7 +438,7 @@ const PricingPage = () => {
             </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-20">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {plans.map((plan, index) => (
               <PremiumPricingCard 
                 key={plan.id} 
@@ -428,14 +449,39 @@ const PricingPage = () => {
               />
             ))}
           </div>
+
+          {/* Mobile Apps Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="text-center mt-20"
+          >
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">
+              Available on iOS & Android
+            </h3>
+            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+              Take your trading diary with you. Track trades, analyze performance, and stay on top of your game from anywhere.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <img 
+                src={appStoreSoon} 
+                alt="Coming soon to the App Store" 
+                className="h-14 hover:opacity-80 transition-opacity"
+              />
+              <img 
+                src={googlePlaySoon} 
+                alt="Coming soon to Google Play" 
+                className="h-14 hover:opacity-80 transition-opacity"
+              />
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Comparison Table */}
       <PricingComparison />
-
-      {/* Roadmap */}
-      <PricingRoadmap />
 
       {/* Final CTA */}
       <CTA />

@@ -8,12 +8,13 @@ interface PricingPlan {
   id: string;
   nameKey: string;
   descriptionKey: string;
-  monthlyPrice: number;
-  annualPrice: number;
-  annualTotal: number;
+  monthlyPrice: number | null;
+  annualPrice: number | null;
+  annualTotal: number | null;
   featuresKeys: string[];
   ctaKey: string;
   popular: boolean;
+  comingSoon?: boolean;
 }
 
 interface PremiumPricingCardProps {
@@ -27,10 +28,12 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
   const navigate = useNavigate();
   
   const getDisplayPrice = () => {
+    if (plan.monthlyPrice === null || plan.annualPrice === null) return null;
     return billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice;
   };
 
   const getSavings = () => {
+    if (plan.monthlyPrice === null || plan.annualTotal === null) return 0;
     return (plan.monthlyPrice * 12) - plan.annualTotal;
   };
 
@@ -63,54 +66,73 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
           </motion.div>
         )}
 
+        {plan.comingSoon && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-primary/80 to-accent/80 rounded-full text-xs font-semibold tracking-wide"
+          >
+            Coming Soon
+          </motion.div>
+        )}
+
         <div className="mb-6">
           <h3 className="text-2xl font-bold mb-2 tracking-tight" style={{ letterSpacing: '-0.01em' }}>
-            {t(plan.nameKey)}
+            {plan.comingSoon ? plan.nameKey : t(plan.nameKey)}
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            {t(plan.descriptionKey)}
+            {plan.comingSoon ? plan.descriptionKey : t(plan.descriptionKey)}
           </p>
         </div>
 
         <div className="mb-8">
-          <div className="flex items-baseline gap-2 mb-2">
-            <motion.span 
-              key={`${billingCycle}-${getDisplayPrice()}`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="text-5xl font-bold tracking-tight tabular-nums"
-              style={{ 
-                fontVariantNumeric: 'tabular-nums',
-                letterSpacing: '-0.02em'
-              }}
-            >
-              ${getDisplayPrice()}
-            </motion.span>
-            <span className="text-sm text-muted-foreground">
-              /{billingCycle === 'monthly' ? t('pricing.perMonth') : t('pricing.perMonthBilledAnnually')}
-            </span>
-          </div>
-          {billingCycle === 'annual' && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              transition={{ duration: 0.28 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20"
-            >
-              <span className="text-sm font-bold text-primary">
-                {t('pricing.savingsAmount', { amount: getSavings() })}
-              </span>
-            </motion.div>
+          {getDisplayPrice() !== null ? (
+            <>
+              <div className="flex items-baseline gap-2 mb-2">
+                <motion.span 
+                  key={`${billingCycle}-${getDisplayPrice()}`}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-5xl font-bold tracking-tight tabular-nums"
+                  style={{ 
+                    fontVariantNumeric: 'tabular-nums',
+                    letterSpacing: '-0.02em'
+                  }}
+                >
+                  ${getDisplayPrice()}
+                </motion.span>
+                <span className="text-sm text-muted-foreground">
+                  /{billingCycle === 'monthly' ? t('pricing.perMonth') : t('pricing.perMonthBilledAnnually')}
+                </span>
+              </div>
+              {billingCycle === 'annual' && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.28 }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+                >
+                  <span className="text-sm font-bold text-primary">
+                    {t('pricing.savingsAmount', { amount: getSavings() })}
+                  </span>
+                </motion.div>
+              )}
+            </>
+          ) : (
+            <div className="text-3xl font-bold tracking-tight mb-2">
+              Custom Pricing
+            </div>
           )}
         </div>
 
         <MagneticButton
-          onClick={() => navigate('/auth')}
+          onClick={plan.comingSoon ? undefined : () => navigate('/auth')}
           variant={plan.popular ? 'default' : 'outline'}
-          className="w-full mb-8 py-6 text-base font-medium"
+          className={`w-full mb-8 py-6 text-base font-medium ${plan.comingSoon ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}`}
         >
-          {t(plan.ctaKey)}
+          {plan.comingSoon ? plan.ctaKey : t(plan.ctaKey)}
         </MagneticButton>
 
         <ul className="space-y-4 flex-1">
@@ -130,7 +152,7 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
                 <Check size={14} className="text-accent" />
               </div>
               <span className="text-sm text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-280 ease-premium">
-                {t(featureKey)}
+                {plan.comingSoon ? featureKey : t(featureKey)}
               </span>
             </motion.li>
           ))}
