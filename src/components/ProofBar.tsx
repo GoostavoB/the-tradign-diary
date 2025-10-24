@@ -8,18 +8,18 @@ export const ProofBar = () => {
   const metrics = [
     {
       icon: Users,
-      value: "3,200+",
-      label: t('landing.proofBar.activeTraders'),
+      value: "10,000+",
+      label: t('landing.proofBar.activeTraders', 'Active Traders'),
     },
     {
       icon: TrendingUp,
-      value: "120,000+",
-      label: t('landing.proofBar.tradesAnalyzed'),
+      value: "1M+",
+      label: t('landing.proofBar.tradesLogged', 'Trades Logged'),
     },
     {
       icon: Star,
-      value: "4.8",
-      label: t('landing.proofBar.averageRating'),
+      value: "98%",
+      label: t('landing.proofBar.satisfaction', 'Satisfaction'),
     },
   ];
 
@@ -29,27 +29,24 @@ export const ProofBar = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
       viewport={{ once: true }}
-      className="py-8 px-6"
+      className="py-12 px-6"
       aria-label="Social proof metrics"
     >
-      <div className="container mx-auto max-w-4xl">
-        <div className="glass-card border border-primary/20 rounded-2xl p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {metrics.map((metric, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center text-center gap-2"
-              >
-                <metric.icon className="h-5 w-5 text-primary mb-1" aria-hidden="true" />
-                <div className="text-xl md:text-2xl font-bold text-foreground">
-                  {metric.value}
-                </div>
-                <div className="text-xs md:text-sm text-muted-foreground">
-                  {metric.label}
-                </div>
+      <div className="container mx-auto max-w-6xl">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {metrics.map((metric, index) => (
+            <div
+              key={index}
+              className="glass-card border border-border/40 rounded-2xl p-8 flex flex-col items-center text-center gap-3 hover:border-primary/40 transition-all duration-300"
+            >
+              <div className="text-4xl md:text-5xl font-bold text-primary">
+                {metric.value}
               </div>
-            ))}
-          </div>
+              <div className="text-sm md:text-base text-muted-foreground">
+                {metric.label}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </motion.section>

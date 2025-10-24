@@ -1,129 +1,61 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 
 const Hero = () => {
   const navigate = useNavigate();
   const { t, isLoading } = useTranslation();
-  const [email, setEmail] = useState("");
 
   // Avoid rendering while language is switching
   if (isLoading) {
     return null;
   }
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Navigate to auth page with email pre-filled
-    navigate('/auth', { state: { email } });
-  };
-
   return (
-    <section className="relative min-h-[100vh] md:min-h-[90vh] flex items-center justify-center px-6 pt-24 pb-10 overflow-hidden" aria-labelledby="hero-title">
-      {/* Premium Gradient Beam Background */}
-      <div className="absolute inset-0 z-0" role="presentation" aria-hidden="true">
-        {/* Top gradient blend to seamlessly merge with header */}
-        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-background via-background/95 to-transparent z-10" />
-        
-        {/* Main diagonal gradient beam */}
-        <div 
-          className="gradient-beam top-[-10%] right-[-10%]" 
-          style={{ opacity: 0.6 }}
-        />
-        
-        {/* Complementary glow orbs */}
-        <div 
-          className="glow-orb w-[600px] h-[600px] top-[20%] left-[10%]"
-          style={{ 
-            background: 'radial-gradient(circle, hsl(var(--hero-blue-start) / 0.12) 0%, transparent 70%)',
-            animation: 'pulse-subtle 4s ease-in-out infinite'
-          }}
-        />
-        <div 
-          className="glow-orb w-[500px] h-[500px] bottom-[15%] right-[15%]"
-          style={{ 
-            background: 'radial-gradient(circle, hsl(var(--hero-blue-end) / 0.08) 0%, transparent 70%)',
-            animation: 'pulse-subtle 5s ease-in-out infinite',
-            animationDelay: '1.5s'
-          }}
-        />
-      </div>
+    <section className="relative min-h-[85vh] flex items-center justify-center px-6 pt-32 pb-16" aria-labelledby="hero-title">
+      {/* Clean dark background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/95" />
 
       <div className="container mx-auto max-w-5xl relative z-10">
         <div className="text-center space-y-8">
-          {/* Enhanced Title with Gradient Accent */}
+          {/* Clean Hero Title */}
           <motion.h1 
             id="hero-title"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-[clamp(36px,6vw,72px)] font-bold leading-[1.1] max-w-4xl mx-auto"
+            className="text-[clamp(40px,6vw,68px)] font-bold leading-[1.1] tracking-tight"
           >
-            Track every crypto trade.{" "}
-            <span className="gradient-text-hero">
-              Learn faster.
-            </span>
+            {t('landing.hero.mainTitle', 'The #1 Crypto Trading Journal')}
           </motion.h1>
 
-          {/* Enhanced Benefit Bullets */}
-          <motion.ul 
+          {/* Subtitle */}
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex flex-col items-center gap-3 text-lg md:text-xl text-muted-foreground/90 max-w-2xl mx-auto"
-            role="list"
+            className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
           >
-            {(() => {
-              const benefits = t('landing.hero.benefits', { returnObjects: true });
-              const benefitArray = Array.isArray(benefits) ? benefits : [];
-              return benefitArray.map((benefit: string, index: number) => (
-                <li key={index} className="flex items-center gap-3">
-                  <span 
-                    className="w-1.5 h-1.5 rounded-full" 
-                    style={{ background: 'linear-gradient(135deg, hsl(var(--hero-blue-start)), hsl(var(--hero-blue-end)))' }}
-                    aria-hidden="true" 
-                  />
-                  {benefit}
-                </li>
-              ));
-            })()}
-          </motion.ul>
+            {t('landing.hero.subtitle', 'Track, analyze, and review every crypto trade with AI. Built exclusively for crypto traders.')}
+          </motion.p>
 
-          {/* Email Capture CTA */}
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="pt-4"
           >
-            <form 
-              onSubmit={handleEmailSubmit}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto"
+            <Button 
+              onClick={() => navigate('/auth')}
+              size="lg"
+              className="h-14 px-10 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 transition-all duration-300"
+              aria-label="Start using The Trading Diary for free"
             >
-              <Input
-                type="email"
-                placeholder={t('landing.hero.emailPlaceholder', 'Enter your email')}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="h-14 px-6 text-base bg-background/50 border-border/50 backdrop-blur-sm focus:border-primary focus:ring-primary rounded-xl w-full sm:flex-1"
-                aria-label="Email address"
-              />
-              <Button 
-                type="submit"
-                size="lg"
-                className="h-14 px-8 text-base font-semibold rounded-xl w-full sm:w-auto group transition-all duration-300 bg-primary hover:bg-primary/90"
-                aria-label="Start using The Trading Diary for free"
-              >
-                {t('landing.hero.ctaPrimary', 'Get started free')}
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </form>
+              {t('landing.hero.ctaPrimary', 'Get Started Free')}
+            </Button>
           </motion.div>
         </div>
       </div>
