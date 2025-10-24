@@ -32,6 +32,10 @@ export const LevelUpModal = ({ show, level, onClose }: LevelUpModalProps) => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
             onClick={onClose}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="level-up-title"
+            aria-describedby="level-up-description"
           >
             <motion.div
               initial={{ scale: 0.5, opacity: 0, y: 50 }}
@@ -46,6 +50,7 @@ export const LevelUpModal = ({ show, level, onClose }: LevelUpModalProps) => {
                 size="icon"
                 className="absolute top-4 right-4"
                 onClick={onClose}
+                aria-label="Close level up notification"
               >
                 <X className="w-4 h-4" />
               </Button>
@@ -55,11 +60,14 @@ export const LevelUpModal = ({ show, level, onClose }: LevelUpModalProps) => {
                 animate={{ scale: [0, 1.2, 1] }}
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center mb-6"
+                role="img"
+                aria-label="Trophy icon"
               >
-                <Trophy className="w-12 h-12 text-white" />
+                <Trophy className="w-12 h-12 text-primary-foreground" />
               </motion.div>
 
               <motion.h2
+                id="level-up-title"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -73,6 +81,7 @@ export const LevelUpModal = ({ show, level, onClose }: LevelUpModalProps) => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
                 className="mb-6"
+                aria-label={`New level: ${level}`}
               >
                 <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20">
                   <Sparkles className="w-5 h-5 text-primary" />
@@ -81,6 +90,7 @@ export const LevelUpModal = ({ show, level, onClose }: LevelUpModalProps) => {
               </motion.div>
 
               <motion.p
+                id="level-up-description"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}

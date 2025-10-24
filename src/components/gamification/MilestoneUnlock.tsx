@@ -29,6 +29,8 @@ export const MilestoneUnlock = ({ show, title, description, icon = 'trophy' }: M
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
       className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+      role="alert"
+      aria-live="polite"
     >
       <Card className="glass-strong p-4 border border-primary/30 shadow-2xl min-w-[300px]">
         <div className="flex items-center gap-3">
@@ -39,8 +41,10 @@ export const MilestoneUnlock = ({ show, title, description, icon = 'trophy' }: M
             }}
             transition={{ duration: 1 }}
             className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary-dark"
+            role="img"
+            aria-label={`${icon} achievement icon`}
           >
-            <Icon className="w-6 h-6 text-white" />
+            <Icon className="w-6 h-6 text-primary-foreground" />
           </motion.div>
           <div>
             <h3 className="font-bold text-primary">{title}</h3>

@@ -105,9 +105,11 @@ export function EmotionalStateLogger() {
                 onClick={() => setSelectedEmotion(emotion.id)}
                 className={`p-3 rounded-lg border transition-all ${
                   selectedEmotion === emotion.id
-                    ? `${emotion.color} border-current text-white shadow-md`
+                    ? `${emotion.color} border-current text-primary-foreground shadow-md`
                     : "border-border hover:border-primary/50 hover:bg-muted/50"
                 }`}
+                aria-label={`Select ${emotion.label} emotion`}
+                aria-pressed={selectedEmotion === emotion.id}
               >
                 <emotion.icon className="h-6 w-6 mx-auto mb-1" />
                 <p className="text-xs font-medium">{emotion.label}</p>

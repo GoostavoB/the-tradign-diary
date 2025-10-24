@@ -13,10 +13,10 @@ const DashboardShowcase = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 md:py-28 px-6 relative overflow-hidden bg-gradient-to-b from-background via-gray-900/30 to-background">
+    <section className="py-20 md:py-28 px-6 relative overflow-hidden bg-gradient-to-b from-background via-gray-900/30 to-background" aria-labelledby="dashboard-showcase-heading">
       {/* Ambient Glow Effects */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[120px]"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" aria-hidden="true"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[120px]" aria-hidden="true"></div>
       
       <div className="container mx-auto max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -28,7 +28,7 @@ const DashboardShowcase = () => {
             viewport={{ once: true }}
             className="space-y-6 lg:pr-8 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+            <h2 id="dashboard-showcase-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
               {t('landing.dashboardShowcase.title').split('This one shows progress.')[0]}
               <span className="text-gradient-primary">
                 {t('landing.dashboardShowcase.title').includes('This one shows progress.') 

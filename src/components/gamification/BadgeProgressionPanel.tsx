@@ -163,7 +163,7 @@ export const BadgeProgressionPanel = () => {
                       ? TIER_COLORS[badge.currentTier as keyof typeof TIER_COLORS]
                       : 'from-muted to-muted'
                   }`}>
-                    <Icon className="w-5 h-5 text-white" />
+                    <Icon className="w-5 h-5 text-primary-foreground" aria-hidden="true" />
                   </div>
                   <div>
                     <h4 className="font-semibold">{badge.name}</h4>

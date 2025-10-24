@@ -71,13 +71,13 @@ export const AchievementsPanel = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" role="region" aria-labelledby="achievements-heading">
       <div className="flex items-center gap-2 mb-4">
-        <Trophy className="h-5 w-5 text-primary" />
-        <h2 className="text-xl font-bold">{t('achievements.title')}</h2>
+        <Trophy className="h-5 w-5 text-primary" aria-hidden="true" />
+        <h2 id="achievements-heading" className="text-xl font-bold">{t('achievements.title')}</h2>
       </div>
 
-      <div className="grid gap-3">
+      <ul className="grid gap-3" role="list">
         {achievements.map((achievement) => {
           const Icon = getIcon(achievement.icon);
           const progressPercent = (achievement.progress / achievement.maxProgress) * 100;
@@ -91,6 +91,8 @@ export const AchievementsPanel = () => {
                   ? "bg-primary/5 border-primary/20" 
                   : "opacity-75"
               )}
+              role="listitem"
+              aria-label={`${achievement.title}: ${achievement.description}. Progress: ${achievement.progress} of ${achievement.maxProgress}. ${achievement.unlocked ? 'Unlocked' : 'Locked'}`}
             >
               <div className="flex items-start gap-3">
                 <div className={cn(
@@ -100,9 +102,9 @@ export const AchievementsPanel = () => {
                     : "bg-muted"
                 )}>
                   {achievement.unlocked ? (
-                    <Icon className="h-5 w-5 text-white" />
+                    <Icon className="h-5 w-5 text-primary-foreground" aria-hidden="true" />
                   ) : (
-                    <Lock className="h-5 w-5 text-muted-foreground" />
+                    <Lock className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
                   )}
                 </div>
 
@@ -131,7 +133,7 @@ export const AchievementsPanel = () => {
             </Card>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 };

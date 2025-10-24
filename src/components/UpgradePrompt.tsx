@@ -60,11 +60,12 @@ export function UpgradePrompt({ open, onClose, feature = 'this feature' }: Upgra
 
           <div className="pt-4 space-y-2">
             <Button
-              className="w-full gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white"
+              className="w-full gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-primary-foreground"
               onClick={() => {
                 navigate('/pricing');
                 onClose();
               }}
+              aria-label="View pricing plans to upgrade account"
             >
               <Sparkles className="w-4 h-4" />
               View Pricing Plans
