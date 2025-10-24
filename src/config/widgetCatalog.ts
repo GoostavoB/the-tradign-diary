@@ -35,6 +35,7 @@ import { CostEfficiencyPanel } from '@/components/insights/CostEfficiencyPanel';
 import { PerformanceHighlights } from '@/components/insights/PerformanceHighlights';
 import { TradingQualityMetrics } from '@/components/insights/TradingQualityMetrics';
 import { TradingHeatmap } from '@/components/TradingHeatmap';
+import { GoalWidget } from '@/components/goals/GoalWidget';
 
 /**
  * Widget Catalog - Registry of all available dashboard widgets
@@ -248,6 +249,17 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: TradingHeatmap as any,
     requiresData: ['trades'],
   },
+
+  goals: {
+    id: 'goals',
+    title: 'Active Goals',
+    description: 'Track progress on your trading goals with projections',
+    category: 'trading',
+    icon: Target,
+    defaultSize: 'large',
+    component: GoalWidget as any,
+    requiresData: [],
+  },
 };
 
 /**
@@ -258,6 +270,7 @@ export const DEFAULT_DASHBOARD_LAYOUT = [
   'spotWallet',
   'winRate',
   'totalTrades',
+  'goals',
   'avgPnLPerTrade',
   'avgPnLPerDay',
   'currentROI',
