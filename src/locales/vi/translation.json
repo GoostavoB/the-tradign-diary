@@ -577,5 +577,53 @@
     "cancel": "Hủy",
     "apply": "Áp dụng",
     "showingData": "Hiển thị dữ liệu cho"
+  },
+  "about": {
+    "pageTitle": "Về Chúng Tôi",
+    "pageDescription": "Tìm hiểu về đội ngũ The Trading Diary và sứ mệnh của chúng tôi trong việc giúp các trader tiền điện tử cải thiện hiệu suất với phân tích và insights được hỗ trợ bởi AI.",
+    "title": "Về The Trading Diary",
+    "subtitle": "Trao quyền cho các trader tiền điện tử với insights và phân tích được hỗ trợ bởi AI",
+    "mission": {
+      "title": "Sứ Mệnh Của Chúng Tôi",
+      "description": "Chúng tôi tin rằng giao dịch thành công không phải về may mắn—mà là về dữ liệu, kỷ luật và cải thiện liên tục. The Trading Diary được xây dựng để giúp các trader tiền điện tử theo dõi mọi giao dịch, phân tích các mẫu và đưa ra quyết định tốt hơn thông qua insights được hỗ trợ bởi AI. Sứ mệnh của chúng tôi là làm cho phân tích giao dịch cấp chuyên nghiệp trở nên dễ tiếp cận với mọi người, từ người mới bắt đầu đến các trader có kinh nghiệm."
+    },
+    "team": {
+      "title": "Đội Ngũ Của Chúng Tôi",
+      "description1": "Chúng tôi là một đội ngũ gồm các trader tiền điện tử có kinh nghiệm, nhà khoa học dữ liệu và kỹ sư phần mềm đã từng ở vị trí của bạn. Chúng tôi đã trải qua sự thất vọng khi theo dõi giao dịch thủ công, gặp khó khăn trong việc xác định các mẫu và đưa ra quyết định cảm xúc mà không có dữ liệu để hỗ trợ.",
+      "description2": "Đội ngũ của chúng tôi kết hợp hàng thập kỷ kinh nghiệm trong giao dịch tiền điện tử, học máy và phát triển sản phẩm fintech. Chúng tôi đã giao dịch qua cả thị trường tăng và giảm, và đã xây dựng The Trading Diary với các tính năng mà chúng tôi mong muốn có khi bắt đầu."
+    },
+    "features": {
+      "title": "Những Gì Chúng Tôi Cung Cấp",
+      "trade": {
+        "title": "Nhập Giao Dịch Tự Động:",
+        "description": "Kết nối với các sàn giao dịch chính và nhập giao dịch một cách liền mạch"
+      },
+      "ai": {
+        "title": "Phân Tích Được Hỗ Trợ Bởi AI:",
+        "description": "Nhận được insights có thể thực hiện từ các mẫu giao dịch của bạn"
+      },
+      "performance": {
+        "title": "Theo Dõi Hiệu Suất:",
+        "description": "Giám sát tiến trình của bạn với bảng điều khiển toàn diện"
+      },
+      "risk": {
+        "title": "Quản Lý Rủi Ro:",
+        "description": "Các công cụ giúp bạn quản lý kích thước vị thế và rủi ro"
+      },
+      "psychology": {
+        "title": "Tâm Lý Giao Dịch:",
+        "description": "Theo dõi các mẫu cảm xúc và cải thiện kỷ luật"
+      }
+    },
+    "security": {
+      "title": "Bảo Mật và Quyền Riêng Tư",
+      "description1": "Dữ liệu giao dịch của bạn rất nhạy cảm, và chúng tôi đối xử với nó như vậy. Chúng tôi sử dụng mã hóa cấp doanh nghiệp cho tất cả dữ liệu trong quá trình truyền và khi lưu trữ. Chúng tôi không bao giờ lưu trữ khóa API sàn giao dịch của bạn dưới dạng văn bản thuần túy, và chúng tôi không bao giờ truy cập trực tiếp vào tài khoản của bạn.",
+      "description2": "Dữ liệu của bạn thuộc về bạn. Bạn có thể xuất nó bất cứ lúc nào và bạn có thể xóa tài khoản của mình vĩnh viễn bất cứ khi nào bạn muốn. Chúng tôi cam kết minh bạch và kiểm soát của người dùng đối với thông tin cá nhân."
+    },
+    "cta": {
+      "title": "Tham Gia Hàng Nghìn Trader",
+      "subtitle": "Bắt đầu theo dõi giao dịch của bạn và cải thiện hiệu suất ngay hôm nay",
+      "button": "Bắt Đầu Miễn Phí"
+    }
   }
 }

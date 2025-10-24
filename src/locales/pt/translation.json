@@ -1695,6 +1695,54 @@
       }
     }
   },
+  "about": {
+    "pageTitle": "Sobre Nós",
+    "pageDescription": "Conheça a equipe do The Trading Diary e nossa missão de ajudar traders de cripto a melhorar seu desempenho com análises e insights impulsionados por IA.",
+    "title": "Sobre The Trading Diary",
+    "subtitle": "Capacitando traders de cripto com insights e análises impulsionados por IA",
+    "mission": {
+      "title": "Nossa Missão",
+      "description": "Acreditamos que o trading bem-sucedido não se trata de sorte—se trata de dados, disciplina e melhoria contínua. O The Trading Diary foi construído para ajudar traders de cripto a rastrear cada operação, analisar padrões e tomar melhores decisões através de insights impulsionados por IA. Nossa missão é tornar análises de trading de nível profissional acessíveis para todos, desde iniciantes até traders experientes."
+    },
+    "team": {
+      "title": "Nossa Equipe",
+      "description1": "Somos uma equipe de traders de cripto experientes, cientistas de dados e engenheiros de software que estiveram em seus sapatos. Experimentamos a frustração de rastrear operações manualmente, lutar para identificar padrões e tomar decisões emocionais sem dados para apoiá-las.",
+      "description2": "Nossa equipe reúne décadas de experiência combinada em trading de criptomoedas, aprendizado de máquina e desenvolvimento de produtos fintech. Negociamos através de mercados de alta e baixa, e construímos o The Trading Diary com os recursos que desejávamos ter quando começamos."
+    },
+    "features": {
+      "title": "O Que Oferecemos",
+      "trade": {
+        "title": "Importação Automática de Operações:",
+        "description": "Conecte-se com as principais exchanges e importe operações perfeitamente"
+      },
+      "ai": {
+        "title": "Análises Impulsionadas por IA:",
+        "description": "Obtenha insights acionáveis de seus padrões de trading"
+      },
+      "performance": {
+        "title": "Rastreamento de Desempenho:",
+        "description": "Monitore seu progresso com dashboards abrangentes"
+      },
+      "risk": {
+        "title": "Gestão de Risco:",
+        "description": "Ferramentas para ajudá-lo a gerenciar o tamanho da posição e risco"
+      },
+      "psychology": {
+        "title": "Psicologia do Trading:",
+        "description": "Rastreie padrões emocionais e melhore a disciplina"
+      }
+    },
+    "security": {
+      "title": "Segurança e Privacidade",
+      "description1": "Seus dados de trading são altamente sensíveis, e os tratamos como tais. Usamos criptografia de nível empresarial para todos os dados em trânsito e em repouso. Nunca armazenamos suas chaves API de exchange em texto simples, e nunca acessamos suas contas diretamente.",
+      "description2": "Seus dados pertencem a você. Você pode exportá-los a qualquer momento e pode excluir sua conta permanentemente quando quiser. Estamos comprometidos com a transparência e controle do usuário sobre informações pessoais."
+    },
+    "cta": {
+      "title": "Junte-se a Milhares de Traders",
+      "subtitle": "Comece a rastrear suas operações e melhorar seu desempenho hoje",
+      "button": "Começar Grátis"
+    }
+  },
   "errors": {
     "generic": "Algo deu errado",
     "network": "Erro de rede. Verifique sua conexão",
