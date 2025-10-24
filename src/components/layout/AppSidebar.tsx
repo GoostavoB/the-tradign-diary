@@ -3,7 +3,7 @@ import {
   BarChart3, Upload, TrendingUp, Target, Brain, Trophy, Settings2, BookOpen, HelpCircle, 
   LineChart, LogOut, Zap, RefreshCw, Wallet, Receipt, BookMarked, Users, GitCompare, 
   Shield, FileBarChart, ClipboardList, Calendar, Bell, FileText, ChevronDown, Search,
-  Plus, Archive, Star, Flame, Award, PieChart, Heart, Image, Download, Info
+  Plus, Archive, Star, Flame, Award, PieChart, Heart, Image, Download, Info, Accessibility
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
@@ -456,6 +456,14 @@ export function AppSidebar() {
                   <NavLink to="/user-guide" end className={getNavCls}>
                     <BookOpen className="h-4 w-4" />
                     {open && <span>{t('navigation.userGuide')}</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Accessibility">
+                  <NavLink to="/accessibility" end className={getNavCls}>
+                    <Accessibility className="h-4 w-4" />
+                    {open && <span>Accessibility</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
