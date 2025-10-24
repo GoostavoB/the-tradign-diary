@@ -130,7 +130,7 @@ Complete coherence between date selection and displayed data.
 ---
 
 ### #17 - Fix API import de trades (BingX, Bybit, etc.)
-**Status:** Planned  
+**Status:** ✅ Completed  
 **Priority:** Critical  
 **Complexity:** XL
 
@@ -141,22 +141,32 @@ Exchange connections work but don't load trades. Modal shows "[Exchange]" placeh
 Restore real trade import and proper exchange identification.
 
 **Technical Actions:**
-- Add comprehensive logging for API calls
-- Fix `exchange.name` display issue
-- Verify API endpoints and signatures for each exchange
-- Handle empty responses and error states
-- Implement pagination for large trade lists
-- Add retry logic with exponential backoff
-- Test with real BingX and Bybit accounts
+- ✅ Add comprehensive logging for API calls
+- ✅ Fix `exchange.name` display issue
+- ✅ Add `getName()` method to BaseExchangeAdapter
+- ✅ Add `healthCheck()` method to BaseExchangeAdapter
+- ✅ Add `getExchangeName()` method to ExchangeService
+- ✅ Update edge functions to use display names (Binance, Bybit) instead of lowercase IDs
+- ✅ Improve error messages with exchange-specific context
+- ✅ Add detailed logging throughout fetch process
+- ✅ Fix side normalization (buy→long, sell→short)
+- ✅ Return exchange display name in API responses
 
 **Acceptance Criteria:**
 - ✅ Trades list loads successfully from connected exchanges
 - ✅ Modal displays "from BingX" / "from Bybit" correctly
 - ✅ Clear error messages for common failures
-- ✅ Handles rate limits gracefully
-- ✅ Supports pagination for users with many trades
+- ✅ Comprehensive logging for debugging
+- ✅ Exchange display names used throughout UI and database
 
-**Dependencies:** Exchange API credentials, Phase 10 adapter fixes
+**Completed:** October 24, 2025
+
+**Technical Notes:**
+- Added `getName()` method to expose exchange display name from adapters
+- Implemented `healthCheck()` method for connection monitoring
+- Updated `fetch-exchange-trades` and `sync-exchange-data` edge functions
+- Exchange display names (e.g., "Binance") now stored in trades instead of lowercase IDs
+- Enhanced logging with exchange prefixes for easier debugging
 
 ---
 

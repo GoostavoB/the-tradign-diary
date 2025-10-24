@@ -152,24 +152,36 @@ Deno.serve(async (req) => {
 
     // Initialize exchange service and fetch trades with timeout
     const exchangeService = new ExchangeService();
+    
+    console.log(`[${connection.exchange_name}] Initializing exchange connection...`);
     const initialized = await exchangeService.initializeExchange(
       connection.exchange_name,
       { apiKey, apiSecret, apiPassphrase }
     );
 
     if (!initialized) {
+      const errorMsg = 'Invalid API credentials. Please check your API key and secret.';
+      console.error(`[${connection.exchange_name}] Connection failed:`, errorMsg);
+      
       await supabaseClient
         .from('exchange_connections')
         .update({
           sync_status: 'error',
-          sync_error: 'Invalid API credentials. Please check your API key and secret.',
+          sync_error: errorMsg,
         })
         .eq('id', connectionId);
 
       throw new Error(`Failed to connect to ${connection.exchange_name}. Please check your credentials.`);
     }
+    
+    console.log(`[${connection.exchange_name}] Connection successful`);
+    
+    // Get display name for better logging
+    const displayName = exchangeService.getExchangeName(connection.exchange_name) || connection.exchange_name;
 
     // Fetch trades with 60 second timeout
+    console.log(`[${displayName}] Fetching trades from ${startTime.toISOString()} to ${endTime.toISOString()}...`);
+    
     const fetchPromise = exchangeService.syncExchange(connection.exchange_name, {
       startDate: startTime,
       endDate: endTime,
@@ -183,6 +195,7 @@ Deno.serve(async (req) => {
 
     if (!result.success || !result.trades) {
       const errorMessage = result.error || 'Failed to fetch trades. Please try again.';
+      console.error(`[${displayName}] Fetch failed:`, errorMessage);
       
       await supabaseClient
         .from('exchange_connections')
@@ -194,12 +207,16 @@ Deno.serve(async (req) => {
 
       throw new Error(errorMessage);
     }
+    
+    console.log(`[${displayName}] Successfully fetched ${result.trades.length} trades`);
 
     // Normalize trades for database
+    console.log(`[${displayName}] Normalizing ${result.trades.length} trades for database...`);
+    
     const allTrades = result.trades.map(trade => ({
       user_id: user.id,
       pair: trade.symbol,
-      side: trade.side,
+      side: trade.side === 'buy' ? 'long' : trade.side === 'sell' ? 'short' : trade.side,
       type: 'spot' as const,
       entry_price: trade.price,
       exit_price: trade.price,
@@ -208,16 +225,21 @@ Deno.serve(async (req) => {
       pnl_percentage: 0,
       fee: trade.fee,
       fee_currency: trade.feeCurrency || trade.feeAsset || 'USDT',
-      exchange: connection.exchange_name,
+      exchange: displayName,
       opened_at: new Date(trade.timestamp).toISOString(),
       closed_at: new Date(trade.timestamp).toISOString(),
-      notes: `Imported from ${connection.exchange_name}. Order ID: ${trade.orderId}`,
-      broker_name: connection.exchange_name,
+      notes: `Imported from ${displayName}. Order ID: ${trade.orderId}`,
+      broker_name: displayName,
     }));
 
     // Store trades in pending_trades table (preview mode)
+    console.log(`[${displayName}] Storing ${allTrades.length} trades in pending_trades table...`);
+    
+    let stored = 0;
+    let errors = 0;
+    
     for (const trade of allTrades) {
-      await supabaseClient
+      const { error } = await supabaseClient
         .from('exchange_pending_trades')
         .insert({
           user_id: user.id,
@@ -225,7 +247,16 @@ Deno.serve(async (req) => {
           trade_data: trade,
           is_selected: true,
         });
+      
+      if (error) {
+        console.error(`[${displayName}] Failed to store trade:`, error);
+        errors++;
+      } else {
+        stored++;
+      }
     }
+    
+    console.log(`[${displayName}] Stored ${stored} trades (${errors} errors)`);
 
     // Update connection status
     await supabaseClient
@@ -241,17 +272,20 @@ Deno.serve(async (req) => {
       await supabaseClient
         .from('exchange_sync_history')
         .update({
-          trades_fetched: allTrades.length,
+          trades_fetched: stored,
           status: 'pending_review',
           completed_at: new Date().toISOString(),
         })
         .eq('id', syncHistory.id);
     }
 
+    console.log(`[${displayName}] Fetch complete. ${stored} trades ready for review.`);
+
     return new Response(
       JSON.stringify({
         success: true,
-        tradesFetched: allTrades.length,
+        tradesFetched: stored,
+        exchangeName: displayName,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

@@ -26,6 +26,13 @@ export abstract class BaseExchangeAdapter {
   }
 
   /**
+   * Get the display name of the exchange
+   */
+  getName(): string {
+    return this.name;
+  }
+
+  /**
    * Rate limiting: ensure minimum delay between requests
    */
   protected async rateLimit(): Promise<void> {

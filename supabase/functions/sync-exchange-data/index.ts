@@ -77,12 +77,16 @@ Deno.serve(async (req) => {
 
     // Initialize exchange service
     const exchangeService = new ExchangeService();
+    console.log(`[${connection.exchange_name}] Initializing exchange connection...`);
+    
     const initialized = await exchangeService.initializeExchange(
       connection.exchange_name,
       { apiKey, apiSecret, apiPassphrase }
     );
 
     if (!initialized) {
+      console.error(`[${connection.exchange_name}] Connection failed`);
+      
       await supabaseClient
         .from('exchange_connections')
         .update({
@@ -94,6 +98,9 @@ Deno.serve(async (req) => {
 
       throw new Error(`Failed to connect to ${connection.exchange_name}`);
     }
+    
+    console.log(`[${connection.exchange_name}] Connection successful`);
+    const displayName = exchangeService.getExchangeName(connection.exchange_name) || connection.exchange_name;
 
     const results: Record<string, number | string> = {};
 
@@ -101,6 +108,7 @@ Deno.serve(async (req) => {
     for (const syncType of syncTypes) {
       try {
         if (syncType === 'trades') {
+          console.log(`[${displayName}] Fetching trades...`);
           const result = await exchangeService.syncExchange(connection.exchange_name, {
             startDate: startTime,
             endDate: endTime,
@@ -108,13 +116,14 @@ Deno.serve(async (req) => {
 
           if (result.success && result.trades) {
             results.trades = result.trades.length;
+            console.log(`[${displayName}] Fetched ${result.trades.length} trades`);
             
             // Store in pending trades for review (similar to existing flow)
             for (const trade of result.trades) {
               const tradeData = {
                 user_id: user.id,
                 pair: trade.symbol,
-                side: trade.side,
+                side: trade.side === 'buy' ? 'long' : trade.side === 'sell' ? 'short' : trade.side,
                 type: 'spot' as const,
                 entry_price: trade.price,
                 exit_price: trade.price,
@@ -123,11 +132,11 @@ Deno.serve(async (req) => {
                 pnl_percentage: 0,
                 fee: trade.fee,
                 fee_currency: trade.feeCurrency || trade.feeAsset || 'USDT',
-                exchange: connection.exchange_name,
+                exchange: displayName,
                 opened_at: new Date(trade.timestamp).toISOString(),
                 closed_at: new Date(trade.timestamp).toISOString(),
-                notes: `Auto-synced from ${connection.exchange_name}`,
-                broker_name: connection.exchange_name,
+                notes: `Auto-synced from ${displayName}`,
+                broker_name: displayName,
               };
 
               await supabaseClient.from('trades').upsert(tradeData, {
@@ -141,6 +150,8 @@ Deno.serve(async (req) => {
               .from('exchange_connections')
               .update({ last_trade_sync_at: new Date().toISOString() })
               .eq('id', connectionId);
+          } else {
+            console.warn(`[${displayName}] No trades returned or sync failed`);
           }
         }
 
@@ -253,13 +264,15 @@ Deno.serve(async (req) => {
           }
         }
       } catch (error) {
-        console.error(`Error syncing ${syncType}:`, error);
+        console.error(`[${displayName}] Error syncing ${syncType}:`, error);
         results[`${syncType}_error`] = error instanceof Error ? error.message : String(error);
       }
     }
 
     // Perform health check
+    console.log(`[${displayName}] Performing health check...`);
     const healthCheck = await exchangeService.performHealthCheck(connection.exchange_name);
+    console.log(`[${displayName}] Health status: ${healthCheck?.status}, Latency: ${healthCheck?.latency}ms`);
     
     // Update connection status
     await supabaseClient
@@ -279,11 +292,12 @@ Deno.serve(async (req) => {
         results,
         healthStatus: healthCheck?.status,
         latency: healthCheck?.latency,
+        exchangeName: displayName,
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Error in sync-exchange-data:', error);
+    console.error('[sync-exchange-data] Error:', error);
     
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     

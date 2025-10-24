@@ -84,6 +84,11 @@ export class ExchangeService {
     return this.adapters.get(exchange.toLowerCase());
   }
 
+  getExchangeName(exchange: string): string | undefined {
+    const adapter = this.getAdapter(exchange);
+    return adapter?.getName();
+  }
+
   async syncExchange(
     exchange: string,
     options?: {
