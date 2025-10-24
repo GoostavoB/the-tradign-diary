@@ -6,10 +6,16 @@ import { useTranslation } from "react-i18next";
 
 const Hero = () => {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n, ready } = useTranslation();
 
-  // Ensure i18n is initialized before rendering
-  if (!i18n.isInitialized) {
+  // Fallback helper for missing translations
+  const getBenefitText = (key: string, fallback: string): string => {
+    const translated = t(key);
+    return translated === key ? fallback : translated;
+  };
+
+  // Ensure i18n is initialized and translations are loaded
+  if (!i18n.isInitialized || !ready) {
     return null;
   }
 
@@ -83,16 +89,16 @@ const Hero = () => {
             aria-label="Platform benefits"
           >
             <article className="glass-strong backdrop-blur-[20px] p-6 rounded-xl shadow-lg border border-primary/10 text-center flex flex-col items-center justify-center">
-              <h3 className="text-lg md:text-xl font-bold text-primary mb-2">{t('landing.benefits.fasterUploads.title')}</h3>
-              <p className="text-sm text-muted-foreground">{t('landing.benefits.fasterUploads.description')}</p>
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-2">{getBenefitText('landing.benefits.fasterUploads.title', '40× Faster Uploads')}</h3>
+              <p className="text-sm text-muted-foreground">{getBenefitText('landing.benefits.fasterUploads.description', 'Batch upload from screenshots. No more manual entry.')}</p>
             </article>
             <article className="glass-strong backdrop-blur-[20px] p-6 rounded-xl shadow-lg border border-primary/10 text-center flex flex-col items-center justify-center">
-              <h3 className="text-lg md:text-xl font-bold text-primary mb-2">{t('landing.benefits.knowEveryFee.title')}</h3>
-              <p className="text-sm text-muted-foreground">{t('landing.benefits.knowEveryFee.description')}</p>
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-2">{getBenefitText('landing.benefits.knowEveryFee.title', 'Know Every Fee')}</h3>
+              <p className="text-sm text-muted-foreground">{getBenefitText('landing.benefits.knowEveryFee.description', 'Track all costs per trade to see your true P&L.')}</p>
             </article>
             <article className="glass-strong backdrop-blur-[20px] p-6 rounded-xl shadow-lg border border-primary/10 text-center flex flex-col items-center justify-center">
-              <h3 className="text-lg md:text-xl font-bold text-primary mb-2">{t('landing.benefits.yourRules.title')}</h3>
-              <p className="text-sm text-muted-foreground">{t('landing.benefits.yourRules.description')}</p>
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-2">{getBenefitText('landing.benefits.yourRules.title', 'Your Rules')}</h3>
+              <p className="text-sm text-muted-foreground">{getBenefitText('landing.benefits.yourRules.description', 'Define your strategy. Track what matters to you.')}</p>
             </article>
           </motion.div>
       </div>

@@ -52,7 +52,7 @@ i18n
 if (process.env.NODE_ENV !== 'production') {
   console.debug('i18n initialized', {
     language: i18n.language,
-    hasTranslations: i18n.exists('landing.stats.fasterUploads.title')
+    hasTranslations: i18n.exists('landing.benefits.fasterUploads.title')
   });
 }
 
