@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { CalendarIcon, ChevronsUpDown, Check, Loader2 } from 'lucide-react';
+import { CalendarIcon, ChevronsUpDown, Check, Loader2, TrendingUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useTokenSearch } from '@/hooks/useTokenSearch';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { isValidDecimal, parseDecimalInput } from '@/utils/numberFormatting';
 
 interface AddTokenModalProps {
@@ -27,19 +27,6 @@ interface AddTokenModalProps {
     notes?: string;
   }) => void;
 }
-
-const POPULAR_TOKENS = [
-  { symbol: 'BTC', name: 'Bitcoin' },
-  { symbol: 'ETH', name: 'Ethereum' },
-  { symbol: 'BNB', name: 'Binance Coin' },
-  { symbol: 'SOL', name: 'Solana' },
-  { symbol: 'XRP', name: 'Ripple' },
-  { symbol: 'ADA', name: 'Cardano' },
-  { symbol: 'DOGE', name: 'Dogecoin' },
-  { symbol: 'MATIC', name: 'Polygon' },
-  { symbol: 'DOT', name: 'Polkadot' },
-  { symbol: 'AVAX', name: 'Avalanche' },
-];
 
 const EXCHANGES = [
   "Binance",
@@ -73,8 +60,24 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
   const [openExchange, setOpenExchange] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTokenResults, setShowTokenResults] = useState(false);
+  const [isManualPrice, setIsManualPrice] = useState(false);
   
   const { results: tokenResults, loading: searchLoading } = useTokenSearch(searchQuery);
+  const { data: priceData, isLoading: priceLoading } = useTokenPrice(tokenSymbol);
+
+  // Auto-fill purchase date to today when symbol is entered
+  useEffect(() => {
+    if (tokenSymbol && !purchaseDate) {
+      setPurchaseDate(new Date());
+    }
+  }, [tokenSymbol]);
+
+  // Auto-fill purchase price from CoinGecko when available
+  useEffect(() => {
+    if (priceData && !isManualPrice && tokenSymbol) {
+      setPurchasePrice(priceData.usd.toString());
+    }
+  }, [priceData, tokenSymbol, isManualPrice]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +100,9 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
     setPurchaseDate(undefined);
     setExchange('');
     setNotes('');
+    setIsManualPrice(false);
+    setSearchQuery('');
+    setShowTokenResults(false);
     onClose();
   };
 
@@ -105,12 +111,21 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
     setTokenName(name);
     setSearchQuery('');
     setShowTokenResults(false);
+    setIsManualPrice(false); // Reset manual price flag when selecting new token
   };
 
   const handleSymbolChange = (value: string) => {
     setTokenSymbol(value.toUpperCase());
     setSearchQuery(value);
     setShowTokenResults(value.length >= 2);
+    setIsManualPrice(false); // Reset when user changes symbol
+  };
+
+  const handlePriceManualChange = (value: string) => {
+    if (isValidDecimal(value)) {
+      setPurchasePrice(value);
+      setIsManualPrice(true); // Mark as manually edited
+    }
   };
 
   return (
@@ -124,25 +139,6 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label>Quick Select</Label>
-            <Select onValueChange={(value) => {
-              const token = POPULAR_TOKENS.find(t => t.symbol === value);
-              if (token) handleTokenSelect(token.symbol, token.name);
-            }}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select popular token" />
-              </SelectTrigger>
-              <SelectContent className="bg-popover z-50">
-                {POPULAR_TOKENS.map(token => (
-                  <SelectItem key={token.symbol} value={token.symbol}>
-                    {token.symbol} - {token.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2 relative">
               <Label htmlFor="symbol">Symbol *</Label>
@@ -189,11 +185,16 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
               <Label htmlFor="name">Token Name *</Label>
               <Input
                 id="name"
-                placeholder="Bitcoin"
+                placeholder="Bitcoin (auto-fills)"
                 value={tokenName}
                 onChange={(e) => setTokenName(e.target.value)}
                 required
               />
+              {tokenName && (
+                <p className="text-xs text-muted-foreground">
+                  ✓ Auto-filled from search
+                </p>
+              )}
             </div>
           </div>
 
@@ -217,20 +218,31 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="price">Purchase Price</Label>
+              <Label htmlFor="price" className="flex items-center gap-2">
+                Purchase Price
+                {priceLoading && <Loader2 className="h-3 w-3 animate-spin" />}
+                {priceData && !isManualPrice && (
+                  <TrendingUp className="h-3 w-3 text-success" />
+                )}
+              </Label>
               <Input
                 id="price"
                 type="text"
                 inputMode="decimal"
-                placeholder="40000"
+                placeholder="Auto-fills from CoinGecko"
                 value={purchasePrice}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (isValidDecimal(value)) {
-                    setPurchasePrice(value);
-                  }
-                }}
+                onChange={(e) => handlePriceManualChange(e.target.value)}
               />
+              {priceData && !isManualPrice && (
+                <p className="text-xs text-success">
+                  ✓ Current market price (live)
+                </p>
+              )}
+              {isManualPrice && (
+                <p className="text-xs text-muted-foreground">
+                  Manual price entered
+                </p>
+              )}
             </div>
           </div>
 
@@ -259,6 +271,11 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
                   />
                 </PopoverContent>
               </Popover>
+              {purchaseDate && format(purchaseDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') && (
+                <p className="text-xs text-muted-foreground">
+                  ✓ Defaults to today
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
