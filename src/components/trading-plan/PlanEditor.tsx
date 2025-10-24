@@ -17,7 +17,7 @@ interface PlanEditorProps {
   onCancel: () => void;
 }
 
-const availableMarkets = ["Crypto", "Forex", "Stocks", "Futures", "Options"];
+const availableCurrencyTypes = ["BTC", "ETH", "Top 10", "Mid Cap", "Small Caps", "Meme Coins"];
 const availableTimeframes = ["1m", "5m", "15m", "30m", "1h", "4h", "1d", "1w"];
 
 export function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
@@ -28,14 +28,16 @@ export function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    markets: [] as string[],
+    currency_types: [] as string[],
     timeframes: [] as string[],
+    trade_setups: "",
     entry_rules: "",
     exit_rules: "",
     risk_management: "",
     position_sizing: "",
     trading_schedule: "",
     review_process: "",
+    checklist: "",
     is_active: false,
   });
 
@@ -44,25 +46,27 @@ export function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
       setFormData({
         name: plan.name || "",
         description: plan.description || "",
-        markets: plan.markets || [],
+        currency_types: plan.currency_types || plan.markets || [],
         timeframes: plan.timeframes || [],
+        trade_setups: plan.trade_setups || "",
         entry_rules: plan.entry_rules || "",
         exit_rules: plan.exit_rules || "",
         risk_management: plan.risk_management || "",
         position_sizing: plan.position_sizing || "",
         trading_schedule: plan.trading_schedule || "",
         review_process: plan.review_process || "",
+        checklist: plan.checklist || "",
         is_active: plan.is_active || false,
       });
     }
   }, [plan]);
 
-  const toggleMarket = (market: string) => {
+  const toggleCurrencyType = (currencyType: string) => {
     setFormData(prev => ({
       ...prev,
-      markets: prev.markets.includes(market)
-        ? prev.markets.filter(m => m !== market)
-        : [...prev.markets, market]
+      currency_types: prev.currency_types.includes(currencyType)
+        ? prev.currency_types.filter(c => c !== currencyType)
+        : [...prev.currency_types, currencyType]
     }));
   };
 
@@ -141,8 +145,9 @@ export function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="basics" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="basics">Basics</TabsTrigger>
+            <TabsTrigger value="setups">Setups</TabsTrigger>
             <TabsTrigger value="rules">Rules</TabsTrigger>
             <TabsTrigger value="risk">Risk</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
@@ -169,16 +174,17 @@ export function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
             </div>
 
             <div className="space-y-2">
-              <Label>Markets</Label>
+              <Label>Currency Types</Label>
+              <p className="text-sm text-muted-foreground">Select the types of cryptocurrencies you trade</p>
               <div className="flex flex-wrap gap-2">
-                {availableMarkets.map((market) => (
+                {availableCurrencyTypes.map((currencyType) => (
                   <Badge
-                    key={market}
-                    variant={formData.markets.includes(market) ? "default" : "outline"}
+                    key={currencyType}
+                    variant={formData.currency_types.includes(currencyType) ? "default" : "outline"}
                     className="cursor-pointer"
-                    onClick={() => toggleMarket(market)}
+                    onClick={() => toggleCurrencyType(currencyType)}
                   >
-                    {market}
+                    {currencyType}
                   </Badge>
                 ))}
               </div>
@@ -198,6 +204,34 @@ export function PlanEditor({ plan, onSave, onCancel }: PlanEditorProps) {
                   </Badge>
                 ))}
               </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="setups" className="space-y-4">
+            <div className="space-y-2">
+              <Label>Trade Setups</Label>
+              <p className="text-sm text-muted-foreground">
+                Document your specific trade setups - the patterns and conditions you look for
+              </p>
+              <Textarea
+                value={formData.trade_setups}
+                onChange={(e) => setFormData({ ...formData, trade_setups: e.target.value })}
+                placeholder="Example:&#10;• Breakout Setup: Price breaks above resistance with volume confirmation&#10;• Reversal Setup: Double bottom pattern with RSI divergence&#10;• Trend Following: Moving average crossover with MACD confirmation"
+                rows={10}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Pre-Trade Checklist</Label>
+              <p className="text-sm text-muted-foreground">
+                List of things to check before entering a trade
+              </p>
+              <Textarea
+                value={formData.checklist}
+                onChange={(e) => setFormData({ ...formData, checklist: e.target.value })}
+                placeholder="Example:&#10;☐ Setup is confirmed&#10;☐ Risk/reward ratio is at least 1:2&#10;☐ Stop loss is defined&#10;☐ Position size calculated&#10;☐ No conflicting signals&#10;☐ Market conditions are favorable"
+                rows={8}
+              />
             </div>
           </TabsContent>
 

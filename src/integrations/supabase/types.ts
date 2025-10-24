@@ -2189,6 +2189,39 @@ export type Database = {
           },
         ]
       }
+      social_shares: {
+        Row: {
+          created_at: string
+          id: string
+          platform: string
+          rewards_amount: number
+          rewards_claimed: boolean
+          shared_at: string
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          platform: string
+          rewards_amount?: number
+          rewards_claimed?: boolean
+          shared_at?: string
+          user_id: string
+          week_start: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          platform?: string
+          rewards_amount?: number
+          rewards_claimed?: boolean
+          shared_at?: string
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: []
+      }
       spot_holdings: {
         Row: {
           created_at: string
@@ -2781,7 +2814,9 @@ export type Database = {
       }
       trading_plans: {
         Row: {
+          checklist: string | null
           created_at: string
+          currency_types: string[] | null
           description: string | null
           entry_rules: string | null
           exit_rules: string | null
@@ -2793,12 +2828,15 @@ export type Database = {
           review_process: string | null
           risk_management: string | null
           timeframes: string[] | null
+          trade_setups: string | null
           trading_schedule: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          checklist?: string | null
           created_at?: string
+          currency_types?: string[] | null
           description?: string | null
           entry_rules?: string | null
           exit_rules?: string | null
@@ -2810,12 +2848,15 @@ export type Database = {
           review_process?: string | null
           risk_management?: string | null
           timeframes?: string[] | null
+          trade_setups?: string | null
           trading_schedule?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          checklist?: string | null
           created_at?: string
+          currency_types?: string[] | null
           description?: string | null
           entry_rules?: string | null
           exit_rules?: string | null
@@ -2827,6 +2868,7 @@ export type Database = {
           review_process?: string | null
           risk_management?: string | null
           timeframes?: string[] | null
+          trade_setups?: string | null
           trading_schedule?: string | null
           updated_at?: string
           user_id?: string
@@ -3692,10 +3734,15 @@ export type Database = {
       }
     }
     Functions: {
+      can_share_this_week: {
+        Args: { p_platform: string; p_user_id: string }
+        Returns: boolean
+      }
       check_daily_alert_cap: { Args: { p_user_id: string }; Returns: boolean }
       cleanup_deleted_trades: { Args: never; Returns: undefined }
       cleanup_expired_deleted_batches: { Args: never; Returns: undefined }
       cleanup_expired_pending_trades: { Args: never; Returns: undefined }
+      get_week_start: { Args: { date_input?: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -3715,6 +3762,7 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: undefined
       }
+      record_social_share: { Args: { p_platform: string }; Returns: Json }
       update_lsr_latest_value: {
         Args: {
           p_binance_ratio?: number

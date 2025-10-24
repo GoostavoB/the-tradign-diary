@@ -30,6 +30,7 @@
 **Completed Items:**
 - ✅ #1 - Currency Selector (USD, EUR, BTC, ETH, etc.)
 - ✅ #2 & #38 - Dashboard Layout Persistence  
+- ✅ #3 - Weekly Sharing Rewards
 - ✅ #4 - Language Consistency with Database Persistence
 - ✅ #5 & #14 - Widget Removal Fixes
 - ✅ #6 - Trading History Sorting (Date, P&L, ROI, Size, Fees)
@@ -51,6 +52,7 @@
 - ✅ #26 - Trading Journal Unified Tags
 - ✅ #27 - Daily Lesson Learned Popup (Press-and-hold)
 - ✅ #29 - Forecast Visual Refinement
+- ✅ #32 - Trading Plan Reformulation (Setups + Currency Types)
 - ✅ #30 - Economic Calendar & Performance Alerts Hidden
 - ✅ #31 - Goals System (Schema + UI fixes)
 - ✅ #33 - Reports System (Backend + UI)
@@ -62,7 +64,7 @@
 - ✅ #42 - UI/UX Standardization (Ongoing)
 
 **Key Achievements:**
-- ✨ 36 backlog items completed (86% done)
+- ✨ 38 backlog items completed (90% done)
 - 🎯 All critical blur/privacy features implemented
 - 📊 Enhanced Trading History with sorting, column customization & error tracking
 - 🗑️ Upload History with soft delete and restoration
@@ -85,11 +87,13 @@
 - 🏆 Social/Leaderboard hidden, Achievements kept
 - 🏷️ Setup & Broker inline creation already implemented
 - 📖 Trading Journal with unified tag system (Setups, Emotions, Errors, Custom)
+- 🎁 Weekly sharing rewards system with database tracking and automatic credit grants
 
 **Next Priorities:**
+- #32 - Trading Plan reformulado (Setups reais + tipo de ativo)
 - #28 - Long/Short Ratio Alerts (Pro/Elite)
 - #35 - Accessibility (WCAG 2.1 AA)
-- #3 - Recompensa por compartilhamento semanal
+- #41 - Usar planilha oficial do Gustavo como base do Stop Calculator
 
 ---
 
@@ -894,21 +898,36 @@ Import and validate formulas from provided spreadsheet for precise stop and risk
 ## 🟡 MEDIUM PRIORITY (14 items)
 
 ### #3 - Recompensa por compartilhamento semanal
-**Status:** Planned | **Complexity:** M
+**Status:** ✅ Completed | **Complexity:** M
 
 **Description:**  
 1 bonus upload per week per eligible social network when user shares.
 
 **Technical Actions:**
-- Add share buttons for each network
-- Implement callback/registration of share event
-- Create weekly counter per network
-- Add weekly reset mechanism
-- Track in database
+- ✅ Added share buttons for each network (Twitter, LinkedIn, Facebook)
+- ✅ Implemented callback/registration of share event via database function
+- ✅ Created weekly counter per network (social_shares table)
+- ✅ Added automatic weekly reset mechanism (week_start tracking)
+- ✅ Track in database with RLS policies
+- ✅ Grant upload credits automatically upon sharing
+- ✅ Prevent duplicate shares per platform per week
+- ✅ Load and display shared platforms on component mount
 
 **Acceptance Criteria:**
-- ✅ User receives +1 upload per network/week
-- ✅ Weekly reset works correctly
+- ✅ User receives +2 upload credits per network/week
+- ✅ Weekly reset works correctly (Monday-based weeks)
+- ✅ Database tracking with proper RLS policies
+- ✅ UI shows which platforms have been shared this week
+- ✅ Credits added to user_settings automatically
+
+**Completed:** October 25, 2025
+
+**Technical Notes:**
+- Created `social_shares` table with week_start tracking
+- Implemented `record_social_share()` database function
+- Implemented `can_share_this_week()` validation function
+- Implemented `get_week_start()` helper function for Monday calculation
+- Updated SocialShareRewards component with real backend integration
 
 ---
 
@@ -1183,21 +1202,27 @@ Hide modules and keep in backlog for phase 2.
 ---
 
 ### #32 - Trading Plan reformulado (Setups reais + tipo de ativo)
-**Status:** Planned | **Complexity:** M
+**Status:** ✅ Completed | **Complexity:** M
 
 **Description:**  
 Replace "Rules" with "Trade Setups". Replace "Markets" with Currency Type (BTC/ETH/Top10/Small Caps).
 
 **Technical Actions:**
-- Add Setup, Rules, Risks, Checklist fields
-- Implement rich text editor
-- Save/edit/delete functionality
-- Plan for future Upload integration
+- ✅ Added Currency Types field (BTC, ETH, Top 10, Mid Cap, Small Caps, Meme Coins)
+- ✅ Added Trade Setups section with rich textarea
+- ✅ Added Pre-Trade Checklist field
+- ✅ Database migration completed (currency_types, trade_setups, checklist columns)
+- ✅ Updated PlanEditor with new 5-tab structure
+- ✅ Migrated existing markets data to currency_types
 
 **Acceptance Criteria:**
-- ✅ Plans save correctly
-- ✅ Editor functional
+- ✅ Plans save correctly with new fields
+- ✅ Editor functional with 5 tabs (Basics, Setups, Rules, Risk, Schedule)
+- ✅ Currency types replace generic markets
+- ✅ Trade setups and checklist documented
 - ✅ Ready for Upload integration
+
+**Completed:** October 25, 2025
 
 ---
 
