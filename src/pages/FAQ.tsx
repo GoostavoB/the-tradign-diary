@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { useTranslation } from '@/hooks/useTranslation';
+import { SkipToContent } from '@/components/SkipToContent';
 
 const FAQ = () => {
   const { t } = useTranslation();
@@ -36,11 +37,12 @@ const FAQ = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-4xl font-bold mb-2">{t('faq.title')}</h1>
+      <SkipToContent />
+      <main id="main-content" className="max-w-3xl mx-auto space-y-6">
+        <header>
+          <h1 className="text-4xl font-bold mb-2" id="faq-heading">{t('faq.title')}</h1>
           <p className="text-muted-foreground">{t('faq.subtitle')}</p>
-        </div>
+        </header>
 
         <Card className="p-6 bg-card border-border">
           <Accordion type="single" collapsible className="w-full">
@@ -56,7 +58,7 @@ const FAQ = () => {
             ))}
           </Accordion>
         </Card>
-      </div>
+      </main>
     </AppLayout>
   );
 };

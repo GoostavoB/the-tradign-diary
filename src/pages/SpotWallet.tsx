@@ -19,6 +19,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import type { TimeRange } from '@/utils/timeframeReturns';
+import { SkipToContent } from '@/components/SkipToContent';
 
 export default function SpotWallet() {
   const [selectedRange, setSelectedRange] = useState<TimeRange>('1M');
@@ -120,14 +121,15 @@ export default function SpotWallet() {
 
   return (
     <AppLayout>
-      <div className="space-y-6 p-6">
+      <SkipToContent />
+      <main id="main-content" className="space-y-6 p-6">
         {/* Page Header */}
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Spot Wallet</h1>
+        <header className="flex flex-col gap-2">
+          <h1 className="text-3xl font-bold tracking-tight" id="spot-wallet-heading">Spot Wallet</h1>
           <p className="text-muted-foreground">
             Track your portfolio with real-time P&L, cost basis, and performance analytics · {holdings?.length || 0} assets · {costMethod} · {baseCurrency}
           </p>
-        </div>
+        </header>
         {/* Header Controls */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <RangeSelector selected={selectedRange} onChange={setSelectedRange} />
@@ -137,6 +139,7 @@ export default function SpotWallet() {
               variant={viewType === 'value' ? 'default' : 'outline'}
               size="sm"
               onClick={() => setViewType('value')}
+              aria-label="View by value"
             >
               Value
             </Button>
@@ -299,7 +302,6 @@ export default function SpotWallet() {
             baseCurrency={baseCurrency}
           />
         )}
-      </div>
 
       <AddTokenModal 
         open={showAddModal} 
@@ -309,6 +311,7 @@ export default function SpotWallet() {
           setShowAddModal(false);
         }}
       />
+      </main>
     </AppLayout>
   );
 };

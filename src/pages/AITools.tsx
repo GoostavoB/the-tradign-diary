@@ -7,37 +7,39 @@ import { AIPatternRecognition } from "@/components/ai/AIPatternRecognition";
 import { TradingPsychologyTracker } from "@/components/ai/TradingPsychologyTracker";
 import { PerformancePrediction } from "@/components/ai/PerformancePrediction";
 import { Brain, MessageSquare, FileText, Target, Activity, TrendingUp } from "lucide-react";
+import { SkipToContent } from "@/components/SkipToContent";
 
 export default function AITools() {
   return (
     <AppLayout>
-      <div className="container mx-auto p-6 max-w-6xl">
-        <h1 className="text-3xl font-bold mb-6">AI Trading Assistant</h1>
+      <SkipToContent />
+      <main id="main-content" className="container mx-auto p-6 max-w-6xl">
+        <h1 className="text-3xl font-bold mb-6" id="ai-tools-heading">AI Trading Assistant</h1>
 
         <Tabs defaultValue="analysis" className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="analysis" className="gap-2">
-              <Brain className="h-4 w-4" />
+              <Brain className="h-4 w-4" aria-hidden="true" />
               Analysis
             </TabsTrigger>
             <TabsTrigger value="patterns" className="gap-2">
-              <Target className="h-4 w-4" />
+              <Target className="h-4 w-4" aria-hidden="true" />
               Patterns
             </TabsTrigger>
             <TabsTrigger value="psychology" className="gap-2">
-              <Activity className="h-4 w-4" />
+              <Activity className="h-4 w-4" aria-hidden="true" />
               Psychology
             </TabsTrigger>
             <TabsTrigger value="prediction" className="gap-2">
-              <TrendingUp className="h-4 w-4" />
+              <TrendingUp className="h-4 w-4" aria-hidden="true" />
               Prediction
             </TabsTrigger>
             <TabsTrigger value="chat" className="gap-2">
-              <MessageSquare className="h-4 w-4" />
+              <MessageSquare className="h-4 w-4" aria-hidden="true" />
               AI Coach
             </TabsTrigger>
             <TabsTrigger value="reports" className="gap-2">
-              <FileText className="h-4 w-4" />
+              <FileText className="h-4 w-4" aria-hidden="true" />
               Reports
             </TabsTrigger>
           </TabsList>
@@ -66,7 +68,7 @@ export default function AITools() {
             <AIGeneratedReport />
           </TabsContent>
         </Tabs>
-      </div>
+      </main>
     </AppLayout>
   );
 }
