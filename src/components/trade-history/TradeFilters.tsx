@@ -1,4 +1,4 @@
-import { Search, Settings2 } from 'lucide-react';
+import { Search, Settings2, ArrowUpDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -27,8 +27,10 @@ interface ColumnConfig {
 interface TradeFiltersProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  sortBy: 'date' | 'pnl' | 'roi';
-  onSortChange: (value: 'date' | 'pnl' | 'roi') => void;
+  sortBy: 'date' | 'pnl' | 'roi' | 'size' | 'fundingFee' | 'tradingFee';
+  onSortChange: (value: 'date' | 'pnl' | 'roi' | 'size' | 'fundingFee' | 'tradingFee') => void;
+  sortDirection: 'asc' | 'desc';
+  onSortDirectionChange: (value: 'asc' | 'desc') => void;
   filterType: 'all' | 'wins' | 'losses';
   onFilterChange: (value: 'all' | 'wins' | 'losses') => void;
   showDeleted: boolean;
@@ -42,6 +44,8 @@ export const TradeFilters = ({
   onSearchChange,
   sortBy,
   onSortChange,
+  sortDirection,
+  onSortDirectionChange,
   filterType,
   onFilterChange,
   showDeleted,
@@ -69,8 +73,20 @@ export const TradeFilters = ({
           <SelectItem value="date">Sort by Date</SelectItem>
           <SelectItem value="pnl">Sort by P&L</SelectItem>
           <SelectItem value="roi">Sort by ROI</SelectItem>
+          <SelectItem value="size">Sort by Size</SelectItem>
+          <SelectItem value="fundingFee">Sort by Funding Fee</SelectItem>
+          <SelectItem value="tradingFee">Sort by Trading Fee</SelectItem>
         </SelectContent>
       </Select>
+
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => onSortDirectionChange(sortDirection === 'asc' ? 'desc' : 'asc')}
+        title={sortDirection === 'asc' ? 'Ascending' : 'Descending'}
+      >
+        <ArrowUpDown className={`h-4 w-4 transition-transform ${sortDirection === 'desc' ? 'rotate-180' : ''}`} />
+      </Button>
 
       <Select value={filterType} onValueChange={onFilterChange}>
         <SelectTrigger className="w-full md:w-[180px]">

@@ -97,7 +97,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-  const [sortBy, setSortBy] = useState<'date' | 'pnl' | 'roi'>('date');
+  const [sortBy, setSortBy] = useState<'date' | 'pnl' | 'roi' | 'size' | 'fundingFee' | 'tradingFee'>('date');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [filterType, setFilterType] = useState<'all' | 'wins' | 'losses'>('all');
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedTrade, setSelectedTrade] = useState<Trade | null>(null);
@@ -164,18 +165,27 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
 
     // Sort
     filtered.sort((a, b) => {
+      let comparison = 0;
+      
       if (sortBy === 'date') {
-        return new Date(b.trade_date).getTime() - new Date(a.trade_date).getTime();
+        comparison = new Date(b.trade_date || 0).getTime() - new Date(a.trade_date || 0).getTime();
       } else if (sortBy === 'pnl') {
-        return (b.pnl || 0) - (a.pnl || 0);
+        comparison = (b.pnl || 0) - (a.pnl || 0);
       } else if (sortBy === 'roi') {
-        return (b.roi || 0) - (a.roi || 0);
+        comparison = (b.roi || 0) - (a.roi || 0);
+      } else if (sortBy === 'size') {
+        comparison = (b.position_size || 0) - (a.position_size || 0);
+      } else if (sortBy === 'fundingFee') {
+        comparison = (b.funding_fee || 0) - (a.funding_fee || 0);
+      } else if (sortBy === 'tradingFee') {
+        comparison = (b.trading_fee || 0) - (a.trading_fee || 0);
       }
-      return 0;
+      
+      return sortDirection === 'desc' ? comparison : -comparison;
     });
 
     return filtered;
-  }, [trades, debouncedSearchTerm, filterType, sortBy, showDeleted, dateRange]);
+  }, [trades, debouncedSearchTerm, filterType, sortBy, sortDirection, showDeleted, dateRange]);
 
   // Memoized filtered trades
   const filteredTrades = useMemo(() => filterAndSortTrades(), [filterAndSortTrades]);
@@ -568,6 +578,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
           onSearchChange={setSearchTerm}
           sortBy={sortBy}
           onSortChange={setSortBy}
+          sortDirection={sortDirection}
+          onSortDirectionChange={setSortDirection}
           filterType={filterType}
           onFilterChange={setFilterType}
           showDeleted={showDeleted}
