@@ -29,7 +29,7 @@ export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => 
         <div className="flex items-center justify-center gap-6 flex-wrap">
           <div className="flex items-center gap-3 flex-shrink-0">
             <TrendingUp className="text-emerald-500/80" size={24} />
-            <span className="text-base font-semibold text-muted-foreground">LIVE (24h):</span>
+            <span className="text-base font-semibold text-foreground">LIVE (24h):</span>
           </div>
           {prices.map((price) => {
             const isPositive = price.priceChangePercent >= 0;
@@ -38,7 +38,7 @@ export const CryptoPrices = ({ className = '', symbols }: CryptoPricesProps) => 
             
             return (
               <div key={price.symbol} className="flex items-center gap-2 flex-shrink-0">
-                <span className="text-base font-semibold text-white">
+                <span className="text-base font-semibold text-foreground">
                   {price.displaySymbol}
                 </span>
                 <span className={`text-base font-mono ${priceColor}`}>

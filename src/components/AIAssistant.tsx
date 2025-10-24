@@ -147,7 +147,7 @@ export const AIAssistant = () => {
                   <div
                     className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                       message.role === 'user'
-                        ? 'bg-accent text-white'
+                        ? 'bg-accent text-accent-foreground'
                         : 'glass border border-border/50'
                     }`}
                   >

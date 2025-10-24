@@ -122,10 +122,10 @@ const Pricing = () => {
 
   return (
     <>
-      <section className="py-16 md:py-20 px-6">
+      <section className="py-16 md:py-20 px-6" aria-labelledby="pricing-heading">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8 md:mb-12 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            <h2 id="pricing-heading" className="text-3xl md:text-4xl font-bold mb-3">
               {t('pricing.title')}
             </h2>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
@@ -153,16 +153,17 @@ const Pricing = () => {
                 }`}
               >
                 {t('pricing.billing.annual')}
-                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                <span className="absolute -top-2 -right-2 bg-green-500 text-primary-foreground text-xs px-2 py-0.5 rounded-full font-semibold">
                   {t('pricing.billing.save20')}
                 </span>
               </button>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-6" role="list">
             {plans.map((plan, index) => (
-              <div
+              <article
+                role="listitem"
                 key={plan.id}
                 className={`glass backdrop-blur-[12px] rounded-2xl p-6 md:p-7 relative hover-lift transition-all shadow-sm animate-fade-in ${
                   plan.popular ? "ring-2 ring-primary shadow-lg shadow-primary/20" : ""
@@ -225,7 +226,7 @@ const Pricing = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </article>
             ))}
           </div>
 

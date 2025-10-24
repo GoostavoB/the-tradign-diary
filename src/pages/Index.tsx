@@ -9,6 +9,7 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import { MobileHeader } from "@/components/MobileHeader";
 import { ProofBar } from "@/components/ProofBar";
+import { SkipToContent } from "@/components/SkipToContent";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/hooks/useTranslation";
 import { updateLandingMeta, addStructuredData, trackLandingView, trackCTAClick } from "@/utils/i18nLandingMeta";
@@ -41,9 +42,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
+      <SkipToContent />
       <MobileHeader />
       
-      <main className="pt-14">
+      <main id="main-content" className="pt-14">
         <Hero />
         <ProofBar />
         <DashboardShowcase />
