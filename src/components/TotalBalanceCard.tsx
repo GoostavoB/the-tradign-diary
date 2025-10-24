@@ -5,9 +5,10 @@ import { AnimatedCounter } from "./AnimatedCounter";
 import { LineChart, Line, ResponsiveContainer, Tooltip } from "recharts";
 import { ExplainMetricButton } from "@/components/ExplainMetricButton";
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
-import { formatCurrency, formatPercent } from "@/utils/formatNumber";
+import { formatPercent } from "@/utils/formatNumber";
 import { Trade } from "@/types/trade";
 import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface TotalBalanceCardProps {
   balance: number;
@@ -25,6 +26,7 @@ export const TotalBalanceCard = memo(({
   className 
 }: TotalBalanceCardProps) => {
   const { openWithPrompt } = useAIAssistant();
+  const { currency, convertAmount, formatAmount } = useCurrency();
   
   // Generate sparkline data from last 14 trades
   const sparklineData = trades
@@ -59,8 +61,8 @@ export const TotalBalanceCard = memo(({
           <div className="flex items-center gap-2">
             <ExplainMetricButton 
               metricName="Total Balance"
-              metricValue={formatCurrency(balance)}
-              context={`Current change: ${formatCurrency(change)} (${changePercent.toFixed(1)}%)`}
+              metricValue={formatAmount(convertAmount(balance))}
+              context={`Current change: ${formatAmount(convertAmount(change))} (${changePercent.toFixed(1)}%)`}
               onExplain={openWithPrompt}
             />
             <div 
@@ -85,9 +87,9 @@ export const TotalBalanceCard = memo(({
         <div className="space-y-1">
           <div 
             className="text-4xl font-bold tracking-tight"
-            aria-label={`Current balance: ${formatCurrency(balance)}`}
+            aria-label={`Current balance: ${formatAmount(convertAmount(balance))}`}
           >
-            <AnimatedCounter value={balance} prefix="$" decimals={2} />
+            <AnimatedCounter value={convertAmount(balance)} prefix={currency.symbol} decimals={2} />
           </div>
           <p 
             id="balance-description"

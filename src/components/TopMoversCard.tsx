@@ -1,11 +1,13 @@
 import { memo, useMemo } from 'react';
 import { GlassCard } from "@/components/ui/glass-card";
 import { TrendingUp, TrendingDown } from "lucide-react";
-import { formatPercent, formatCurrency } from "@/utils/formatNumber";
+import { formatPercent } from "@/utils/formatNumber";
 import { Trade } from "@/types/trade";
 import { ExplainMetricButton } from "@/components/ExplainMetricButton";
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import { TokenIcon } from "@/components/TokenIcon";
+import { BlurredCurrency } from '@/components/ui/BlurredValue';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface AssetMover {
   symbol: string;
@@ -21,6 +23,7 @@ interface TopMoversCardProps {
 
 const TopMoversCardComponent = ({ trades, className }: TopMoversCardProps) => {
   const { openWithPrompt } = useAIAssistant();
+  const { convertAmount, formatAmount } = useCurrency();
   
   const topMovers = useMemo(() => {
     // Calculate top movers by total P&L
@@ -53,7 +56,7 @@ const TopMoversCardComponent = ({ trades, className }: TopMoversCardProps) => {
           <ExplainMetricButton 
             metricName="Top Movers"
             metricValue={`${topMovers.length} assets`}
-            context={topMovers.length > 0 ? `Biggest mover: ${topMovers[0].symbol} at ${formatCurrency(topMovers[0].pnl)}` : ''}
+            context={topMovers.length > 0 ? `Biggest mover: ${topMovers[0].symbol} at ${formatAmount(convertAmount(topMovers[0].pnl))}` : ''}
             onExplain={openWithPrompt}
           />
         </div>
@@ -67,7 +70,7 @@ const TopMoversCardComponent = ({ trades, className }: TopMoversCardProps) => {
                   key={asset.symbol} 
                   className="flex items-center justify-between gap-3 p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
                   role="listitem"
-                  aria-label={`${asset.symbol}: ${formatCurrency(asset.pnl)}, ${isPositive ? 'up' : 'down'} ${formatPercent(Math.abs(asset.change))}`}
+                  aria-label={`${asset.symbol}: ${formatAmount(convertAmount(asset.pnl))}, ${isPositive ? 'up' : 'down'} ${formatPercent(Math.abs(asset.change))}`}
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <div 
@@ -92,7 +95,7 @@ const TopMoversCardComponent = ({ trades, className }: TopMoversCardProps) => {
                     <p className={`font-semibold text-sm whitespace-nowrap ${
                       isPositive ? 'text-primary' : 'text-secondary'
                     }`}>
-                      {formatCurrency(asset.pnl)}
+                      <BlurredCurrency amount={asset.pnl} />
                     </p>
                     <p className={`text-xs whitespace-nowrap ${
                       isPositive ? 'text-primary/70' : 'text-secondary/70'

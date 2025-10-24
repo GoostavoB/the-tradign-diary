@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from './button';
 import { useBlur } from '@/contexts/BlurContext';
+import { useCurrency } from '@/contexts/CurrencyContext';
 import { cn } from '@/lib/utils';
 
 interface BlurredValueProps {
@@ -63,13 +64,16 @@ export const BlurredCurrency = ({
   className?: string;
   showToggle?: boolean;
 }) => {
+  const { currency, convertAmount, formatAmount } = useCurrency();
+  const convertedAmount = convertAmount(amount);
+  const formattedValue = formatAmount(convertedAmount);
+  // Remove the currency symbol from the formatted string to use it as prefix
+  const valueWithoutSymbol = formattedValue.replace(currency.symbol, '').trim();
+  
   return (
     <BlurredValue
-      value={amount.toLocaleString('en-US', { 
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2 
-      })}
-      prefix="$"
+      value={valueWithoutSymbol}
+      prefix={currency.symbol}
       className={className}
       showToggle={showToggle}
     />

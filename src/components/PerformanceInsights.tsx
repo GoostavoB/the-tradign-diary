@@ -3,9 +3,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, AlertCircle, CheckCircle2, Trophy, Target } from 'lucide-react';
 import type { Trade } from '@/types/trade';
-import { formatCurrency, formatPercent } from '@/utils/formatNumber';
+import { formatPercent } from '@/utils/formatNumber';
 import { ExplainMetricButton } from '@/components/ExplainMetricButton';
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
+import { BlurredCurrency } from '@/components/ui/BlurredValue';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface PerformanceInsightsProps {
   trades: Trade[];
@@ -13,6 +15,7 @@ interface PerformanceInsightsProps {
 
 export const PerformanceInsights = memo(({ trades }: PerformanceInsightsProps) => {
   const { openWithPrompt } = useAIAssistant();
+  const { convertAmount, formatAmount } = useCurrency();
   if (!trades.length) return null;
 
   // Calculate insights
@@ -102,14 +105,14 @@ export const PerformanceInsights = memo(({ trades }: PerformanceInsightsProps) =
       type: 'success',
       icon: TrendingUp,
       title: 'Profitable Overall',
-      message: `Total P&L of ${formatCurrency(totalPnl)}. Stay consistent with your winning strategy.`
+      message: `Total P&L of ${formatAmount(convertAmount(totalPnl))}. Stay consistent with your winning strategy.`
     });
   } else if (totalPnl < 0) {
     insights.push({
       type: 'danger',
       icon: TrendingDown,
       title: 'Drawdown Alert',
-      message: `Down ${formatCurrency(Math.abs(totalPnl))}. Take a break, review your trades, and refocus.`
+      message: `Down ${formatAmount(convertAmount(Math.abs(totalPnl)))}. Take a break, review your trades, and refocus.`
     });
   }
 
@@ -189,7 +192,7 @@ export const PerformanceInsights = memo(({ trades }: PerformanceInsightsProps) =
             </div>
             <ExplainMetricButton
               metricName="Best Trade"
-              metricValue={formatCurrency(bestTrade.pnl || 0)}
+              metricValue={formatAmount(convertAmount(bestTrade.pnl || 0))}
               context={`${bestTrade.symbol} with ${formatPercent(bestTrade.roi || 0)} ROI`}
               onExplain={openWithPrompt}
             />
@@ -202,7 +205,7 @@ export const PerformanceInsights = memo(({ trades }: PerformanceInsightsProps) =
             <div className="flex items-center justify-between">
               <span className="text-xs text-muted-foreground">P&L</span>
               <span className="text-sm font-bold text-neon-green">
-                {formatCurrency(bestTrade.pnl || 0)}
+                <BlurredCurrency amount={bestTrade.pnl || 0} />
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -222,7 +225,7 @@ export const PerformanceInsights = memo(({ trades }: PerformanceInsightsProps) =
             </div>
             <ExplainMetricButton
               metricName="Worst Trade"
-              metricValue={formatCurrency(worstTrade.pnl || 0)}
+              metricValue={formatAmount(convertAmount(worstTrade.pnl || 0))}
               context={`${worstTrade.symbol} with ${formatPercent(worstTrade.roi || 0)} ROI`}
               onExplain={openWithPrompt}
             />
@@ -235,7 +238,7 @@ export const PerformanceInsights = memo(({ trades }: PerformanceInsightsProps) =
             <div className="flex items-center justify-between">
               <span className="text-xs text-muted-foreground">P&L</span>
               <span className="text-sm font-bold text-neon-red">
-                {formatCurrency(worstTrade.pnl || 0)}
+                <BlurredCurrency amount={worstTrade.pnl || 0} />
               </span>
             </div>
             <div className="flex items-center justify-between">

@@ -1,13 +1,14 @@
 import { memo } from 'react';
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { formatCurrency } from "@/utils/formatNumber";
 import { Trade } from "@/types/trade";
 import { format } from "date-fns";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { ExplainMetricButton } from "@/components/ExplainMetricButton";
 import { useTranslation } from '@/hooks/useTranslation';
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
+import { BlurredCurrency } from '@/components/ui/BlurredValue';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface RecentTransactionsCardProps {
   trades: Trade[];
@@ -17,6 +18,7 @@ interface RecentTransactionsCardProps {
 export const RecentTransactionsCard = memo(({ trades, className }: RecentTransactionsCardProps) => {
   const { t } = useTranslation();
   const { openWithPrompt } = useAIAssistant();
+  const { convertAmount, formatAmount } = useCurrency();
   const recentTrades = trades
     .sort((a, b) => new Date(b.trade_date).getTime() - new Date(a.trade_date).getTime())
     .slice(0, 5);
@@ -30,7 +32,7 @@ export const RecentTransactionsCard = memo(({ trades, className }: RecentTransac
             <ExplainMetricButton 
               metricName="Recent Transactions"
               metricValue={`${recentTrades.length} trades`}
-              context={recentTrades.length > 0 ? `Latest: ${recentTrades[0].symbol} (${formatCurrency(recentTrades[0].pnl || 0)})` : ''}
+              context={recentTrades.length > 0 ? `Latest: ${recentTrades[0].symbol} (${formatAmount(convertAmount(recentTrades[0].pnl || 0))})` : ''}
               onExplain={openWithPrompt}
             />
             <a href="/dashboard" className="text-xs text-primary hover:underline">
@@ -70,7 +72,7 @@ export const RecentTransactionsCard = memo(({ trades, className }: RecentTransac
                     <p className={`font-semibold text-sm whitespace-nowrap ${
                       isWin ? 'text-primary' : 'text-secondary'
                     }`}>
-                      {formatCurrency(trade.pnl || 0)}
+                      <BlurredCurrency amount={trade.pnl || 0} />
                     </p>
                     <Badge 
                       variant={trade.side === 'long' ? 'default' : 'secondary'}

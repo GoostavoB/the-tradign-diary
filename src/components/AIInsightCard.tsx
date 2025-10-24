@@ -2,8 +2,9 @@ import { memo, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Sparkles, TrendingUp, TrendingDown, Target } from 'lucide-react';
 import type { Trade } from '@/types/trade';
-import { formatCurrency, formatPercent } from '@/utils/formatNumber';
-import { BlurredValue } from '@/components/ui/BlurredValue';
+import { formatPercent } from '@/utils/formatNumber';
+import { BlurredValue, BlurredCurrency } from '@/components/ui/BlurredValue';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 interface AIInsightCardProps {
   trades: Trade[];
@@ -12,6 +13,7 @@ interface AIInsightCardProps {
 }
 
 export const AIInsightCard = memo(({ trades, capitalLog, stats }: AIInsightCardProps) => {
+  const { convertAmount, formatAmount } = useCurrency();
   const insight = useMemo(() => {
     if (!trades.length) {
       return {
@@ -141,31 +143,31 @@ export const AIInsightCard = memo(({ trades, capitalLog, stats }: AIInsightCardP
       case 'performance':
         return (
           <>
-            You're up <BlurredValue value={formatCurrency(msg.pnl)} /> with a <BlurredValue value={msg.winRate.toFixed(2)} suffix="%" /> win rate. {msg.text}
+            You're up <BlurredCurrency amount={msg.pnl} className="inline" /> with a <BlurredValue value={msg.winRate.toFixed(2)} suffix="%" /> win rate. {msg.text}
           </>
         );
       case 'streak':
         return (
           <>
-            You've won {msg.wins} of your last 10 trades with <BlurredValue value={formatCurrency(msg.pnl)} /> profit. {msg.text}
+            You've won {msg.wins} of your last 10 trades with <BlurredCurrency amount={msg.pnl} className="inline" /> profit. {msg.text}
           </>
         );
       case 'risk':
         return (
           <>
-            Your average win (<BlurredValue value={formatCurrency(msg.avgWin)} />) is <BlurredValue value={msg.ratio.toFixed(1)} suffix="x" /> your average loss. {msg.text}
+            Your average win (<BlurredCurrency amount={msg.avgWin} className="inline" />) is <BlurredValue value={msg.ratio.toFixed(1)} suffix="x" /> your average loss. {msg.text}
           </>
         );
       case 'warning':
         return (
           <>
-            Recent trades are down <BlurredValue value={formatCurrency(msg.pnl)} />. {msg.text}
+            Recent trades are down <BlurredCurrency amount={msg.pnl} className="inline" />. {msg.text}
           </>
         );
       case 'alert':
         return (
           <>
-            Overall down <BlurredValue value={formatCurrency(msg.pnl)} />. {msg.text}
+            Overall down <BlurredCurrency amount={msg.pnl} className="inline" />. {msg.text}
           </>
         );
       case 'building':
