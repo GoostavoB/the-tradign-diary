@@ -40,7 +40,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
       <MobileHeader />
       
       <main className="pt-14">
