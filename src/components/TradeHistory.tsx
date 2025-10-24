@@ -517,21 +517,13 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
   };
 
   const handleErrorUpdate = async (tradeId: string, error_description: string) => {
-    // Note: error_description field needs to be added to trades table schema
-    // Temporarily disabled until migration is run
-    toast.info('Error field feature coming soon - database migration pending');
-    setEditingError(null);
-    setErrorText('');
-    setErrorPopoverOpen(false);
-    return;
-    
-    /* Uncomment after adding error_description column to trades table
     const { error } = await supabase
       .from('trades')
       .update({ error_description })
       .eq('id', tradeId);
 
     if (error) {
+      console.error('Error updating trade error description:', error);
       toast.error('Failed to update error field');
     } else {
       setTrades(trades.map(t => t.id === tradeId ? { ...t, error_description } : t));
@@ -541,7 +533,6 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
       setErrorPopoverOpen(false);
       onTradesChange?.();
     }
-    */
   };
 
   if (loading) {

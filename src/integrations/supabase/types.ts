@@ -2391,6 +2391,7 @@ export type Database = {
           duration_minutes: number | null
           emotional_tag: string | null
           entry_price: number | null
+          error_description: string | null
           exchange_source: string | null
           exchange_trade_id: string | null
           exit_price: number | null
@@ -2433,6 +2434,7 @@ export type Database = {
           duration_minutes?: number | null
           emotional_tag?: string | null
           entry_price?: number | null
+          error_description?: string | null
           exchange_source?: string | null
           exchange_trade_id?: string | null
           exit_price?: number | null
@@ -2475,6 +2477,7 @@ export type Database = {
           duration_minutes?: number | null
           emotional_tag?: string | null
           entry_price?: number | null
+          error_description?: string | null
           exchange_source?: string | null
           exchange_trade_id?: string | null
           exit_price?: number | null
