@@ -48,7 +48,8 @@ const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Author = lazy(() => import("./pages/Author"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const CryptoTradingFAQ = lazy(() => import("./pages/CryptoTradingFAQ"));
-const Social = lazy(() => import("./pages/Social"));
+// Phase 2: Social features - temporarily disabled for backlog #34
+// const Social = lazy(() => import("./pages/Social"));
 const AITools = lazy(() => import("./pages/AITools"));
 const Journal = lazy(() => import("./pages/Journal"));
 const TradeAnalysis = lazy(() => import("./pages/TradeAnalysis"));
@@ -64,7 +65,8 @@ const SpotWallet = lazy(() => import("./pages/SpotWallet"));
 const FeeAnalysis = lazy(() => import("./pages/FeeAnalysis"));
 const LogoDownload = lazy(() => import("./pages/LogoDownload"));
 const LogoGenerator = lazy(() => import("./pages/LogoGenerator"));
-const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+// Phase 2: Leaderboard feature - temporarily disabled for backlog #34
+// const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const LongShortRatio = lazy(() => import("./pages/LongShortRatio"));
 const EconomicCalendar = lazy(() => import("./pages/EconomicCalendar"));
 const TaxReports = lazy(() => import("./pages/TaxReports"));
@@ -89,7 +91,8 @@ const BlogArticle = lazy(() => import("./pages/BlogArticle"));
 const Learn = lazy(() => import("./pages/Learn"));
 const ApiDocs = lazy(() => import("./pages/ApiDocs"));
 const AdvancedAnalytics = lazy(() => import("./pages/AdvancedAnalytics"));
-const SocialFeed = lazy(() => import("./pages/SocialFeed"));
+// Phase 2: Social Feed - temporarily disabled for backlog #34
+// const SocialFeed = lazy(() => import("./pages/SocialFeed"));
 const Testimonials = lazy(() => import("./pages/Testimonials"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
@@ -183,7 +186,8 @@ const AppRoutes = () => {
         {/* <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} /> */}
         <Route path="/market-data" element={<ProtectedRoute><MarketData /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-        <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
+        {/* Phase 2: Social features - temporarily disabled for backlog #34 */}
+        {/* <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} /> */}
         <Route path="/ai-tools" element={<ProtectedRoute><AITools /></ProtectedRoute>} />
         <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
         {/* Trade Analysis temporarily disabled - incomplete module */}
@@ -197,7 +201,8 @@ const AppRoutes = () => {
         <Route path="/spot-wallet" element={<ProtectedRoute><SpotWallet /></ProtectedRoute>} />
         <Route path="/fee-analysis" element={<ProtectedRoute><FeeAnalysis /></ProtectedRoute>} />
         <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
-        <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+        {/* Phase 2: Leaderboard - temporarily disabled for backlog #34 */}
+        {/* <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} /> */}
         <Route path="/long-short-ratio" element={<ProtectedRoute><LongShortRatio /></ProtectedRoute>} />
         {/* Phase 2: Economic Calendar and Performance Alerts - temporarily disabled for backlog #30 */}
         {/* <Route path="/economic-calendar" element={<ProtectedRoute><EconomicCalendar /></ProtectedRoute>} /> */}
@@ -217,7 +222,8 @@ const AppRoutes = () => {
         <Route path="/learn" element={<ProtectedRoute><Learn /></ProtectedRoute>} />
         <Route path="/api-docs" element={<ProtectedRoute><ApiDocs /></ProtectedRoute>} />
         <Route path="/advanced-analytics" element={<ProtectedRoute><AdvancedAnalytics /></ProtectedRoute>} />
-        <Route path="/social-feed" element={<ProtectedRoute><SocialFeed /></ProtectedRoute>} />
+        {/* Phase 2: Social Feed - temporarily disabled for backlog #34 */}
+        {/* <Route path="/social-feed" element={<ProtectedRoute><SocialFeed /></ProtectedRoute>} /> */}
         <Route path="/testimonials" element={<PublicPageThemeWrapper><Testimonials /></PublicPageThemeWrapper>} />
         <Route path="/changelog" element={<PublicPageThemeWrapper><ChangelogPage /></PublicPageThemeWrapper>} />
         <Route path="/how-it-works" element={<PublicPageThemeWrapper><HowItWorks /></PublicPageThemeWrapper>} />

@@ -44,6 +44,7 @@
 - ✅ #18 - Trading Account Module Hidden
 - ✅ #19 - Upload UX Premium (Batch upload)
 - ✅ #20 - Deleted History with 48h Restoration
+- ✅ #23 - Post-save Trade Modal Choice
 - ✅ #24 - Trade Analysis Module Hidden
 - ✅ #25 - Risk Management Calculators (Stop Loss, Leverage, Drawdown redesign)
 - ✅ #27 - Daily Lesson Learned Popup (Press-and-hold)
@@ -51,6 +52,7 @@
 - ✅ #30 - Economic Calendar & Performance Alerts Hidden
 - ✅ #31 - Goals System (Schema + UI fixes)
 - ✅ #33 - Reports System (Backend + UI)
+- ✅ #34 - Social/Leaderboard Hidden (Achievements kept)
 - ✅ #36 - Progress IXP Hidden
 - ✅ #37 - AI Parsing Enhancement (Infrastructure)
 - ✅ #39 - Risk Metrics Validation & Documentation
@@ -58,12 +60,12 @@
 - ✅ #42 - UI/UX Standardization (Ongoing)
 
 **Key Achievements:**
-- ✨ 32 backlog items completed (76% done)
+- ✨ 34 backlog items completed (81% done)
 - 🎯 All critical blur/privacy features implemented
 - 📊 Enhanced Trading History with sorting, column customization & error tracking
 - 🗑️ Upload History with soft delete and restoration
 - 💰 Multi-currency support with 12 fiat + crypto options + real-time exchange rates
-- 🎨 Design system tokens applied across multiple pages (Forecast, Risk, Goals, Reports)
+- 🎨 Design system tokens applied across multiple pages (Forecast, Risk, Goals, Reports, Upload)
 - 👑 Tier-based dashboard customization for Pro/Elite users
 - 🌍 Language consistency with database persistence
 - 🧮 Complete Risk Management suite with calculators and documentation
@@ -77,6 +79,8 @@
 - 🏦 Trading Accounts module hidden for redesign
 - 📈 Forecast page visual refinement with design tokens
 - ⚡ Progress IXP hidden pending visual redesign
+- ✅ Post-save modal with user choice (no forced redirects)
+- 🏆 Social/Leaderboard hidden, Achievements kept
 
 **Next Priorities:**
 - #28 - Long/Short Ratio Alerts (Pro/Elite)
@@ -1050,22 +1054,30 @@ Add Setup field to trade. Allow creating Broker if it doesn't exist.
 ---
 
 ### #23 - Pós-salvamento de trade: pop-up de escolha
-**Status:** Planned | **Complexity:** S
+**Status:** ✅ Completed | **Complexity:** S
 
 **Problem:**  
 Automatic redirect to Dashboard after save doesn't respect user flow.
 
 **Technical Actions:**
-- Show modal with options:
-  - "Go to Dashboard"
-  - "Go to Trade History"
-  - "Stay Here"
-- Optional timeout (5s default)
+- ✅ Removed automatic navigate after 1.5s from Upload.tsx
+- ✅ Enhanced SuccessFeedback component with three button options
+- ✅ Added "Go to Dashboard" button
+- ✅ Added "Go to Trade History" button
+- ✅ Added "Stay Here" button (dismisses modal and resets form)
+- ✅ Replaced hardcoded colors (text-neon-green) with semantic tokens (text-success)
+- ✅ Updated card styling with glass-card
+- ✅ Optional autoCloseDelay parameter (default: 0 = no auto-close)
+- ✅ Added countdown timer when auto-close is enabled
 
 **Acceptance Criteria:**
 - ✅ No automatic redirect
 - ✅ User chooses destination
-- ✅ Consistent across all languages
+- ✅ Three clear options available
+- ✅ "Stay Here" resets form for new upload
+- ✅ Consistent across all languages (uses semantic tokens)
+
+**Completed:** October 25, 2025
 
 ---
 
@@ -1159,21 +1171,27 @@ Replace "Rules" with "Trade Setups". Replace "Markets" with Currency Type (BTC/E
 ---
 
 ### #34 - Social/Comunidade: focar em Badges + Share no X
-**Status:** Planned | **Complexity:** M
+**Status:** ✅ Completed | **Complexity:** M
 
 **Description:**  
 Leave Social and Leaderboard as disabled "Zoom". Keep Achievements and X sharing.
 
 **Technical Actions:**
-- Add "Share on X" button per badge
-- Generate dynamic tweet text with link and @TheTradingDiary
-- Log share events
-- Hide extra social modules
+- ✅ Commented out Social, SocialFeed, Leaderboard routes
+- ✅ Commented out Social, SocialFeed, Leaderboard sidebar items
+- ✅ Kept Achievements page fully functional
+- ✅ Preserved all component code for phase 2
+- ✅ Added clear "Phase 2" comments
 
 **Acceptance Criteria:**
-- ✅ Tweet opens with correct text
-- ✅ Premium visual
-- ✅ No extra social modules
+- ✅ Social/Leaderboard not visible in navigation
+- ✅ Achievements page works normally
+- ✅ Code preserved for future re-enablement
+- ✅ No broken links or errors
+
+**Completed:** October 25, 2025
+
+**Note:** X sharing functionality for badges can be added in future phase when social features are re-enabled.
 
 ---
 

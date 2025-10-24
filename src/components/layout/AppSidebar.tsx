@@ -124,9 +124,10 @@ export function AppSidebar() {
       defaultOpen: false,
       dataTour: 'community-group',
       items: [
-        { title: t('navigation.social'), url: '/social', icon: Users, iconName: 'Users', keywords: ['social', 'community', 'feed', 'posts', 'share', 'friends', 'network', 'follow', 'followers', 'strategies', 'discussions', 'comments', 'likes', 'engagement', 'traders', 'public'] },
-        { title: 'Social Feed', url: '/social-feed', icon: Heart, iconName: 'Heart', keywords: ['feed', 'posts', 'community', 'share', 'social', 'network', 'connect', 'trading', 'ideas', 'discuss'] },
-        { title: t('navigation.leaderboard'), url: '/leaderboard', icon: Trophy, iconName: 'Trophy', keywords: ['leaderboard', 'ranking', 'top', 'competition', 'scores', 'traders', 'best', 'performers', 'elite', 'standings', 'positions', 'compare', 'leaders', 'winners', 'rank', 'compete'] },
+        // Phase 2: Social features - temporarily disabled for backlog #34
+        // { title: t('navigation.social'), url: '/social', icon: Users, iconName: 'Users', keywords: ['social', 'community', 'feed', 'posts', 'share', 'friends', 'network', 'follow', 'followers', 'strategies', 'discussions', 'comments', 'likes', 'engagement', 'traders', 'public'] },
+        // { title: 'Social Feed', url: '/social-feed', icon: Heart, iconName: 'Heart', keywords: ['feed', 'posts', 'community', 'share', 'social', 'network', 'connect', 'trading', 'ideas', 'discuss'] },
+        // { title: t('navigation.leaderboard'), url: '/leaderboard', icon: Trophy, iconName: 'Trophy', keywords: ['leaderboard', 'ranking', 'top', 'competition', 'scores', 'traders', 'best', 'performers', 'elite', 'standings', 'positions', 'compare', 'leaders', 'winners', 'rank', 'compete'] },
         { title: t('navigation.achievements'), url: '/achievements', icon: Award, iconName: 'Award', keywords: ['achievements', 'badges', 'rewards', 'unlocks', 'milestones', 'trophies', 'accomplishments', 'goals', 'completed', 'earned', 'collection', 'showcase', 'awards', 'earn', 'win', 'accomplish'] },
         // Gamification temporarily hidden - XP/Level/Challenges removed, badges kept in Achievements
         // { title: t('navigation.progressXP'), url: '/progress-analytics', icon: Zap, iconName: 'Zap', keywords: ['progress', 'xp', 'experience', 'level', 'achievements', 'gamification', 'points', 'rewards', 'streaks', 'challenges', 'daily', 'weekly', 'missions', 'unlock', 'growth', 'rank', 'leveling'] },

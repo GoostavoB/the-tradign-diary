@@ -738,16 +738,11 @@ const Upload = () => {
         
         toast.success(`Successfully saved ${extractedTrades.length} trade(s)!`);
         
-        // Wait for success animation then navigate
-        setTimeout(async () => {
-          // Mark that user completed first upload - trigger guided tour
-          await supabase
-            .from('user_settings')
-            .update({ onboarding_completed: true })
-            .eq('user_id', user.id);
-          
-          navigate('/dashboard');
-        }, 1500);
+        // Mark onboarding as completed (for guided tour)
+        await supabase
+          .from('user_settings')
+          .update({ onboarding_completed: true })
+          .eq('user_id', user.id);
       }
     } catch (error) {
       console.error('Error saving trades:', error);
@@ -1350,6 +1345,13 @@ const Upload = () => {
                     onViewHistory={() => {
                       setShowSuccess(false);
                       navigate('/dashboard?tab=history');
+                    }}
+                    onStayHere={() => {
+                      setShowSuccess(false);
+                      setExtractedTrades([]);
+                      setExtractionImage(null);
+                      setExtractionPreview(null);
+                      setSavedTradesCount(0);
                     }}
                   />
                 )}
