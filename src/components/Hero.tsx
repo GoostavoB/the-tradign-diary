@@ -14,6 +14,15 @@ const Hero = () => {
     return null;
   }
 
+  // Safe fallbacks to prevent raw keys from displaying
+  const title = t('landing.hero.titleShort', 'Track every crypto trade. Learn faster.');
+  const benefits = t('landing.hero.benefits', { returnObjects: true, defaultValue: [
+    'Import trades in minutes',
+    'See true PnL with fees',
+    'Review setups with tags'
+  ] }) as string[];
+  const cta = t('landing.hero.ctaPrimary', 'Get started free');
+
   return (
     <section className="relative min-h-[100vh] md:min-h-[90vh] flex items-center justify-center px-6 pt-24 pb-10 overflow-hidden" aria-labelledby="hero-title">
       {/* Background Image */}

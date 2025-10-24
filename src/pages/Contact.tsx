@@ -106,10 +106,10 @@ const Contact = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold">
-            {t('contact.title')}
+            {t('contact.title', 'Contact Us')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('contact.subtitle')}
+            {t('contact.subtitle', 'Get in touch with our team')}
           </p>
         </div>
 

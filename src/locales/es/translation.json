@@ -319,6 +319,8 @@
     "tools": "Herramientas",
     "settings": "Configuración",
     "social": "Social",
+    "contact": "Contacto",
+    "signIn": "Iniciar sesión",
     "aiTools": "Herramientas IA",
     "achievements": "Logros",
     "forecast": "Pronóstico",
@@ -1061,6 +1063,12 @@
     "cancel": "Cancelar",
     "apply": "Aplicar",
     "showingData": "Mostrando datos para"
+  },
+  "blog": {
+    "title": "Blog de Trading Crypto",
+    "subtitle": "Insights expertos sobre trading con IA",
+    "searchPlaceholder": "Buscar artículos...",
+    "allArticles": "Todos los Artículos"
   },
   "landing": {
     "hero": {

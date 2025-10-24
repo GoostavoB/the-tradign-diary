@@ -39,7 +39,7 @@ i18n
     load: 'languageOnly',
     defaultNS: 'translation',
     ns: ['translation'],
-    debug: false,
+    debug: process.env.NODE_ENV !== 'production',
     interpolation: {
       escapeValue: false, // React already escapes values
     },
@@ -48,12 +48,66 @@ i18n
     }
   });
 
-// Debug check in development
+// Debug check and validation in development
 if (process.env.NODE_ENV !== 'production') {
   console.debug('i18n initialized', {
     language: i18n.language,
     hasTranslations: i18n.exists('landing.benefits.fasterUploads.title')
   });
+  
+  // Critical keys validation
+  const criticalKeys = [
+    // Landing page
+    'landing.hero.titleShort',
+    'landing.hero.subtitle',
+    'landing.hero.benefits',
+    'landing.hero.ctaPrimary',
+    'landing.proofBar.activeTraders',
+    'landing.proofBar.tradesAnalyzed',
+    'landing.proofBar.averageRating',
+    'landing.testimonials.sectionTitle',
+    'landing.footer.securityBadge',
+    
+    // Navigation
+    'navigation.home',
+    'navigation.dashboard',
+    'navigation.contact',
+    'navigation.signIn',
+    
+    // Blog
+    'blog.title',
+    'blog.subtitle',
+    'blog.searchPlaceholder',
+    
+    // Pricing
+    'pricing.hero.title',
+    'pricing.title',
+    
+    // Contact
+    'contact.title',
+    'contact.subtitle',
+    
+    // Common
+    'common.save',
+    'common.cancel',
+    'common.loading'
+  ];
+  
+  const missingKeys: string[] = [];
+  
+  criticalKeys.forEach(key => {
+    if (!i18n.exists(key)) {
+      missingKeys.push(key);
+      console.error(`❌ MISSING CRITICAL TRANSLATION KEY: ${key}`);
+    }
+  });
+  
+  if (missingKeys.length > 0) {
+    console.warn(`⚠️  ${missingKeys.length} critical translation keys are missing!`);
+    console.warn('Missing keys:', missingKeys);
+  } else {
+    console.log('✅ All critical translation keys validated successfully');
+  }
 }
 
 export default i18n;

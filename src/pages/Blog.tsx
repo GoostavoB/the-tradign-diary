@@ -90,10 +90,10 @@ const Blog = () => {
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="text-center space-y-3">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            {t('blog.title')}
+            {t('blog.title', 'Crypto Trading Blog')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('blog.subtitle')}
+            {t('blog.subtitle', 'Expert insights on AI-powered trading')}
           </p>
         </div>
         
@@ -103,7 +103,7 @@ const Blog = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder={t('blog.searchPlaceholder')}
+              placeholder={t('blog.searchPlaceholder', 'Search articles...')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
