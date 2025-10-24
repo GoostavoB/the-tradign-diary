@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Save, FileText, Image as ImageIcon, Calendar, Tag, Star } from 'lucide-react';
+import { Save, FileText, Calendar, Star } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Trade } from '@/types/trade';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { UnifiedTagSelector } from './UnifiedTagSelector';
 
 interface JournalEntry {
   id?: string;
@@ -48,7 +49,6 @@ export const RichTradingJournal = ({ trade, existingEntry, onSave }: RichTrading
     rating: existingEntry?.rating || 3,
     trade_id: trade?.id,
   });
-  const [newTag, setNewTag] = useState('');
 
   const moods = [
     { value: 'confident', label: 'Confident', emoji: '💪' },
@@ -102,20 +102,6 @@ export const RichTradingJournal = ({ trade, existingEntry, onSave }: RichTrading
     } finally {
       setSaving(false);
     }
-  };
-
-  const addTag = () => {
-    if (newTag && !entry.tags.includes(newTag)) {
-      setEntry(prev => ({ ...prev, tags: [...prev.tags, newTag] }));
-      setNewTag('');
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setEntry(prev => ({
-      ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove),
-    }));
   };
 
   return (
@@ -231,36 +217,11 @@ export const RichTradingJournal = ({ trade, existingEntry, onSave }: RichTrading
             </div>
           </div>
 
-          {/* Tags */}
-          <div className="space-y-2">
-            <Label htmlFor="tags">Tags</Label>
-            <div className="flex gap-2">
-              <Input
-                id="tags"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && addTag()}
-                placeholder="Add tags (press Enter)..."
-              />
-              <Button type="button" variant="outline" onClick={addTag}>
-                <Tag className="h-4 w-4" />
-              </Button>
-            </div>
-            {entry.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {entry.tags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="secondary"
-                    className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-                    onClick={() => removeTag(tag)}
-                  >
-                    {tag} ×
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Tags - Unified System */}
+          <UnifiedTagSelector
+            selectedTags={entry.tags}
+            onTagsChange={(tags) => setEntry(prev => ({ ...prev, tags }))}
+          />
 
           {/* Trade Reference */}
           {trade && (

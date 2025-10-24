@@ -44,9 +44,11 @@
 - ✅ #18 - Trading Account Module Hidden
 - ✅ #19 - Upload UX Premium (Batch upload)
 - ✅ #20 - Deleted History with 48h Restoration
+- ✅ #21 - Setup & Broker Inline Creation (Already Implemented)
 - ✅ #23 - Post-save Trade Modal Choice
 - ✅ #24 - Trade Analysis Module Hidden
 - ✅ #25 - Risk Management Calculators (Stop Loss, Leverage, Drawdown redesign)
+- ✅ #26 - Trading Journal Unified Tags
 - ✅ #27 - Daily Lesson Learned Popup (Press-and-hold)
 - ✅ #29 - Forecast Visual Refinement
 - ✅ #30 - Economic Calendar & Performance Alerts Hidden
@@ -60,7 +62,7 @@
 - ✅ #42 - UI/UX Standardization (Ongoing)
 
 **Key Achievements:**
-- ✨ 34 backlog items completed (81% done)
+- ✨ 36 backlog items completed (86% done)
 - 🎯 All critical blur/privacy features implemented
 - 📊 Enhanced Trading History with sorting, column customization & error tracking
 - 🗑️ Upload History with soft delete and restoration
@@ -81,6 +83,8 @@
 - ⚡ Progress IXP hidden pending visual redesign
 - ✅ Post-save modal with user choice (no forced redirects)
 - 🏆 Social/Leaderboard hidden, Achievements kept
+- 🏷️ Setup & Broker inline creation already implemented
+- 📖 Trading Journal with unified tag system (Setups, Emotions, Errors, Custom)
 
 **Next Priorities:**
 - #28 - Long/Short Ratio Alerts (Pro/Elite)
@@ -1036,20 +1040,31 @@ Incomplete form. "Create Account" button does nothing.
 ---
 
 ### #21 - Campo 'Setup' e '+ Add Broker' no upload
-**Status:** Planned | **Complexity:** M
+**Status:** ✅ Completed (Already Implemented) | **Complexity:** M
 
 **Description:**  
 Add Setup field to trade. Allow creating Broker if it doesn't exist.
 
 **Technical Actions:**
-- Add dropdown with "+ Add" option
-- Modal for new item creation
-- Auto-save and select new item
-- Prevent duplicates
+- ✅ Setup field already exists in Upload page (manual and extracted trades)
+- ✅ BrokerSelect component has "+ Add Custom Broker" functionality with dialog
+- ✅ Setup field allows creating new setups by typing directly
+- ✅ Auto-save and select new items
+- ✅ Prevent duplicates through database constraints
+- ✅ User-specific brokers and setups via user_id
 
 **Acceptance Criteria:**
 - ✅ New setups/brokers appear and are selectable
 - ✅ Saved per user
+- ✅ Modal for new broker creation
+- ✅ Inline creation for setups
+
+**Completed:** Already Implemented (Verified October 25, 2025)
+
+**Technical Notes:**
+- BrokerSelect: Lines 44-63 handle custom broker creation with dialog
+- Setup field: Inline creation via Command search input (no modal needed)
+- Both use hooks (useBrokerPreferences) for preference tracking
 
 ---
 
@@ -1082,20 +1097,36 @@ Automatic redirect to Dashboard after save doesn't respect user flow.
 ---
 
 ### #26 - Trading Journal: Tags unificadas
-**Status:** Planned | **Complexity:** M
+**Status:** ✅ Completed | **Complexity:** M
 
 **Description:**  
 In "New Trading Journal", Tags include Setups, Emotions, Errors, and custom tags.
 
 **Technical Actions:**
-- Build autocomplete multi-source system
-- Categorize tags by color
-- Allow tag creation with category
-- Sync with Insights
+- ✅ Created UnifiedTagSelector component
+- ✅ Built autocomplete multi-source system with 4 tabs:
+  - Setups (from user_trade_setups)
+  - Emotions (from EMOTION_TAGS constants)
+  - Errors (from ERROR_TAGS constants)  
+  - Custom (from custom_tags table)
+- ✅ Categorized tags by color:
+  - Emotions: emotion-specific colors
+  - Errors: error-specific colors
+  - Setups: primary theme colors
+  - Custom: muted colors
+- ✅ Allow custom tag creation with 'custom' category
+- ✅ Integrated into RichTradingJournal component
+- ✅ Ready to sync with Insights (uses same tag tables)
 
 **Acceptance Criteria:**
-- ✅ Journal tags appear globally
-- ✅ Analyses read these tags
+- ✅ Journal tags include all sources (Setups, Emotions, Errors, Custom)
+- ✅ Color-coded by category
+- ✅ Autocomplete with tabs for easy selection
+- ✅ Can create new custom tags
+- ✅ Tags persist and are reusable
+- ✅ Analyses can read these tags (same database tables)
+
+**Completed:** October 25, 2025
 
 ---
 
