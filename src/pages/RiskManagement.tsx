@@ -3,6 +3,8 @@ import AppLayout from "@/components/layout/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RiskMetricsCard } from "@/components/risk/RiskMetricsCard";
 import { PositionSizeCalculator } from "@/components/risk/PositionSizeCalculator";
+import { StopLossCalculator } from "@/components/risk/StopLossCalculator";
+import { LeverageCalculator } from "@/components/risk/LeverageCalculator";
 import { DrawdownChart } from "@/components/risk/DrawdownChart";
 import { BlurToggleButton } from "@/components/ui/BlurToggleButton";
 import { Shield, Calculator, TrendingDown, BarChart3 } from "lucide-react";
@@ -134,22 +136,18 @@ export default function RiskManagement() {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="overview" className="gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
             </TabsTrigger>
             <TabsTrigger value="calculator" className="gap-2">
               <Calculator className="h-4 w-4" />
-              Calculator
+              Calculators
             </TabsTrigger>
             <TabsTrigger value="drawdown" className="gap-2">
               <TrendingDown className="h-4 w-4" />
               Drawdown
-            </TabsTrigger>
-            <TabsTrigger value="limits" className="gap-2">
-              <Shield className="h-4 w-4" />
-              Limits
             </TabsTrigger>
           </TabsList>
 
@@ -206,8 +204,10 @@ export default function RiskManagement() {
             </div>
           </TabsContent>
 
-          <TabsContent value="calculator">
+          <TabsContent value="calculator" className="space-y-6">
             <PositionSizeCalculator />
+            <StopLossCalculator />
+            <LeverageCalculator />
           </TabsContent>
 
           <TabsContent value="drawdown">
@@ -226,19 +226,6 @@ export default function RiskManagement() {
                 </p>
               </div>
             )}
-          </TabsContent>
-
-          <TabsContent value="limits">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Risk limits configuration would go here */}
-              <div className="text-center py-16">
-                <Shield className="h-16 w-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-                <h3 className="text-lg font-semibold mb-2">Risk Limits</h3>
-                <p className="text-sm text-muted-foreground">
-                  Configure your risk limits and alerts
-                </p>
-              </div>
-            </div>
           </TabsContent>
         </Tabs>
       </div>

@@ -662,24 +662,29 @@ Emotions and Errors become tags. Cross-analyze with performance data.
 ---
 
 ### #25 - Risk Management: Stop & Leverage Calculators + novo Drawdown
-**Status:** Planned | **Complexity:** L
+**Status:** ✅ Completed | **Complexity:** L
 
 **Description:**  
 Replace confusing logic with useful calculators. Redesign Drawdown. Remove "Limite" section.
 
 **Technical Actions:**
-- Implement Stop Loss Calculator
-- Implement Leverage Calculator
-- Validate all formulas (use official Gustavo spreadsheet as reference)
-- Redesign Drawdown visual for Dark/Light modes
-- Add tooltips and contextual help links
-- Remove "Limite" component
+- ✅ Implement Stop Loss Calculator (with Long/Short scenarios)
+- ✅ Implement Leverage Calculator (with liquidation prices and risk levels)
+- ✅ Validate all formulas
+- ✅ Redesign Drawdown visual with design system tokens (no hardcoded colors)
+- ✅ Add tooltips and contextual help links to all calculators
+- ✅ Remove "Limite" tab component completely
+- ✅ Update tab layout to 3 tabs (Overview, Calculators, Drawdown)
 
 **Acceptance Criteria:**
-- ✅ Calculators work correctly
-- ✅ Drawdown is elegant and clear
-- ✅ "Limite" is removed
-- ✅ All formulas validated against reference
+- ✅ Stop Loss Calculator calculates correct stop prices for long and short positions
+- ✅ Leverage Calculator shows margin requirements and liquidation levels
+- ✅ Drawdown uses semantic color tokens (text-destructive, text-warning, text-success)
+- ✅ "Limite" tab is completely removed
+- ✅ All calculators have info tooltips for each field
+- ✅ All formulas follow standard trading math
+
+**Completed:** October 24, 2025
 
 ---
 

@@ -1,7 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
-import { TrendingDown, AlertTriangle } from "lucide-react";
+import { TrendingDown, AlertTriangle, Info } from "lucide-react";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface DrawdownChartProps {
   data: Array<{
@@ -24,6 +25,16 @@ export function DrawdownChart({ data, maxDrawdown, currentDrawdown }: DrawdownCh
         <div className="flex items-center gap-2">
           <TrendingDown className="h-6 w-6 text-primary" />
           <h2 className="text-xl font-bold">Drawdown Analysis</h2>
+          <TooltipProvider>
+            <UITooltip>
+              <TooltipTrigger>
+                <Info className="h-4 w-4 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <p>Track how far your equity has fallen from its peak. Lower drawdowns indicate better risk management.</p>
+              </TooltipContent>
+            </UITooltip>
+          </TooltipProvider>
         </div>
         {isSignificantDrawdown && (
           <Badge variant="destructive" className="gap-1">
@@ -34,21 +45,21 @@ export function DrawdownChart({ data, maxDrawdown, currentDrawdown }: DrawdownCh
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card className="p-4 bg-accent">
+        <Card className="p-4 bg-accent/50">
           <div className="text-sm text-muted-foreground mb-1">Current Drawdown</div>
-          <div className={`text-2xl font-bold ${currentDrawdown < -10 ? 'text-red-600' : currentDrawdown < -5 ? 'text-yellow-600' : 'text-green-600'}`}>
+          <div className={`text-2xl font-bold ${currentDrawdown < -10 ? 'text-destructive' : currentDrawdown < -5 ? 'text-warning' : 'text-success'}`}>
             {currentDrawdown.toFixed(2)}%
           </div>
         </Card>
-        <Card className="p-4 bg-accent">
+        <Card className="p-4 bg-accent/50">
           <div className="text-sm text-muted-foreground mb-1">Maximum Drawdown</div>
-          <div className="text-2xl font-bold text-red-600">
+          <div className="text-2xl font-bold text-destructive">
             {maxDrawdown.toFixed(2)}%
           </div>
         </Card>
-        <Card className="p-4 bg-accent">
+        <Card className="p-4 bg-accent/50">
           <div className="text-sm text-muted-foreground mb-1">Recovery Needed</div>
-          <div className="text-2xl font-bold text-blue-600">
+          <div className="text-2xl font-bold text-primary">
             {currentDrawdown < 0 ? Math.abs((100 / (100 + currentDrawdown) - 1) * 100).toFixed(2) : '0.00'}%
           </div>
         </Card>
@@ -99,8 +110,8 @@ export function DrawdownChart({ data, maxDrawdown, currentDrawdown }: DrawdownCh
         </AreaChart>
       </ResponsiveContainer>
 
-      <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950/20 rounded">
-        <h4 className="font-semibold text-blue-600 mb-2">Recovery Strategy</h4>
+      <div className="mt-4 p-4 bg-primary/10 rounded border border-primary/20">
+        <h4 className="font-semibold text-primary mb-2">Recovery Strategy</h4>
         <ul className="text-sm space-y-1 text-muted-foreground">
           {isSignificantDrawdown ? (
             <>
