@@ -611,6 +611,30 @@ export type Database = {
           },
         ]
       }
+      custom_tags: {
+        Row: {
+          created_at: string | null
+          id: string
+          tag_name: string
+          tag_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          tag_name: string
+          tag_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          tag_name?: string
+          tag_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_challenges: {
         Row: {
           challenge_date: string
@@ -2389,9 +2413,11 @@ export type Database = {
           duration_days: number | null
           duration_hours: number | null
           duration_minutes: number | null
+          emotion_tags: string[] | null
           emotional_tag: string | null
           entry_price: number | null
           error_description: string | null
+          error_tags: string[] | null
           exchange_source: string | null
           exchange_trade_id: string | null
           exit_price: number | null
@@ -2432,9 +2458,11 @@ export type Database = {
           duration_days?: number | null
           duration_hours?: number | null
           duration_minutes?: number | null
+          emotion_tags?: string[] | null
           emotional_tag?: string | null
           entry_price?: number | null
           error_description?: string | null
+          error_tags?: string[] | null
           exchange_source?: string | null
           exchange_trade_id?: string | null
           exit_price?: number | null
@@ -2475,9 +2503,11 @@ export type Database = {
           duration_days?: number | null
           duration_hours?: number | null
           duration_minutes?: number | null
+          emotion_tags?: string[] | null
           emotional_tag?: string | null
           entry_price?: number | null
           error_description?: string | null
+          error_tags?: string[] | null
           exchange_source?: string | null
           exchange_trade_id?: string | null
           exit_price?: number | null

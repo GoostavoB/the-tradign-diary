@@ -3,7 +3,8 @@ import AppLayout from "@/components/layout/AppLayout";
 import { EmotionalStateLogger } from "@/components/psychology/EmotionalStateLogger";
 import { EmotionalTimeline } from "@/components/psychology/EmotionalTimeline";
 import { BehaviorPatternAnalysis } from "@/components/psychology/BehaviorPatternAnalysis";
-import { Brain, Clock, BarChart3, Lightbulb } from "lucide-react";
+import { EmotionPerformanceCorrelation } from "@/components/psychology/EmotionPerformanceCorrelation";
+import { Brain, Clock, BarChart3, Lightbulb, Tags } from "lucide-react";
 import { PremiumFeatureLock } from "@/components/PremiumFeatureLock";
 import { usePremiumFeatures } from "@/hooks/usePremiumFeatures";
 
@@ -24,22 +25,26 @@ export default function Psychology() {
         </div>
 
         <Tabs defaultValue="log" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="log" className="gap-2">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="log" className="flex items-center gap-2">
               <Brain className="h-4 w-4" />
-              Log State
+              <span className="hidden sm:inline">Log State</span>
             </TabsTrigger>
-            <TabsTrigger value="timeline" className="gap-2">
+            <TabsTrigger value="timeline" className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
-              Timeline
+              <span className="hidden sm:inline">Timeline</span>
             </TabsTrigger>
-            <TabsTrigger value="analysis" className="gap-2">
+            <TabsTrigger value="analysis" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              Analysis
+              <span className="hidden sm:inline">Analysis</span>
             </TabsTrigger>
-            <TabsTrigger value="insights" className="gap-2">
+            <TabsTrigger value="correlations" className="flex items-center gap-2">
+              <Tags className="h-4 w-4" />
+              <span className="hidden sm:inline">Tags</span>
+            </TabsTrigger>
+            <TabsTrigger value="insights" className="flex items-center gap-2">
               <Lightbulb className="h-4 w-4" />
-              Insights
+              <span className="hidden sm:inline">Insights</span>
             </TabsTrigger>
           </TabsList>
 
@@ -56,6 +61,10 @@ export default function Psychology() {
 
           <TabsContent value="analysis">
             <BehaviorPatternAnalysis />
+          </TabsContent>
+
+          <TabsContent value="correlations">
+            <EmotionPerformanceCorrelation />
           </TabsContent>
 
           <TabsContent value="insights">
