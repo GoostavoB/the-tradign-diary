@@ -1,0 +1,74 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    const authHeader = req.headers.get('Authorization')!;
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user } } = await supabaseClient.auth.getUser(token);
+
+    if (!user) {
+      throw new Error('Unauthorized');
+    }
+
+    const { trades, creditsToDeduct } = await req.json();
+
+    if (!Array.isArray(trades) || trades.length === 0) {
+      throw new Error('No trades provided');
+    }
+
+    console.log(`Processing ${trades.length} trades for user ${user.id}`);
+
+    // TODO: Implement credit system deduction here
+    // const { error: creditError } = await supabaseClient.rpc('deduct_credits', {
+    //   user_id: user.id,
+    //   amount: creditsToDeduct
+    // });
+    // if (creditError) throw creditError;
+
+    // Insert all trades
+    const { data: insertedTrades, error } = await supabaseClient
+      .from('trades')
+      .insert(
+        trades.map(t => ({
+          ...t,
+          user_id: user.id,
+        }))
+      )
+      .select();
+
+    if (error) throw error;
+
+    console.log(`Successfully inserted ${insertedTrades?.length || 0} trades`);
+
+    return new Response(
+      JSON.stringify({ 
+        success: true,
+        trades: insertedTrades,
+        tradesInserted: insertedTrades?.length || 0
+      }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+
+  } catch (error) {
+    console.error('Multi-upload processing error:', error);
+    return new Response(
+      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+});

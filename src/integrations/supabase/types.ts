@@ -984,6 +984,39 @@ export type Database = {
           },
         ]
       }
+      generated_reports: {
+        Row: {
+          generated_at: string
+          id: string
+          period_end: string
+          period_start: string
+          report_data: Json
+          report_type: string
+          trade_count: number
+          user_id: string
+        }
+        Insert: {
+          generated_at?: string
+          id?: string
+          period_end: string
+          period_start: string
+          report_data: Json
+          report_type: string
+          trade_count?: number
+          user_id: string
+        }
+        Update: {
+          generated_at?: string
+          id?: string
+          period_end?: string
+          period_start?: string
+          report_data?: Json
+          report_type?: string
+          trade_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       journal_entries: {
         Row: {
           content: string
@@ -2518,6 +2551,7 @@ export type Database = {
           created_at: string
           current_value: number
           deadline: string | null
+          description: string | null
           goal_type: string
           id: string
           period: string
@@ -2530,6 +2564,7 @@ export type Database = {
           created_at?: string
           current_value?: number
           deadline?: string | null
+          description?: string | null
           goal_type: string
           id?: string
           period: string
@@ -2542,6 +2577,7 @@ export type Database = {
           created_at?: string
           current_value?: number
           deadline?: string | null
+          description?: string | null
           goal_type?: string
           id?: string
           period?: string
@@ -3213,6 +3249,39 @@ export type Database = {
           id?: string
           name?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_trade_patterns: {
+        Row: {
+          avg_leverage: number | null
+          broker_frequency: Json | null
+          emotional_tag_frequency: Json | null
+          id: string
+          last_updated: string
+          setup_frequency: Json | null
+          symbol_frequency: Json | null
+          user_id: string
+        }
+        Insert: {
+          avg_leverage?: number | null
+          broker_frequency?: Json | null
+          emotional_tag_frequency?: Json | null
+          id?: string
+          last_updated?: string
+          setup_frequency?: Json | null
+          symbol_frequency?: Json | null
+          user_id: string
+        }
+        Update: {
+          avg_leverage?: number | null
+          broker_frequency?: Json | null
+          emotional_tag_frequency?: Json | null
+          id?: string
+          last_updated?: string
+          setup_frequency?: Json | null
+          symbol_frequency?: Json | null
           user_id?: string
         }
         Relationships: []

@@ -23,15 +23,40 @@ export class BingXAdapter extends BaseExchangeAdapter {
     const signature = this.generateSignature(queryString);
     const url = `${this.baseUrl}${endpoint}?${queryString}&signature=${signature}`;
 
+    console.log('BingX Request:', { endpoint, timestamp, params });
+
     const response = await fetch(url, {
       headers: { 'X-BX-APIKEY': this.credentials.apiKey },
     });
 
     const data = await response.json();
+    
+    console.log('BingX Response:', { status: response.status, code: data.code, msg: data.msg });
+    
     if (data.code !== 0) {
-      throw new Error(`BingX API Error: ${data.msg}`);
+      const errorMessage = this.handleError(data.code, data.msg);
+      console.error('BingX API Error:', errorMessage);
+      throw new Error(errorMessage);
     }
     return data.data as T;
+  }
+
+  private handleError(code: number, message: string): string {
+    // Common BingX error codes
+    const errorMap: Record<number, string> = {
+      100001: 'Invalid signature. Please check your API Secret.',
+      100202: 'Invalid API Key. Please verify your credentials.',
+      100400: 'Invalid request parameters.',
+      100429: 'Rate limit exceeded. Please slow down your requests.',
+      100500: 'Internal server error. Please try again later.',
+    };
+
+    const knownError = errorMap[code];
+    if (knownError) {
+      return `BingX Error [${code}]: ${knownError}`;
+    }
+
+    return `BingX API Error [${code}]: ${message || 'Unknown error'}`;
   }
 
   async testConnection(): Promise<boolean> {

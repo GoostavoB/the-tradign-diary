@@ -239,15 +239,33 @@ export class BybitAdapter extends BaseExchangeAdapter {
 
   private handleError(status: number, error: any): Error {
     const message = error?.retMsg || error?.message || 'Unknown Bybit API error';
+    const code = error?.retCode;
     
-    if (status === 401 || status === 403) {
-      return new Error(`Bybit Authentication Error: ${message}`);
+    console.error('Bybit Error:', { status, code, message, error });
+    
+    // Bybit V5 error codes
+    const errorMap: Record<number, string> = {
+      10003: 'Invalid API key or signature. Please verify your credentials.',
+      10004: 'API key has insufficient permissions. Please enable required permissions in Bybit.',
+      10006: 'Rate limit exceeded. Please slow down your requests.',
+      10016: 'Invalid request. Please check your parameters.',
+      110001: 'Order does not exist.',
+      110003: 'Insufficient balance.',
+    };
+    
+    if (status === 401 || status === 403 || code === 10003 || code === 10004) {
+      return new Error(`Bybit Authentication Error [${code}]: ${errorMap[code] || message}. Please check your API keys and permissions.`);
     }
     
-    if (status === 429) {
+    if (status === 429 || code === 10006) {
       return new Error('Bybit Rate Limit Exceeded. Please try again later.');
     }
+
+    const knownError = errorMap[code];
+    if (knownError) {
+      return new Error(`Bybit Error [${code}]: ${knownError}`);
+    }
     
-    return new Error(`Bybit API Error: ${message}`);
+    return new Error(`Bybit API Error [${code || status}]: ${message}`);
   }
 }

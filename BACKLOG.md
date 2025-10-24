@@ -58,7 +58,7 @@ Transform assistant into a useful tool for trading concepts and personal analysi
 ---
 
 ### #15 - Timeframe: selecionar 1 dia e filtrar todos os dados
-**Status:** Planned  
+**Status:** ✅ Completed  
 **Priority:** Critical  
 **Complexity:** L
 
@@ -69,12 +69,12 @@ Cannot select a single day. Need to distinguish "today" visually and apply filte
 Complete coherence between date selection and displayed data.
 
 **Technical Actions:**
-- Allow range selection of 1 day
-- Add special "today" indicator (border/badge)
-- Propagate filter to backend queries
-- Update all charts/lists/metrics in real-time
-- Sync timeframe state across all sections
-- Add validation to prevent invalid date ranges
+- ✅ Allow range selection of 1 day
+- ✅ Add special "today" indicator (border/badge)
+- ✅ Propagate filter to backend queries
+- ✅ Update all charts/lists/metrics in real-time
+- ✅ Sync timeframe state across all sections
+- ✅ Add validation to prevent invalid date ranges
 
 **Acceptance Criteria:**
 - ✅ Can select single day in timeframe picker
@@ -82,6 +82,8 @@ Complete coherence between date selection and displayed data.
 - ✅ All data reflects selected period exactly
 - ✅ Filter persists during session
 - ✅ Clear UI feedback when data is loading
+
+**Completed:** October 24, 2025
 
 ---
 
