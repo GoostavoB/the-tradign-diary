@@ -3,10 +3,11 @@ import { Card } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { format } from 'date-fns';
-import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Trash2, RotateCcw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface UploadBatch {
   id: string;
@@ -37,6 +38,7 @@ export const UploadHistory = () => {
   const [newBatchId, setNewBatchId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(5);
+  const [showDeleted, setShowDeleted] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -77,12 +79,21 @@ export const UploadHistory = () => {
 
     setLoading(true);
     
-    const { data, error } = await supabase
+    let query = supabase
       .from('upload_batches')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(50);
+
+    // Filter by deleted status
+    if (showDeleted) {
+      query = query.not('deleted_at', 'is', null);
+    } else {
+      query = query.is('deleted_at', null);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Error fetching batches:', error);
@@ -170,18 +181,52 @@ export const UploadHistory = () => {
   const handleDeleteBatch = async (batchId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    if (!confirm('Delete this upload batch? This will not delete the trades.')) return;
+    if (showDeleted) {
+      // Permanent delete
+      if (!confirm('Permanently delete this upload batch? This cannot be undone.')) return;
+
+      const { error } = await supabase
+        .from('upload_batches')
+        .delete()
+        .eq('id', batchId);
+
+      if (error) {
+        toast.error('Failed to delete batch');
+      } else {
+        setBatches(prev => prev.filter(b => b.id !== batchId));
+        toast.success('Batch permanently deleted');
+      }
+    } else {
+      // Soft delete
+      if (!confirm('Delete this upload batch? You can restore it within 48 hours.')) return;
+
+      const { error } = await supabase
+        .from('upload_batches')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', batchId);
+
+      if (error) {
+        toast.error('Failed to delete batch');
+      } else {
+        setBatches(prev => prev.filter(b => b.id !== batchId));
+        toast.success('Batch deleted');
+      }
+    }
+  };
+
+  const handleRestoreBatch = async (batchId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
 
     const { error } = await supabase
       .from('upload_batches')
-      .delete()
+      .update({ deleted_at: null })
       .eq('id', batchId);
 
     if (error) {
-      toast.error('Failed to delete batch');
+      toast.error('Failed to restore batch');
     } else {
       setBatches(prev => prev.filter(b => b.id !== batchId));
-      toast.success('Batch deleted');
+      toast.success('Batch restored');
     }
   };
 
@@ -228,20 +273,42 @@ export const UploadHistory = () => {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Upload History</h3>
-        {batches.length > 0 && (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDeleteAllHistory}
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            Delete All History
-          </Button>
+      <Tabs value={showDeleted ? 'deleted' : 'active'} onValueChange={(v) => setShowDeleted(v === 'deleted')}>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold">Upload History</h3>
+          <div className="flex items-center gap-2">
+            <TabsList className="glass">
+              <TabsTrigger value="active" className="text-xs">
+                Active
+              </TabsTrigger>
+              <TabsTrigger value="deleted" className="text-xs">
+                Deleted
+              </TabsTrigger>
+            </TabsList>
+            {!showDeleted && batches.length > 0 && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDeleteAllHistory}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete All
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {showDeleted && (
+          <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-md mt-3">
+            <p className="text-sm text-amber-600 dark:text-amber-400">
+              ⚠️ <strong>Deleted Uploads:</strong> These batches can be restored within 48 hours. 
+              After that, they will be permanently removed.
+            </p>
+          </div>
         )}
-      </div>
-      <div className="space-y-3">
+
+        <TabsContent value="active" className="mt-3">
+          <div className="space-y-3">
         {batches.slice(0, visibleCount).map((batch) => {
           const isExpanded = expandedBatch === batch.id;
           const isNew = newBatchId === batch.id;
@@ -264,21 +331,45 @@ export const UploadHistory = () => {
                     {format(new Date(batch.created_at), 'HH:mm')}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  {isExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-primary transition-colors" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-muted-foreground transition-colors" />
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
-                    onClick={(e) => handleDeleteBatch(batch.id, e)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
+                  <div className="flex items-center gap-2">
+                    {isExpanded ? (
+                      <ChevronUp className="w-5 h-5 text-primary transition-colors" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-muted-foreground transition-colors" />
+                    )}
+                    {showDeleted ? (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 opacity-0 group-hover:opacity-100 hover:bg-primary/10 hover:text-primary transition-all duration-200"
+                          onClick={(e) => handleRestoreBatch(batch.id, e)}
+                          title="Restore batch"
+                        >
+                          <RotateCcw className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+                          onClick={(e) => handleDeleteBatch(batch.id, e)}
+                          title="Delete permanently"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+                        onClick={(e) => handleDeleteBatch(batch.id, e)}
+                        title="Delete batch"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
               </div>
 
               {/* Body */}
@@ -382,10 +473,136 @@ export const UploadHistory = () => {
             >
               <ChevronDown className="w-4 h-4 mr-2" />
               See More ({batches.length - visibleCount} remaining)
-            </Button>
-          </div>
-        )}
-      </div>
+              </Button>
+            </div>
+          )}
+        </div>
+        </TabsContent>
+
+        <TabsContent value="deleted" className="mt-3">
+          {batches.length === 0 ? (
+            <Card className="p-8 text-center glass">
+              <p className="text-muted-foreground">No deleted uploads found</p>
+            </Card>
+          ) : (
+            <div className="space-y-3">
+              {batches.slice(0, visibleCount).map((batch) => {
+                const isExpanded = expandedBatch === batch.id;
+                
+                return (
+                  <Card
+                    key={batch.id}
+                    className="group glass backdrop-blur-[12px] rounded-2xl p-5 cursor-pointer hover-lift transition-all shadow-sm"
+                    onClick={() => toggleExpand(batch.id, batch.created_at)}
+                  >
+                    {/* Same content as active tab */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-base font-semibold text-foreground">
+                          {format(new Date(batch.created_at), 'MMM dd, yyyy')}
+                        </span>
+                        <span className="text-xs text-muted-foreground font-medium px-2 py-0.5 rounded-full bg-muted/50">
+                          {format(new Date(batch.created_at), 'HH:mm')}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {isExpanded ? (
+                          <ChevronUp className="w-5 h-5 text-primary transition-colors" />
+                        ) : (
+                          <ChevronDown className="w-5 h-5 text-muted-foreground transition-colors" />
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 opacity-0 group-hover:opacity-100 hover:bg-primary/10 hover:text-primary transition-all duration-200"
+                          onClick={(e) => handleRestoreBatch(batch.id, e)}
+                          title="Restore batch"
+                        >
+                          <RotateCcw className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+                          onClick={(e) => handleDeleteBatch(batch.id, e)}
+                          title="Delete permanently"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2.5">
+                      {batch.brokers && batch.brokers.length > 0 && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground">Broker:</span>
+                          <span className="text-sm font-medium text-foreground">{batch.brokers.join(', ')}</span>
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant="outline" className="text-xs font-medium px-2 py-0.5">
+                          {batch.trade_count} {batch.trade_count === 1 ? 'trade' : 'trades'}
+                        </Badge>
+                        {batch.position_types && batch.position_types.length > 0 && (
+                          <>
+                            {batch.position_types.map((type) => (
+                              <Badge
+                                key={type}
+                                className={`text-xs font-semibold px-2.5 py-0.5 ${
+                                  type === 'long'
+                                    ? 'bg-neon-green/10 text-neon-green border-neon-green/30 hover:bg-neon-green/20'
+                                    : 'bg-neon-red/10 text-neon-red border-neon-red/30 hover:bg-neon-red/20'
+                                }`}
+                              >
+                                {type.toUpperCase()}
+                              </Badge>
+                            ))}
+                          </>
+                        )}
+                      </div>
+
+                      {batch.assets && batch.assets.length > 0 && (
+                        <div className="text-xs">
+                          <span className="text-muted-foreground">Assets:</span>{' '}
+                          <span className="font-medium text-foreground break-words">
+                            {batch.assets.join(', ')}
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-3 mt-3 border-t border-border/30">
+                        <div>
+                          <span className="text-xs text-muted-foreground">Total P&L: </span>
+                          <span className={`text-lg font-bold ${(batch.total_pnl || 0) >= 0 ? 'text-neon-green' : 'text-neon-red'}`}>
+                            ${(batch.total_pnl || 0).toFixed(2)}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground font-medium">
+                          Uploaded {format(new Date(batch.created_at), 'MM/dd/yyyy')} at {format(new Date(batch.created_at), 'HH:mm')}
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+                );
+              })}
+
+              {visibleCount < batches.length && (
+                <div className="flex justify-center pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setVisibleCount(prev => prev + 10)}
+                    className="w-full sm:w-auto"
+                  >
+                    <ChevronDown className="w-4 h-4 mr-2" />
+                    See More ({batches.length - visibleCount} remaining)
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

@@ -2819,6 +2819,7 @@ export type Database = {
         Row: {
           assets: string[]
           created_at: string
+          deleted_at: string | null
           id: string
           most_recent_trade_asset: string | null
           most_recent_trade_id: string | null
@@ -2830,6 +2831,7 @@ export type Database = {
         Insert: {
           assets?: string[]
           created_at?: string
+          deleted_at?: string | null
           id?: string
           most_recent_trade_asset?: string | null
           most_recent_trade_id?: string | null
@@ -2841,6 +2843,7 @@ export type Database = {
         Update: {
           assets?: string[]
           created_at?: string
+          deleted_at?: string | null
           id?: string
           most_recent_trade_asset?: string | null
           most_recent_trade_id?: string | null
@@ -3607,6 +3610,7 @@ export type Database = {
     Functions: {
       check_daily_alert_cap: { Args: { p_user_id: string }; Returns: boolean }
       cleanup_deleted_trades: { Args: never; Returns: undefined }
+      cleanup_expired_deleted_batches: { Args: never; Returns: undefined }
       cleanup_expired_pending_trades: { Args: never; Returns: undefined }
       has_role: {
         Args: {

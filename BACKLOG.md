@@ -25,6 +25,31 @@
 
 ---
 
+## 🎉 RECENT PROGRESS (October 24, 2025)
+
+**Completed Items:**
+- ✅ #1 - Currency Selector (USD, EUR, BTC, ETH, etc.)
+- ✅ #2 - Dashboard Layout Persistence
+- ✅ #5 & #14 - Widget Removal Fixes
+- ✅ #9 - Trading Assistant LLM (Backend deployed)
+- ✅ #12 & #13 - Global Blur Toggle System
+- ✅ #15 - Single Day Timeframe Selection
+- ✅ #19 - Upload UX Premium (Batch upload)
+- ✅ #20 - Deleted History with 48h Restoration
+- ✅ #24 - Trade Analysis Module Hidden
+- ✅ #31 - Goals System (Schema + UI fixes)
+- ✅ #33 - Reports System (Backend + UI)
+- ✅ #37 - AI Parsing Enhancement (Infrastructure)
+- ✅ #38 - Dashboard Layout Persistence (Duplicate of #2)
+- ✅ #42 - UI/UX Standardization (Ongoing)
+- ⏳ #7 - Trading History Error Field (UI ready, migration pending)
+
+**In Progress:**
+- #8 - Customizable Dashboard for Pro/Elite
+- #17 - Exchange API Import Fixes
+
+---
+
 ## 🔴 CRITICAL PRIORITY (7 items)
 
 ### #9 - Trading Assistant com LLM contextual (Pro/Elite)
@@ -553,22 +578,25 @@ Widget removal via customization modal doesn't update grid.
 ---
 
 ### #20 - Deleted History (Upload) com restauração 48h
-**Status:** Planned | **Complexity:** M
+**Status:** ✅ Completed | **Complexity:** M
 
 **Description:**  
 Separate Upload History from Trade History. Allow delete with 48h restore window.
 
 **Technical Actions:**
-- Move deleted uploads to temporary table (soft delete)
-- Add "Deleted History" link/page
-- Implement "Restore" button
-- Create cron job for 48h permanent deletion
-- Ensure trades remain intact when upload is deleted
+- ✅ Implemented soft delete for upload_batches (deleted_at column)
+- ✅ Added "Deleted History" tab view
+- ✅ Implemented restore functionality
+- ✅ Created cleanup function for permanent deletion after 48h
+- ✅ Trades remain intact when upload is deleted (trades table unaffected)
+- ✅ Visual indicators and confirmation dialogs
 
 **Acceptance Criteria:**
 - ✅ Can restore within 48h
-- ✅ After 48h, permanent deletion
+- ✅ After 48h, permanent deletion (via cleanup function)
 - ✅ Trades are not affected by upload deletion
+
+**Completed:** October 24, 2025
 
 ---
 
