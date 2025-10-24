@@ -40,9 +40,18 @@
       "cta": "Bắt Đầu Dùng Thử Miễn Phí"
     },
     "stats": {
-      "activeTraders": "Trader Hoạt động",
-      "tradesLogged": "Giao dịch Đã Ghi",
-      "satisfaction": "Tỷ Lệ Hài Lòng"
+      "fasterUploads": {
+        "title": "Nhanh Hơn 40 Lần",
+        "description": "Tải lên hàng loạt từ ảnh chụp màn hình. Không cần nhập thủ công."
+      },
+      "knowEveryFee": {
+        "title": "Biết Mọi Phí",
+        "description": "So sánh sàn giao dịch và phát hiện chi phí ẩn."
+      },
+      "yourRules": {
+        "title": "Bảng Điều Khiển Của Bạn",
+        "description": "Chỉ số, màu sắc và bố cục hoàn toàn tùy chỉnh."
+      }
     },
     "dashboardShowcase": {
       "title": "Các giao dịch của bạn, được tổ chức. Cái này cho thấy tiến độ.",
@@ -85,7 +94,7 @@
       "readMoreInsights": "Đọc Thêm Insights Giao Dịch"
     },
     "testimonials": {
-      "approvedByTraders": "Được Trader Chấp Thuận"
+      "approvedByTraders": "Được Trader Chuyên Nghiệp Chấp Thuận"
     },
     "cta": {
       "title": "Sẵn Sàng Nâng Cấp Giao Dịch của Bạn?",

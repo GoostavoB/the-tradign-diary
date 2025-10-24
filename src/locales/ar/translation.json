@@ -32,9 +32,18 @@
       "cta": "ابدأ التجربة المجانية"
     },
     "stats": {
-      "activeTraders": "المتداولون النشطون",
-      "tradesLogged": "الصفقات المسجلة",
-      "satisfaction": "معدل الرضا"
+      "fasterUploads": {
+        "title": "أسرع 40 مرة",
+        "description": "تحميل دفعي من لقطات الشاشة. لا حاجة للإدخال اليدوي."
+      },
+      "knowEveryFee": {
+        "title": "اعرف كل رسوم",
+        "description": "قارن البورصات واكتشف التكاليف المخفية."
+      },
+      "yourRules": {
+        "title": "لوحتك، قواعدك",
+        "description": "مقاييس وألوان وتخطيط قابلة للتخصيص بالكامل."
+      }
     },
     "dashboardShowcase": {
       "title": "صفقاتك، منظمة. هذا يظهر التقدم.",
@@ -77,7 +86,7 @@
       "readMoreInsights": "اقرأ المزيد من رؤى التداول"
     },
     "testimonials": {
-      "approvedByTraders": "معتمد من قبل المتداولين"
+      "approvedByTraders": "معتمد من قبل المتداولين المحترفين"
     },
     "cta": {
       "title": "هل أنت مستعد لتحسين تداولك؟",
