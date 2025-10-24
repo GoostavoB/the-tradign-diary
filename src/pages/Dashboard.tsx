@@ -62,9 +62,10 @@ const SetupManager = lazy(() => import('@/components/SetupManager').then(m => ({
 const DrawdownAnalysis = lazy(() => import('@/components/DrawdownAnalysis').then(m => ({ default: m.DrawdownAnalysis })));
 const TradingHeatmap = lazy(() => import('@/components/TradingHeatmap').then(m => ({ default: m.TradingHeatmap })));
 const AIAssistant = lazy(() => import('@/components/AIAssistant').then(m => ({ default: m.AIAssistant })));
-const GamificationSidebar = lazy(() => import('@/components/gamification/GamificationSidebar').then(m => ({ default: m.GamificationSidebar })));
+// GamificationSidebar temporarily disabled - XP/Level/Challenges hidden
+// const GamificationSidebar = lazy(() => import('@/components/gamification/GamificationSidebar').then(m => ({ default: m.GamificationSidebar })));
 import { TourCTAButton } from '@/components/tour/TourCTAButton';
-import { Zap, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { pageMeta } from '@/utils/seoHelpers';
@@ -169,7 +170,8 @@ const Dashboard = () => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [selectedColumnCount, setSelectedColumnCount] = useState(3);
   const [originalPositions, setOriginalPositions] = useState<WidgetPosition[]>([]);
-  const [isGamificationOpen, setIsGamificationOpen] = useState(false);
+  // Gamification temporarily disabled
+  // const [isGamificationOpen, setIsGamificationOpen] = useState(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   
   // User tier for feature restrictions
@@ -832,7 +834,7 @@ const Dashboard = () => {
 
   return (
     <>
-    <AppLayout isGamificationOpen={isGamificationOpen} onGamificationToggle={() => setIsGamificationOpen(!isGamificationOpen)}>
+    <AppLayout>
       {/* Onboarding Flow - shows for new users */}
       {showOnboarding && !onboardingLoading && (
         <OnboardingFlow onComplete={completeOnboarding} />
@@ -869,15 +871,15 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <DateRangeFilter dateRange={dateRange} onDateRangeChange={handleDateRangeChange} />
-            {/* Gamification Button */}
-            <Button
+            {/* Gamification Button temporarily hidden */}
+            {/* <Button
               size="icon"
               onClick={() => setIsGamificationOpen(!isGamificationOpen)}
               variant="outline"
               className="glass hover:glass-strong"
             >
               <Zap className="h-4 w-4" />
-            </Button>
+            </Button> */}
           </div>
         </div>
 
@@ -1048,11 +1050,10 @@ const Dashboard = () => {
       </div>
     </AppLayout>
     
-    {/* Glassmorphic Overlay Sidebar - Gamification */}
-    <AnimatePresence>
+    {/* Glassmorphic Overlay Sidebar - Gamification temporarily disabled */}
+    {/* <AnimatePresence>
       {isGamificationOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -1061,7 +1062,6 @@ const Dashboard = () => {
             className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-40"
           />
           
-          {/* Glass Sidebar */}
           <motion.aside
             initial={{ x: "100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -1088,7 +1088,7 @@ const Dashboard = () => {
           </motion.aside>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence> */}
     </>
   );
 };

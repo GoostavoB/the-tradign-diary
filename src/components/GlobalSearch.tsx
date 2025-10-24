@@ -96,15 +96,16 @@ const searchItems: SearchItem[] = [
     category: 'Community',
     keywords: ['community', 'leaderboard', 'share'],
   },
-  {
-    id: 'gamification',
-    title: 'Achievements',
-    description: 'Track your progress and unlock rewards',
-    icon: Sparkles,
-    path: '/gamification',
-    category: 'Rewards',
-    keywords: ['badges', 'xp', 'level', 'rewards'],
-  },
+  // Gamification page temporarily hidden - XP/Level/Challenges removed
+  // {
+  //   id: 'gamification',
+  //   title: 'Achievements',
+  //   description: 'Track your progress and unlock rewards',
+  //   icon: Sparkles,
+  //   path: '/gamification',
+  //   category: 'Rewards',
+  //   keywords: ['badges', 'xp', 'level', 'rewards'],
+  // },
   {
     id: 'fee-analysis',
     title: 'Fee Analysis',

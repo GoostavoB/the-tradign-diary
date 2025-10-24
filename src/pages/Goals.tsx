@@ -8,9 +8,10 @@ import { BlurredCurrency } from "@/components/ui/BlurredValue";
 import { GoalCard } from "@/components/goals/GoalCard";
 import { CreateGoalDialog } from "@/components/goals/CreateGoalDialog";
 import { GoalProjection } from "@/components/goals/GoalProjection";
-import { GamificationSidebar } from "@/components/gamification/GamificationSidebar";
+// GamificationSidebar temporarily disabled - XP/Level/Challenges hidden
+// import { GamificationSidebar } from "@/components/gamification/GamificationSidebar";
 import { AchievementBadges } from "@/components/AchievementBadges";
-import { Target, TrendingUp, Award, CheckCircle, Zap, X, Trophy, Star } from "lucide-react";
+import { Target, TrendingUp, Award, CheckCircle, X, Trophy, Star } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -264,11 +265,10 @@ export default function Goals() {
           </AlertDialogContent>
         </AlertDialog>
 
-        {/* Full-Screen Glassmorphic Gamification Overlay */}
-        <AnimatePresence>
+        {/* Full-Screen Glassmorphic Gamification Overlay - Temporarily disabled */}
+        {/* <AnimatePresence>
           {showGamification && (
             <>
-              {/* Backdrop with blur */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -278,7 +278,6 @@ export default function Goals() {
                 onClick={() => setShowGamification(false)}
               />
               
-              {/* Floating Glass Panel */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -286,100 +285,17 @@ export default function Goals() {
                 transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
                 className="fixed inset-4 md:inset-8 z-[101] overflow-hidden rounded-2xl"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/95 backdrop-blur-2xl border border-border/50 shadow-2xl" />
-                
-                <div className="relative h-full overflow-y-auto custom-scrollbar">
-                  {/* Header */}
-                  <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-border/50 px-8 py-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-3 rounded-xl bg-primary/10 backdrop-blur-sm">
-                          <Zap className="h-6 w-6 text-primary" />
-                        </div>
-                        <div>
-                          <h2 className="text-2xl font-bold">Performance Overview</h2>
-                          <p className="text-sm text-muted-foreground">Track your progress and achievements</p>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={() => setShowGamification(false)}
-                        size="icon"
-                        variant="ghost"
-                        className="h-10 w-10 rounded-full hover:bg-muted/50"
-                      >
-                        <X className="h-5 w-5" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-8 space-y-8">
-                    {/* XP & Challenges Section */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      <Card className="p-6 glass-strong backdrop-blur-xl bg-card/40 border-border/50">
-                        <GamificationSidebar />
-                      </Card>
-
-                      {/* Quick Stats */}
-                      <Card className="p-6 glass-strong backdrop-blur-xl bg-card/40 border-border/50">
-                        <div className="flex items-center gap-3 mb-6">
-                          <Trophy className="h-5 w-5 text-primary" />
-                          <h3 className="text-lg font-semibold">Recent Wins</h3>
-                        </div>
-                        <div className="space-y-4">
-                          {trades?.slice(0, 5).filter(t => (t.pnl || 0) > 0).map((trade, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                              <div className="flex items-center gap-3">
-                                <Star className="h-4 w-4 text-emerald-500" />
-                                <div>
-                                  <p className="text-sm font-medium">{trade.symbol}</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {new Date(trade.trade_date).toLocaleDateString()}
-                                  </p>
-                                </div>
-                              </div>
-                              <Badge className="bg-emerald-500/20 text-emerald-500 border-emerald-500/30">
-                                +<BlurredCurrency amount={Math.abs(trade.pnl || 0)} className="inline" />
-                              </Badge>
-                            </div>
-                          ))}
-                          {(!trades || trades.filter(t => (t.pnl || 0) > 0).length === 0) && (
-                            <div className="text-center py-8 text-muted-foreground">
-                              <Trophy className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                              <p className="text-sm">No winning trades yet</p>
-                              <p className="text-xs">Keep trading to see your wins here!</p>
-                            </div>
-                          )}
-                        </div>
-                      </Card>
-                    </div>
-
-                    {/* Achievements Section */}
-                    <div className="glass-strong backdrop-blur-xl rounded-xl border border-border/50 overflow-hidden">
-                      <AchievementBadges trades={trades as any || []} />
-                    </div>
+                <div className="p-8 space-y-8">
+                  <div className="glass-strong backdrop-blur-xl rounded-xl border border-border/50 overflow-hidden">
+                    <AchievementBadges trades={trades as any || []} />
                   </div>
                 </div>
               </motion.div>
             </>
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
 
-        {/* Floating Lightning Button */}
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
-          className="fixed bottom-8 right-8 z-50"
-        >
-          <Button
-            onClick={() => setShowGamification(!showGamification)}
-            size="lg"
-            className="h-16 w-16 rounded-full shadow-2xl bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 border-2 border-primary/20 backdrop-blur-sm transition-all duration-300 hover:scale-110"
-          >
-          <Zap className="h-7 w-7 text-primary-foreground animate-pulse" />
-        </Button>
-      </motion.div>
+        {/* Floating Action Button - Temporarily disabled */}
         </div>
       </div>
     </AppLayout>
