@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,12 +6,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Mail, Building2, User, MessageSquare } from 'lucide-react';
-import AppLayout from '@/components/layout/AppLayout';
+import { MobileHeader } from '@/components/MobileHeader';
+import Footer from '@/components/Footer';
+import { SkipToContent } from '@/components/SkipToContent';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useHreflang } from '@/hooks/useHreflang';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '@/utils/languageRouting';
 import { z } from 'zod';
-import { useEffect } from 'react';
 
 const contactSchema = z.object({
   name: z.string()
@@ -102,8 +103,12 @@ const Contact = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
+      <SkipToContent />
+      <MobileHeader />
+      
+      <main id="main-content" className="pt-20 pb-16 px-4">
+        <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold">
             {t('contact.title', 'Contact Us')}
@@ -207,8 +212,11 @@ const Contact = () => {
             contact@thetradingdiary.com
           </a>
         </div>
-      </div>
-    </AppLayout>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
   );
 };
 
