@@ -27,6 +27,9 @@ const Hero = () => {
     <section className="relative min-h-[100vh] md:min-h-[90vh] flex items-center justify-center px-6 pt-24 pb-10 overflow-hidden" aria-labelledby="hero-title">
       {/* Premium Gradient Beam Background */}
       <div className="absolute inset-0 z-0" role="presentation" aria-hidden="true">
+        {/* Top gradient blend to seamlessly merge with header */}
+        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-background via-background/95 to-transparent z-10" />
+        
         {/* Main diagonal gradient beam */}
         <div 
           className="gradient-beam top-[-10%] right-[-10%]" 
