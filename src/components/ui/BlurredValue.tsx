@@ -64,9 +64,9 @@ export const BlurredCurrency = ({
   className?: string;
   showToggle?: boolean;
 }) => {
-  const { currency, convertAmount, formatAmount } = useCurrency();
-  const convertedAmount = convertAmount(amount);
-  const formattedValue = formatAmount(convertedAmount);
+  const { currency, formatAmount } = useCurrency();
+  // formatAmount already handles conversion internally - don't call convertAmount separately!
+  const formattedValue = formatAmount(amount);
   // Remove the currency symbol from the formatted string to use it as prefix
   const valueWithoutSymbol = formattedValue.replace(currency.symbol, '').trim();
   
