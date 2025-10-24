@@ -530,6 +530,128 @@ export default function UserGuide() {
                       </div>
                     </AccordionContent>
                   </AccordionItem>
+
+                  <AccordionItem value="performance-metrics" id="performance-metrics">
+                    <AccordionTrigger>Performance Metrics Explained</AccordionTrigger>
+                    <AccordionContent className="space-y-4">
+                      <p><strong>Purpose:</strong> Understanding the key performance indicators that measure trading success.</p>
+                      
+                      <div className="space-y-3 ml-4">
+                        <div className="p-3 border rounded-lg space-y-1" id="win-rate">
+                          <strong className="text-sm">Win Rate</strong>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Formula:</strong> (Winning Trades / Total Trades) × 100
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>What it means:</strong> Percentage of trades that resulted in profit.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Example:</strong> 60 wins out of 100 trades = 60% win rate.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Good target:</strong> 50%+ for swing trading, 60%+ for scalping.
+                          </p>
+                        </div>
+
+                        <div className="p-3 border rounded-lg space-y-1" id="profit-factor">
+                          <strong className="text-sm">Profit Factor</strong>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Formula:</strong> Gross Profit / Gross Loss
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>What it means:</strong> How much profit you make for every dollar lost.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Example:</strong> $10,000 profits, $5,000 losses = 2.0 profit factor.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Good target:</strong> Above 1.5 is solid, above 2.0 is excellent.
+                          </p>
+                        </div>
+
+                        <div className="p-3 border rounded-lg space-y-1" id="avg-win-loss">
+                          <strong className="text-sm">Average Win / Average Loss</strong>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Formula:</strong> (Total Wins / # of Wins) and (Total Losses / # of Losses)
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>What it means:</strong> Your typical profit vs typical loss size.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Example:</strong> Avg win $150, avg loss $100 = 1.5:1 ratio.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Key insight:</strong> You can have 40% win rate and still be profitable if avg win is 2x avg loss.
+                          </p>
+                        </div>
+
+                        <div className="p-3 border rounded-lg space-y-1" id="sharpe-ratio">
+                          <strong className="text-sm">Sharpe Ratio</strong>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Formula:</strong> (Average Return - Risk-Free Rate) / Standard Deviation of Returns
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>What it means:</strong> Risk-adjusted return. Higher is better.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Interpretation:</strong> &lt;1 = poor, 1-2 = acceptable, 2-3 = good, &gt;3 = excellent.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Example:</strong> Two traders with 20% returns, but one with lower volatility has higher Sharpe ratio.
+                          </p>
+                        </div>
+
+                        <div className="p-3 border rounded-lg space-y-1" id="roi">
+                          <strong className="text-sm">Return on Investment (ROI)</strong>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Formula:</strong> (Net Profit / Initial Capital) × 100
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>What it means:</strong> Percentage return on your starting capital.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Example:</strong> Start with $10,000, profit $2,000 = 20% ROI.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Note:</strong> Always consider timeframe (20% in 1 year vs 1 month).
+                          </p>
+                        </div>
+
+                        <div className="p-3 border rounded-lg space-y-1" id="expectancy">
+                          <strong className="text-sm">Expectancy</strong>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Formula:</strong> (Win Rate × Avg Win) - (Loss Rate × Avg Loss)
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>What it means:</strong> Average amount you expect to win or lose per trade.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Example:</strong> 60% win rate, $150 avg win, 40% loss rate, $100 avg loss = (0.6 × 150) - (0.4 × 100) = $50 expectancy.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Goal:</strong> Positive expectancy means profitable strategy long-term.
+                          </p>
+                        </div>
+
+                        <div className="p-3 border rounded-lg space-y-1" id="max-consecutive">
+                          <strong className="text-sm">Max Consecutive Wins/Losses</strong>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>What it means:</strong> Longest streak of wins or losses.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Why it matters:</strong> Helps you prepare psychologically for losing streaks.
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <strong>Example:</strong> 5 consecutive losses means you need capital to survive 5+ losses.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="p-3 bg-primary/10 rounded-lg text-sm mt-3">
+                        <strong>Best Practice:</strong> No single metric tells the full story. Review Win Rate, Profit Factor, and Average Win/Loss together for complete picture.
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 </Accordion>
               </CardContent>
             </Card>

@@ -47,10 +47,11 @@
 - ✅ #33 - Reports System (Backend + UI)
 - ✅ #37 - AI Parsing Enhancement (Infrastructure)
 - ✅ #39 - Risk Metrics Validation & Documentation
+- ✅ #40 - Learn More Contextual Links (User Guide Performance Metrics)
 - ✅ #42 - UI/UX Standardization (Ongoing)
 
 **Key Achievements:**
-- ✨ 20 backlog items completed in single session
+- ✨ 21 backlog items completed in single session
 - 🎯 All critical blur/privacy features implemented
 - 📊 Enhanced Trading History with sorting, column customization & error tracking
 - 🗑️ Upload History with soft delete and restoration
@@ -59,13 +60,14 @@
 - 👑 Tier-based dashboard customization for Pro/Elite users
 - 🌍 Language consistency with database persistence
 - 🧮 Complete Risk Management suite with calculators and documentation
-- 📚 Comprehensive User Guide with deep linking
+- 📚 Comprehensive User Guide with deep linking and performance metrics
 - 📝 Daily Lesson Learned popup with press-and-hold confirmation
+- 🔗 Learn More links integrated across risk metrics
 
 **Next Priorities:**
-- #40 - Learn More contextual links  
 - #28 - Long/Short Ratio Alerts (Pro/Elite)
 - #35 - Accessibility (WCAG 2.1 AA)
+- #3 - Recompensa por compartilhamento semanal
 
 ---
 
@@ -817,22 +819,33 @@ Review formulas for Weekly, Cumulative, and Open Position Risk. Document in User
 ---
 
 ### #40 - Links contextuais 'Learn More' em toda a plataforma
-**Status:** Planned | **Complexity:** M
+**Status:** ✅ Completed | **Complexity:** M
 
 **Description:**  
 Add direct links to User Guide on metrics, charts, and key fields.
 
 **Technical Actions:**
-- Map all sections and metrics
-- Add tooltip/link components
-- Synchronize with User Guide structure
-- Ensure deep linking works
-- Test all links
+- ✅ Created LearnMoreLink component for consistency
+- ✅ Added comprehensive Performance Metrics section to User Guide with:
+  - Win Rate formula, interpretation, and targets
+  - Profit Factor formula and benchmarks
+  - Average Win/Loss explanation and ratio importance
+  - Sharpe Ratio calculation and interpretation
+  - ROI formula and timeframe considerations
+  - Expectancy formula and positive expectancy importance
+  - Max Consecutive Wins/Losses psychological preparation
+- ✅ Added deep linking support with anchor IDs
+- ✅ Integrated Learn More links in Risk Metrics Cards
+- ✅ All sections have formulas, examples, and practical interpretations
 
 **Acceptance Criteria:**
-- ✅ All "Learn More" links go to correct section
+- ✅ All "Learn More" links go to correct section with anchor navigation
 - ✅ No broken links
-- ✅ Consistent placement and styling
+- ✅ Consistent placement and styling via LearnMoreLink component
+- ✅ Comprehensive metric documentation available
+- ✅ User Guide covers both risk and performance metrics
+
+**Completed:** October 24, 2025
 
 ---
 
