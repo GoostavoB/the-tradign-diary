@@ -116,6 +116,11 @@ export function SyncTradesDialog({
       toast.error(t('exchanges.sync.startBeforeEnd'));
       return;
     }
+    
+    if (exchangeName.toLowerCase() === 'bingx' && !symbol.trim()) {
+      toast.error('BingX requires a symbol (e.g., BTC-USDT)');
+      return;
+    }
 
     fetchMutation.mutate();
   };
@@ -243,14 +248,20 @@ export function SyncTradesDialog({
                 <span className="font-medium">{getDateRangeLabel()}</span>
               </div>
               <div className="grid gap-1">
-                <Label>{t('exchanges.sync.symbolOptional') || 'Symbol (optional)'}</Label>
+                <Label>
+                  {exchangeName.toLowerCase() === 'bingx' ? 'Symbol (required)' : t('exchanges.sync.symbolOptional') || 'Symbol (optional)'}
+                </Label>
                 <Input
-                  placeholder="e.g. BTC-USDT"
+                  placeholder={exchangeName.toLowerCase() === 'bingx' ? 'BTC-USDT (required)' : 'e.g. BTC-USDT'}
                   value={symbol}
                   onChange={(e) => setSymbol(e.target.value.toUpperCase())}
+                  required={exchangeName.toLowerCase() === 'bingx'}
                 />
                 <p className="text-xs text-muted-foreground">
-                  {t('exchanges.sync.symbolHint') || 'For BingX spot and standard futures, a symbol may be required.'}
+                  {exchangeName.toLowerCase() === 'bingx' 
+                    ? 'Format: BTC-USDT. Required by BingX.'
+                    : t('exchanges.sync.symbolHint') || 'Optional filter for specific trading pair.'
+                  }
                 </p>
               </div>
             </div>
@@ -261,7 +272,10 @@ export function SyncTradesDialog({
           <Button variant="outline" onClick={onClose} disabled={fetchMutation.isPending}>
             {t('common.cancel')}
           </Button>
-          <Button onClick={handleFetch} disabled={fetchMutation.isPending}>
+          <Button 
+            onClick={handleFetch} 
+            disabled={fetchMutation.isPending || (exchangeName.toLowerCase() === 'bingx' && !symbol.trim())}
+          >
             {fetchMutation.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

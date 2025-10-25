@@ -175,6 +175,20 @@ Deno.serve(async (req) => {
       throw new Error(`Failed to connect to ${connection.exchange_name}. Please check your credentials.`);
     }
     
+    // BingX requires a symbol for spot and standard futures
+    if (connection.exchange_name.toLowerCase() === 'bingx' && !symbol) {
+      const errMsg = 'BingX requires a symbol (e.g., BTC-USDT) for spot and standard futures history.';
+      await supabaseClient
+        .from('exchange_connections')
+        .update({ sync_status: 'error', sync_error: errMsg })
+        .eq('id', connectionId);
+      
+      return new Response(
+        JSON.stringify({ error: errMsg }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
     console.log(`[${connection.exchange_name}] Connection successful`);
     
     const displayName = exchangeService.getExchangeName(connection.exchange_name) || connection.exchange_name;
@@ -278,13 +292,16 @@ Deno.serve(async (req) => {
       notes: `Imported from ${displayName}${trade.orderId ? ` (Order ${trade.orderId})` : ''}`,
     }));
 
-    // Delete old pending trades before inserting new ones
-    const { count: deletedCount } = await supabaseClient
-      .from('exchange_pending_trades')
-      .delete({ count: 'exact' })
-      .eq('connection_id', connectionId);
+    // Only delete old pending trades if we have new trades to insert
+    if (allTrades.length > 0) {
+      const { count: deletedCount } = await supabaseClient
+        .from('exchange_pending_trades')
+        .delete({ count: 'exact' })
+        .eq('connection_id', connectionId);
+      
+      console.log(`[${displayName}] Deleted ${deletedCount || 0} old pending trades`);
+    }
     
-    console.log(`[${displayName}] Deleted ${deletedCount || 0} old pending trades`);
     console.log(`[${displayName}] Storing ${allTrades.length} trades in pending_trades table...`);
     
     let stored = 0;

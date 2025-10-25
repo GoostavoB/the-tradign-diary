@@ -122,7 +122,7 @@ export class BingXAdapter extends BaseExchangeAdapter {
         .map(trade => ({
           id: (trade.orderId || trade.tradeId || trade.id || '').toString(),
           exchange: 'bingx',
-          symbol: (trade.symbol || '').replace('-', '/'),
+          symbol: (trade.symbol || options?.symbol?.replace('-', '/') || '').replace('-', '/'),
           side: (trade.side || '').toLowerCase() as 'buy' | 'sell',
           price: parseFloat(trade.price || trade.avgPrice || '0'),
           quantity: parseFloat(trade.executedQty || trade.qty || trade.quantity || trade.origQty || '0'),
@@ -280,7 +280,7 @@ export class BingXAdapter extends BaseExchangeAdapter {
           const ts = new Date(parseInt(tsRaw) || Date.now());
 
           // Enhanced symbol extraction for different response formats
-          let symbol = t.symbol || t.pair || t.contractId || '';
+          let symbol = t.symbol || t.pair || t.contractId || options?.symbol?.replace('-', '/') || '';
           if (symbol) symbol = symbol.replace('-', '/').replace('_', '/');
 
           // Enhanced side extraction
