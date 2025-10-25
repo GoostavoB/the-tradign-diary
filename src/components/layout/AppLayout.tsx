@@ -15,6 +15,7 @@ import { GuidedTour } from '@/components/tour/GuidedTour';
 import { UpdatesModal } from '@/components/tour/UpdatesModal';
 import { CurrencySelector } from '@/components/CurrencySelector';
 import { BlurToggle } from '@/components/BlurToggle';
+import { AccountSwitcher } from '@/components/accounts/AccountSwitcher';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -53,6 +54,7 @@ const AppLayout = ({ children, isGamificationOpen, onGamificationToggle }: AppLa
             {/* Left: Sidebar trigger */}
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
+              <AccountSwitcher />
             </div>
 
             {/* Right: Icon Buttons */}
@@ -74,6 +76,7 @@ const AppLayout = ({ children, isGamificationOpen, onGamificationToggle }: AppLa
           <header className="md:hidden h-14 border-b border-border/50 backdrop-blur-xl glass-subtle flex items-center justify-between gap-2 px-3 sticky top-0 z-30" role="banner" aria-label="Mobile navigation header">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
+              <AccountSwitcher />
             </div>
             <div className="flex items-center gap-1">
               <CurrencySelector />

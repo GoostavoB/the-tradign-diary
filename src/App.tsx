@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { AccountProvider } from "@/contexts/AccountContext";
 import { AIAssistantProvider } from "@/contexts/AIAssistantContext";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { BlurProvider } from "@/contexts/BlurContext";
@@ -253,6 +254,7 @@ const App = () => (
               <ThemeInitializer />
               <AuthProvider>
                 <SubscriptionProvider>
+                <AccountProvider>
                 <CalmModeProvider>
                   <CurrencyProvider>
                     <BlurProvider>
@@ -269,6 +271,7 @@ const App = () => (
                     </BlurProvider>
                   </CurrencyProvider>
                 </CalmModeProvider>
+                </AccountProvider>
                 </SubscriptionProvider>
               </AuthProvider>
             </LanguageProvider>

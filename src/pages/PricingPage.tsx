@@ -47,6 +47,7 @@ const PricingPage = () => {
       monthlyPrice: 0,
       yearlyPrice: 0,
       features: [
+        '1 account',
         'AI uploads up to 50/mo',
         'Weekly heatmap and win rate',
         'Net PnL with fees',
@@ -63,6 +64,7 @@ const PricingPage = () => {
       monthlyPrice: 35,
       yearlyPrice: 29,
       features: [
+        'Unlimited accounts',
         'AI uploads up to 1,000/mo',
         'Fees dashboard and maker vs taker sim',
         'Leverage and position size by risk',
@@ -79,6 +81,7 @@ const PricingPage = () => {
       monthlyPrice: 79,
       yearlyPrice: 65,
       features: [
+        'Unlimited accounts',
         'AI uploads up to 5,000/mo',
         'MFE/MAE and expectancy by setup',
         'Weekly reports and PDF/CSV export',
