@@ -1,6 +1,15 @@
 /**
  * Leverage and Stop Loss Calculator Utilities
  * Core math for crypto futures trading
+ * 
+ * Mathematical Foundation:
+ * - Leverage (L): Position size multiplier relative to margin
+ * - Stop Loss Distance (δ): Percentage distance from entry to stop
+ * - Liquidation Buffer (B): Safety margin before liquidation
+ * - Liquidation Distance (d_liq): Distance to liquidation price
+ * 
+ * Key Formula: L_max = 1 / (δ + B)
+ * Where δ and B are expressed as decimals (e.g., 2% = 0.02)
  */
 
 export const LEVERAGE_STEPS = [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50, 60, 75, 80, 90, 100];
@@ -27,39 +36,120 @@ export function roundDownToStep(val: number, steps: number[]): number {
   return r;
 }
 
+/**
+ * Calculate stop loss distance as percentage
+ * Formula: δ = |P_entry - P_stop| / P_entry × 100
+ * 
+ * @param entry - Entry price
+ * @param stop - Stop loss price
+ * @returns Stop distance as percentage (e.g., 2.5 for 2.5%)
+ */
 export function stopPercentFromPrices(entry: number, stop: number): number {
   return Math.abs((entry - stop) / entry) * 100;
 }
 
+/**
+ * Calculate stop loss price from percentage distance
+ * Formula (Long): P_stop = P_entry × (1 - δ)
+ * Formula (Short): P_stop = P_entry × (1 + δ)
+ * 
+ * @param entry - Entry price
+ * @param sPct - Stop distance as percentage (e.g., 2.5 for 2.5%)
+ * @param side - Position side ("long" or "short")
+ * @returns Stop loss price
+ */
 export function stopPriceFromPercent(entry: number, sPct: number, side: Side): number {
   const s = sPct / 100;
   return side === "long" ? entry * (1 - s) : entry * (1 + s);
 }
 
+/**
+ * Calculate maximum safe leverage from stop distance
+ * Formula: L* = 1 / (δ + B)
+ * Then rounds down to nearest available leverage step
+ * 
+ * @param sPct - Stop distance as percentage (e.g., 2.5 for 2.5%)
+ * @param bufferB - Liquidation buffer as percentage (e.g., 0.5 for 0.5%)
+ * @param cap - Maximum leverage cap (e.g., 100)
+ * @returns Maximum safe leverage (rounded down, capped)
+ */
 export function maxLeverageFromStopPercent(sPct: number, bufferB: number, cap: number): number {
   const Lstar = 1 / (sPct / 100 + bufferB / 100);
   const rounded = roundDownToStep(Lstar, LEVERAGE_STEPS);
   return Math.min(Math.max(rounded, 1), cap);
 }
 
+/**
+ * Calculate approximate liquidation price
+ * Formula: d_liq = max(1/L - B, 0)
+ * Formula (Long): P_liq = P_entry × (1 - d_liq)
+ * Formula (Short): P_liq = P_entry × (1 + d_liq)
+ * 
+ * @param entry - Entry price
+ * @param L - Leverage multiplier
+ * @param bufferB - Liquidation buffer as percentage (e.g., 0.5 for 0.5%)
+ * @param side - Position side ("long" or "short")
+ * @returns Approximate liquidation price
+ */
 export function liquidationPriceApprox(entry: number, L: number, bufferB: number, side: Side): number {
   const dliq = Math.max(1 / L - bufferB / 100, 0);
   return side === "long" ? entry * (1 - dliq) : entry * (1 + dliq);
 }
 
+/**
+ * Calculate safety margin between stop and liquidation
+ * The "cushion" distance between stop loss and liquidation price
+ * Formula (Long): margin% = (P_stop - P_liq) / P_entry × 100
+ * Formula (Short): margin% = (P_liq - P_stop) / P_entry × 100
+ * 
+ * @param entry - Entry price
+ * @param stop - Stop loss price
+ * @param pliq - Liquidation price
+ * @param side - Position side ("long" or "short")
+ * @returns Safety margin as percentage
+ */
 export function safetyMarginPercent(entry: number, stop: number, pliq: number, side: Side): number {
   if (side === "long") return ((stop - pliq) / entry) * 100;
   return ((pliq - stop) / entry) * 100;
 }
 
+/**
+ * Calculate risk value in quote currency (e.g., USDT)
+ * Formula: Risk = |P_entry - P_stop| × (Quote_Size / P_entry)
+ * 
+ * @param entry - Entry price
+ * @param stop - Stop loss price
+ * @param quoteSize - Position size in quote currency (e.g., $1000 USDT)
+ * @returns Risk amount in quote currency
+ */
 export function riskValueQuote(entry: number, stop: number, quoteSize: number): number {
   return Math.abs(entry - stop) * (quoteSize / entry);
 }
 
+/**
+ * Calculate risk value from base quantity
+ * Formula: Risk = |P_entry - P_stop| × Base_Quantity
+ * 
+ * @param entry - Entry price
+ * @param stop - Stop loss price
+ * @param baseQty - Position size in base currency (e.g., 0.5 BTC)
+ * @returns Risk amount in quote currency
+ */
 export function riskValueBase(entry: number, stop: number, baseQty: number): number {
   return Math.abs(entry - stop) * baseQty;
 }
 
+/**
+ * Determine risk level from leverage and safety margin
+ * Classification:
+ * - Low: L ≤ 20x AND margin ≥ 0.75%
+ * - High: L > 50x OR margin < 0.25%
+ * - Medium: Everything else
+ * 
+ * @param L - Leverage multiplier
+ * @param marginPct - Safety margin percentage
+ * @returns Risk level classification
+ */
 export function riskLevelFrom(L: number, marginPct: number): RiskLevel {
   if (L <= 20 && marginPct >= 0.75) return "Low";
   if (L > 50 || marginPct < 0.25) return "High";

@@ -2,8 +2,9 @@ import AppLayout from '@/components/layout/AppLayout';
 import { TradingJournal } from '@/components/TradingJournal';
 import { RiskCalculator } from '@/components/RiskCalculator';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
+import { EnhancedStopLossCalculator } from '@/components/risk/EnhancedStopLossCalculator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Calculator, Receipt } from 'lucide-react';
+import { BookOpen, Calculator, Receipt, Target } from 'lucide-react';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { pageMeta } from '@/utils/seoHelpers';
 import { SkipToContent } from '@/components/SkipToContent';
@@ -22,7 +23,7 @@ const Tools = () => {
         </header>
 
         <Tabs defaultValue="journal" className="space-y-6">
-          <TabsList className="grid w-full max-w-lg grid-cols-3 glass">
+          <TabsList className="grid w-full max-w-4xl grid-cols-4 glass">
             <TabsTrigger value="journal" className="gap-2">
               <BookOpen className="w-4 h-4" aria-hidden="true" />
               Journal
@@ -30,6 +31,10 @@ const Tools = () => {
             <TabsTrigger value="calculator" className="gap-2">
               <Calculator className="w-4 h-4" aria-hidden="true" />
               Risk Calculator
+            </TabsTrigger>
+            <TabsTrigger value="stoploss" className="gap-2">
+              <Target className="w-4 h-4" aria-hidden="true" />
+              Stop Loss
             </TabsTrigger>
             <TabsTrigger value="expenses" className="gap-2">
               <Receipt className="w-4 h-4" aria-hidden="true" />
@@ -43,6 +48,10 @@ const Tools = () => {
 
           <TabsContent value="calculator">
             <RiskCalculator />
+          </TabsContent>
+
+          <TabsContent value="stoploss">
+            <EnhancedStopLossCalculator />
           </TabsContent>
 
           <TabsContent value="expenses">
