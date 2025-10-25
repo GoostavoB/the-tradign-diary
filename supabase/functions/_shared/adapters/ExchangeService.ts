@@ -256,4 +256,35 @@ export class ExchangeService {
 
     return await adapter.healthCheck();
   }
+
+  async performFuturesHealthCheck(exchange: string): Promise<{
+    status: 'healthy' | 'degraded' | 'down';
+    latency: number;
+    lastError?: string;
+  } | null> {
+    const adapter = this.getAdapter(exchange);
+    if (!adapter) return null;
+
+    const start = Date.now();
+    try {
+      if (typeof (adapter as any).testFuturesConnection === 'function') {
+        const ok = await (adapter as any).testFuturesConnection();
+        const latency = Date.now() - start;
+        return { status: ok ? (latency > 3000 ? 'degraded' : 'healthy') : 'down', latency };
+      }
+      if (typeof (adapter as any).fetchFuturesTrades === 'function') {
+        // Minimal probe over last 24h
+        await (adapter as any).fetchFuturesTrades({ startTime: new Date(Date.now() - 24*60*60*1000), limit: 1 });
+        const latency = Date.now() - start;
+        return { status: latency > 3000 ? 'degraded' : 'healthy', latency };
+      }
+      return { status: 'down', latency: Date.now() - start, lastError: 'Futures not supported by adapter' };
+    } catch (e) {
+      return {
+        status: 'down',
+        latency: Date.now() - start,
+        lastError: e instanceof Error ? e.message : String(e),
+      };
+    }
+  }
 }

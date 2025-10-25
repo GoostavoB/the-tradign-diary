@@ -179,6 +179,26 @@ Deno.serve(async (req) => {
     const displayName = exchangeService.getExchangeName(connection.exchange_name) || connection.exchange_name;
     const tradingType = connection.trading_type || 'spot';
 
+    // Futures health check when applicable
+    if (tradingType === 'futures' || tradingType === 'both') {
+      const futHealth = await exchangeService.performFuturesHealthCheck(connection.exchange_name);
+      console.log(`[${displayName}] Futures health:`, futHealth);
+      if (futHealth && futHealth.status === 'down') {
+        const errMsg = `Futures permission check failed${futHealth.lastError ? `: ${futHealth.lastError}` : ''}`;
+        await supabaseClient
+          .from('exchange_connections')
+          .update({ sync_status: 'error', sync_error: errMsg })
+          .eq('id', connectionId);
+        if (syncHistory) {
+          await supabaseClient
+            .from('exchange_sync_history')
+            .update({ status: 'error', completed_at: new Date().toISOString() })
+            .eq('id', syncHistory.id);
+        }
+        return new Response(JSON.stringify({ error: errMsg }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    }
+
     console.log(`[${displayName}] Fetching ${tradingType} trades from ${startTime.toISOString()} to ${endTime.toISOString()}...`);
     
     let fetchedTrades: any[] = [];
