@@ -32,7 +32,7 @@ export const ExchangeCarousel = () => {
           {exchanges.slice(0, 4).map((exchange) => (
             <div 
               key={exchange.name}
-              className="p-3 rounded-lg bg-background/50 dark:bg-background/30 border border-primary/10"
+              className="p-2"
             >
               <img
                 src={exchange.logo}
@@ -52,7 +52,7 @@ export const ExchangeCarousel = () => {
           {exchanges.slice(4, 8).map((exchange) => (
             <div 
               key={exchange.name}
-              className="p-3 rounded-lg bg-background/50 dark:bg-background/30 border border-primary/10"
+              className="p-2"
             >
               <img
                 src={exchange.logo}
@@ -72,7 +72,7 @@ export const ExchangeCarousel = () => {
           {exchanges.slice(8).map((exchange) => (
             <div 
               key={exchange.name}
-              className="p-3 rounded-lg bg-background/50 dark:bg-background/30 border border-primary/10"
+              className="p-2"
             >
               <img
                 src={exchange.logo}
