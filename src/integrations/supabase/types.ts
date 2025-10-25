@@ -283,6 +283,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_training_profile: {
+        Row: {
+          common_challenges: string[] | null
+          consent_to_analyze: boolean | null
+          created_at: string
+          experience_level: string | null
+          id: string
+          main_goals: string[] | null
+          main_goals_other: string | null
+          market_focus: string[] | null
+          risk_per_trade: string | null
+          strategy_style: string | null
+          trading_schedule: string[] | null
+          trading_styles: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          common_challenges?: string[] | null
+          consent_to_analyze?: boolean | null
+          created_at?: string
+          experience_level?: string | null
+          id?: string
+          main_goals?: string[] | null
+          main_goals_other?: string | null
+          market_focus?: string[] | null
+          risk_per_trade?: string | null
+          strategy_style?: string | null
+          trading_schedule?: string[] | null
+          trading_styles?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          common_challenges?: string[] | null
+          consent_to_analyze?: boolean | null
+          created_at?: string
+          experience_level?: string | null
+          id?: string
+          main_goals?: string[] | null
+          main_goals_other?: string | null
+          market_focus?: string[] | null
+          risk_per_trade?: string | null
+          strategy_style?: string | null
+          trading_schedule?: string[] | null
+          trading_styles?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       alert_history: {
         Row: {
           alert_id: string

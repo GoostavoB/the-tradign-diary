@@ -17,6 +17,8 @@ import { BehaviorAnalytics } from '@/components/insights/BehaviorAnalytics';
 import { DashboardSkeleton } from '@/components/DashboardSkeleton';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
 import { AIInsightsBox } from '@/components/insights/AIInsightsBox';
+import { AITrainingQuestionnaire } from '@/components/ai-training/AITrainingQuestionnaire';
+import { useAITrainingProfile } from '@/hooks/useAITrainingProfile';
 import { LevelUpModal } from '@/components/gamification/LevelUpModal';
 import { FloatingXP } from '@/components/gamification/FloatingXP';
 import { MicroFeedbackOverlay } from '@/components/gamification/MicroFeedbackOverlay';
@@ -107,6 +109,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState<TradeStats | null>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
+  const { hasProfile, loading: profileLoading, refetch: refetchProfile } = useAITrainingProfile();
   const [initialInvestment, setInitialInvestment] = useState(0);
   const [capitalLog, setCapitalLog] = useState<any[]>([]);
   const [includeFeesInPnL, setIncludeFeesInPnL] = useState(true);
@@ -832,6 +835,11 @@ const Dashboard = () => {
       </SortableWidget>
     );
   }, [isCustomizing, removeWidget, stats, processedTrades, initialInvestment, spotWalletTotal, holdings, portfolioChartData, customWidgets, fetchCustomWidgets]);
+
+  // Show AI Training Questionnaire if user doesn't have a profile yet
+  if (hasProfile === false && !profileLoading) {
+    return <AITrainingQuestionnaire onComplete={refetchProfile} />;
+  }
 
   return (
     <>
