@@ -20,4 +20,5 @@ export const trackLandingEvents = {
   trackSelectPlanClick: (plan: string) => trackEvent('track_select_plan_click', { plan }),
   trackCheckoutCompleted: (plan: string, amount: number) => 
     trackEvent('track_checkout_completed', { plan, amount }),
+  trackEvent: (eventName: string, properties?: Record<string, any>) => trackEvent(eventName, properties),
 };
