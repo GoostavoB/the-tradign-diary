@@ -11,6 +11,7 @@ interface ConnectRequest {
   apiKey: string;
   apiSecret: string;
   apiPassphrase?: string;
+  tradingType?: 'spot' | 'futures' | 'both';
 }
 
 Deno.serve(async (req) => {
@@ -39,7 +40,7 @@ Deno.serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    const { exchange, apiKey, apiSecret, apiPassphrase }: ConnectRequest = await req.json();
+    const { exchange, apiKey, apiSecret, apiPassphrase, tradingType }: ConnectRequest = await req.json();
 
     // Validate required fields
     if (!exchange || !apiKey || !apiSecret) {
@@ -82,6 +83,7 @@ Deno.serve(async (req) => {
         api_key_encrypted: encryptedKey,
         api_secret_encrypted: encryptedSecret,
         api_passphrase_encrypted: encryptedPassphrase,
+        trading_type: tradingType || 'spot',
         is_active: true,
         sync_status: 'pending',
         sync_error: null,

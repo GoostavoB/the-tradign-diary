@@ -94,6 +94,7 @@ export class ExchangeService {
     options?: {
       startDate?: Date;
       endDate?: Date;
+      tradingType?: 'spot' | 'futures' | 'both';
     }
   ): Promise<{
     success: boolean;
@@ -110,10 +111,19 @@ export class ExchangeService {
     }
 
     try {
-      const trades = await adapter.fetchTrades({
-        startTime: options?.startDate,
-        endTime: options?.endDate,
-      });
+      let trades: Trade[] = [];
+
+      if (options?.tradingType === 'futures' && typeof (adapter as any).fetchFuturesTrades === 'function') {
+        trades = await (adapter as any).fetchFuturesTrades({
+          startTime: options?.startDate,
+          endTime: options?.endDate,
+        });
+      } else {
+        trades = await adapter.fetchTrades({
+          startTime: options?.startDate,
+          endTime: options?.endDate,
+        });
+      }
 
       return { success: true, trades };
     } catch (error) {

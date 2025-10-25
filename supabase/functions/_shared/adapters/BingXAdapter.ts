@@ -150,6 +150,56 @@ export class BingXAdapter extends BaseExchangeAdapter {
     return [];
   }
 
+  async fetchFuturesTrades(options?: FetchOptions): Promise<Trade[]> {
+    try {
+      const params: Record<string, any> = { 
+        limit: Math.min(options?.limit || 500, 500)
+      };
+
+      // Add time filters if provided
+      if (options?.startTime) {
+        params.startTime = options.startTime.getTime();
+      }
+      if (options?.endTime) {
+        params.endTime = options.endTime.getTime();
+      }
+      if (options?.symbol) {
+        // Futures uses dash separator: BTC-USDT
+        params.symbol = options.symbol.replace('/', '-');
+      }
+
+      // BingX futures endpoint: /openApi/swap/v2/trade/allOrders
+      const response = await this.makeRequest<{ orders: any[] }>(
+        '/openApi/swap/v2/trade/allOrders', 
+        params
+      );
+      
+      if (!response.orders || !Array.isArray(response.orders)) {
+        console.warn('BingX futures returned no trades or invalid format');
+        return [];
+      }
+
+      return response.orders
+        .filter(trade => trade && trade.orderId)
+        .map(trade => ({
+          id: trade.orderId?.toString() || '',
+          exchange: 'bingx',
+          symbol: trade.symbol?.replace('-', '/') || '',
+          side: trade.side?.toLowerCase() as 'buy' | 'sell',
+          price: parseFloat(trade.avgPrice || trade.price || '0'),
+          quantity: parseFloat(trade.executedQty || trade.origQty || '0'),
+          fee: parseFloat(trade.commission || '0'),
+          feeCurrency: 'USDT', // BingX futures typically uses USDT
+          timestamp: new Date(parseInt(trade.time || trade.updateTime) || Date.now()),
+          orderId: trade.orderId?.toString(),
+          role: trade.positionSide, // LONG or SHORT
+        }));
+    } catch (error) {
+      console.error('Error fetching BingX futures trades:', error);
+      throw error;
+    }
+  }
+
   async fetchWithdrawals(options?: FetchOptions): Promise<Withdrawal[]> {
     return [];
   }

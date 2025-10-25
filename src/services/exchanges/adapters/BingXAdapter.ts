@@ -125,6 +125,47 @@ export class BingXAdapter extends BaseExchangeAdapter {
     }
   }
 
+  async fetchFuturesTrades(options?: FetchOptions): Promise<Trade[]> {
+    try {
+      const params: Record<string, any> = { 
+        limit: Math.min(options?.limit || 500, 500)
+      };
+
+      if (options?.startTime) {
+        params.startTime = options.startTime.getTime();
+      }
+      if (options?.endTime) {
+        params.endTime = options.endTime.getTime();
+      }
+      if (options?.symbol) {
+        params.symbol = options.symbol.replace('/', '-');
+      }
+
+      const response = await this.makeRequest<any>('/openApi/swap/v2/trade/allOrders', params);
+      
+      if (!response.orders || !Array.isArray(response.orders)) {
+        return [];
+      }
+
+      return response.orders.map((trade: any) => ({
+        id: trade.orderId?.toString() || '',
+        exchange: 'bingx',
+        symbol: trade.symbol?.replace('-', '/') || '',
+        side: trade.side?.toLowerCase() as 'buy' | 'sell',
+        price: parseFloat(trade.avgPrice || trade.price || '0'),
+        quantity: parseFloat(trade.executedQty || trade.origQty || '0'),
+        fee: parseFloat(trade.commission || '0'),
+        feeCurrency: 'USDT',
+        timestamp: new Date(parseInt(trade.time || trade.updateTime) || Date.now()),
+        orderId: trade.orderId?.toString(),
+        role: trade.positionSide,
+      }));
+    } catch (error) {
+      console.error('Error fetching BingX futures trades:', error);
+      return [];
+    }
+  }
+
   async fetchDeposits(options?: FetchOptions): Promise<Deposit[]> { return []; }
   async fetchWithdrawals(options?: FetchOptions): Promise<Withdrawal[]> { return []; }
 }

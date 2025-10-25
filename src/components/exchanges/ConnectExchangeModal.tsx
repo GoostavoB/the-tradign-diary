@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Eye, EyeOff, AlertTriangle, Loader2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -33,6 +34,7 @@ export function ConnectExchangeModal({
   const [apiKey, setApiKey] = useState('');
   const [apiSecret, setApiSecret] = useState('');
   const [apiPassphrase, setApiPassphrase] = useState('');
+  const [tradingType, setTradingType] = useState<'spot' | 'futures' | 'both'>('spot');
   const [showKey, setShowKey] = useState(false);
   const [showSecret, setShowSecret] = useState(false);
   const [showPassphrase, setShowPassphrase] = useState(false);
@@ -55,6 +57,7 @@ export function ConnectExchangeModal({
             apiKey,
             apiSecret,
             apiPassphrase: apiPassphrase || undefined,
+            tradingType,
           }),
         }
       );
@@ -194,6 +197,33 @@ export function ConnectExchangeModal({
                   {showPassphrase ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
+            </div>
+          )}
+
+          {/* Trading Type Selector - Show for exchanges that support futures */}
+          {['bingx', 'binance', 'bybit', 'mexc', 'okx', 'gateio', 'kucoin'].includes(exchange.toLowerCase()) && (
+            <div className="space-y-2">
+              <Label>{t('exchanges.connect.tradingType')}</Label>
+              <RadioGroup value={tradingType} onValueChange={(value: any) => setTradingType(value)}>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="spot" id="spot" />
+                  <Label htmlFor="spot" className="font-normal cursor-pointer">
+                    {t('exchanges.connect.spotOnly')}
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="futures" id="futures" />
+                  <Label htmlFor="futures" className="font-normal cursor-pointer">
+                    {t('exchanges.connect.futuresOnly')}
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="both" id="both" />
+                  <Label htmlFor="both" className="font-normal cursor-pointer">
+                    {t('exchanges.connect.both')}
+                  </Label>
+                </div>
+              </RadioGroup>
             </div>
           )}
 

@@ -176,44 +176,41 @@ Deno.serve(async (req) => {
     
     console.log(`[${connection.exchange_name}] Connection successful`);
     
-    // Get display name for better logging
     const displayName = exchangeService.getExchangeName(connection.exchange_name) || connection.exchange_name;
+    const tradingType = connection.trading_type || 'spot';
 
-    // Fetch trades with 60 second timeout
-    console.log(`[${displayName}] Fetching trades from ${startTime.toISOString()} to ${endTime.toISOString()}...`);
+    console.log(`[${displayName}] Fetching ${tradingType} trades from ${startTime.toISOString()} to ${endTime.toISOString()}...`);
     
-    const fetchPromise = exchangeService.syncExchange(connection.exchange_name, {
-      startDate: startTime,
-      endDate: endTime,
-    });
-
-    const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Sync timed out. Please try again with a smaller date range.')), 60000)
-    );
-
-    const result = await Promise.race([fetchPromise, timeoutPromise]);
-
-    if (!result.success || !result.trades) {
-      const errorMessage = result.error || 'Failed to fetch trades. Please try again.';
-      console.error(`[${displayName}] Fetch failed:`, errorMessage);
-      
-      await supabaseClient
-        .from('exchange_connections')
-        .update({
-          sync_status: 'error',
-          sync_error: errorMessage,
-        })
-        .eq('id', connectionId);
-
-      throw new Error(errorMessage);
+    let fetchedTrades: any[] = [];
+    
+    if (tradingType === 'spot' || tradingType === 'both') {
+      const spotResult = await exchangeService.syncExchange(connection.exchange_name, {
+        startDate: startTime,
+        endDate: endTime,
+        tradingType: 'spot',
+      });
+      if (spotResult.trades) {
+        fetchedTrades.push(...spotResult.trades.map(t => ({ ...t, trading_type: 'spot' })));
+      }
     }
     
-    console.log(`[${displayName}] Successfully fetched ${result.trades.length} trades`);
+    if (tradingType === 'futures' || tradingType === 'both') {
+      const futuresResult = await exchangeService.syncExchange(connection.exchange_name, {
+        startDate: startTime,
+        endDate: endTime,
+        tradingType: 'futures',
+      });
+      if (futuresResult.trades) {
+        fetchedTrades.push(...futuresResult.trades.map(t => ({ ...t, trading_type: 'futures' })));
+      }
+    }
+
+    console.log(`[${displayName}] Successfully fetched ${fetchedTrades.length} trades`);
 
     // Normalize trades for database
-    console.log(`[${displayName}] Normalizing ${result.trades.length} trades for database...`);
+    console.log(`[${displayName}] Normalizing ${fetchedTrades.length} trades for database...`);
     
-    const allTrades = result.trades.map(trade => ({
+    const allTrades = fetchedTrades.map(trade => ({
       user_id: user.id,
       pair: trade.symbol,
       side: trade.side === 'buy' ? 'long' : trade.side === 'sell' ? 'short' : trade.side,

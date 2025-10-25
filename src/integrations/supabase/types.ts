@@ -759,6 +759,7 @@ export type Database = {
           sync_cursor: Json | null
           sync_error: string | null
           sync_status: string | null
+          trading_type: string | null
           updated_at: string | null
           user_id: string
         }
@@ -780,6 +781,7 @@ export type Database = {
           sync_cursor?: Json | null
           sync_error?: string | null
           sync_status?: string | null
+          trading_type?: string | null
           updated_at?: string | null
           user_id: string
         }
@@ -801,6 +803,7 @@ export type Database = {
           sync_cursor?: Json | null
           sync_error?: string | null
           sync_status?: string | null
+          trading_type?: string | null
           updated_at?: string | null
           user_id?: string
         }
@@ -2526,6 +2529,7 @@ export type Database = {
           trade_hash: string | null
           trade_type: string | null
           trading_fee: number | null
+          trading_type: string | null
           updated_at: string | null
           user_id: string
           xp_awarded: boolean
@@ -2571,6 +2575,7 @@ export type Database = {
           trade_hash?: string | null
           trade_type?: string | null
           trading_fee?: number | null
+          trading_type?: string | null
           updated_at?: string | null
           user_id: string
           xp_awarded?: boolean
@@ -2616,6 +2621,7 @@ export type Database = {
           trade_hash?: string | null
           trade_type?: string | null
           trading_fee?: number | null
+          trading_type?: string | null
           updated_at?: string | null
           user_id?: string
           xp_awarded?: boolean
