@@ -200,7 +200,8 @@ const AppRoutes = () => {
         <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         <Route path="/psychology" element={<ProtectedRoute><Psychology /></ProtectedRoute>} />
         <Route path="/trading-plan" element={<ProtectedRoute><TradingPlan /></ProtectedRoute>} />
-        <Route path="/exchanges" element={<ProtectedRoute><ExchangeConnections /></ProtectedRoute>} />
+        {/* Exchange connections temporarily hidden for future use */}
+        {/* <Route path="/exchanges" element={<ProtectedRoute><ExchangeConnections /></ProtectedRoute>} /> */}
         <Route path="/spot-wallet" element={<ProtectedRoute><SpotWallet /></ProtectedRoute>} />
         <Route path="/fee-analysis" element={<ProtectedRoute><FeeAnalysis /></ProtectedRoute>} />
         <Route path="/faq" element={<ProtectedRoute><FAQ /></ProtectedRoute>} />
@@ -213,7 +214,8 @@ const AppRoutes = () => {
         {/* Phase 2: Trading Accounts - temporarily disabled for backlog #18 */}
         {/* <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} /> */}
         {/* <Route path="/performance-alerts" element={<ProtectedRoute><PerformanceAlerts /></ProtectedRoute>} /> */}
-        <Route path="/exchange-connections" element={<ProtectedRoute><ExchangeConnections /></ProtectedRoute>} />
+        {/* Exchange connections temporarily hidden for future use */}
+        {/* <Route path="/exchange-connections" element={<ProtectedRoute><ExchangeConnections /></ProtectedRoute>} /> */}
         {/* Phase 2: Progress Analytics (IXP/XP) - temporarily disabled for backlog #36 */}
         {/* <Route path="/progress-analytics" element={<ProtectedRoute><ProgressAnalytics /></ProtectedRoute>} /> */}
         <Route path="/my-metrics" element={<ProtectedRoute><MyMetrics /></ProtectedRoute>} />
