@@ -270,7 +270,7 @@ const PricingPage = () => {
           >
             <GlassCard className="p-8 md:p-12 text-center">
               <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-gradient-to-r from-accent via-primary to-accent bg-size-200 animate-gradient mb-8 shadow-lg shadow-accent/20">
-                <span className="text-sm font-bold text-white uppercase tracking-wider">{t('pricing.comingSoon.badge', 'Coming Soon')}</span>
+                <span className="text-sm font-bold text-primary-foreground uppercase tracking-wider">{t('pricing.comingSoon.badge', 'Coming Soon')}</span>
               </div>
               
               {/* Enterprise */}

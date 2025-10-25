@@ -87,7 +87,7 @@ const Gamification = () => {
                   transition={{ duration: 3, repeat: Infinity }}
                   className={`p-4 rounded-2xl bg-gradient-to-br ${getLevelBadgeColor(xpData.currentLevel)}`}
                 >
-                  <Trophy className="w-8 h-8 text-white" />
+                  <Trophy className="w-8 h-8 text-primary-foreground" />
                 </motion.div>
                 <div>
                   <p className="text-sm text-muted-foreground">Your Level</p>
