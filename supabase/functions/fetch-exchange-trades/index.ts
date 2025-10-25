@@ -205,6 +205,20 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Fallback: if user selected spot but nothing returned, try futures for exchanges that support it
+    const supportsFutures = ['bingx','binance','bybit','mexc','okx','gateio','kucoin'].includes(connection.exchange_name.toLowerCase());
+    if (tradingType === 'spot' && fetchedTrades.length === 0 && supportsFutures) {
+      console.log(`[${displayName}] Spot returned 0 trades, trying futures as fallback...`);
+      const futuresResult = await exchangeService.syncExchange(connection.exchange_name, {
+        startDate: startTime,
+        endDate: endTime,
+        tradingType: 'futures',
+      });
+      if (futuresResult.trades) {
+        fetchedTrades.push(...futuresResult.trades.map(t => ({ ...t, trading_type: 'futures' })));
+      }
+    }
+
     console.log(`[${displayName}] Successfully fetched ${fetchedTrades.length} trades`);
 
     // Normalize trades for database
@@ -214,7 +228,7 @@ Deno.serve(async (req) => {
       user_id: user.id,
       pair: trade.symbol,
       side: trade.side === 'buy' ? 'long' : trade.side === 'sell' ? 'short' : trade.side,
-      type: 'spot' as const,
+      type: trade.trading_type === 'futures' ? 'futures' : 'spot',
       entry_price: trade.price,
       exit_price: trade.price,
       size: trade.quantity,
