@@ -456,6 +456,68 @@
         "challenges": "Thử thách Hàng ngày/Hàng tuần"
       }
     },
+    "expectedResults": {
+      "title": "Kết Quả Thực Tế từ Trader Thực Tế",
+      "subtitle": "Đây là những gì người dùng thường đạt được sau 8-12 tuần đánh giá hàng tuần nhất quán",
+      "metrics": {
+        "winRate": {
+          "label": "Tỷ Lệ Thắng",
+          "value": "+3 đến +8 điểm",
+          "description": "Cải thiện theo điểm phần trăm"
+        },
+        "expectancy": {
+          "label": "Kỳ Vọng Mỗi Giao Dịch",
+          "value": "+0.05 đến +0.20 R",
+          "description": "Lợi nhuận kỳ vọng mỗi giao dịch"
+        },
+        "profitFactor": {
+          "label": "Hệ Số Lợi Nhuận",
+          "value": "+0.1 đến +0.4",
+          "description": "Tỷ lệ thắng so với thua"
+        },
+        "drawdown": {
+          "label": "Drawdown Tối Đa Hàng Tuần",
+          "value": "−15 đến −30%",
+          "description": "Giảm rủi ro"
+        }
+      },
+      "example": {
+        "title": "Ví Dụ Trước và Sau",
+        "before": "Trước",
+        "after": "Sau 12 Tuần",
+        "winRate": "Tỷ Lệ Thắng",
+        "avgWin": "Thắng Trung Bình",
+        "avgLoss": "Thua Trung Bình",
+        "profitFactor": "Hệ Số Lợi Nhuận",
+        "expectancy": "Kỳ Vọng"
+      },
+      "additional": {
+        "avgLoss": {
+          "label": "Kích Thước Thua Trung Bình",
+          "value": "−10 đến −30%"
+        },
+        "avgWin": {
+          "label": "Kích Thước Thắng Trung Bình",
+          "value": "+5 đến +15%"
+        },
+        "planAdherence": {
+          "label": "Tuân Thủ Kế Hoạch",
+          "value": "80-90%"
+        },
+        "ruleBreaks": {
+          "label": "Vi Phạm Quy Tắc Mỗi Tuần",
+          "value": "−50 đến −80%"
+        },
+        "returnVolatility": {
+          "label": "Biến Động Lợi Nhuận (R Hàng Ngày)",
+          "value": "−10 đến −25%"
+        },
+        "overtrading": {
+          "label": "Ngày Giao Dịch Quá Mức",
+          "value": "−50%"
+        }
+      }
+    },
     "roadmap": {
       "title": "Sắp Ra mắt",
       "subtitle": "Các tính năng mới thú vị mà chúng tôi đang xây dựng cho bạn",

@@ -1293,6 +1293,68 @@
           "challenges": "Desafíos Diarios/Semanales"
         }
       },
+      "expectedResults": {
+        "title": "Resultados Reales de Traders Reales",
+        "subtitle": "Esto es lo que los usuarios suelen lograr en 8-12 semanas de revisiones semanales consistentes",
+        "metrics": {
+          "winRate": {
+            "label": "Tasa de Éxito",
+            "value": "+3 a +8 pts",
+            "description": "Mejora en puntos porcentuales"
+          },
+          "expectancy": {
+            "label": "Expectativa por Operación",
+            "value": "+0.05 a +0.20 R",
+            "description": "Beneficio esperado por operación"
+          },
+          "profitFactor": {
+            "label": "Factor de Beneficio",
+            "value": "+0.1 a +0.4",
+            "description": "Ratio de ganancias a pérdidas"
+          },
+          "drawdown": {
+            "label": "Drawdown Semanal Máximo",
+            "value": "−15 a −30%",
+            "description": "Exposición al riesgo reducida"
+          }
+        },
+        "example": {
+          "title": "Ejemplo Antes y Después",
+          "before": "Antes",
+          "after": "Después de 12 Semanas",
+          "winRate": "Tasa de Éxito",
+          "avgWin": "Ganancia Promedio",
+          "avgLoss": "Pérdida Promedio",
+          "profitFactor": "Factor de Beneficio",
+          "expectancy": "Expectativa"
+        },
+        "additional": {
+          "avgLoss": {
+            "label": "Tamaño de Pérdida Promedio",
+            "value": "−10 a −30%"
+          },
+          "avgWin": {
+            "label": "Tamaño de Ganancia Promedio",
+            "value": "+5 a +15%"
+          },
+          "planAdherence": {
+            "label": "Adherencia al Plan",
+            "value": "80-90%"
+          },
+          "ruleBreaks": {
+            "label": "Violaciones de Reglas por Semana",
+            "value": "−50 a −80%"
+          },
+          "returnVolatility": {
+            "label": "Volatilidad de Retornos (R Diario)",
+            "value": "−10 a −25%"
+          },
+          "overtrading": {
+            "label": "Días de Sobreoperación",
+            "value": "−50%"
+          }
+        }
+      },
       "roadmap": {
         "title": "Próximamente",
         "subtitle": "Nuevas funciones emocionantes que estamos construyendo para ti",

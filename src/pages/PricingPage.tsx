@@ -14,6 +14,7 @@ import { PremiumBillingToggle } from "@/components/premium/PremiumBillingToggle"
 import { Logo } from "@/components/Logo";
 import { GlassCard } from "@/components/GlassCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { ExpectedResults } from "@/components/premium/ExpectedResults";
 import appStoreSoon from "@/assets/coming_soon_appstore.png";
 import googlePlaySoon from "@/assets/google-play-coming-soon.png";
 
@@ -203,6 +204,8 @@ const PricingPage = () => {
         </div>
       </section>
 
+      {/* Expected Results Section */}
+      <ExpectedResults />
 
       {/* Pricing Cards */}
       <section ref={pricingRef} className="py-16 px-6">

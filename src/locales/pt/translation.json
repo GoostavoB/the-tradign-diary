@@ -1283,6 +1283,68 @@
           "challenges": "Desafios Diários/Semanais"
         }
       },
+      "expectedResults": {
+        "title": "Resultados Reais de Traders Reais",
+        "subtitle": "Aqui está o que os usuários normalmente alcançam em 8-12 semanas de revisões semanais consistentes",
+        "metrics": {
+          "winRate": {
+            "label": "Taxa de Acerto",
+            "value": "+3 a +8 pts",
+            "description": "Melhoria em pontos percentuais"
+          },
+          "expectancy": {
+            "label": "Expectativa por Operação",
+            "value": "+0.05 a +0.20 R",
+            "description": "Lucro esperado por operação"
+          },
+          "profitFactor": {
+            "label": "Fator de Lucro",
+            "value": "+0.1 a +0.4",
+            "description": "Proporção de ganhos para perdas"
+          },
+          "drawdown": {
+            "label": "Drawdown Semanal Máximo",
+            "value": "−15 a −30%",
+            "description": "Exposição ao risco reduzida"
+          }
+        },
+        "example": {
+          "title": "Exemplo Antes e Depois",
+          "before": "Antes",
+          "after": "Depois de 12 Semanas",
+          "winRate": "Taxa de Acerto",
+          "avgWin": "Ganho Médio",
+          "avgLoss": "Perda Média",
+          "profitFactor": "Fator de Lucro",
+          "expectancy": "Expectativa"
+        },
+        "additional": {
+          "avgLoss": {
+            "label": "Tamanho da Perda Média",
+            "value": "−10 a −30%"
+          },
+          "avgWin": {
+            "label": "Tamanho do Ganho Médio",
+            "value": "+5 a +15%"
+          },
+          "planAdherence": {
+            "label": "Aderência ao Plano",
+            "value": "80-90%"
+          },
+          "ruleBreaks": {
+            "label": "Violações de Regras por Semana",
+            "value": "−50 a −80%"
+          },
+          "returnVolatility": {
+            "label": "Volatilidade de Retorno (R Diário)",
+            "value": "−10 a −25%"
+          },
+          "overtrading": {
+            "label": "Dias de Overtrading",
+            "value": "−50%"
+          }
+        }
+      },
       "roadmap": {
         "title": "Em Breve",
         "subtitle": "Novos recursos emocionantes que estamos construindo para você",

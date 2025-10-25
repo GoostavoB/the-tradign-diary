@@ -424,6 +424,68 @@
         "challenges": "Daily/Weekly Challenges"
       }
     },
+    "expectedResults": {
+      "title": "Real Results, Real Traders",
+      "subtitle": "Here's what users typically achieve in 8-12 weeks of consistent weekly reviews",
+      "metrics": {
+        "winRate": {
+          "label": "Win Rate",
+          "value": "+3 to +8 pts",
+          "description": "Improvement in percentage points"
+        },
+        "expectancy": {
+          "label": "Expectancy per Trade",
+          "value": "+0.05 to +0.20 R",
+          "description": "Expected profit per trade"
+        },
+        "profitFactor": {
+          "label": "Profit Factor",
+          "value": "+0.1 to +0.4",
+          "description": "Ratio of wins to losses"
+        },
+        "drawdown": {
+          "label": "Max Weekly Drawdown",
+          "value": "−15 to −30%",
+          "description": "Reduced risk exposure"
+        }
+      },
+      "example": {
+        "title": "Before & After Example",
+        "before": "Before",
+        "after": "After 12 Weeks",
+        "winRate": "Win Rate",
+        "avgWin": "Average Win",
+        "avgLoss": "Average Loss",
+        "profitFactor": "Profit Factor",
+        "expectancy": "Expectancy"
+      },
+      "additional": {
+        "avgLoss": {
+          "label": "Average Loss Size",
+          "value": "−10 to −30%"
+        },
+        "avgWin": {
+          "label": "Average Win Size",
+          "value": "+5 to +15%"
+        },
+        "planAdherence": {
+          "label": "Plan Adherence",
+          "value": "80-90%"
+        },
+        "ruleBreaks": {
+          "label": "Rule Breaks per Week",
+          "value": "−50 to −80%"
+        },
+        "returnVolatility": {
+          "label": "Return Volatility (Daily R)",
+          "value": "−10 to −25%"
+        },
+        "overtrading": {
+          "label": "Overtrading Days",
+          "value": "−50%"
+        }
+      }
+    },
     "roadmap": {
       "title": "Coming Soon",
       "subtitle": "Exciting new features we're building for you",
