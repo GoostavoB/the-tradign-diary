@@ -243,31 +243,48 @@ Deno.serve(async (req) => {
     }
   }
 
-    console.log(`[${displayName}] Successfully fetched ${fetchedTrades.length} trades`);
+    // Filter to only executed fills within date range
+    const startMs = startTime.getTime();
+    const endMs = endTime.getTime();
+    const executedTrades = fetchedTrades.filter(t => {
+      if (!t || !t.symbol) return false;
+      const qty = Number(t.quantity) || 0;
+      if (qty <= 0) return false;
+      const ts = new Date(t.timestamp).getTime();
+      if (ts < startMs || ts > endMs) return false;
+      return true;
+    });
 
-    // Normalize trades for database
-    console.log(`[${displayName}] Normalizing ${fetchedTrades.length} trades for database...`);
+    console.log(`[${displayName}] Successfully fetched ${fetchedTrades.length} trades (${executedTrades.length} executed within date range)`);
+
+    // Normalize trades for database using UI/DB schema
+    console.log(`[${displayName}] Normalizing ${executedTrades.length} trades for database...`);
     
-    const allTrades = fetchedTrades.map(trade => ({
+    const allTrades = executedTrades.map(trade => ({
       user_id: user.id,
-      pair: trade.symbol,
-      side: trade.side === 'buy' ? 'long' : trade.side === 'sell' ? 'short' : trade.side,
-      type: trade.trading_type === 'futures' ? 'futures' : 'spot',
-      entry_price: trade.price,
-      exit_price: trade.price,
-      size: trade.quantity,
+      symbol: (trade.symbol || '').toUpperCase().replace('-', '/').replace('_', '/'),
+      side: trade.side === 'buy' ? 'long' : trade.side === 'sell' ? 'short' : null,
+      broker: displayName,
+      entry_price: Number(trade.price) || 0,
+      exit_price: Number(trade.price) || 0,
+      position_size: Number(trade.quantity) || 0,
+      trading_fee: Number(trade.fee) || 0,
+      profit_loss: 0,
       pnl: 0,
-      pnl_percentage: 0,
-      fee: trade.fee,
-      fee_currency: trade.feeCurrency || trade.feeAsset || 'USDT',
-      exchange: displayName,
+      roi: 0,
       opened_at: new Date(trade.timestamp).toISOString(),
       closed_at: new Date(trade.timestamp).toISOString(),
-      notes: `Imported from ${displayName}. Order ID: ${trade.orderId}`,
-      broker_name: displayName,
+      trade_date: new Date(trade.timestamp).toISOString(),
+      notes: `Imported from ${displayName}${trade.orderId ? ` (Order ${trade.orderId})` : ''}`,
     }));
 
-    // Store trades in pending_trades table (preview mode)
+    // Delete old pending trades before inserting new ones
+    const { count: deletedCount } = await supabaseClient
+      .from('exchange_pending_trades')
+      .delete({ count: 'exact' })
+      .eq('connection_id', connectionId);
+    
+    console.log(`[${displayName}] Deleted ${deletedCount || 0} old pending trades`);
     console.log(`[${displayName}] Storing ${allTrades.length} trades in pending_trades table...`);
     
     let stored = 0;

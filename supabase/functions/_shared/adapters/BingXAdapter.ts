@@ -112,7 +112,15 @@ export class BingXAdapter extends BaseExchangeAdapter {
       }
 
       return items
-        .filter(trade => trade && (trade.orderId || trade.tradeId || trade.id))
+        .filter(trade => {
+          if (!trade || !(trade.orderId || trade.tradeId || trade.id)) return false;
+          // Filter to only executed trades
+          const executedQty = parseFloat(trade.executedQty || trade.qty || trade.quantity || trade.origQty || '0');
+          if (executedQty <= 0) return false;
+          // If status exists, ensure it's FILLED
+          if (trade.status && trade.status !== 'FILLED') return false;
+          return true;
+        })
         .map(trade => ({
           id: (trade.orderId || trade.tradeId || trade.id || '').toString(),
           exchange: 'bingx',
@@ -254,7 +262,15 @@ export class BingXAdapter extends BaseExchangeAdapter {
       }
 
       return items
-        .filter((t: any) => t && (t.orderId || t.tradeId || t.id))
+        .filter((t: any) => {
+          if (!t || !(t.orderId || t.tradeId || t.id)) return false;
+          // Filter to only executed trades
+          const executedQty = parseFloat(t.executedQty || t.executedVolume || t.dealVol || t.qty || '0');
+          if (executedQty <= 0) return false;
+          // If status exists, ensure it's FILLED
+          if (t.status && t.status !== 'FILLED') return false;
+          return true;
+        })
         .map((t: any) => {
           const price = parseFloat(
             t.avgPrice || t.price || t.dealAvgPrice || t.dealPrice || '0'
