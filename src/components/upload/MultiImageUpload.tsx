@@ -478,7 +478,7 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
           <DialogHeader>
             <DialogTitle>Confirm Trade Import</DialogTitle>
             <DialogDescription>
-              Review the detected trades before importing
+              Summary only — you'll edit everything in the next step
             </DialogDescription>
           </DialogHeader>
           

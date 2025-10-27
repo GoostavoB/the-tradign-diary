@@ -40,9 +40,9 @@ export const CSVPreviewSummary = ({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Review Detected Trades</h3>
+          <h3 className="text-lg font-semibold">Review & Select Trades (Summary Only)</h3>
           <p className="text-sm text-muted-foreground">
-            Select trades to import • {selectedTrades.size} of {trades.length} selected
+            Select trades to import • {selectedTrades.size} of {trades.length} selected • You'll edit all details after import
           </p>
         </div>
         <Button

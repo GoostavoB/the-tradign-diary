@@ -369,9 +369,9 @@ export const CSVUpload = ({ onTradesExtracted }: CSVUploadProps) => {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <h3 className="text-lg font-semibold">Review Detected Trades</h3>
+              <h3 className="text-lg font-semibold">Review & Select Trades (Summary Only)</h3>
               <p className="text-sm text-muted-foreground">
-                {fileName} {selectedBroker && `• ${selectedBroker}`}
+                {fileName} {selectedBroker && `• ${selectedBroker}`} • Editing happens in the next step
               </p>
             </div>
           </div>
