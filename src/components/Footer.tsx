@@ -1,4 +1,5 @@
 import { Twitter, Github, Linkedin, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { useTranslation } from "@/hooks/useTranslation";
 import NewsletterSignup from "@/components/NewsletterSignup";
@@ -44,24 +45,24 @@ const Footer = () => {
             <h3 id="footer-product" className="font-semibold mb-3 text-sm">{t('landing.footer.product')}</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/features" className="inline-block py-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/features" className="inline-block py-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.features')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/how-it-works" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/how-it-works" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.howItWorks', 'How It Works')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.pricing')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/faq" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('navigation.faq')}
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
@@ -71,14 +72,14 @@ const Footer = () => {
             <h3 id="footer-support" className="font-semibold mb-3 text-sm">{t('landing.footer.support')}</h3>
             <ul className="space-y-2.5">
               <li>
-                <a href="/blog" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('navigation.blog', 'Blog')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/crypto-trading-faq" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/crypto-trading-faq" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.cryptoFaq', 'Crypto Trading FAQ')}
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
@@ -91,14 +92,14 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/contact" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.contact')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/testimonials" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/testimonials" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.testimonials', 'Testimonials')}
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
@@ -108,34 +109,34 @@ const Footer = () => {
             <h3 id="footer-legal" className="font-semibold mb-3 text-sm">{t('landing.footer.legal')}</h3>
             <ul className="space-y-2.5">
               <li>
-                <a href="/about" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.aboutUs', 'About Us')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/sitemap" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/sitemap" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.sitemap', 'Sitemap')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/terms" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.terms')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.privacy')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/cookie-policy" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/cookie-policy" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.cookiePolicy', 'Cookie Policy')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/changelog" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                <Link to="/changelog" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.changelog', 'Changelog')}
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

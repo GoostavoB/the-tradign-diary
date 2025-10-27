@@ -50,9 +50,10 @@ const BenefitsGrid = () => {
 
   return (
     <section 
-      className="py-20 md:py-32 px-4 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-background"
+      className="py-20 md:py-32 px-4 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-background border-2 border-primary/30"
       data-testid="benefits-v2"
       aria-label="Key Benefits"
+      style={{ boxShadow: '0 0 20px rgba(var(--primary-rgb), 0.3)' }}
     >
       {/* Ambient glow effects */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[140px]" />

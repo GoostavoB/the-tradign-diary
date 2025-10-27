@@ -19,10 +19,36 @@
     <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
     <meta name="mobile-web-app-capable" content="yes" />
     
-    <!-- HTTPS enforcement -->
+    <!-- HTTPS enforcement (production only) -->
     <script>
-      if (location.protocol !== 'https:' || location.hostname !== 'www.thetradingdiary.com') {
-        location.replace('https://www.thetradingdiary.com' + location.pathname + location.search + location.hash);
+      // Only redirect on production domain - allows preview/localhost to work
+      if (location.hostname.endsWith('thetradingdiary.com')) {
+        if (location.protocol !== 'https:' || location.hostname !== 'www.thetradingdiary.com') {
+          location.replace('https://www.thetradingdiary.com' + location.pathname + location.search + location.hash);
+        }
+      }
+    </script>
+    
+    <!-- Preview/Dev SW cleanup (one-time) -->
+    <script>
+      // Clean service workers and caches in preview environments
+      if (!location.hostname.endsWith('thetradingdiary.com')) {
+        const swCleanupKey = 'sw-cleanup-done-v1';
+        if (!localStorage.getItem(swCleanupKey)) {
+          try {
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations()
+                .then(regs => regs.forEach(reg => reg.unregister()))
+                .catch(() => {});
+            }
+            if ('caches' in window) {
+              caches.keys()
+                .then(keys => Promise.all(keys.map(k => caches.delete(k))))
+                .catch(() => {});
+            }
+            localStorage.setItem(swCleanupKey, 'true');
+          } catch (_) {}
+        }
       }
     </script>
     
