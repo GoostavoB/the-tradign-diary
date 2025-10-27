@@ -48,10 +48,13 @@ const brokerMappings: Record<BrokerFormat, BrokerMapping> = {
     entry_price: ['Avg Entry Price', 'avg entry price', 'Entry Price'],
     exit_price: ['Exit Price', 'exit price'],
     position_size: ['Order Qty', 'order qty', 'Qty'],
+    margin: ['Margin(Leverage)', 'Margin', 'margin'],
+    leverage: ['Leverage', 'leverage'],
     opened_at: ['Created Time', 'created time', 'Create Time'],
     closed_at: ['Closed Time', 'closed time', 'Close Time'],
     profit_loss: ['Closed P&L', 'closed pnl', 'PnL'],
     trading_fee: ['Trading Fee', 'trading fee', 'Fee'],
+    funding_fee: ['Funding Fee', 'funding fee'],
   },
   'okx': {
     symbol: ['Instrument ID', 'instrument id', 'Symbol'],
@@ -194,6 +197,15 @@ const getPeriodOfDay = (dateStr: string): 'morning' | 'afternoon' | 'night' => {
   return 'night';
 };
 
+const cleanMarginValue = (value: string | number): number => {
+  if (typeof value === 'number') return value;
+  if (!value) return 0;
+  
+  // Extract number from formats like "614.2 USDT (20x)" or "614.2"
+  const match = String(value).match(/([0-9.]+)/);
+  return match ? parseFloat(match[1]) : 0;
+};
+
 export const mapBrokerCSVToTrades = (rows: any[], format: BrokerFormat): ExtractedTrade[] => {
   const mapping = brokerMappings[format];
   if (!mapping || Object.keys(mapping).length === 0) {
@@ -214,7 +226,24 @@ export const mapBrokerCSVToTrades = (rows: any[], format: BrokerFormat): Extract
     
     // Calculate additional fields
     const leverage = parseFloat(findColumnValue(row, mapping.leverage) || '1');
-    const margin = positionSize * entryPrice / leverage;
+    
+    // Try to get margin from CSV first (prioritize broker-provided margin)
+    let margin = cleanMarginValue(findColumnValue(row, mapping.margin) || '0');
+    
+    // If margin not in CSV, calculate it
+    if (margin === 0 && positionSize > 0 && entryPrice > 0) {
+      // Check if position_size appears to be in dollar value or contract units
+      // If position_size is much larger than entry_price, it's likely dollar value
+      if (positionSize > entryPrice * 10) {
+        // Position size is likely in dollars (e.g., $20,000)
+        margin = positionSize / leverage;
+      } else {
+        // Position size is likely in contract units (e.g., 0.17 BTC)
+        // Calculate notional value first, then margin
+        margin = (positionSize * entryPrice) / leverage;
+      }
+    }
+    
     const roi = margin > 0 ? (profitLoss / margin) * 100 : 0;
     const duration = calculateDuration(openedAt, closedAt);
     const periodOfDay = getPeriodOfDay(closedAt);

@@ -205,7 +205,19 @@ export const CSVUpload = ({ onTradesExtracted }: CSVUploadProps) => {
           : (trade.entry_price - trade.exit_price) * trade.position_size;
         
         trade.profit_loss = pnl - (trade.funding_fee || 0) - (trade.trading_fee || 0);
-        trade.margin = trade.entry_price * trade.position_size / (trade.leverage || 1);
+        
+        // Only calculate margin if not already provided from CSV
+        if (!trade.margin || trade.margin === 0) {
+          // Check if position_size appears to be in dollar value or contract units
+          if (trade.position_size > trade.entry_price * 10) {
+            // Position size is likely in dollars
+            trade.margin = trade.position_size / (trade.leverage || 1);
+          } else {
+            // Position size is likely in contract units
+            trade.margin = trade.entry_price * trade.position_size / (trade.leverage || 1);
+          }
+        }
+        
         trade.roi = trade.margin > 0 ? (trade.profit_loss / trade.margin) * 100 : 0;
       }
 
