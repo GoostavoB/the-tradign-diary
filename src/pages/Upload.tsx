@@ -745,6 +745,13 @@ const Upload = () => {
           .from('user_settings')
           .update({ onboarding_completed: true })
           .eq('user_id', user.id);
+
+        // Clear extracted trades and navigate to dashboard
+        setExtractedTrades([]);
+        setTradeEdits({});
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
       }
     } catch (error) {
       console.error('Error saving trades:', error);

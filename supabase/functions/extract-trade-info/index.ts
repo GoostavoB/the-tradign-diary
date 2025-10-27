@@ -69,7 +69,7 @@ function extractJSON(text: string): any {
 }
 
 function estimateTradeCount(ocrText: string): number {
-  if (!ocrText) return 1;
+  if (!ocrText) return 10; // Default to expecting 10 trades when no OCR
   
   // Count distinct symbols (BTCUSDT, ETHUSDT, etc.)
   const symbolMatches = ocrText.match(/[A-Z]{3,6}USDT?/gi) || [];
@@ -81,22 +81,26 @@ function estimateTradeCount(ocrText: string): number {
   // Count timestamp patterns (YYYY/MM/DD or similar)
   const dateMatches = ocrText.match(/\d{4}[-\/]\d{2}[-\/]\d{2}/g) || [];
   
+  // Count PnL/profit mentions (usually one per trade)
+  const pnlMatches = ocrText.match(/\b(pnl|profit|loss|p&l)\b/gi) || [];
+  
   // Use the maximum of these indicators
   const estimate = Math.max(
     uniqueSymbols.size,
     Math.floor(sideMatches.length / 2), // Entry + Exit = 2 mentions per trade
-    Math.floor(dateMatches.length / 2)  // Opened + Closed = 2 dates per trade
+    Math.floor(dateMatches.length / 2), // Opened + Closed = 2 dates per trade
+    pnlMatches.length
   );
   
   return Math.max(1, Math.min(estimate, 10)); // Cap at 10 trades
 }
 
 function calculateMaxTokens(estimatedTrades: number, route: 'lite' | 'deep'): number {
-  const baseTokens = route === 'lite' ? 300 : 500;
-  const tokensPerTrade = route === 'lite' ? 200 : 250;
+  const baseTokens = route === 'lite' ? 500 : 800;
+  const tokensPerTrade = route === 'lite' ? 250 : 350;
   
   if (estimatedTrades <= 1) return baseTokens;
-  return baseTokens + (tokensPerTrade * (estimatedTrades - 1));
+  return Math.min(baseTokens + (tokensPerTrade * (estimatedTrades - 1)), 4000);
 }
 
 serve(async (req) => {

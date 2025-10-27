@@ -8,6 +8,7 @@ import { useUploadCredits } from '@/hooks/useUploadCredits';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PreAnalysisConfirmDialog } from './PreAnalysisConfirmDialog';
 import { CreditPurchaseDialog } from './CreditPurchaseDialog';
+import { runOCR } from '@/utils/ocrPipeline';
 
 interface UploadedImage {
   file: File;
@@ -80,9 +81,27 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
             
             const imageBase64 = await base64Promise;
 
+            // Run OCR on the image
+            let ocrResult;
+            try {
+              ocrResult = await runOCR(image.file);
+              console.log(`OCR completed for ${image.file.name}:`, {
+                confidence: ocrResult.confidence,
+                qualityScore: ocrResult.qualityScore,
+                textLength: ocrResult.text.length
+              });
+            } catch (ocrError) {
+              console.error('OCR failed for image:', ocrError);
+              // Continue without OCR data
+            }
+
             const { data, error } = await supabase.functions.invoke('extract-trade-info', {
               body: { 
                 imageBase64: imageBase64,
+                ocrText: ocrResult?.text || null,
+                ocrConfidence: ocrResult?.confidence || null,
+                imageHash: ocrResult?.imageHash || null,
+                perceptualHash: ocrResult?.perceptualHash || null,
               },
             });
 
