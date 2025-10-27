@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { AIInsightCard } from './AIInsightCard';
+import { LSRInsightCard } from './LSRInsightCard';
 import { useHomeInsights } from '@/hooks/useHomeInsights';
 import { useInsightsRotation } from '@/hooks/useInsightsRotation';
 import { Card } from '@/components/ui/card';
@@ -80,6 +81,7 @@ export const AIInsightsBox = memo(({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
+        <LSRInsightCard />
         {visibleInsights.map((insight, index) => (
           <AIInsightCard
             key={`${insight.id}-${index}`}
