@@ -638,8 +638,8 @@ const Upload = () => {
         const edits = tradeEdits[index] || {};
         const finalTrade = { ...trade, ...edits };
         
-        // Create trade hash for duplicate detection
-        const tradeHash = `${finalTrade.symbol}_${finalTrade.opened_at}_${finalTrade.roi}_${finalTrade.profit_loss}`;
+        // Create trade hash for duplicate detection (includes both entry and exit timestamps)
+        const tradeHash = `${finalTrade.symbol}_${finalTrade.opened_at}_${finalTrade.closed_at}_${finalTrade.position_size}_${Math.abs(finalTrade.profit_loss).toFixed(2)}`;
         
         return {
           user_id: user.id,
@@ -672,17 +672,33 @@ const Upload = () => {
         };
       });
 
-      // Check for duplicates
+      // Check for duplicates (ONLY in active trades, not deleted ones)
       const hashes = tradesData.map(t => t.trade_hash);
       const { data: existingTrades } = await supabase
         .from('trades')
-        .select('trade_hash, symbol, trade_date, pnl')
+        .select('trade_hash, symbol, trade_date, pnl, opened_at, closed_at, position_size')
         .eq('user_id', user.id)
+        .is('deleted_at', null)
         .in('trade_hash', hashes);
 
+      // Also check for near-duplicates with time tolerance (±2 seconds)
+      const symbols = [...new Set(tradesData.map(t => t.symbol))];
+      const { data: nearDuplicates } = await supabase
+        .from('trades')
+        .select('symbol, opened_at, closed_at, position_size, pnl')
+        .eq('user_id', user.id)
+        .is('deleted_at', null)
+        .in('symbol', symbols);
+
+      // Find exact hash matches
+      let duplicateMatches: Array<{
+        tradeIndex: number;
+        trade: ExtractedTrade;
+        existing: { symbol: string; trade_date: string; pnl: number };
+      }> = [];
+
       if (existingTrades && existingTrades.length > 0) {
-        // Found duplicates - collect all of them
-        const duplicateMatches = existingTrades.map(existing => {
+        duplicateMatches = existingTrades.map(existing => {
           const duplicateTradeIndex = tradesData.findIndex(t => t.trade_hash === existing.trade_hash);
           return {
             tradeIndex: duplicateTradeIndex,
@@ -694,7 +710,47 @@ const Upload = () => {
             },
           };
         }).filter(d => d.tradeIndex >= 0);
+      }
 
+      // Find time-tolerant duplicates (2 second tolerance on both entry and exit)
+      if (nearDuplicates && nearDuplicates.length > 0) {
+        tradesData.forEach((newTrade, index) => {
+          // Skip if already found as exact duplicate
+          if (duplicateMatches.some(d => d.tradeIndex === index)) return;
+
+          const match = nearDuplicates.find(existing => {
+            if (existing.symbol !== newTrade.symbol) return false;
+            
+            const entryMatch = Math.abs(
+              new Date(existing.opened_at).getTime() - new Date(newTrade.opened_at).getTime()
+            ) <= 2000; // 2 second tolerance
+            
+            const exitMatch = Math.abs(
+              new Date(existing.closed_at).getTime() - new Date(newTrade.closed_at).getTime()
+            ) <= 2000; // 2 second tolerance
+            
+            const sizeMatch = Math.abs((existing.position_size || 0) - newTrade.position_size) < 0.0001;
+            const pnlMatch = Math.abs((existing.pnl || 0) - newTrade.pnl) < 0.01; // penny tolerance
+            
+            return entryMatch && exitMatch && sizeMatch && pnlMatch;
+          });
+
+          if (match) {
+            duplicateMatches.push({
+              tradeIndex: index,
+              trade: extractedTrades[index],
+              existing: {
+                symbol: match.symbol,
+                trade_date: match.opened_at,
+                pnl: match.pnl || 0,
+              },
+            });
+          }
+        });
+      }
+
+      if (duplicateMatches.length > 0) {
+        // Found duplicates
         setBatchDuplicates({
           open: true,
           duplicates: duplicateMatches,
