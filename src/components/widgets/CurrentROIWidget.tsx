@@ -2,11 +2,12 @@ import { memo, useState } from 'react';
 import { WidgetWrapper } from './WidgetWrapper';
 import { AnimatedCounter } from '@/components/AnimatedCounter';
 import { formatCurrency, formatPercent } from '@/utils/formatNumber';
-import { TrendingUp, TrendingDown, Edit2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Edit2, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
@@ -163,7 +164,21 @@ export const CurrentROIWidget = memo(({
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">{t('widgets.currentCapital')}</span>
+            <div className="flex items-center gap-1">
+              <span className="text-muted-foreground">{t('widgets.currentCapital')}</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-3 w-3 text-muted-foreground/60 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-xs">
+                      Invested Trading Capital + Total Profit - Withdrawn Capital
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
             <span className="font-medium">
               <BlurredCurrency amount={currentBalance} className="inline" />
             </span>
