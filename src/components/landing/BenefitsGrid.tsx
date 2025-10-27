@@ -14,31 +14,43 @@ const BenefitsGrid = () => {
       icon: Shield,
       titleKey: "landing.benefits.noApiKeys.title",
       descriptionKey: "landing.benefits.noApiKeys.description",
+      fallbackTitle: "No API keys. Maximum security.",
+      fallbackDescription: "Avoid risks and simplify setup. No API keys means no access vulnerabilities."
     },
     {
       icon: Building2,
       titleKey: "landing.benefits.allExchanges.title",
       descriptionKey: "landing.benefits.allExchanges.description",
+      fallbackTitle: "Compatible with every exchange.",
+      fallbackDescription: "Works seamlessly with Binance, Bybit, OKX, and all major platforms."
     },
     {
       icon: Lock,
       titleKey: "landing.benefits.privateDefault.title",
       descriptionKey: "landing.benefits.privateDefault.description",
+      fallbackTitle: "Privacy guaranteed by default.",
+      fallbackDescription: "Your data stays yours. End-to-end encryption and zero data sharing."
     },
     {
       icon: Shield,
       titleKey: "landing.benefits.saferDesign.title",
       descriptionKey: "landing.benefits.saferDesign.description",
+      fallbackTitle: "Security first, by design.",
+      fallbackDescription: "Built with industry-leading security standards from the ground up."
     },
     {
       icon: Upload,
       titleKey: "landing.benefits.uploadGo.title",
       descriptionKey: "landing.benefits.uploadGo.description",
+      fallbackTitle: "Upload and trade instantly.",
+      fallbackDescription: "Screenshot your trades and upload. AI handles the rest in seconds."
     },
     {
       icon: Zap,
       titleKey: "landing.benefits.fasterUploads.title",
       descriptionKey: "landing.benefits.fasterUploads.description",
+      fallbackTitle: "40× Faster Uploads",
+      fallbackDescription: "Batch upload from screenshots. No more manual entry."
     },
   ];
 
@@ -75,10 +87,10 @@ const BenefitsGrid = () => {
           className="text-center mb-16 space-y-4"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-            {t('landing.benefits.mainTitle')}
+            {t('landing.benefits.mainTitle', 'Built for Every Trader')}
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            {t('landing.benefits.mainSubtitle')}
+            {t('landing.benefits.mainSubtitle', 'Security, privacy, and compatibility with every exchange.')}
           </p>
         </motion.div>
 
@@ -125,10 +137,10 @@ const BenefitsGrid = () => {
                   
                   <h3 className="text-xl font-semibold mb-3 text-foreground 
                                group-hover:text-primary transition-colors duration-300">
-                    {t(benefit.titleKey)}
+                    {t(benefit.titleKey, benefit.fallbackTitle)}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    {t(benefit.descriptionKey)}
+                    {t(benefit.descriptionKey, benefit.fallbackDescription)}
                   </p>
                 </div>
               </motion.div>
@@ -151,9 +163,9 @@ const BenefitsGrid = () => {
                      px-8 py-6 text-lg font-semibold 
                      shadow-lg hover:shadow-xl hover:scale-105
                      transition-all duration-300"
-            aria-label={t("landing.benefits.ctaButton")}
+            aria-label={t("landing.benefits.ctaButton", "Try it free now")}
           >
-            {t("landing.benefits.ctaButton")}
+            {t("landing.benefits.ctaButton", "Try it free now")}
           </Button>
         </motion.div>
       </div>

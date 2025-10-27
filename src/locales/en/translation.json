@@ -29,9 +29,7 @@
     "upload": "Upload",
     "view": "View",
     "customize": "Customize",
-    "settings": "Settings",
-    "inDevelopment": "In Development",
-    "comingSoon": "Coming Soon"
+    "settings": "Settings"
   },
   "landing": {
     "hero": {
@@ -40,20 +38,6 @@
       "cta": "Start Free Trial"
     },
     "stats": {
-      "fasterUploads": {
-        "title": "40× Faster Uploads",
-        "description": "Batch upload from screenshots. No more manual entry."
-      },
-      "knowEveryFee": {
-        "title": "Know Every Fee",
-        "description": "Compare exchanges and uncover hidden costs."
-      },
-      "yourRules": {
-        "title": "Your Dashboard, Your Rules",
-        "description": "Fully customizable metrics, colors, and layout."
-      }
-    },
-    "benefits": {
       "fasterUploads": {
         "title": "40× Faster Uploads",
         "description": "Batch upload from screenshots. No more manual entry."
@@ -188,32 +172,44 @@
     "valueBar": {
       "message": "Clear data today, better decisions on your next trade"
     },
-  "benefits": {
-    "mainTitle": "Built for Every Trader",
-    "mainSubtitle": "Security, privacy, and compatibility with every exchange.",
-    "noApiKeys": {
-      "title": "No API keys. Maximum security.",
-      "description": "Avoid risks and simplify setup. No API keys means no access vulnerabilities."
+    "benefits": {
+      "mainTitle": "Built for Every Trader",
+      "mainSubtitle": "Security, privacy, and compatibility with every exchange.",
+      "fasterUploads": {
+        "title": "40× Faster Uploads",
+        "description": "Batch upload from screenshots. No more manual entry."
+      },
+      "knowEveryFee": {
+        "title": "Know Every Fee",
+        "description": "Compare exchanges and uncover hidden costs."
+      },
+      "yourRules": {
+        "title": "Your Dashboard, Your Rules",
+        "description": "Fully customizable metrics, colors, and layout."
+      },
+      "noApiKeys": {
+        "title": "No API keys. Maximum security.",
+        "description": "Avoid risks and simplify setup. No API keys means no access vulnerabilities."
+      },
+      "allExchanges": {
+        "title": "Compatible with every exchange.",
+        "description": "Works seamlessly with Binance, Bybit, OKX, and all major platforms."
+      },
+      "privateDefault": {
+        "title": "Privacy guaranteed by default.",
+        "description": "Your data stays yours. End-to-end encryption and zero data sharing."
+      },
+      "saferDesign": {
+        "title": "Security first, by design.",
+        "description": "Built with industry-leading security standards from the ground up."
+      },
+      "uploadGo": {
+        "title": "Upload and trade instantly.",
+        "description": "Screenshot your trades and upload. AI handles the rest in seconds."
+      },
+      "trustedBy": "Trusted by 45,000+ traders worldwide",
+      "ctaButton": "Try it free now"
     },
-    "allExchanges": {
-      "title": "Compatible with every exchange.",
-      "description": "Works seamlessly with Binance, Bybit, OKX, and all major platforms."
-    },
-    "privateDefault": {
-      "title": "Privacy guaranteed by default.",
-      "description": "Your data stays yours. End-to-end encryption and zero data sharing."
-    },
-    "saferDesign": {
-      "title": "Security first, by design.",
-      "description": "Built with industry-leading security standards from the ground up."
-    },
-    "uploadGo": {
-      "title": "Upload and trade instantly.",
-      "description": "Screenshot your trades and upload. AI handles the rest in seconds."
-    },
-    "trustedBy": "Trusted by 45,000+ traders worldwide",
-    "ctaButton": "Try it free now"
-  },
     "cta": {
       "title": "Ready to Level Up Your Trading?",
       "subtitle": "Join thousands of traders improving their discipline and profitability.",

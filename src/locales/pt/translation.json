@@ -29,26 +29,10 @@
     "upload": "Enviar",
     "view": "Ver",
     "customize": "Personalizar",
-    "settings": "Configurações",
-    "inDevelopment": "Em Desenvolvimento",
-    "comingSoon": "Em Breve"
+    "settings": "Configurações"
   },
   "landing": {
     "stats": {
-      "fasterUploads": {
-        "title": "40× Mais Rápido",
-        "description": "Carregamento em lote a partir de capturas. Sem entrada manual."
-      },
-      "knowEveryFee": {
-        "title": "Conheça Todas as Taxas",
-        "description": "Compare exchanges e descubra custos ocultos."
-      },
-      "yourRules": {
-        "title": "Seu Painel, Suas Regras",
-        "description": "Métricas, cores e layout totalmente personalizáveis."
-      }
-    },
-    "benefits": {
       "fasterUploads": {
         "title": "40× Mais Rápido",
         "description": "Carregamento em lote a partir de capturas. Sem entrada manual."
@@ -145,6 +129,18 @@
     "benefits": {
       "mainTitle": "Construído para Cada Trader",
       "mainSubtitle": "Segurança, privacidade e compatibilidade com todas as exchanges.",
+      "fasterUploads": {
+        "title": "40× Mais Rápido",
+        "description": "Carregamento em lote a partir de capturas. Sem entrada manual."
+      },
+      "knowEveryFee": {
+        "title": "Conheça Todas as Taxas",
+        "description": "Compare exchanges e descubra custos ocultos."
+      },
+      "yourRules": {
+        "title": "Seu Painel, Suas Regras",
+        "description": "Métricas, cores e layout totalmente personalizáveis."
+      },
       "noApiKeys": {
         "title": "Sem chaves API. Máxima segurança.",
         "description": "Evite riscos e simplifique a configuração. Sem chaves API significa sem vulnerabilidades de acesso."

@@ -57,11 +57,21 @@ if (process.env.NODE_ENV !== 'production') {
   
   // Critical keys validation
   const criticalKeys = [
-    // Landing page
+    // Landing page - Hero
     'landing.hero.titleShort',
     'landing.hero.subtitle',
     'landing.hero.benefits',
     'landing.hero.ctaPrimary',
+    
+    // Landing page - Benefits (with fallbacks)
+    'landing.benefits.mainTitle',
+    'landing.benefits.ctaButton',
+    'landing.benefits.fasterUploads.title',
+    'landing.benefits.fasterUploads.description',
+    'landing.benefits.uploadGo.title',
+    'landing.benefits.uploadGo.description',
+    
+    // Landing page - Proof & Testimonials
     'landing.proofBar.activeTraders',
     'landing.proofBar.tradesAnalyzed',
     'landing.proofBar.averageRating',

@@ -11,8 +11,6 @@
     "success": "Thành công",
     "inDevelopment": "Đang Phát Triển",
     "comingSoon": "Sắp Ra Mắt",
-    "inDevelopment": "Đang Phát Triển",
-    "comingSoon": "Sắp Ra Mắt",
     "confirm": "Xác nhận",
     "close": "Đóng",
     "back": "Quay lại",
@@ -35,20 +33,6 @@
   },
   "landing": {
     "stats": {
-      "fasterUploads": {
-        "title": "Nhanh Hơn 40 Lần",
-        "description": "Tải lên hàng loạt từ ảnh chụp màn hình. Không cần nhập thủ công."
-      },
-      "knowEveryFee": {
-        "title": "Biết Mọi Phí",
-        "description": "So sánh sàn giao dịch và phát hiện chi phí ẩn."
-      },
-      "yourRules": {
-        "title": "Bảng Điều Khiển Của Bạn",
-        "description": "Chỉ số, màu sắc và bố cục hoàn toàn tùy chỉnh."
-      }
-    },
-    "benefits": {
       "fasterUploads": {
         "title": "Nhanh Hơn 40 Lần",
         "description": "Tải lên hàng loạt từ ảnh chụp màn hình. Không cần nhập thủ công."
@@ -145,6 +129,18 @@
     "benefits": {
       "mainTitle": "Xây Dựng Cho Mọi Trader",
       "mainSubtitle": "Bảo mật, quyền riêng tư và tương thích với mọi sàn giao dịch.",
+      "fasterUploads": {
+        "title": "Nhanh Hơn 40 Lần",
+        "description": "Tải lên hàng loạt từ ảnh chụp màn hình. Không cần nhập thủ công."
+      },
+      "knowEveryFee": {
+        "title": "Biết Mọi Phí",
+        "description": "So sánh sàn giao dịch và phát hiện chi phí ẩn."
+      },
+      "yourRules": {
+        "title": "Bảng Điều Khiển Của Bạn",
+        "description": "Chỉ số, màu sắc và bố cục hoàn toàn tùy chỉnh."
+      },
       "noApiKeys": {
         "title": "Không cần khóa API. Bảo mật tối đa.",
         "description": "Tránh rủi ro và đơn giản hóa thiết lập. Không có khóa API nghĩa là không có lỗ hổng truy cập."

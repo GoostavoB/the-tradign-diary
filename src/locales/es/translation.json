@@ -29,26 +29,10 @@
     "upload": "Subir",
     "view": "Ver",
     "customize": "Personalizar",
-    "settings": "Configuración",
-    "inDevelopment": "En Desarrollo",
-    "comingSoon": "Próximamente"
+    "settings": "Configuración"
   },
   "landing": {
     "stats": {
-      "fasterUploads": {
-        "title": "40× Más Rápido",
-        "description": "Carga por lotes desde capturas. Sin entrada manual."
-      },
-      "knowEveryFee": {
-        "title": "Conoce Cada Comisión",
-        "description": "Compara exchanges y descubre costos ocultos."
-      },
-      "yourRules": {
-        "title": "Tu Panel, Tus Reglas",
-        "description": "Métricas, colores y diseño completamente personalizables."
-      }
-    },
-    "benefits": {
       "fasterUploads": {
         "title": "40× Más Rápido",
         "description": "Carga por lotes desde capturas. Sin entrada manual."
@@ -145,6 +129,18 @@
     "benefits": {
       "mainTitle": "Construido para Cada Trader",
       "mainSubtitle": "Seguridad, privacidad y compatibilidad con todos los exchanges.",
+      "fasterUploads": {
+        "title": "40× Más Rápido",
+        "description": "Carga por lotes desde capturas. Sin entrada manual."
+      },
+      "knowEveryFee": {
+        "title": "Conoce Cada Comisión",
+        "description": "Compara exchanges y descubre costos ocultos."
+      },
+      "yourRules": {
+        "title": "Tu Panel, Tus Reglas",
+        "description": "Métricas, colores y diseño completamente personalizables."
+      },
       "noApiKeys": {
         "title": "Sin claves API. Máxima seguridad.",
         "description": "Evita riesgos y simplifica la configuración. Sin claves API significa sin vulnerabilidades de acceso."
