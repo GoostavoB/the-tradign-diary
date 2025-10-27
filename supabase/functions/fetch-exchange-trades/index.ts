@@ -6,6 +6,23 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Exchange display name mapping for reliable fallback
+const EXCHANGE_DISPLAY_NAMES: Record<string, string> = {
+  'binance': 'Binance',
+  'bybit': 'Bybit',
+  'okx': 'OKX',
+  'kucoin': 'KuCoin',
+  'gateio': 'Gate.io',
+  'mexc': 'MEXC',
+  'bingx': 'BingX',
+  'bitfinex': 'Bitfinex',
+  'kraken': 'Kraken',
+  'coinbase': 'Coinbase',
+  'bitstamp': 'Bitstamp',
+  'huobi': 'Huobi',
+  'bitget': 'Bitget',
+};
+
 interface FetchRequest {
   connectionId: string;
   mode: 'preview' | 'import';
@@ -191,7 +208,17 @@ Deno.serve(async (req) => {
     
     console.log(`[${connection.exchange_name}] Connection successful`);
     
-    const displayName = exchangeService.getExchangeName(connection.exchange_name) || connection.exchange_name;
+    // Get exchange display name with guaranteed fallback
+    const exchangeName = exchangeService.getExchangeName(connection.exchange_name);
+    const displayName = exchangeName 
+      || EXCHANGE_DISPLAY_NAMES[connection.exchange_name.toLowerCase()] 
+      || connection.exchange_name.toUpperCase();
+    
+    // Log warning if adapter getName() failed
+    if (!exchangeName) {
+      console.warn(`[Warning] getExchangeName returned undefined for "${connection.exchange_name}", using fallback: "${displayName}"`);
+    }
+    
     const tradingType = connection.trading_type || 'spot';
 
     // Futures health check when applicable
@@ -274,11 +301,17 @@ Deno.serve(async (req) => {
     // Normalize trades for database using UI/DB schema
     console.log(`[${displayName}] Normalizing ${executedTrades.length} trades for database...`);
     
+    // Validate broker name before using it
+    const validBrokerName = EXCHANGE_DISPLAY_NAMES[connection.exchange_name.toLowerCase()] || displayName;
+    if (validBrokerName !== displayName) {
+      console.warn(`[Warning] Broker name mismatch. Using validated name: "${validBrokerName}" instead of "${displayName}"`);
+    }
+    
     const allTrades = executedTrades.map(trade => ({
       user_id: user.id,
       symbol: (trade.symbol || '').toUpperCase().replace('-', '/').replace('_', '/'),
       side: trade.side === 'buy' ? 'long' : trade.side === 'sell' ? 'short' : null,
-      broker: displayName,
+      broker: validBrokerName,
       entry_price: Number(trade.price) || 0,
       exit_price: Number(trade.price) || 0,
       position_size: Number(trade.quantity) || 0,
@@ -289,7 +322,7 @@ Deno.serve(async (req) => {
       opened_at: new Date(trade.timestamp).toISOString(),
       closed_at: new Date(trade.timestamp).toISOString(),
       trade_date: new Date(trade.timestamp).toISOString(),
-      notes: `Imported from ${displayName}${trade.orderId ? ` (Order ${trade.orderId})` : ''}`,
+      notes: `Imported from ${validBrokerName}${trade.orderId ? ` (Order ${trade.orderId})` : ''}`,
     }));
 
     // Only delete old pending trades if we have new trades to insert
