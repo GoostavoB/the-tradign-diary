@@ -135,9 +135,9 @@ const Pricing = () => {
       <section className="py-16 md:py-20 px-6" aria-labelledby="pricing-heading">
         <div className="container mx-auto max-w-6xl">
           {/* Speed banner */}
-          <div className="text-center mb-6 p-4 bg-primary/10 rounded-lg">
-            <p className="text-base font-medium">
-              {t('pricing.speedBanner', 'Get 3 actions right after your first upload')}
+          <div className="text-center mb-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
+            <p className="text-base font-medium text-primary">
+              {t('pricing.speedBanner', '🚀 Start Improving Your Trading Results Today — Get 3 AI Insights Instantly')}
             </p>
           </div>
 
