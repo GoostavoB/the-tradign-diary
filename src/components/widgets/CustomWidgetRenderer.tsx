@@ -202,17 +202,37 @@ export const CustomWidgetRenderer = ({ widget, onDelete, showAddToDashboard = fa
         .eq('user_id', user.id)
         .single();
 
-      const currentPositions = (settings?.layout_json as any[]) || [];
+      // Handle both old format (direct array) and new format (object with positions)
+      const layoutData = settings?.layout_json as any;
+      let currentPositions: any[] = [];
+      let columnCount = 3; // default
+      
+      if (Array.isArray(layoutData)) {
+        // Legacy format: direct array
+        currentPositions = layoutData;
+      } else if (layoutData?.positions && Array.isArray(layoutData.positions)) {
+        // New format: object with positions and columnCount
+        currentPositions = layoutData.positions;
+        columnCount = layoutData.columnCount || 3;
+      }
+
       const newPosition = {
         id: `custom-${widget.id}`,
         column: 0,
         row: currentPositions.length > 0 ? Math.max(...currentPositions.map((p: any) => p.row)) + 1 : 0,
       };
 
+      // Save in the new format (object with positions and columnCount)
+      const updatedLayout = {
+        positions: [...currentPositions, newPosition],
+        columnCount: columnCount
+      };
+
       await supabase
         .from('user_settings')
         .update({
-          layout_json: [...currentPositions, newPosition] as any,
+          layout_json: updatedLayout as any,
+          updated_at: new Date().toISOString()
         })
         .eq('user_id', user.id);
 
