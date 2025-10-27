@@ -3952,6 +3952,39 @@ export type Database = {
         }
         Relationships: []
       }
+      withdrawal_log: {
+        Row: {
+          amount_withdrawn: number
+          created_at: string
+          id: string
+          notes: string | null
+          total_after: number
+          updated_at: string
+          user_id: string
+          withdrawal_date: string
+        }
+        Insert: {
+          amount_withdrawn: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          total_after: number
+          updated_at?: string
+          user_id: string
+          withdrawal_date?: string
+        }
+        Update: {
+          amount_withdrawn?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          total_after?: number
+          updated_at?: string
+          user_id?: string
+          withdrawal_date?: string
+        }
+        Relationships: []
+      }
       xp_activity_log: {
         Row: {
           activity_type: string

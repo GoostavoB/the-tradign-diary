@@ -301,4 +301,11 @@ export const pageMeta = {
     canonical: 'https://www.thetradingdiary.com/tools',
     robots: 'noindex,nofollow',
   },
+  withdrawals: {
+    title: 'Withdrawals - The Trading Diary',
+    description: 'Track your capital withdrawals for accurate margin calculations and tax reporting.',
+    keywords: 'withdrawals, capital management, tax tracking, trading withdrawals',
+    canonical: 'https://www.thetradingdiary.com/withdrawals',
+    robots: 'noindex,nofollow',
+  },
 };

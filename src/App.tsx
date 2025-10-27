@@ -72,6 +72,7 @@ const FriendLeaderboard = lazy(() => import("./pages/FriendLeaderboard"));
 const LongShortRatio = lazy(() => import("./pages/LongShortRatio"));
 const EconomicCalendar = lazy(() => import("./pages/EconomicCalendar"));
 const TaxReports = lazy(() => import("./pages/TaxReports"));
+const Withdrawals = lazy(() => import("./pages/Withdrawals"));
 // Phase 2: Trading Accounts module - temporarily disabled for backlog #18 (incomplete form)
 // const Accounts = lazy(() => import("./pages/Accounts"));
 const PerformanceAlerts = lazy(() => import("./pages/PerformanceAlerts"));
@@ -213,6 +214,7 @@ const AppRoutes = () => {
         {/* Phase 2: Economic Calendar and Performance Alerts - temporarily disabled for backlog #30 */}
         {/* <Route path="/economic-calendar" element={<ProtectedRoute><EconomicCalendar /></ProtectedRoute>} /> */}
         <Route path="/tax-reports" element={<ProtectedRoute><TaxReports /></ProtectedRoute>} />
+        <Route path="/withdrawals" element={<ProtectedRoute><Withdrawals /></ProtectedRoute>} />
         {/* Phase 2: Trading Accounts - temporarily disabled for backlog #18 */}
         {/* <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} /> */}
         {/* <Route path="/performance-alerts" element={<ProtectedRoute><PerformanceAlerts /></ProtectedRoute>} /> */}

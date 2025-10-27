@@ -3,7 +3,7 @@ import {
   BarChart3, Upload, TrendingUp, Target, Brain, Trophy, Settings2, BookOpen, HelpCircle, 
   LineChart, LogOut, Zap, RefreshCw, Wallet, Receipt, BookMarked, Users, GitCompare, 
   Shield, FileBarChart, ClipboardList, Calendar, Bell, FileText, ChevronDown, Search,
-  Plus, Archive, Star, Flame, Award, PieChart, Heart, Image, Download, Info, Accessibility
+  Plus, Archive, Star, Flame, Award, PieChart, Heart, Image, Download, Info, Accessibility, TrendingDown
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
@@ -117,6 +117,7 @@ export function AppSidebar() {
       items: [
         { title: t('navigation.reports'), url: '/reports', icon: FileBarChart, iconName: 'FileBarChart', keywords: ['reports', 'documents', 'generate', 'export', 'monthly', 'weekly', 'custom', 'scheduled', 'automated', 'history', 'download', 'summary', 'kpi', 'metrics', 'analysis', 'period', 'excel', 'csv'] },
         { title: t('navigation.taxReports'), url: '/tax-reports', icon: FileText, iconName: 'FileText', keywords: ['tax', 'taxes', 'irs', 'filings', 'legal', 'compliance', 'capital', 'gains', 'losses', 'year', 'end', 'accountant', 'documentation', 'fifo', 'lifo', 'accounting', 'fiscal', 'revenue', 'income'] },
+        { title: t('navigation.withdrawals'), url: '/withdrawals', icon: TrendingDown, iconName: 'TrendingDown', keywords: ['withdrawals', 'withdraw', 'capital', 'money', 'funds', 'cash', 'out', 'profit', 'taking', 'tax', 'margin', 'balance', 'history', 'tracking', 'record', 'log'] },
         { title: t('navigation.myMetrics'), url: '/my-metrics', icon: Star, iconName: 'Star', keywords: ['metrics', 'custom', 'kpi', 'benchmarks', 'personal', 'indicators', 'measure', 'track', 'performance', 'own', 'create', 'define', 'personalized'] },
       ],
     },
