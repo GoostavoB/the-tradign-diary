@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Trash2, TrendingUp, TrendingDown, Plus } from 'lucide-react';
+import { Trash2, TrendingUp, TrendingDown, Plus, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { formatNumber, formatPercent } from '@/utils/formatNumber';
@@ -26,16 +26,42 @@ interface CustomWidgetRendererProps {
 export const CustomWidgetRenderer = ({ widget, onDelete, showAddToDashboard = false }: CustomWidgetRendererProps) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [addingToDashboard, setAddingToDashboard] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchWidgetData();
+
+    // Subscribe to real-time changes on trades table
+    const channel = supabase
+      .channel('custom-widget-trades')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'trades',
+        },
+        (payload) => {
+          console.log('Trade change detected, refreshing widget data');
+          fetchWidgetData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [widget]);
 
-  const fetchWidgetData = async () => {
+  const fetchWidgetData = async (isManualRefresh = false) => {
     try {
-      setLoading(true);
+      if (isManualRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -59,6 +85,7 @@ export const CustomWidgetRenderer = ({ widget, onDelete, showAddToDashboard = fa
       });
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -415,6 +442,16 @@ export const CustomWidgetRenderer = ({ widget, onDelete, showAddToDashboard = fa
           <h3 className="text-lg font-semibold">{widget.title}</h3>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => fetchWidgetData(true)}
+            disabled={refreshing}
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+            title="Refresh widget data"
+          >
+            <RefreshCw className={`h-4 w-4 text-muted-foreground ${refreshing ? 'animate-spin' : ''}`} />
+          </Button>
           {showAddToDashboard && (
             <Button
               variant="ghost"
