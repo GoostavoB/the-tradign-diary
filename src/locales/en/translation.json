@@ -332,9 +332,9 @@
     "perMonthBilledAnnually": "month, billed annually",
     "savingsAmount": "Save ${{amount}}/year",
     "guaranteeNote": "7-day money-back guarantee • Cancel anytime • No hidden fees",
+    "uploadNote": "Up to 10 trades per upload",
     "speedBanner": "Get 3 actions right after your first upload",
     "saveBadge": "Save 2 months",
-    "tradeNote": "Each closed order counts as 1 trade",
     "trialTerms": "7-day trial • Cancel anytime • Prorated refund in first 14 days on annual",
     "noCardRequired": "No credit card required",
     "hero": {

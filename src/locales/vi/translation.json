@@ -325,6 +325,7 @@
     "perMonthBilledAnnually": "tháng, thanh toán hàng năm",
     "savingsAmount": "Tiết kiệm ${{amount}}/năm",
     "guaranteeNote": "Đảm bảo hoàn tiền trong 7 ngày • Hủy bất cứ lúc nào • Không có phí ẩn",
+    "uploadNote": "Tối đa 10 giao dịch mỗi lần tải lên",
     "hero": {
       "title": "Giao dịch với sự rõ ràng.",
       "subtitle": "Nhật ký giao dịch được hỗ trợ bởi AI cho nhà đầu tư tiền điện tử. Ghi lại mọi giao dịch, tìm kiếm mẫu và theo dõi lợi thế của bạn.",

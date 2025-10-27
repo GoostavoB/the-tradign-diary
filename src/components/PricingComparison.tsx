@@ -14,59 +14,57 @@ const PricingComparison = () => {
 
   const features = [
     {
-      category: t('pricing.comparison.categories.aiAnalytics'),
+      category: t('pricing.comparison.categories.uploads'),
       items: [
-        { name: t('pricing.comparison.features.aiUploads'), basic: "50/mo", pro: "100/mo", elite: "300/mo" },
-        { name: t('pricing.comparison.features.manualUploads'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.aiAnalysis'), basic: false, pro: "1/week", elite: "5/week" },
-        { name: t('pricing.comparison.features.customWidgets'), basic: "15+", pro: "3", elite: "10" },
-        { name: t('pricing.comparison.features.advancedCharts'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.imageUploads'), basic: "20/mo", pro: "50/mo", elite: "120/mo" },
+        { name: t('pricing.comparison.features.tradesPerUpload'), basic: "10", pro: "10", elite: "10" },
+        { name: t('pricing.comparison.features.manualEntry'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.csvExport'), basic: true, pro: true, elite: true },
       ]
     },
     {
-      category: t('pricing.comparison.categories.tradingTools'),
+      category: t('pricing.comparison.categories.accounts'),
       items: [
+        { name: t('pricing.comparison.features.connectedAccounts'), basic: "1", pro: "Unlimited", elite: "Unlimited" },
+      ]
+    },
+    {
+      category: t('pricing.comparison.categories.features'),
+      items: [
+        { name: t('pricing.comparison.features.aiInsights'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.customDashboard'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.tradingHistory'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.journal'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.drawdownAnalysis'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.leverageCalculator'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.marketData'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.equityForecast'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.feeAnalysis'), basic: false, pro: true, elite: true },
         { name: t('pricing.comparison.features.tradingPlan'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.preTradeChecklist'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.goalsTracking'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.tradeReplay'), basic: false, pro: false, elite: true },
-        { name: t('pricing.comparison.features.positionCalculator'), basic: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.goals'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.psychology'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.reports'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.taxReports'), basic: false, pro: true, elite: true },
       ]
     },
     {
-      category: t('pricing.comparison.categories.journaling'),
+      category: t('pricing.comparison.categories.aiMetrics'),
       items: [
-        { name: t('pricing.comparison.features.basicJournal'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.emotionalTimeline'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.richJournal'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.patternAnalysis'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.customMetrics'), basic: false, pro: "3/mo", elite: "10/mo" },
       ]
     },
     {
-      category: t('pricing.comparison.categories.riskManagement'),
+      category: t('pricing.comparison.categories.support'),
       items: [
-        { name: t('pricing.comparison.features.feeAnalytics'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.riskDashboard'), basic: false, pro: false, elite: true },
-        { name: t('pricing.comparison.features.drawdownAnalysis'), basic: false, pro: false, elite: true },
-        { name: t('pricing.comparison.features.performanceAlerts'), basic: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.emailSupport'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.prioritySupport'), basic: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.earlyAccess'), basic: false, pro: false, elite: true },
       ]
     },
     {
-      category: t('pricing.comparison.categories.integrations'),
+      category: t('pricing.comparison.categories.extras'),
       items: [
-        { name: t('pricing.comparison.features.csvImport'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.exchangeConnections'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.autoRefresh'), basic: false, pro: true, elite: true },
-      ]
-    },
-    {
-      category: t('pricing.comparison.categories.social'),
-      items: [
-        { name: t('pricing.comparison.features.viewFeed'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.createPosts'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.leaderboard'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.xpBadges'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.challenges'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.extraCredits'), basic: "$2/10", pro: "$2/10", elite: "$1/10 (50% off)" },
       ]
     },
   ];

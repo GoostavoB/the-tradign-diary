@@ -1162,6 +1162,7 @@
       "perMonthBilledAnnually": "mes, facturado anualmente",
       "savingsAmount": "Ahorra ${{amount}}/año",
       "guaranteeNote": "Garantía de devolución de 7 días • Cancela en cualquier momento • Sin tarifas ocultas",
+      "uploadNote": "Hasta 10 operaciones por subida",
       "hero": {
         "title": "Opera con claridad.",
         "subtitle": "Un diario de trading impulsado por IA para inversores en cripto. Captura cada operación, encuentra patrones y rastrea tu ventaja.",

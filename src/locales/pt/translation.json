@@ -1152,6 +1152,7 @@
       "perMonthBilledAnnually": "mês, cobrado anualmente",
       "savingsAmount": "Economize ${{amount}}/ano",
       "guaranteeNote": "Garantia de reembolso de 7 dias • Cancele a qualquer momento • Sem taxas ocultas",
+      "uploadNote": "Até 10 operações por upload",
       "hero": {
         "title": "Opere com clareza.",
         "subtitle": "Um diário de trading alimentado por IA para investidores em cripto. Capture cada operação, encontre padrões e acompanhe sua vantagem.",

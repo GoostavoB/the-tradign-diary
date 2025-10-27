@@ -1,0 +1,68 @@
+{
+  "pricing": {
+    "uploadNote": "Up to 10 trades per upload",
+    "plans": {
+      "basic": {
+        "name": "Starter",
+        "description": "Perfect for beginners",
+        "features": {
+          "uploads": "20 uploads/month • Up to 10 trades per upload",
+          "accounts": "1 connected account",
+          "aiInsights": "AI Insights on the homepage",
+          "tradingHistory": "Trading history",
+          "manualEntry": "Manual trade entry",
+          "spotWallet": "Spot wallet",
+          "journal": "Trading journal",
+          "drawdown": "Drawdown analysis",
+          "leverageCalculator": "Leverage stop calculator",
+          "marketData": "Market data",
+          "equityForecast": "Smart equity forecast projections",
+          "emailSupport": "Email support",
+          "noFeeAnalysis": "Fee analysis: not included"
+        }
+      },
+      "pro": {
+        "features": {
+          "uploads": "50 uploads/month • Up to 10 trades per upload",
+          "unlimitedAccounts": "Unlimited accounts",
+          "feeAnalysis": "Fee analysis",
+          "tradingPlan": "Trading plan",
+          "goals": "Goals",
+          "psychology": "Trading psychology",
+          "reports": "Reports",
+          "taxReports": "Tax reports",
+          "customMetrics": "Custom AI metrics: 3 per month",
+          "everythingBasic": "Everything in Starter"
+        }
+      },
+      "elite": {
+        "features": {
+          "uploads": "120 uploads/month • Up to 10 trades per upload",
+          "unlimitedAccounts": "Unlimited accounts",
+          "customMetrics": "Custom AI metrics: 10 per month",
+          "earlyAccess": "Early access to new features",
+          "prioritySupport": "Premium priority support",
+          "extraCreditsDiscount": "50% off extra credits",
+          "everythingPro": "Everything in Pro"
+        }
+      }
+    },
+    "comparison": {
+      "categories": {
+        "uploads": "Uploads & Accounts",
+        "features": "Core Features",
+        "aiMetrics": "AI Metrics",
+        "support": "Support",
+        "extras": "Extras"
+      },
+      "features": {
+        "imageUploads": "Image uploads per month",
+        "tradesPerUpload": "Trades per upload",
+        "manualEntry": "Manual trade entry",
+        "csvExport": "CSV export only",
+        "connectedAccounts": "Connected accounts",
+        "customMetrics": "Custom AI metrics"
+      }
+    }
+  }
+}
