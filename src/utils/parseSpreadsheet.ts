@@ -16,6 +16,43 @@ export function isExcelFile(file: File): boolean {
 }
 
 /**
+ * Robust file type detection using extension, MIME type, and magic bytes
+ */
+export async function detectFileType(file: File): Promise<'excel' | 'csv'> {
+  // Check extension first
+  const lower = file.name.toLowerCase();
+  if (/\.(xlsx|xls|xlsm)$/i.test(lower)) return 'excel';
+  
+  // Check MIME type
+  const mime = (file.type || '').toLowerCase();
+  if (mime.includes('sheet') || mime.includes('excel') || 
+      mime === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+      mime === 'application/vnd.ms-excel' ||
+      mime === 'application/zip') {
+    return 'excel';
+  }
+  
+  // Check magic bytes (file signature)
+  try {
+    const buffer = await file.slice(0, 8).arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+    
+    // XLSX: ZIP file signature (0x50 0x4B - "PK")
+    if (bytes[0] === 0x50 && bytes[1] === 0x4B) return 'excel';
+    
+    // Legacy XLS: OLE Compound File signature (0xD0 0xCF 0x11 0xE0)
+    if (bytes[0] === 0xD0 && bytes[1] === 0xCF && bytes[2] === 0x11 && bytes[3] === 0xE0) {
+      return 'excel';
+    }
+  } catch (error) {
+    console.warn('Could not read file signature:', error);
+  }
+  
+  // Default to CSV
+  return 'csv';
+}
+
+/**
  * Parses Excel files (.xlsx, .xls) into structured data
  */
 export async function parseSpreadsheet(

@@ -12,7 +12,7 @@ import { BrokerSelect } from "./BrokerSelect";
 import { toast } from "sonner";
 import { useBrokerTemplates } from "@/hooks/useBrokerTemplates";
 import { findBestTemplateMatch } from "@/utils/csvAutoMapper";
-import { isExcelFile, parseSpreadsheet, parseFlexibleNumber } from "@/utils/parseSpreadsheet";
+import { detectFileType, parseSpreadsheet, parseFlexibleNumber } from "@/utils/parseSpreadsheet";
 
 interface CSVUploadProps {
   onTradesExtracted: (trades: ExtractedTrade[]) => void;
@@ -35,11 +35,16 @@ export const CSVUpload = ({ onTradesExtracted }: CSVUploadProps) => {
   const handleFileSelect = useCallback(async (file: File) => {
     setFileName(file.name);
     
-    // Detect file type and parse accordingly
-    const isExcel = isExcelFile(file);
+    // Robust file type detection
+    const fileType = await detectFileType(file);
     
-    if (isExcel) {
-      toast.info("Parsing Excel file...");
+    if (fileType === 'excel') {
+      // Show helpful message if file is mislabeled
+      if (file.name.toLowerCase().endsWith('.csv')) {
+        toast.info("Detected Excel content in CSV file - parsing as spreadsheet...");
+      } else {
+        toast.info("Parsing Excel file...");
+      }
       
       try {
         const result = await parseSpreadsheet(file);
@@ -71,7 +76,7 @@ export const CSVUpload = ({ onTradesExtracted }: CSVUploadProps) => {
           setCurrentStep('mapping');
         }
       } catch (error) {
-        toast.error("Failed to parse Excel file");
+        toast.error("Failed to parse Excel file: " + (error instanceof Error ? error.message : 'Unknown error'));
         console.error(error);
       }
     } else {
@@ -83,6 +88,46 @@ export const CSVUpload = ({ onTradesExtracted }: CSVUploadProps) => {
         skipEmptyLines: true,
         complete: (results) => {
           if (results.errors.length > 0) {
+            // Check if this might actually be an Excel file with .csv extension
+            const hasNonTextError = results.errors.some(e => 
+              e.message.includes('invalid') || e.message.includes('byte')
+            );
+            
+            if (hasNonTextError) {
+              toast.info("CSV parser failed - trying Excel parser...");
+              // Retry as Excel
+              parseSpreadsheet(file)
+                .then(result => {
+                  const { headers, rows } = result;
+                  setCsvHeaders(headers);
+                  setCsvData(rows);
+                  
+                  const match = findBestTemplateMatch(headers, templates);
+                  if (match && match.similarity >= 80) {
+                    setDetectedTemplate({ id: match.templateId, name: match.brokerName });
+                    const template = templates.find(t => t.id === match.templateId);
+                    if (template) {
+                      toast.success(`Recognized as ${match.brokerName}! Auto-loading mapping...`);
+                      setColumnMappings(template.column_mappings);
+                      setSelectedBroker(match.brokerName);
+                      incrementUsage(match.templateId);
+                      const trades = applyMappingToData(rows, template.column_mappings);
+                      setMappedTrades(trades);
+                      setCurrentStep('preview');
+                    }
+                  } else {
+                    toast.info("File parsed successfully - let's map the columns");
+                    setCurrentStep('mapping');
+                  }
+                })
+                .catch(excelError => {
+                  toast.error("Failed to parse file with both CSV and Excel parsers");
+                  console.error('CSV errors:', results.errors);
+                  console.error('Excel error:', excelError);
+                });
+              return;
+            }
+            
             toast.error("Failed to parse CSV file");
             console.error(results.errors);
             return;
@@ -118,7 +163,7 @@ export const CSVUpload = ({ onTradesExtracted }: CSVUploadProps) => {
           }
         },
         error: () => {
-          toast.error("Failed to read CSV file");
+          toast.error("Failed to read file");
         }
       });
     }
