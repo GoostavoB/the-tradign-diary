@@ -197,20 +197,37 @@ const PricingComparison = () => {
 
         {/* Comparison Grid */}
         <div className="space-y-8">
-          {/* Sticky Header */}
-          <div className="sticky top-20 z-20 backdrop-blur-xl bg-background/80 rounded-2xl border border-border/50 p-6 mb-6">
+          {/* Sticky Header - Desktop */}
+          <div className="hidden md:block sticky top-20 z-20 backdrop-blur-xl bg-background/80 rounded-2xl border border-border/50 p-6 mb-6">
             <div className="grid grid-cols-4 gap-4">
               <div className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                 {t('pricing.comparison.feature')}
               </div>
               <div className="text-center text-sm font-bold">Basic</div>
               <div className="text-center text-sm font-bold relative">
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-primary text-primary-foreground text-[10px] font-medium rounded-full whitespace-nowrap">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-primary text-primary-foreground text-[10px] font-medium rounded-full whitespace-nowrap">
                   Most Popular
                 </div>
                 Pro
               </div>
               <div className="text-center text-sm font-bold">Elite</div>
+            </div>
+          </div>
+          
+          {/* Mobile: Scrollable Header */}
+          <div className="md:hidden sticky top-20 z-20 backdrop-blur-xl bg-background/80 rounded-2xl border border-border/50 p-4 mb-6 overflow-x-auto">
+            <div className="grid grid-cols-4 gap-4 min-w-[600px]">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Feature
+              </div>
+              <div className="text-center text-xs font-bold">Basic</div>
+              <div className="text-center text-xs font-bold relative">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-primary text-primary-foreground text-[8px] font-medium rounded-full whitespace-nowrap">
+                  Popular
+                </div>
+                Pro
+              </div>
+              <div className="text-center text-xs font-bold">Elite</div>
             </div>
           </div>
 
@@ -228,13 +245,22 @@ const PricingComparison = () => {
               {category.items.map((item, itemIdx) => (
                 <div 
                   key={itemIdx}
-                  className="comparison-row backdrop-blur-md bg-card/40 rounded-xl border border-border/50 p-5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300 group"
+                  className="comparison-row backdrop-blur-md bg-card/40 rounded-xl border border-border/50 p-3 md:p-5 hover:border-primary/30 hover:bg-card/60 transition-all duration-300 group overflow-x-auto"
                 >
-                  <div className="grid grid-cols-4 gap-4 items-center">
+                  {/* Desktop layout */}
+                  <div className="hidden md:grid grid-cols-4 gap-4 items-center">
                     <div className="font-medium text-sm">{item.name}</div>
                     <div className="text-center group-hover:scale-105 transition-transform">{renderCell(item.basic)}</div>
                     <div className="text-center bg-primary/5 rounded-lg py-2 group-hover:bg-primary/10 group-hover:scale-105 transition-all">{renderCell(item.pro)}</div>
                     <div className="text-center group-hover:scale-105 transition-transform">{renderCell(item.elite)}</div>
+                  </div>
+                  
+                  {/* Mobile: Horizontal scroll layout */}
+                  <div className="md:hidden grid grid-cols-4 gap-3 items-center min-w-[600px]">
+                    <div className="font-medium text-xs pr-2">{item.name}</div>
+                    <div className="text-center">{renderCell(item.basic)}</div>
+                    <div className="text-center bg-primary/5 rounded-lg py-1.5">{renderCell(item.pro)}</div>
+                    <div className="text-center">{renderCell(item.elite)}</div>
                   </div>
                 </div>
               ))}

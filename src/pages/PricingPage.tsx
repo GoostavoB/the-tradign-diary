@@ -104,10 +104,10 @@ const PricingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">
       <MobileHeader />
       
-      <main className="pt-20 pb-20">
+      <main className="pt-20 pb-20 overflow-x-hidden">
         {/* Hero Section */}
         <section className="px-6 mb-16">
           <div className="container mx-auto max-w-4xl text-center">
@@ -170,30 +170,35 @@ const PricingPage = () => {
         {/* Billing Toggle */}
         <section className="px-6 mb-12">
           <div className="container mx-auto max-w-6xl">
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <button
-                onClick={() => handleBillingToggle('monthly')}
-                className={`px-6 py-3 rounded-xl font-medium transition-all ${
-                  billingCycle === 'monthly'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Monthly
-              </button>
-              <button
-                onClick={() => handleBillingToggle('yearly')}
-                className={`px-6 py-3 rounded-xl font-medium transition-all relative ${
-                  billingCycle === 'yearly'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Yearly
-                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">
-                  Save 2 months
-                </span>
-              </button>
+            <div className="flex flex-col items-center justify-center gap-3 mb-8">
+              {/* Badge above buttons */}
+              <div className="inline-block bg-green-500 text-white text-xs sm:text-sm px-3 py-1.5 rounded-full font-semibold">
+                Save 2 months with yearly
+              </div>
+              
+              {/* Toggle buttons */}
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => handleBillingToggle('monthly')}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                    billingCycle === 'monthly'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => handleBillingToggle('yearly')}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                    billingCycle === 'yearly'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Yearly
+                </button>
+              </div>
             </div>
 
             {/* Plan Cards */}

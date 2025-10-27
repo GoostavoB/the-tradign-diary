@@ -50,12 +50,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">
       <SkipToContent />
       <ValueBar />
       <MobileHeader />
       
-      <main id="main-content" className="pt-14">
+      <main id="main-content" className="pt-14 overflow-x-hidden">
         <Hero />
         <WaveDivider color="hsl(var(--background))" className="text-background -mt-1" />
         <HowItWorks />
