@@ -4,6 +4,7 @@ import { Logo } from "@/components/Logo";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeStudio } from "@/components/theme-studio/ThemeStudio";
 import { useTranslation } from "@/hooks/useTranslation";
+import { VietnamLogoWrapper } from "@/components/VietnamLogoWrapper";
 import {
   Sheet,
   SheetContent,
@@ -37,13 +38,15 @@ export const MobileHeader = () => {
       <div className="container mx-auto h-full px-4 flex items-center justify-between">
         {/* Logo - Left */}
         <div className="flex items-center">
-          <Logo 
-            variant="horizontal" 
-            size="sm" 
-            showText={true} 
-            clickable={isPublicRoute}
-            to="/"
-          />
+          <VietnamLogoWrapper>
+            <Logo 
+              variant="horizontal" 
+              size="sm" 
+              showText={true} 
+              clickable={isPublicRoute}
+              to="/"
+            />
+          </VietnamLogoWrapper>
         </div>
 
         {/* Desktop Navigation - Hidden on Mobile */}
