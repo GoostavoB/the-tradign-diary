@@ -124,6 +124,23 @@ serve(async (req) => {
       );
     }
 
+    // Deduct 1 upload credit before processing
+    const { data: creditDeducted, error: creditError } = await supabaseClient.rpc('deduct_upload_credit', {
+      p_user_id: user.id,
+    });
+
+    if (creditError || !creditDeducted) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Insufficient upload credits',
+          details: 'You need 1 credit to analyze this image. Purchase additional credits to continue.'
+        }),
+        { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.log('✅ Deducted 1 upload credit for user:', user.id);
+
     const { 
       imageBase64, 
       ocrText, 
