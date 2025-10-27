@@ -188,6 +188,14 @@ export default {
             boxShadow: "0 0 0 8px hsl(var(--destructive) / 0), 0 0 20px hsl(var(--destructive) / 0.3)",
           },
         },
+        "pulse-slow": {
+          "0%, 100%": {
+            opacity: "1",
+          },
+          "50%": {
+            opacity: "0.7",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -202,6 +210,7 @@ export default {
         "shimmer": "shimmer 8s ease-in-out infinite",
         "shake": "shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97)",
         "pulse-error": "pulse-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-slow": "pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },

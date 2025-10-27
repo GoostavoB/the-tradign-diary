@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import Hero from "@/components/Hero";
 import { ValueBar } from "@/components/landing/ValueBar";
+import { StatsSection } from "@/components/landing/StatsSection";
+import { WaveDivider } from "@/components/landing/WaveDivider";
 import HowItWorks from "@/components/landing/HowItWorks";
 import DashboardShowcase from "@/components/DashboardShowcase";
 import Features from "@/components/Features";
@@ -56,12 +58,17 @@ const Index = () => {
       
       <main id="main-content" className="pt-14">
         <Hero />
+        <WaveDivider color="hsl(var(--background))" className="text-background -mt-1" />
+        <StatsSection />
+        <WaveDivider color="hsl(var(--background))" flip className="text-background -mb-1" />
         <HowItWorks />
         <DashboardShowcase />
+        <WaveDivider color="hsl(var(--background))" className="text-background -mt-1" />
         <PainToValue />
         <Features />
         <BuildSection />
         <BenefitsGrid />
+        <WaveDivider color="hsl(var(--background))" flip className="text-background -mb-1" />
         <Testimonials />
         <Pricing />
         <SecurityTrust />

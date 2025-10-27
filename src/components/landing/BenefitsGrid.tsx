@@ -50,10 +50,14 @@ const BenefitsGrid = () => {
 
   return (
     <section 
-      className="py-20 md:py-32 px-4 relative overflow-hidden bg-gradient-to-br from-background via-secondary/30 to-background border-t-2 border-primary/40"
+      className="py-20 md:py-32 px-4 relative overflow-hidden bg-gradient-to-br from-background via-primary/5 to-background"
       data-testid="benefits-v2"
       aria-label="Key Benefits"
     >
+      {/* Ambient glow effects */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[140px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-[140px]" />
+      
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-[0.02]">
         <div className="absolute inset-0" style={{
@@ -63,43 +67,64 @@ const BenefitsGrid = () => {
       </div>
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        {/* Header */}
-        <motion.div 
-          className="text-center mb-16 md:mb-20"
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 space-y-4"
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
-            {t("landing.benefits.mainTitle")}
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+            {t('landing.benefits.mainTitle')}
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            {t("landing.benefits.mainSubtitle")}
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            {t('landing.benefits.mainSubtitle')}
           </p>
         </motion.div>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ 
+                  y: -8, 
+                  scale: 1.02,
+                  transition: { duration: 0.3, ease: "easeOut" } 
+                }}
                 className="group relative"
               >
-                <div className="glass p-8 rounded-2xl h-full transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/10 border border-border/50 hover:border-primary/30">
-                  <div className="mb-4 inline-flex p-3 rounded-xl bg-primary/10 transition-colors duration-300 group-hover:bg-primary/20">
-                    <Icon 
-                      className="w-6 h-6 text-primary transition-transform duration-300 group-hover:scale-110" 
-                      strokeWidth={1.5}
-                    />
+                <div className="relative h-full p-8 rounded-2xl overflow-hidden
+                              bg-gradient-to-br from-card/60 to-card/40 backdrop-blur-sm
+                              border border-primary/10 
+                              group-hover:border-primary/40 
+                              group-hover:shadow-[0_8px_30px_rgb(var(--primary)_/_0.12)]
+                              transition-all duration-500 ease-out">
+                  
+                  {/* Glow effect on hover */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3 text-foreground transition-colors duration-300 group-hover:text-primary">
+                  
+                  {/* Icon with subtle glow on hover */}
+                  <div className="relative mb-6 inline-flex p-4 rounded-xl 
+                                bg-primary/10 group-hover:bg-primary/20
+                                transition-all duration-300">
+                    <Icon className="h-7 w-7 text-primary 
+                                   group-hover:scale-110 group-hover:rotate-3
+                                   transition-all duration-300" 
+                          strokeWidth={1.5} 
+                          aria-hidden="true" />
+                  </div>
+                  
+                  <h3 className="text-xl font-semibold mb-3 text-foreground 
+                               group-hover:text-primary transition-colors duration-300">
                     {t(benefit.titleKey)}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -116,13 +141,16 @@ const BenefitsGrid = () => {
           className="text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <Button
             onClick={handleCTAClick}
             size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground 
+                     px-8 py-6 text-lg font-semibold 
+                     shadow-lg hover:shadow-xl hover:scale-105
+                     transition-all duration-300"
             aria-label={t("landing.benefits.ctaButton")}
           >
             {t("landing.benefits.ctaButton")}
@@ -134,7 +162,7 @@ const BenefitsGrid = () => {
           className="mt-16 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <p className="text-sm text-muted-foreground mb-6">
