@@ -506,10 +506,10 @@ const Dashboard = () => {
         currentROI = ((currentBalance - baseCapital) / baseCapital) * 100;
       }
       
-      // Calculate average ROI per trade
-      const avgROIPerTrade = deduplicatedTrades.length > 0 
-        ? deduplicatedTrades.reduce((sum, t) => sum + (t.roi || 0), 0) / deduplicatedTrades.length 
-        : 0;
+      // Calculate weighted average ROI (accounts for different position sizes)
+      const totalProfit = deduplicatedTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+      const totalMargin = deduplicatedTrades.reduce((sum, t) => sum + (t.margin || 0), 0);
+      const avgROIPerTrade = totalMargin > 0 ? (totalProfit / totalMargin) * 100 : 0;
 
       setStats({
         total_pnl: totalPnL,

@@ -4,6 +4,8 @@ import { AnimatedCounter } from '@/components/AnimatedCounter';
 import { formatPercent } from '@/utils/formatNumber';
 import { TrendingUp, TrendingDown, Percent } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Info } from 'lucide-react';
 
 interface AvgROIPerTradeWidgetProps {
   id: string;
@@ -26,7 +28,23 @@ export const AvgROIPerTradeWidget = memo(({
   return (
     <WidgetWrapper
       id={id}
-      title={t('widgets.avgROIPerTrade.title')}
+      title={
+        <div className="flex items-center gap-2">
+          <span>{t('widgets.avgROIPerTrade.title')}</span>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                <p className="text-sm">
+                  Weighted average based on capital used per trade. Larger positions have more influence on the average, giving you a true picture of overall performance.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      }
       isEditMode={isEditMode}
       onRemove={onRemove}
     >
