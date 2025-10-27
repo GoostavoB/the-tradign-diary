@@ -8,6 +8,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, Image } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 interface PreAnalysisConfirmDialogProps {
   open: boolean;
@@ -18,6 +20,8 @@ interface PreAnalysisConfirmDialogProps {
   onConfirm: () => void;
   onPurchaseCredits: () => void;
   isAnalyzing: boolean;
+  broker: string;
+  onBrokerChange: (broker: string) => void;
 }
 
 export const PreAnalysisConfirmDialog = ({
@@ -29,6 +33,8 @@ export const PreAnalysisConfirmDialog = ({
   onConfirm,
   onPurchaseCredits,
   isAnalyzing,
+  broker,
+  onBrokerChange,
 }: PreAnalysisConfirmDialogProps) => {
   const hasEnoughCredits = currentBalance >= creditsRequired;
 
@@ -43,6 +49,33 @@ export const PreAnalysisConfirmDialog = ({
         </DialogHeader>
 
         <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="broker-select">Broker/Exchange</Label>
+            <Select value={broker} onValueChange={onBrokerChange}>
+              <SelectTrigger id="broker-select">
+                <SelectValue placeholder="Select broker (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Binance">Binance</SelectItem>
+                <SelectItem value="Bybit">Bybit</SelectItem>
+                <SelectItem value="OKX">OKX</SelectItem>
+                <SelectItem value="Bitget">Bitget</SelectItem>
+                <SelectItem value="HTX">HTX</SelectItem>
+                <SelectItem value="KuCoin">KuCoin</SelectItem>
+                <SelectItem value="Gate.io">Gate.io</SelectItem>
+                <SelectItem value="MEXC">MEXC</SelectItem>
+                <SelectItem value="BingX">BingX</SelectItem>
+                <SelectItem value="Kraken">Kraken</SelectItem>
+                <SelectItem value="Coinbase">Coinbase</SelectItem>
+                <SelectItem value="Bitfinex">Bitfinex</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              This will be automatically applied to all detected trades
+            </p>
+          </div>
+
           <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg text-sm">
             <p className="text-muted-foreground">
               <strong>Processing limits:</strong> Up to 10 trades per image. Rate limits: 15 images/minute, 150 images/hour. 

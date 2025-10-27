@@ -34,6 +34,7 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
   const [bypassCache, setBypassCache] = useState(false);
   const [batchProgress, setBatchProgress] = useState<string>('');
   const [queuedCount, setQueuedCount] = useState(0);
+  const [broker, setBroker] = useState<string>('');
   const credits = useUploadCredits();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,6 +144,7 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
                 imageHash: ocrResult?.imageHash || null,
                 perceptualHash: ocrResult?.perceptualHash || null,
                 bypassCache: bypassCache,
+                broker: broker || null,
               },
             });
 
@@ -450,6 +452,8 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
           setShowPurchaseDialog(true);
         }}
         isAnalyzing={isAnalyzing}
+        broker={broker}
+        onBrokerChange={setBroker}
       />
 
       {/* Purchase Credits Dialog */}
@@ -492,7 +496,7 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
               </div>
             </div>
             
-            <div className="max-h-[300px] overflow-y-auto space-y-2">
+            <div className="max-h-[400px] overflow-y-auto space-y-2">
               {detectedTrades.map((trade, index) => (
                 <div 
                   key={index} 
@@ -511,26 +515,59 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
                       className="mt-1 h-4 w-4 rounded border-gray-300"
                       onClick={(e) => e.stopPropagation()}
                     />
-                    <div className="flex-1">
+                    <div className="flex-1 space-y-2">
                       <div className="flex justify-between items-start">
-                        <div>
-                          <span className="font-medium">{trade.symbol}</span>
-                          <span className={`ml-2 text-xs px-2 py-0.5 rounded ${
-                            trade.side === 'long' 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-red-100 text-red-700'
-                          }`}>
-                            {trade.side?.toUpperCase()}
-                          </span>
+                        <div className="space-y-1">
+                          <div>
+                            <span className="font-medium text-base">{trade.symbol}</span>
+                            <span className={`ml-2 text-xs px-2 py-0.5 rounded ${
+                              trade.side === 'long' 
+                                ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' 
+                                : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
+                            }`}>
+                              {trade.side?.toUpperCase()}
+                            </span>
+                            {trade.leverage && trade.leverage > 1 && (
+                              <span className="ml-1 text-xs px-1.5 py-0.5 bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300 rounded">
+                                {trade.leverage}x
+                              </span>
+                            )}
+                          </div>
+                          {trade.broker && (
+                            <div className="text-xs text-muted-foreground">
+                              {trade.broker}
+                            </div>
+                          )}
+                          {trade.setup && (
+                            <div className="text-xs text-blue-600 dark:text-blue-400">
+                              {trade.setup}
+                            </div>
+                          )}
                         </div>
-                        <span className={`text-sm font-medium ${
-                          trade.profit_loss >= 0 ? 'text-green-600' : 'text-red-600'
-                        }`}>
-                          {trade.profit_loss >= 0 ? '+' : ''}{trade.profit_loss?.toFixed(2)}
-                        </span>
+                        <div className="text-right">
+                          <div className={`text-sm font-medium ${
+                            trade.profit_loss >= 0 ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {trade.profit_loss >= 0 ? '+' : ''}${trade.profit_loss?.toFixed(2)}
+                          </div>
+                          {trade.roi && (
+                            <div className={`text-xs ${
+                              trade.roi >= 0 ? 'text-green-600' : 'text-red-600'
+                            }`}>
+                              {trade.roi >= 0 ? '+' : ''}{trade.roi?.toFixed(2)}%
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Entry: {trade.entry_price} • Exit: {trade.exit_price}
+                      
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                        <div>Entry: ${trade.entry_price?.toFixed(2)}</div>
+                        <div>Exit: ${trade.exit_price?.toFixed(2)}</div>
+                        <div>Size: ${trade.position_size?.toFixed(2)}</div>
+                        {trade.margin && <div>Margin: ${trade.margin?.toFixed(2)}</div>}
+                        {trade.trading_fee !== 0 && <div>Trade Fee: ${trade.trading_fee?.toFixed(2)}</div>}
+                        {trade.funding_fee !== 0 && <div>Funding: ${trade.funding_fee?.toFixed(2)}</div>}
+                        {trade.period_of_day && <div className="capitalize">{trade.period_of_day}</div>}
                       </div>
                     </div>
                   </div>

@@ -281,7 +281,21 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `Extract ALL trades from OCR text. Treat this like a table: one trade per row. BUY => long, SELL => short. Output ONLY valid JSON array. Each trade must match schema: ${JSON.stringify(TRADE_SCHEMA)}. Calculate position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage (e.g., "10x" = 10) and position_size. Calculate duration and period_of_day. CRITICAL: Never return an empty array. If uncertain, return best-effort trade rows. Return up to 10 trades max per image, but include ALL rows present in the screenshot. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".`
+              content: `Extract ALL trades from OCR text. Treat this like a table: one trade per row. BUY => long, SELL => short. Output ONLY valid JSON array. Each trade must match schema: ${JSON.stringify(TRADE_SCHEMA)}.
+
+CRITICAL EXTRACTION RULES:
+1. Position Type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG
+2. Leverage: Extract from text (e.g., "10x" = 10, "20x" = 20)
+3. Position Size: Total position value in USD/USDT
+4. Margin: Calculate as position_size / leverage if not explicitly shown
+5. Trading Fee: Look for "Fee", "Trade Fee", "Commission" (often shown as negative)
+6. Funding Fee: Look for "Funding", "Funding Rate", "Funding Fee" (can be positive or negative)
+7. ROI: Calculate as (profit_loss / margin) * 100 if not shown, or extract from "ROE", "ROI", "Return"
+8. Setup/Strategy: Look for strategy names like "Scalp", "Swing", "Breakout", "Reversal", "Trend Following"
+9. Period of Day: Calculate from opened_at time: 05:00-11:59 = morning, 12:00-17:59 = afternoon, 18:00-04:59 = night
+10. Duration: Calculate from opened_at and closed_at timestamps
+
+NEVER return empty array. If uncertain, return best-effort rows. Max 10 trades per image. Expected ~${estimatedTradeCount} trade(s). End with "\\n\\nEND".`
             },
             {
               role: "user",
@@ -339,10 +353,24 @@ serve(async (req) => {
           body: JSON.stringify({
             model: modelUsed,
             messages: [
-              {
-                role: "system",
-                content: `Extract ALL trades from trading screenshot. Treat this like a table: one trade per row. BUY => long, SELL => short. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}. For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage and position_size. Calculate duration and period_of_day. CRITICAL: Never return an empty array. If uncertain, return best-effort trade rows. Return up to 10 trades max per image, but include ALL rows present in the screenshot. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
-              },
+            {
+              role: "system",
+              content: `Extract ALL trades from trading screenshot. Treat this like a table: one trade per row. BUY => long, SELL => short. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}.
+
+CRITICAL EXTRACTION RULES:
+1. Position Type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG
+2. Leverage: Extract from text (e.g., "10x" = 10, "20x" = 20)
+3. Position Size: Total position value in USD/USDT
+4. Margin: Calculate as position_size / leverage if not explicitly shown
+5. Trading Fee: Look for "Fee", "Trade Fee", "Commission" (often shown as negative)
+6. Funding Fee: Look for "Funding", "Funding Rate", "Funding Fee" (can be positive or negative)
+7. ROI: Calculate as (profit_loss / margin) * 100 if not shown, or extract from "ROE", "ROI", "Return"
+8. Setup/Strategy: Look for strategy names like "Scalp", "Swing", "Breakout", "Reversal", "Trend Following"
+9. Period of Day: Calculate from opened_at time: 05:00-11:59 = morning, 12:00-17:59 = afternoon, 18:00-04:59 = night
+10. Duration: Calculate from opened_at and closed_at timestamps
+
+NEVER return empty array. If uncertain, return best-effort rows. Max 10 trades per image. Expected ~${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
+            },
               {
                 role: "user",
                 content: [
@@ -407,7 +435,21 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `Extract ALL trades from trading screenshot. Treat this like a table: one trade per row. BUY => long, SELL => short. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}. For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage and position_size. Calculate duration and period_of_day. CRITICAL: Never return an empty array. If uncertain, return best-effort trade rows. Return up to 10 trades max per image, but include ALL rows present in the screenshot. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
+              content: `Extract ALL trades from trading screenshot. Treat this like a table: one trade per row. BUY => long, SELL => short. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}.
+
+CRITICAL EXTRACTION RULES:
+1. Position Type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG
+2. Leverage: Extract from text (e.g., "10x" = 10, "20x" = 20)
+3. Position Size: Total position value in USD/USDT
+4. Margin: Calculate as position_size / leverage if not explicitly shown
+5. Trading Fee: Look for "Fee", "Trade Fee", "Commission" (often shown as negative)
+6. Funding Fee: Look for "Funding", "Funding Rate", "Funding Fee" (can be positive or negative)
+7. ROI: Calculate as (profit_loss / margin) * 100 if not shown, or extract from "ROE", "ROI", "Return"
+8. Setup/Strategy: Look for strategy names like "Scalp", "Swing", "Breakout", "Reversal", "Trend Following"
+9. Period of Day: Calculate from opened_at time: 05:00-11:59 = morning, 12:00-17:59 = afternoon, 18:00-04:59 = night
+10. Duration: Calculate from opened_at and closed_at timestamps
+
+NEVER return empty array. If uncertain, return best-effort rows. Max 10 trades per image. Expected ~${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
             },
             {
               role: "user",
@@ -473,30 +515,62 @@ serve(async (req) => {
       );
     }
 
-    // Normalize trades to match database schema
-    const normalizedTrades = trades.map((t: any) => ({
-      symbol: t.symbol ?? t.asset ?? '',
-      side: (t.side ?? t.position_type ?? 'long').toLowerCase(),
-      broker: broker || t.broker || '',
-      setup: t.setup ?? '',
-      emotional_tag: t.emotional_tag ?? '',
-      entry_price: Number(t.entry_price) || 0,
-      exit_price: Number(t.exit_price) || 0,
-      position_size: Number(t.position_size) || 0,
-      leverage: Number(t.leverage) || 1,
-      profit_loss: Number(t.profit_loss) || 0,
-      funding_fee: Number(t.funding_fee) || 0,
-      trading_fee: Number(t.trading_fee) || 0,
-      roi: Number(t.roi) || 0,
-      margin: t.margin ? Number(t.margin) : null,
-      opened_at: t.opened_at ?? '',
-      closed_at: t.closed_at ?? '',
-      period_of_day: t.period_of_day ?? 'morning',
-      duration_days: Number(t.duration_days) || 0,
-      duration_hours: Number(t.duration_hours) || 0,
-      duration_minutes: Number(t.duration_minutes) || 0,
-      notes: t.notes ?? ''
-    }));
+    // Normalize trades to match database schema with enhanced calculations
+    const normalizedTrades = trades.map((t: any) => {
+      const posSize = Number(t.position_size) || 0;
+      const leverage = Number(t.leverage) || 1;
+      const profitLoss = Number(t.profit_loss) || 0;
+      
+      // Calculate margin if not provided: margin = position_size / leverage
+      let margin = t.margin ? Number(t.margin) : null;
+      if (!margin && posSize && leverage) {
+        margin = posSize / leverage;
+      }
+      
+      // Calculate ROI if not provided: roi = (profit_loss / margin) * 100
+      let roi = Number(t.roi) || 0;
+      if (!roi && profitLoss && margin && margin > 0) {
+        roi = (profitLoss / margin) * 100;
+      }
+      
+      // Calculate period_of_day from opened_at if not provided
+      let periodOfDay = t.period_of_day ?? 'morning';
+      if (t.opened_at && !t.period_of_day) {
+        try {
+          const openTime = new Date(t.opened_at);
+          const hour = openTime.getHours();
+          if (hour >= 5 && hour < 12) periodOfDay = 'morning';
+          else if (hour >= 12 && hour < 18) periodOfDay = 'afternoon';
+          else periodOfDay = 'night';
+        } catch (e) {
+          console.warn('Failed to parse opened_at for period_of_day:', e);
+        }
+      }
+      
+      return {
+        symbol: t.symbol ?? t.asset ?? '',
+        side: (t.side ?? t.position_type ?? 'long').toLowerCase(),
+        broker: broker || t.broker || '',
+        setup: t.setup ?? '',
+        emotional_tag: t.emotional_tag ?? '',
+        entry_price: Number(t.entry_price) || 0,
+        exit_price: Number(t.exit_price) || 0,
+        position_size: posSize,
+        leverage: leverage,
+        profit_loss: profitLoss,
+        funding_fee: Number(t.funding_fee) || 0,
+        trading_fee: Number(t.trading_fee) || 0,
+        roi: roi,
+        margin: margin,
+        opened_at: t.opened_at ?? '',
+        closed_at: t.closed_at ?? '',
+        period_of_day: periodOfDay,
+        duration_days: Number(t.duration_days) || 0,
+        duration_hours: Number(t.duration_hours) || 0,
+        duration_minutes: Number(t.duration_minutes) || 0,
+        notes: t.notes ?? ''
+      };
+    });
 
     // Enforce max 10 trades per image
     if (normalizedTrades.length > 10) {
