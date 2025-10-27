@@ -47,7 +47,7 @@ const BADGE_INFO: Record<string, { name: string; description: string; icon: any 
   first_trade: { name: 'First Trade', description: 'Log your first trade', icon: Star },
   winning_streak: { name: 'Winning Streak', description: 'Win consecutive trades', icon: TrendingUp },
   consistency: { name: 'Consistency Master', description: 'Trade regularly', icon: Trophy },
-  profit_milestone: { name: 'Profit Milestone', description: 'Reach profit goals', icon: Trophy },
+  profit_milestone: { name: 'Profit Milestone', description: 'Reach profit goals', icon: TrendingUp },
 };
 
 export const BadgeProgressionPanel = () => {

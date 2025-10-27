@@ -26,6 +26,7 @@ import { WeeklySummaryRecap } from '@/components/WeeklySummaryRecap';
 import { useXPSystem } from '@/hooks/useXPSystem';
 import { useDailyChallenges } from '@/hooks/useDailyChallenges';
 import { useTradeXPRewards } from '@/hooks/useTradeXPRewards';
+import { useProfitMilestoneBadges } from '@/hooks/useProfitMilestoneBadges';
 import { TradingStreaks } from '@/components/TradingStreaks';
 import { DateRangeFilter } from '@/components/DateRangeFilter';
 import { useDateRange } from '@/contexts/DateRangeContext';
@@ -212,6 +213,13 @@ const Dashboard = () => {
   
   // Award XP for trades
   useTradeXPRewards(trades);
+  
+  // Check profit milestone badges
+  const totalTradingProfit = useMemo(() => 
+    trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0),
+    [trades]
+  );
+  useProfitMilestoneBadges(totalTradingProfit, user?.id);
 
   const gridRef = useRef<HTMLDivElement>(null);
   const [columnCount, setColumnCount] = useState(3);
@@ -813,11 +821,27 @@ const Dashboard = () => {
         widgetProps.totalTrades = stats?.total_trades || 0;
         break;
       case 'capitalGrowth':
-        widgetProps.chartData = portfolioChartData;
-        const baseCapitalForGrowth = totalCapitalAdditions > 0 ? totalCapitalAdditions : initialInvestment;
-        widgetProps.initialInvestment = baseCapitalForGrowth;
-        widgetProps.totalCapitalAdditions = totalCapitalAdditions;
-        widgetProps.currentBalance = baseCapitalForGrowth + (stats?.total_pnl || 0);
+        // Capital Growth widget now self-fetches data via useCapitalGrowthData hook
+        break;
+      case 'absoluteProfit':
+        const tradingPnL = processedTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+        const cumulativeData: Array<{ date: string; value: number }> = [];
+        let cumulative = 0;
+        
+        [...processedTrades]
+          .sort((a, b) => new Date(a.closed_at || a.trade_date).getTime() - new Date(b.closed_at || b.trade_date).getTime())
+          .forEach(t => {
+            cumulative += t.profit_loss || 0;
+            const date = new Date(t.closed_at || t.trade_date);
+            cumulativeData.push({
+              date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+              value: cumulative,
+            });
+          });
+        
+        widgetProps.totalPnL = tradingPnL;
+        widgetProps.tradeCount = processedTrades.length;
+        widgetProps.chartData = cumulativeData;
         break;
       case 'heatmap':
         widgetProps.trades = processedTrades;

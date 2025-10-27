@@ -24,12 +24,12 @@ import { TopMoversWidget } from '@/components/widgets/TopMoversWidget';
 import { AIInsightsWidget } from '@/components/widgets/AIInsightsWidget';
 import { RecentTransactionsWidget } from '@/components/widgets/RecentTransactionsWidget';
 import { QuickActionsWidget } from '@/components/widgets/QuickActionsWidget';
-import { PortfolioOverviewWidget } from '@/components/widgets/PortfolioOverviewWidget';
 import { AvgPnLPerTradeWidget } from '@/components/widgets/AvgPnLPerTradeWidget';
 import { AvgPnLPerDayWidget } from '@/components/widgets/AvgPnLPerDayWidget';
 import { CurrentROIWidget } from '@/components/widgets/CurrentROIWidget';
 import { AvgROIPerTradeWidget } from '@/components/widgets/AvgROIPerTradeWidget';
 import { CapitalGrowthWidget } from '@/components/widgets/CapitalGrowthWidget';
+import { AbsoluteProfitWidget } from '@/components/widgets/AbsoluteProfitWidget';
 import { BehaviorAnalytics } from '@/components/insights/BehaviorAnalytics';
 import { CostEfficiencyPanel } from '@/components/insights/CostEfficiencyPanel';
 import { PerformanceHighlights } from '@/components/insights/PerformanceHighlights';
@@ -86,15 +86,15 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     requiresData: ['holdings'],
   },
   
-  portfolioOverview: {
-    id: 'portfolioOverview',
-    title: 'Portfolio Overview',
-    description: 'Portfolio value chart over time',
-    category: 'portfolio',
-    icon: LineChart,
-    defaultSize: 'medium',
-    component: PortfolioOverviewWidget,
-    requiresData: ['stats', 'trades'],
+  absoluteProfit: {
+    id: 'absoluteProfit',
+    title: 'Total Trading Profit',
+    description: 'Pure trading profit excluding deposits/withdrawals',
+    category: 'performance',
+    icon: TrendingUp,
+    defaultSize: 'small',
+    component: AbsoluteProfitWidget,
+    requiresData: ['trades'],
   },
   
   topMovers: {
@@ -187,12 +187,12 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
   capitalGrowth: {
     id: 'capitalGrowth',
     title: 'Capital Growth',
-    description: 'Visualize your capital growth over time',
+    description: 'Track your capital including deposits, withdrawals, and trading P&L',
     category: 'performance',
     icon: TrendingUp,
     defaultSize: 'large',
     component: CapitalGrowthWidget,
-    requiresData: ['stats', 'trades'],
+    requiresData: [],
   },
 
   behaviorAnalytics: {
@@ -276,7 +276,7 @@ export const DEFAULT_DASHBOARD_LAYOUT = [
   'currentROI',
   'avgROIPerTrade',
   'capitalGrowth',
-  'portfolioOverview',
+  'absoluteProfit',
   'heatmap',
   'recentTransactions',
   'topMovers',

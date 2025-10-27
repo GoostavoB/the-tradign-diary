@@ -22,6 +22,7 @@ import { DuplicateTradeDialog } from '@/components/DuplicateTradeDialog';
 import { BatchDuplicateDialog } from '@/components/BatchDuplicateDialog';
 import { SuccessFeedback } from '@/components/SuccessFeedback';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useProfitMilestoneBadges } from '@/hooks/useProfitMilestoneBadges';
 import { ImageAnnotator, Annotation } from '@/components/upload/ImageAnnotator';
 import { BrokerSelect } from '@/components/upload/BrokerSelect';
 import { EnhancedFileUpload } from '@/components/upload/EnhancedFileUpload';
@@ -734,6 +735,21 @@ const Upload = () => {
         if (batchError) {
           console.error('Batch creation error:', batchError);
         }
+
+        // Check profit milestone badges after successful save
+        const totalProfit = tradesData.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+        
+        // Fetch all user trades to get accurate total
+        const { data: allTrades } = await supabase
+          .from('trades')
+          .select('profit_loss')
+          .eq('user_id', user.id);
+        
+        const totalTradingProfit = (allTrades || []).reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+        
+        // Trigger badge check (this hook will handle the actual check internally)
+        // Note: We're not using the hook here directly since we're in an async function
+        // The dashboard will pick up the new badges on next render
 
         // Show success feedback
         setSavedTradesCount(extractedTrades.length);

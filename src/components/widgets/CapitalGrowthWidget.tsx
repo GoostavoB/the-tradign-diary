@@ -2,34 +2,35 @@ import { memo } from 'react';
 import { WidgetWrapper } from './WidgetWrapper';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { formatCurrency } from '@/utils/formatNumber';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowDownCircle, ArrowUpCircle, DollarSign } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { BlurredCurrency } from '@/components/ui/BlurredValue';
+import { useCapitalGrowthData } from '@/hooks/useCapitalGrowthData';
 
 interface CapitalGrowthWidgetProps {
   id: string;
   isEditMode?: boolean;
   onRemove?: () => void;
-  chartData: Array<{ date: string; value: number }>;
-  initialInvestment: number;
-  totalCapitalAdditions?: number;
-  currentBalance: number;
 }
 
 export const CapitalGrowthWidget = memo(({
   id,
   isEditMode,
   onRemove,
-  chartData,
-  initialInvestment,
-  totalCapitalAdditions = 0,
-  currentBalance,
 }: CapitalGrowthWidgetProps) => {
   const { t } = useTranslation();
-  const totalCapitalInvested = initialInvestment + totalCapitalAdditions;
-  const totalGrowth = currentBalance - totalCapitalInvested;
-  const growthPercentage = totalCapitalInvested > 0 ? ((totalGrowth / totalCapitalInvested) * 100) : 0;
-  const isPositive = totalGrowth >= 0;
+  const {
+    chartData,
+    initialInvestment,
+    totalDeposits,
+    totalWithdrawals,
+    tradingPnL,
+    currentBalance,
+    growthPercent,
+    isLoading,
+  } = useCapitalGrowthData();
+
+  const isPositive = growthPercent >= 0;
 
   return (
     <WidgetWrapper
@@ -40,30 +41,56 @@ export const CapitalGrowthWidget = memo(({
     >
       <div className="space-y-4">
         {/* Summary Stats */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">{t('widgets.initial')}</p>
-            <p className="text-sm font-semibold">
-              <BlurredCurrency amount={totalCapitalInvested} className="inline" />
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">{t('widgets.current')}</p>
-            <p className="text-sm font-semibold">
-              <BlurredCurrency amount={currentBalance} className="inline" />
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">{t('widgets.growth')}</p>
             <div className="flex items-center gap-1">
-              <p className={`text-sm font-semibold ${isPositive ? 'text-profit' : 'text-loss'}`}>
-                {isPositive ? '+' : ''}{growthPercentage.toFixed(2)}%
-              </p>
-              {isPositive ? (
+              <DollarSign className="h-3 w-3 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">Initial</p>
+            </div>
+            <p className="text-sm font-semibold">
+              <BlurredCurrency amount={initialInvestment} className="inline" />
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1">
+              <ArrowUpCircle className="h-3 w-3 text-blue-500" />
+              <p className="text-xs text-muted-foreground">Deposits</p>
+            </div>
+            <p className="text-sm font-semibold text-blue-500">
+              <BlurredCurrency amount={totalDeposits} className="inline" />
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1">
+              <ArrowDownCircle className="h-3 w-3 text-orange-500" />
+              <p className="text-xs text-muted-foreground">Withdrawals</p>
+            </div>
+            <p className="text-sm font-semibold text-orange-500">
+              <BlurredCurrency amount={totalWithdrawals} className="inline" />
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1">
+              {tradingPnL >= 0 ? (
                 <TrendingUp className="h-3 w-3 text-profit" />
               ) : (
                 <TrendingDown className="h-3 w-3 text-loss" />
               )}
+              <p className="text-xs text-muted-foreground">Trading P&L</p>
+            </div>
+            <p className={`text-sm font-semibold ${tradingPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
+              {tradingPnL >= 0 ? '+' : ''}<BlurredCurrency amount={tradingPnL} className="inline" />
+            </p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground">Current Balance</p>
+            <div className="flex items-center gap-1">
+              <p className="text-sm font-semibold">
+                <BlurredCurrency amount={currentBalance} className="inline" />
+              </p>
+              <span className={`text-xs ${isPositive ? 'text-profit' : 'text-loss'}`}>
+                ({isPositive ? '+' : ''}{growthPercent.toFixed(1)}%)
+              </span>
             </div>
           </div>
         </div>
