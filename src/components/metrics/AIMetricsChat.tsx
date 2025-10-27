@@ -129,12 +129,17 @@ export const AIMetricsChat = ({ onWidgetCreated }: AIMetricsChatProps) => {
       const { error } = await supabase
         .from('custom_dashboard_widgets')
         .insert({
+          user_id: user.id,
+          widget_type: pendingWidget.visualization_type || 'metric_card',
           title: pendingWidget.title,
           description: pendingWidget.description,
+          query_config: pendingWidget.data_config || {},
+          display_config: pendingWidget.display_format || {},
           is_permanent: true,
           created_via: 'ai_assistant',
-          ai_prompt: messages.find(m => m.role === 'user')?.content || ''
-        });
+          ai_prompt: messages.find(m => m.role === 'user')?.content || '',
+          data_snapshot: pendingWidget
+        } as any);
 
       if (error) throw error;
 
