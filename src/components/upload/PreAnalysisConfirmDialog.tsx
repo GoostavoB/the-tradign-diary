@@ -57,6 +57,11 @@ export const PreAnalysisConfirmDialog = ({
           </div>
 
           <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+            <span className="font-medium">Cost per upload</span>
+            <span className="text-lg font-bold">1 credit</span>
+          </div>
+
+          <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
             <span className="font-medium">Your current balance</span>
             <span className={`text-lg font-bold ${hasEnoughCredits ? 'text-green-600' : 'text-destructive'}`}>
               {currentBalance}

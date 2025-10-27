@@ -68,63 +68,70 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
     setIsAnalyzing(true);
 
     try {
-      const results = await Promise.all(
-        images.map(async (image) => {
+      const results: UploadedImage[] = [];
+
+      // Process sequentially to respect backend rate limits (5/minute)
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+        // Mark as analyzing for immediate visual feedback
+        setImages(prev => prev.map((img, idx) => (idx === i ? { ...img, status: 'analyzing' } : img)));
+
+        try {
+          // Convert image to base64
+          const reader = new FileReader();
+          const base64Promise = new Promise<string>((resolve, reject) => {
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(image.file);
+          });
+          const imageBase64 = await base64Promise;
+
+          // Run OCR on the image
+          let ocrResult: any | undefined;
           try {
-            // Convert image to base64
-            const reader = new FileReader();
-            const base64Promise = new Promise<string>((resolve, reject) => {
-              reader.onloadend = () => resolve(reader.result as string);
-              reader.onerror = reject;
-              reader.readAsDataURL(image.file);
+            ocrResult = await runOCR(image.file);
+            console.log(`OCR completed for ${image.file.name}:`, {
+              confidence: ocrResult.confidence,
+              qualityScore: ocrResult.qualityScore,
+              textLength: ocrResult.text.length
             });
-            
-            const imageBase64 = await base64Promise;
-
-            // Run OCR on the image
-            let ocrResult;
-            try {
-              ocrResult = await runOCR(image.file);
-              console.log(`OCR completed for ${image.file.name}:`, {
-                confidence: ocrResult.confidence,
-                qualityScore: ocrResult.qualityScore,
-                textLength: ocrResult.text.length
-              });
-            } catch (ocrError) {
-              console.error('OCR failed for image:', ocrError);
-              // Continue without OCR data
-            }
-
-            const { data, error } = await supabase.functions.invoke('extract-trade-info', {
-              body: { 
-                imageBase64: imageBase64,
-                ocrText: ocrResult?.text || null,
-                ocrConfidence: ocrResult?.confidence || null,
-                imageHash: ocrResult?.imageHash || null,
-                perceptualHash: ocrResult?.perceptualHash || null,
-              },
-            });
-
-            if (error) throw error;
-
-            return {
-              ...image,
-              status: 'success' as const,
-              trades: data.trades || [],
-            };
-          } catch (error) {
-            console.error('Error analyzing image:', error);
-            return {
-              ...image,
-              status: 'error' as const,
-              trades: [],
-            };
+          } catch (ocrError) {
+            console.error('OCR failed for image:', ocrError);
+            // Continue without OCR data
           }
-        })
-      );
 
-      setImages(results);
+          const { data, error } = await supabase.functions.invoke('extract-trade-info', {
+            body: {
+              imageBase64: imageBase64,
+              ocrText: ocrResult?.text || null,
+              ocrConfidence: ocrResult?.confidence || null,
+              imageHash: ocrResult?.imageHash || null,
+              perceptualHash: ocrResult?.perceptualHash || null,
+            },
+          });
 
+          if (error) throw error;
+
+          const success: UploadedImage = {
+            ...image,
+            status: 'success',
+            trades: (data as any)?.trades || [],
+          };
+          results.push(success);
+          // Update single image result for progress
+          setImages(prev => prev.map((img, idx) => (idx === i ? success : img)));
+        } catch (err) {
+          console.error('Error analyzing image:', err);
+          const failed: UploadedImage = { ...image, status: 'error', trades: [] };
+          results.push(failed);
+          setImages(prev => prev.map((img, idx) => (idx === i ? failed : img)));
+        }
+
+        // Small delay between images to reduce chance of 429s
+        await new Promise(res => setTimeout(res, 250));
+      }
+
+      // Aggregate
       const allTrades = results
         .filter(img => img.status === 'success')
         .flatMap(img => img.trades || []);
