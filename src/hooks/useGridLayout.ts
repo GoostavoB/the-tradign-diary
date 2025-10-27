@@ -14,23 +14,34 @@ export interface LayoutData {
 }
 
 const DEFAULT_POSITIONS: WidgetPosition[] = [
-  { id: 'totalBalance', column: 0, row: 0 },
+  // Row 0: Current ROI / Win Rate / Avg PNL Per Trade / Avg PNL Per Day
+  { id: 'currentROI', column: 0, row: 0 },
   { id: 'winRate', column: 1, row: 0 },
-  { id: 'totalTrades', column: 2, row: 0 },
-  { id: 'portfolioOverview', column: 0, row: 1 },
-  { id: 'spotWallet', column: 1, row: 1 },
+  { id: 'avgPnLPerTrade', column: 2, row: 0 },
+  { id: 'avgPnLPerDay', column: 3, row: 0 },
+  
+  // Row 1: Capital Growth / Weekly Heatmap / Top Movers
+  { id: 'capitalGrowth', column: 0, row: 1 },
+  { id: 'heatmap', column: 1, row: 1 },
   { id: 'topMovers', column: 2, row: 1 },
-  { id: 'recentTransactions', column: 0, row: 2 },
-  { id: 'quickActions', column: 1, row: 2 },
-  { id: 'capitalGrowth', column: 0, row: 3 },
-  { id: 'avgPnLPerTrade', column: 1, row: 3 },
-  { id: 'avgPnLPerDay', column: 2, row: 3 },
-  { id: 'currentROI', column: 0, row: 4 },
+  
+  // Row 2: Trading Behaviour Patterns
+  { id: 'behaviorAnalytics', column: 0, row: 2 },
+  
+  // Additional widgets
+  { id: 'totalBalance', column: 0, row: 3 },
+  { id: 'spotWallet', column: 1, row: 3 },
+  { id: 'totalTrades', column: 2, row: 3 },
+  { id: 'goals', column: 3, row: 3 },
+  { id: 'recentTransactions', column: 0, row: 4 },
+  { id: 'quickActions', column: 1, row: 4 },
+  { id: 'aiInsights', column: 2, row: 4 },
+  { id: 'absoluteProfit', column: 0, row: 5 },
 ];
 
 export const useGridLayout = (userId: string | undefined, availableWidgets: string[]) => {
   const [positions, setPositions] = useState<WidgetPosition[]>(DEFAULT_POSITIONS);
-  const [columnCount, setColumnCount] = useState<number>(3);
+  const [columnCount, setColumnCount] = useState<number>(4);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
