@@ -175,10 +175,36 @@ export const useGridLayout = (userId: string | undefined, availableWidgets: stri
                   console.error('[useGridLayout] Failed to persist layout auto-fix:', e);
                 }
               } else {
-                // Valid user layout - respect it completely
-                setPositions(layoutData.positions);
-                setColumnCount(desiredCols);
-                console.log('[useGridLayout] User layout loaded:', desiredCols, 'columns');
+                // Valid user layout - check if absoluteProfit needs to be moved to top-left
+                const absoluteProfitPos = layoutData.positions.find((p: WidgetPosition) => p.id === 'absoluteProfit');
+                
+                if (absoluteProfitPos && (absoluteProfitPos.column !== 0 || absoluteProfitPos.row !== 0)) {
+                  console.log('[useGridLayout] Moving absoluteProfit to top-left');
+                  
+                  // Re-pack with absoluteProfit at top-left
+                  const activeIds = layoutData.positions.map((p: WidgetPosition) => p.id);
+                  const corrected = packRowMajor(activeIds, desiredCols);
+                  
+                  setPositions(corrected);
+                  setColumnCount(desiredCols);
+                  
+                  // Persist the correction
+                  try {
+                    const layoutToSave: LayoutData = { positions: corrected, columnCount: desiredCols };
+                    await supabase
+                      .from('user_settings')
+                      .update({ layout_json: layoutToSave as any, updated_at: new Date().toISOString() })
+                      .eq('user_id', userId!);
+                    toast.info('Total Trading Profit moved to top-left');
+                  } catch (e) {
+                    console.error('[useGridLayout] Failed to persist correction:', e);
+                  }
+                } else {
+                  // Valid user layout - respect it completely
+                  setPositions(layoutData.positions);
+                  setColumnCount(desiredCols);
+                  console.log('[useGridLayout] User layout loaded:', desiredCols, 'columns');
+                }
               }
             }
           }

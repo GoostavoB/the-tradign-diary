@@ -31,7 +31,6 @@ import { TradingStreaks } from '@/components/TradingStreaks';
 import { DateRangeFilter } from '@/components/DateRangeFilter';
 import { useDateRange } from '@/contexts/DateRangeContext';
 import { CustomizeDashboardControls } from '@/components/CustomizeDashboardControls';
-import { useWidgetLayout } from '@/hooks/useWidgetLayout';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 import { LessonLearnedPopup } from '@/components/lessons/LessonLearnedPopup';
@@ -239,6 +238,36 @@ const Dashboard = () => {
     setSelectedColumnCount(newCount);
     updateColumnCount(newCount);
   }, [updateColumnCount]);
+
+  // Local handlers for immediate UI feedback during customization
+  const handleRemoveWidget = useCallback((widgetId: string) => {
+    if (isCustomizing) {
+      // During customization: update local state immediately, don't persist yet
+      const newPositions = positions.filter(p => p.id !== widgetId);
+      setPositions(newPositions);
+      toast.success('Widget removed');
+    } else {
+      // Outside customization: persist immediately
+      removeWidget(widgetId);
+    }
+  }, [isCustomizing, positions, removeWidget]);
+
+  const handleAddWidget = useCallback((widgetId: string) => {
+    if (isCustomizing) {
+      // During customization: update local state immediately, don't persist yet
+      if (positions.find(p => p.id === widgetId)) {
+        toast.info('Widget already added');
+        return;
+      }
+      const maxRow = Math.max(0, ...positions.map(p => p.row));
+      const newPositions = [...positions, { id: widgetId, column: 0, row: maxRow + 1 }];
+      setPositions(newPositions);
+      toast.success('Widget added');
+    } else {
+      // Outside customization: persist immediately
+      addWidget(widgetId);
+    }
+  }, [isCustomizing, positions, addWidget]);
 
   // Organize widgets by column and row
   const grid = useMemo(() => {
@@ -726,12 +755,13 @@ const Dashboard = () => {
           key={widgetId}
           id={widgetId}
           isEditMode={isCustomizing}
-          onRemove={() => removeWidget(widgetId)}
+          onRemove={() => handleRemoveWidget(widgetId)}
         >
           <CustomWidgetRenderer 
             widget={customWidget}
-            onDelete={() => {
-              removeWidget(widgetId);
+            onDelete={async () => {
+              await supabase.from('custom_dashboard_widgets').delete().eq('id', widgetId);
+              handleRemoveWidget(widgetId);
               fetchCustomWidgets();
             }}
           />
@@ -750,7 +780,7 @@ const Dashboard = () => {
       id: widgetId,
       isEditMode: isCustomizing,
       isCompact: false,
-      onRemove: () => removeWidget(widgetId),
+      onRemove: () => handleRemoveWidget(widgetId),
     };
 
     // Add widget-specific data
@@ -870,12 +900,12 @@ const Dashboard = () => {
         key={widgetId}
         id={widgetId}
         isEditMode={isCustomizing}
-        onRemove={() => removeWidget(widgetId)}
+        onRemove={() => handleRemoveWidget(widgetId)}
       >
         <WidgetComponent {...widgetProps} />
       </SortableWidget>
     );
-  }, [isCustomizing, removeWidget, stats, processedTrades, initialInvestment, spotWalletTotal, holdings, portfolioChartData, customWidgets, fetchCustomWidgets]);
+  }, [isCustomizing, handleRemoveWidget, stats, processedTrades, initialInvestment, spotWalletTotal, holdings, portfolioChartData, customWidgets, fetchCustomWidgets]);
 
   // Show AI Training Questionnaire if user doesn't have a profile yet
   if (hasProfile === false && !profileLoading) {
@@ -1085,13 +1115,13 @@ const Dashboard = () => {
         </Suspense>
 
         {/* Widget Library Modal */}
-        <WidgetLibrary
-          open={showWidgetLibrary}
-          onClose={() => setShowWidgetLibrary(false)}
-          onAddWidget={addWidget}
-          onRemoveWidget={removeWidget}
-          activeWidgets={activeWidgets}
-        />
+            <WidgetLibrary
+              open={showWidgetLibrary}
+              onClose={() => setShowWidgetLibrary(false)}
+              onAddWidget={handleAddWidget}
+              onRemoveWidget={handleRemoveWidget}
+              activeWidgets={activeWidgets}
+            />
         
         {/* Tour CTA Button */}
         <TourCTAButton />
