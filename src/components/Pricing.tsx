@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { addStructuredData } from "@/utils/seoHelpers";
 import PricingComparison from "./PricingComparison";
-import PricingRoadmap from "./PricingRoadmap";
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -272,9 +271,6 @@ const Pricing = () => {
 
       {/* Comparison Table */}
       <PricingComparison />
-
-      {/* Roadmap */}
-      <PricingRoadmap />
     </>
   );
 };

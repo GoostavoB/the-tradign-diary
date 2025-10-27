@@ -524,25 +524,6 @@
           "proof": "Sự tự tin để giữ vị thế thắng đến từ dữ liệu"
         }
       }
-    },
-    "roadmap": {
-      "title": "Sắp Ra mắt",
-      "subtitle": "Các tính năng mới thú vị mà chúng tôi đang xây dựng cho bạn",
-      "targetQuarter": "Mục tiêu",
-      "highPriority": "Ưu tiên Cao",
-      "mediumPriority": "Ưu tiên Trung bình",
-      "features": {
-        "bestAssetFinder": "Trình Tìm Tài sản Tốt nhất - Xác định các cặp có lợi nhuận nhất của bạn",
-        "batchEdit": "Chỉnh sửa Hàng loạt - Chỉnh sửa nhiều giao dịch cùng lúc",
-        "valueAtRisk": "Máy tính Giá trị Rủi ro (VaR)",
-        "apiAccess": "Quyền truy cập Khóa API Chỉ đọc",
-        "portfolioTracking": "Phân tích & Ảnh chụp Danh mục đầu tư",
-        "inAppAlerts": "Hệ thống Cảnh báo Trong ứng dụng",
-        "autosyncDelta": "Nhập Đồng bộ hóa Delta Tự động",
-        "savedViews": "Bộ lọc Nhanh & Chế độ xem Đã lưu",
-        "teamCollaboration": "Công cụ Cộng tác Nhóm"
-      },
-      "disclaimer": "Các tính năng và lịch trình có thể thay đổi dựa trên phản hồi của người dùng và ưu tiên phát triển"
     }
   },
   "blog": {
@@ -842,25 +823,6 @@
         "xpBadges": "XP & Huy hiệu",
         "challenges": "Thử thách Hàng ngày/Hàng tuần"
       }
-    },
-    "roadmap": {
-      "title": "Sắp Ra Mắt",
-      "subtitle": "Các tính năng mới thú vị mà chúng tôi đang xây dựng cho bạn",
-      "targetQuarter": "Mục tiêu",
-      "highPriority": "Ưu tiên Cao",
-      "mediumPriority": "Ưu tiên Trung bình",
-      "features": {
-        "bestAssetFinder": "Trình tìm Tài sản Tốt nhất - Xác định các cặp có lợi nhuận nhất của bạn",
-        "batchEdit": "Chỉnh sửa Hàng loạt - Chỉnh sửa nhiều giao dịch cùng một lúc",
-        "valueAtRisk": "Máy tính Giá trị Rủi ro (VaR)",
-        "apiAccess": "Truy cập Khóa API Chỉ Đọc",
-        "portfolioTracking": "Phân tích Danh mục Đầu tư & Ảnh chụp nhanh",
-        "inAppAlerts": "Hệ thống Cảnh báo Trong Ứng dụng",
-        "autosyncDelta": "Nhập Delta Tự động Đồng bộ",
-        "savedViews": "Bộ lọc Nhanh & Chế độ xem Đã lưu",
-        "teamCollaboration": "Công cụ Cộng tác Nhóm"
-      },
-      "disclaimer": "Các tính năng và thời gian biểu có thể thay đổi dựa trên phản hồi của người dùng và ưu tiên phát triển"
     },
     "comingSoon": {
       "badge": "Sắp Ra Mắt",

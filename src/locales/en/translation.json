@@ -610,25 +610,6 @@
         }
       }
     },
-    "roadmap": {
-      "title": "Coming Soon",
-      "subtitle": "Exciting new features we're building for you",
-      "targetQuarter": "Target",
-      "highPriority": "High Priority",
-      "mediumPriority": "Medium Priority",
-      "features": {
-        "bestAssetFinder": "Best Asset Finder - Identify your most profitable pairs",
-        "batchEdit": "Batch Edit - Edit multiple trades at once",
-        "valueAtRisk": "Value at Risk (VaR) Calculator",
-        "apiAccess": "Read-Only API Key Access",
-        "portfolioTracking": "Portfolio Analytics & Snapshots",
-        "inAppAlerts": "In-App Alert System",
-        "autosyncDelta": "Autosync Delta Imports",
-        "savedViews": "Fast Filters & Saved Views",
-        "teamCollaboration": "Team Collaboration Tools"
-      },
-      "disclaimer": "Features and timeline subject to change based on user feedback and development priorities"
-    },
     "comingSoon": {
       "badge": "Coming Soon",
       "enterprise": {

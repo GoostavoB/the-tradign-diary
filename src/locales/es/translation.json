@@ -1361,25 +1361,6 @@
             "proof": "La confianza para mantener posiciones ganadoras viene de los datos"
           }
         }
-      },
-      "roadmap": {
-        "title": "Próximamente",
-        "subtitle": "Nuevas funciones emocionantes que estamos construyendo para ti",
-        "targetQuarter": "Objetivo",
-        "highPriority": "Alta Prioridad",
-        "mediumPriority": "Media Prioridad",
-        "features": {
-          "bestAssetFinder": "Localizador de Mejor Activo - Identifica tus pares más rentables",
-          "batchEdit": "Edición por Lotes - Edita múltiples operaciones a la vez",
-          "valueAtRisk": "Calculadora de Valor en Riesgo (VaR)",
-          "apiAccess": "Acceso a Clave API Solo Lectura",
-          "portfolioTracking": "Análisis y Snapshots de Portafolio",
-          "inAppAlerts": "Sistema de Alertas en la Aplicación",
-          "autosyncDelta": "Importaciones Delta de Sincronización Automática",
-          "savedViews": "Filtros Rápidos y Vistas Guardadas",
-          "teamCollaboration": "Herramientas de Colaboración en Equipo"
-        },
-        "disclaimer": "Las funciones y el cronograma están sujetos a cambios según los comentarios de los usuarios y las prioridades de desarrollo"
       }
     },
     "cta": {
@@ -1969,25 +1950,6 @@
         "xpBadges": "XP e Insignias",
         "challenges": "Desafíos Diarios/Semanales"
       }
-    },
-    "roadmap": {
-      "title": "Próximamente",
-      "subtitle": "Nuevas funciones emocionantes que estamos construyendo para ti",
-      "targetQuarter": "Objetivo",
-      "highPriority": "Alta Prioridad",
-      "mediumPriority": "Prioridad Media",
-      "features": {
-        "bestAssetFinder": "Buscador de Mejor Activo - Identifica tus pares más rentables",
-        "batchEdit": "Edición por Lotes - Edita múltiples operaciones a la vez",
-        "valueAtRisk": "Calculadora de Valor en Riesgo (VaR)",
-        "apiAccess": "Acceso a Clave API de Solo Lectura",
-        "portfolioTracking": "Análisis de Cartera e Instantáneas",
-        "inAppAlerts": "Sistema de Alertas en la Aplicación",
-        "autosyncDelta": "Importaciones Delta de Autosincronización",
-        "savedViews": "Filtros Rápidos y Vistas Guardadas",
-        "teamCollaboration": "Herramientas de Colaboración en Equipo"
-      },
-      "disclaimer": "Las funciones y el cronograma están sujetos a cambios según los comentarios de los usuarios y las prioridades de desarrollo"
     },
     "comingSoon": {
       "badge": "Próximamente",

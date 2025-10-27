@@ -1351,25 +1351,6 @@
             "proof": "Confiança para manter posições vencedoras vem dos dados"
           }
         }
-      },
-      "roadmap": {
-        "title": "Em Breve",
-        "subtitle": "Novos recursos emocionantes que estamos construindo para você",
-        "targetQuarter": "Meta",
-        "highPriority": "Alta Prioridade",
-        "mediumPriority": "Média Prioridade",
-        "features": {
-          "bestAssetFinder": "Localizador de Melhor Ativo - Identifique seus pares mais lucrativos",
-          "batchEdit": "Edição em Lote - Edite várias operações de uma vez",
-          "valueAtRisk": "Calculadora de Valor em Risco (VaR)",
-          "apiAccess": "Acesso à Chave API Somente Leitura",
-          "portfolioTracking": "Análises e Snapshots de Portfólio",
-          "inAppAlerts": "Sistema de Alertas no Aplicativo",
-          "autosyncDelta": "Importações Delta de Sincronização Automática",
-          "savedViews": "Filtros Rápidos e Visualizações Salvas",
-          "teamCollaboration": "Ferramentas de Colaboração em Equipe"
-        },
-        "disclaimer": "Recursos e cronograma sujeitos a alterações com base no feedback dos usuários e prioridades de desenvolvimento"
       }
     },
     "cta": {
@@ -1959,25 +1940,6 @@
         "xpBadges": "XP e Emblemas",
         "challenges": "Desafios Diários/Semanais"
       }
-    },
-    "roadmap": {
-      "title": "Em Breve",
-      "subtitle": "Novos recursos emocionantes que estamos desenvolvendo para você",
-      "targetQuarter": "Meta",
-      "highPriority": "Alta Prioridade",
-      "mediumPriority": "Prioridade Média",
-      "features": {
-        "bestAssetFinder": "Localizador de Melhor Ativo - Identifique seus pares mais lucrativos",
-        "batchEdit": "Edição em Lote - Edite múltiplas negociações de uma vez",
-        "valueAtRisk": "Calculadora de Valor em Risco (VaR)",
-        "apiAccess": "Acesso à Chave API Somente Leitura",
-        "portfolioTracking": "Análises de Portfólio e Snapshots",
-        "inAppAlerts": "Sistema de Alertas no Aplicativo",
-        "autosyncDelta": "Importações Delta de Sincronização Automática",
-        "savedViews": "Filtros Rápidos e Visualizações Salvas",
-        "teamCollaboration": "Ferramentas de Colaboração em Equipe"
-      },
-      "disclaimer": "Recursos e cronograma sujeitos a alterações com base no feedback dos usuários e prioridades de desenvolvimento"
     },
     "comingSoon": {
       "badge": "Em Breve",
