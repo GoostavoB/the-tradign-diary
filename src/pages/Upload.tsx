@@ -871,7 +871,7 @@ const Upload = () => {
                 <div>
                   <h3 className="text-lg font-semibold">Import from CSV</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Upload a CSV export from your broker (Binance, Bybit, OKX) or from TradeJournal Pro.
+                    Import your trades directly from your exchange or your existing trading journal.
                   </p>
                 </div>
                 
