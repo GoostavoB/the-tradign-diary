@@ -1197,6 +1197,134 @@ export type Database = {
           },
         ]
       }
+      friend_challenge_notifications: {
+        Row: {
+          challenger_user_id: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          notification_type: string
+          user_id: string
+        }
+        Insert: {
+          challenger_user_id: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          notification_type: string
+          user_id: string
+        }
+        Update: {
+          challenger_user_id?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          notification_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      friend_invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          invitation_code: string
+          invitee_email: string | null
+          invitee_user_id: string | null
+          inviter_user_id: string
+          status: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          invitation_code: string
+          invitee_email?: string | null
+          invitee_user_id?: string | null
+          inviter_user_id: string
+          status?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          invitation_code?: string
+          invitee_email?: string | null
+          invitee_user_id?: string | null
+          inviter_user_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      friend_leaderboard_groups: {
+        Row: {
+          created_at: string
+          creator_user_id: string
+          description: string | null
+          id: string
+          invite_code: string
+          is_private: boolean | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          creator_user_id: string
+          description?: string | null
+          id?: string
+          invite_code?: string
+          is_private?: boolean | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          creator_user_id?: string
+          description?: string | null
+          id?: string
+          invite_code?: string
+          is_private?: boolean | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      friend_leaderboard_members: {
+        Row: {
+          group_id: string
+          id: string
+          joined_at: string
+          user_id: string
+        }
+        Insert: {
+          group_id: string
+          id?: string
+          joined_at?: string
+          user_id: string
+        }
+        Update: {
+          group_id?: string
+          id?: string
+          joined_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friend_leaderboard_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "friend_leaderboard_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       generated_reports: {
         Row: {
           generated_at: string
@@ -1284,6 +1412,7 @@ export type Database = {
         Row: {
           consistency_index: number
           created_at: string
+          group_id: string | null
           id: string
           performance_score: number
           rank: number
@@ -1296,6 +1425,7 @@ export type Database = {
         Insert: {
           consistency_index?: number
           created_at?: string
+          group_id?: string | null
           id?: string
           performance_score?: number
           rank?: number
@@ -1308,6 +1438,7 @@ export type Database = {
         Update: {
           consistency_index?: number
           created_at?: string
+          group_id?: string | null
           id?: string
           performance_score?: number
           rank?: number
@@ -1318,6 +1449,13 @@ export type Database = {
           win_rate?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "leaderboard_entries_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "friend_leaderboard_groups"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "leaderboard_entries_season_id_fkey"
             columns: ["season_id"]

@@ -13,12 +13,16 @@ import { ProfileBadgeShowcase } from '@/components/gamification/ProfileBadgeShow
 import { RareAchievementEffect } from '@/components/gamification/RareAchievementEffect';
 import { useXPSystem } from '@/hooks/useXPSystem';
 import { useDailyChallenges } from '@/hooks/useDailyChallenges';
-import { Trophy, Zap, Target, TrendingUp, Award, Star } from 'lucide-react';
+import { Trophy, Zap, Target, TrendingUp, Award, Star, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { FriendChallengeNotifications } from '@/components/gamification/FriendChallengeNotifications';
+import { useNavigate } from 'react-router-dom';
 
 const Gamification = () => {
+  const navigate = useNavigate();
   const { xpData, loading: xpLoading, getXPForNextLevel, showLevelUp, setShowLevelUp } = useXPSystem();
   const { challenges, loading: challengesLoading } = useDailyChallenges();
   const [activeTab, setActiveTab] = useState('daily');
@@ -62,11 +66,20 @@ const Gamification = () => {
       />
       
       <div className="container mx-auto py-6 space-y-6">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Gamification Hub</h1>
-          <p className="text-muted-foreground">
-            Track your journey, complete challenges, and level up
-          </p>
+        <div className="mb-6 flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Gamification Hub</h1>
+            <p className="text-muted-foreground">
+              Track your journey, complete challenges, and level up
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <FriendChallengeNotifications />
+            <Button onClick={() => navigate('/friend-leaderboard')} variant="outline">
+              <Users className="w-4 h-4 mr-2" />
+              Friends
+            </Button>
+          </div>
         </div>
 
         {/* Highlights */}
