@@ -1278,11 +1278,177 @@ const Upload = () => {
                 <MultiImageUpload
                   onTradesExtracted={(trades) => {
                     setExtractedTrades(trades);
-                    toast.success(`Extracted ${trades.length} trades from batch upload`);
+                    // Clear any existing edits
+                    setTradeEdits({});
+                    // Show success message
+                    toast.success(`Extracted ${trades.length} trades from batch upload`, {
+                      description: 'Review and edit the trades below, then click "Save All Trades"'
+                    });
                   }} 
                 />
               </div>
             </Card>
+
+            {/* Show extracted trades for editing */}
+            {extractedTrades.length > 0 && (
+              <Card className="p-6 glass">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold">Review Extracted Trades</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Review and edit the trades below before saving
+                      </p>
+                    </div>
+                    <Button
+                      onClick={saveAllExtractedTrades}
+                      disabled={loading || extractedTrades.length === 0}
+                      size="lg"
+                    >
+                      {loading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>Save All {extractedTrades.length} Trades</>
+                      )}
+                    </Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {extractedTrades.map((trade, index) => {
+                      const edits = tradeEdits[index] || {};
+                      return (
+                        <Card key={index} className="p-4 relative glass-subtle">
+                          <button
+                            onClick={() => removeExtractedTrade(index)}
+                            className="absolute top-3 right-3 p-1.5 hover:bg-destructive/10 rounded-full transition-colors group"
+                            title="Remove trade"
+                          >
+                            <Trash2 className="h-4 w-4 text-muted-foreground group-hover:text-destructive" />
+                          </button>
+
+                          <div className="space-y-3 pr-8">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                              <div>
+                                <Label className="text-xs text-muted-foreground">Symbol</Label>
+                                <Input
+                                  value={edits.symbol ?? trade.symbol}
+                                  onChange={(e) => updateTradeField(index, 'symbol', e.target.value)}
+                                  className="mt-1 h-8 text-sm font-medium"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs text-muted-foreground">Side</Label>
+                                <div className="flex gap-2 mt-1">
+                                  <Button
+                                    type="button"
+                                    variant={((edits.side ?? trade.side) === 'long') ? 'default' : 'outline'}
+                                    size="sm"
+                                    className="flex-1 h-8"
+                                    onClick={() => updateTradeField(index, 'side', 'long')}
+                                  >
+                                    Long
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    variant={((edits.side ?? trade.side) === 'short') ? 'default' : 'outline'}
+                                    size="sm"
+                                    className="flex-1 h-8"
+                                    onClick={() => updateTradeField(index, 'side', 'short')}
+                                  >
+                                    Short
+                                  </Button>
+                                </div>
+                              </div>
+                              <div>
+                                <Label className="text-xs text-muted-foreground">Leverage</Label>
+                                <Input
+                                  type="number"
+                                  value={edits.leverage ?? trade.leverage}
+                                  onChange={(e) => updateTradeField(index, 'leverage', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <Label className="text-xs text-muted-foreground">Entry Price</Label>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={edits.entry_price ?? trade.entry_price}
+                                  onChange={(e) => updateTradeField(index, 'entry_price', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs text-muted-foreground">Exit Price</Label>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  value={edits.exit_price ?? trade.exit_price}
+                                  onChange={(e) => updateTradeField(index, 'exit_price', parseFloat(e.target.value))}
+                                  className="mt-1 h-8 text-sm"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <Label className="text-xs text-muted-foreground">Opened At</Label>
+                                <Input
+                                  type="datetime-local"
+                                  value={edits.opened_at ?? trade.opened_at}
+                                  onChange={(e) => updateTradeField(index, 'opened_at', e.target.value)}
+                                  className="mt-1 h-8 text-sm"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs text-muted-foreground">Closed At</Label>
+                                <Input
+                                  type="datetime-local"
+                                  value={edits.closed_at ?? trade.closed_at}
+                                  onChange={(e) => updateTradeField(index, 'closed_at', e.target.value)}
+                                  className="mt-1 h-8 text-sm"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="pt-2 border-t border-border">
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                                <div>
+                                  <span className="text-muted-foreground">P&L:</span>{' '}
+                                  <span className={cn("font-medium", (edits.profit_loss ?? trade.profit_loss) >= 0 ? "text-green-500" : "text-red-500")}>
+                                    ${(edits.profit_loss ?? trade.profit_loss)?.toFixed(2) ?? '0.00'}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-muted-foreground">ROI:</span>{' '}
+                                  <span className={cn("font-medium", (edits.roi ?? trade.roi) >= 0 ? "text-green-500" : "text-red-500")}>
+                                    {(edits.roi ?? trade.roi)?.toFixed(2) ?? '0.00'}%
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-muted-foreground">Size:</span>{' '}
+                                  <span className="font-medium">${(edits.position_size ?? trade.position_size)?.toFixed(2) ?? '0.00'}</span>
+                                </div>
+                                <div>
+                                  <span className="text-muted-foreground">Margin:</span>{' '}
+                                  <span className="font-medium">${(edits.margin ?? trade.margin ?? 0)?.toFixed(2) ?? '0.00'}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="ai-extract" className="space-y-6">
