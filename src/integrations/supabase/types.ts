@@ -2752,6 +2752,8 @@ export type Database = {
           current_period_start: string | null
           custom_metrics_limit: number | null
           custom_metrics_used_this_month: number | null
+          daily_upload_limit: number | null
+          daily_xp_cap: number | null
           extra_credits_purchased: number | null
           has_fee_analysis_access: boolean | null
           id: string
@@ -2775,6 +2777,8 @@ export type Database = {
           current_period_start?: string | null
           custom_metrics_limit?: number | null
           custom_metrics_used_this_month?: number | null
+          daily_upload_limit?: number | null
+          daily_xp_cap?: number | null
           extra_credits_purchased?: number | null
           has_fee_analysis_access?: boolean | null
           id?: string
@@ -2798,6 +2802,8 @@ export type Database = {
           current_period_start?: string | null
           custom_metrics_limit?: number | null
           custom_metrics_used_this_month?: number | null
+          daily_upload_limit?: number | null
+          daily_xp_cap?: number | null
           extra_credits_purchased?: number | null
           has_fee_analysis_access?: boolean | null
           id?: string
@@ -2810,6 +2816,27 @@ export type Database = {
           updated_at?: string
           upload_credits_balance?: number | null
           upload_credits_used_this_month?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tier_preview_unlocks: {
+        Row: {
+          id: string
+          tier_previewed: number
+          unlocked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          tier_previewed: number
+          unlocked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          tier_previewed?: number
+          unlocked_at?: string | null
           user_id?: string
         }
         Relationships: []
@@ -2884,6 +2911,38 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "trade_annotations_trade_id_fkey"
+            columns: ["trade_id"]
+            isOneToOne: false
+            referencedRelation: "trades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trade_emotions: {
+        Row: {
+          created_at: string | null
+          emotion: string
+          id: string
+          trade_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          emotion: string
+          id?: string
+          trade_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          emotion?: string
+          id?: string
+          trade_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trade_emotions_trade_id_fkey"
             columns: ["trade_id"]
             isOneToOne: false
             referencedRelation: "trades"
@@ -4005,6 +4064,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_xp_tiers: {
+        Row: {
+          created_at: string | null
+          current_tier: number
+          daily_upload_limit: number
+          daily_xp_cap: number
+          daily_xp_earned: number
+          id: string
+          last_reset_at: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_tier?: number
+          daily_upload_limit?: number
+          daily_xp_cap?: number
+          daily_xp_earned?: number
+          id?: string
+          last_reset_at?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_tier?: number
+          daily_upload_limit?: number
+          daily_xp_cap?: number
+          daily_xp_earned?: number
+          id?: string
+          last_reset_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       wallet_snapshots: {
         Row: {
           created_at: string
@@ -4280,6 +4375,7 @@ export type Database = {
         Returns: undefined
       }
       record_social_share: { Args: { p_platform: string }; Returns: Json }
+      reset_daily_xp: { Args: never; Returns: undefined }
       reset_monthly_credits: { Args: never; Returns: undefined }
       update_lsr_latest_value: {
         Args: {

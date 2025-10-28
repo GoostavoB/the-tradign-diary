@@ -150,3 +150,94 @@ export const predictNextDayXP = (
     total: loginXP + tradeXP,
   };
 };
+
+/**
+ * XP Tier System - Phase 1
+ * 5-tier progression system for monetization
+ */
+
+export const TIER_THRESHOLDS = [0, 1000, 4000, 10000, 25000] as const;
+
+export const TIER_NAMES = ['Free', 'Bronze', 'Silver', 'Gold', 'Platinum'] as const;
+
+export const TIER_DAILY_XP_CAPS = [750, 750, 1500, 1500, 999999] as const;
+
+export const TIER_DAILY_UPLOAD_LIMITS = [1, 1, 5, 5, 20] as const;
+
+export type TierLevel = 0 | 1 | 2 | 3 | 4;
+
+/**
+ * Calculate user's tier based on total XP earned
+ */
+export const calculateTier = (totalXP: number): TierLevel => {
+  if (totalXP >= TIER_THRESHOLDS[4]) return 4;
+  if (totalXP >= TIER_THRESHOLDS[3]) return 3;
+  if (totalXP >= TIER_THRESHOLDS[2]) return 2;
+  if (totalXP >= TIER_THRESHOLDS[1]) return 1;
+  return 0;
+};
+
+/**
+ * Get tier name from tier number
+ */
+export const getTierName = (tier: TierLevel): string => {
+  return TIER_NAMES[tier];
+};
+
+/**
+ * Get XP required to reach next tier
+ */
+export const getXPToNextTier = (totalXP: number): number | null => {
+  const currentTier = calculateTier(totalXP);
+  
+  // Max tier reached
+  if (currentTier === 4) return null;
+  
+  const nextTierThreshold = TIER_THRESHOLDS[currentTier + 1];
+  return nextTierThreshold - totalXP;
+};
+
+/**
+ * Get daily XP cap for a tier
+ */
+export const getDailyXPCap = (tier: TierLevel): number => {
+  return TIER_DAILY_XP_CAPS[tier];
+};
+
+/**
+ * Get daily upload limit for a tier
+ */
+export const getDailyUploadLimit = (tier: TierLevel): number => {
+  return TIER_DAILY_UPLOAD_LIMITS[tier];
+};
+
+/**
+ * Calculate progress percentage to next tier
+ */
+export const getTierProgress = (totalXP: number): number => {
+  const currentTier = calculateTier(totalXP);
+  
+  // Max tier reached
+  if (currentTier === 4) return 100;
+  
+  const currentThreshold = TIER_THRESHOLDS[currentTier];
+  const nextThreshold = TIER_THRESHOLDS[currentTier + 1];
+  const xpInCurrentTier = totalXP - currentThreshold;
+  const xpNeededForNextTier = nextThreshold - currentThreshold;
+  
+  return Math.floor((xpInCurrentTier / xpNeededForNextTier) * 100);
+};
+
+/**
+ * Check if user can earn more XP today
+ */
+export const canEarnXP = (dailyXPEarned: number, dailyXPCap: number): boolean => {
+  return dailyXPEarned < dailyXPCap;
+};
+
+/**
+ * Get remaining XP that can be earned today
+ */
+export const getRemainingDailyXP = (dailyXPEarned: number, dailyXPCap: number): number => {
+  return Math.max(0, dailyXPCap - dailyXPEarned);
+};
