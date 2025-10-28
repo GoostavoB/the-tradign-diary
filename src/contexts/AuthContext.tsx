@@ -49,6 +49,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else if (event === 'USER_UPDATED') {
           console.log('User data updated');
         } else if (event === 'SIGNED_IN' && session?.user) {
+          // Update last login tracking for engagement reminders
+          const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          const todayLocal = new Date().toLocaleDateString('en-CA');
+
+          await supabase
+            .from('user_xp_tiers')
+            .update({ 
+              last_login_date: todayLocal,
+              last_login_timezone: userTimezone
+            })
+            .eq('user_id', session.user.id);
+
           // Identify user in analytics with full profile data
           setTimeout(async () => {
             // Fetch user tier data

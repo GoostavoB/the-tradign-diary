@@ -26,6 +26,7 @@ import { PublicPageThemeWrapper } from "@/components/PublicPageThemeWrapper";
 import { usePageTracking } from "@/hooks/usePageTracking";
 import { ConversionTracking } from "@/components/ConversionTracking";
 import { LanguageSync } from "@/components/LanguageSync";
+import { WelcomeBackToast } from "@/components/gamification/WelcomeBackToast";
 
 // Eagerly load critical pages (landing and auth)
 import Index from "./pages/Index";
@@ -129,10 +130,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 const AppRoutes = () => {
   usePageTracking(); // Automatically track page views
+  const { user } = useAuth();
   
   return (
     <>
       <LanguageSync />
+      {user && <WelcomeBackToast />}
       <Suspense fallback={<PageLoader />}>
         <Routes>
         {/* Landing page (English only) */}
