@@ -26,22 +26,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const user = authContext?.user ?? null;
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Initialize from i18n.language (already set by i18n.ts during initialization)
   const [language, setLanguage] = useState<SupportedLanguage>(() => {
-    // Priority: URL path > localStorage > browser > default
-    const pathLang = getLanguageFromPath(location.pathname);
-    if (pathLang !== DEFAULT_LANGUAGE) return pathLang;
-    
-    const stored = localStorage.getItem('app-language');
-    if (stored) {
-      // Normalize to base language code (e.g., 'en-US' -> 'en')
-      const base = stored.split('-')[0];
-      if (SUPPORTED_LANGUAGES.includes(base as SupportedLanguage)) {
-        return base as SupportedLanguage;
-      }
+    const i18nLang = i18n.language as SupportedLanguage;
+    if (SUPPORTED_LANGUAGES.includes(i18nLang)) {
+      console.log(`[LanguageProvider] Initialized from i18n: ${i18nLang}`);
+      return i18nLang;
     }
-    
+    console.log('[LanguageProvider] Fallback to en');
     return DEFAULT_LANGUAGE;
   });
+  
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -145,16 +141,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, [user, location.pathname, navigate]);
 
-  // Sync with URL path changes (only for public routes)
-  useEffect(() => {
-    if (!isPublicRoute(location.pathname)) return;
-    
-    const pathLang = getLanguageFromPath(location.pathname);
-    if (pathLang !== language) {
-      // Call the proper changeLanguage function which handles loading state
-      changeLanguage(pathLang, false);
-    }
-  }, [location.pathname, language, changeLanguage]);
+  // URL sync is no longer needed - i18n.ts handles initialization from URL
 
   return (
     <LanguageContext.Provider value={{ language, changeLanguage, isLoading }}>

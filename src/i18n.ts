@@ -44,6 +44,7 @@ function getInitialLanguage(): SupportedLanguage {
 
 const initialLanguage = getInitialLanguage();
 
+// Initialize i18n and wait for it to be ready
 i18n
   .use(initReactI18next)
   .init({
@@ -64,6 +65,9 @@ i18n
     react: {
       useSuspense: false,
     },
+  })
+  .then(() => {
+    console.log(`[i18n] ✅ Initialized with language: ${i18n.language}`);
   });
 
 // Development helper: Log missing keys

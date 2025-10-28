@@ -25,12 +25,7 @@ const IndexEs = () => {
     defaultLanguage: 'en'
   });
 
-  // Force Spanish language on mount
-  useEffect(() => {
-    if (language !== 'es') {
-      changeLanguage('es', false);
-    }
-  }, []);
+  // Language is set by i18n initialization - no need to force it here
 
   useEffect(() => {
     // Update meta tags and SEO
@@ -46,14 +41,7 @@ const IndexEs = () => {
     navigate('/auth?lang=es');
   };
 
-  // Loading guard
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-secondary/30 to-background">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  // Loading is handled at App level - no need for page-level guard
 
   return (
     <div key={`landing-${language}`} className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">

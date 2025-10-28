@@ -35,12 +35,7 @@ const Index = () => {
     defaultLanguage: 'en'
   });
 
-  // Force English language on mount
-  useEffect(() => {
-    if (language !== 'en') {
-      changeLanguage('en', false);
-    }
-  }, []);
+  // Language is set by i18n initialization - no need to force it here
 
   useEffect(() => {
     // Temporary: clear old service worker and caches to avoid stale UI
@@ -59,14 +54,7 @@ const Index = () => {
     navigate('/auth?lang=en');
   };
 
-  // Loading guard
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-950 via-gray-900 to-black">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  // Loading is handled at App level - no need for page-level guard
 
   return (
     <div key={`landing-${language}`} className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">

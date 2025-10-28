@@ -15,8 +15,9 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "next-themes";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
+import i18n from "@/i18n";
 import { GlobalSearch } from "@/components/GlobalSearch";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { InstallPrompt } from "@/components/mobile/InstallPrompt";
@@ -246,44 +247,75 @@ const AppRoutes = () => {
   );
 };
 
-const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true} storageKey="app-theme">
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <LanguageProvider>
-              <ThemeInitializer />
-              <AuthProvider>
-                <SubscriptionProvider>
-                <AccountProvider>
-                <CalmModeProvider>
-                  <CurrencyProvider>
-                    <BlurProvider>
-                      <AIAssistantProvider>
-                        <DateRangeProvider>
-                          <AppRoutes />
-                          <ConversionTracking />
-                          <PerformanceMonitor />
-                          <GlobalSearch />
-                          <OfflineIndicator />
-                          <InstallPrompt />
-                        </DateRangeProvider>
-                      </AIAssistantProvider>
-                    </BlurProvider>
-                  </CurrencyProvider>
-                </CalmModeProvider>
-                </AccountProvider>
-                </SubscriptionProvider>
-              </AuthProvider>
-            </LanguageProvider>
-          </BrowserRouter>
-        </TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+const App = () => {
+  const [i18nReady, setI18nReady] = useState(i18n.isInitialized);
+
+  useEffect(() => {
+    // Wait for i18n to be initialized before rendering
+    const checkInitialized = () => {
+      if (i18n.isInitialized) {
+        setI18nReady(true);
+      }
+    };
+
+    checkInitialized();
+
+    // Listen for initialization event
+    i18n.on('initialized', checkInitialized);
+
+    return () => {
+      i18n.off('initialized', checkInitialized);
+    };
+  }, []);
+
+  // Show loading spinner while i18n initializes
+  if (!i18nReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true} storageKey="app-theme">
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <LanguageProvider>
+                <ThemeInitializer />
+                <AuthProvider>
+                  <SubscriptionProvider>
+                  <AccountProvider>
+                  <CalmModeProvider>
+                    <CurrencyProvider>
+                      <BlurProvider>
+                        <AIAssistantProvider>
+                          <DateRangeProvider>
+                            <AppRoutes />
+                            <ConversionTracking />
+                            <PerformanceMonitor />
+                            <GlobalSearch />
+                            <OfflineIndicator />
+                            <InstallPrompt />
+                          </DateRangeProvider>
+                        </AIAssistantProvider>
+                      </BlurProvider>
+                    </CurrencyProvider>
+                  </CalmModeProvider>
+                  </AccountProvider>
+                  </SubscriptionProvider>
+                </AuthProvider>
+              </LanguageProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
