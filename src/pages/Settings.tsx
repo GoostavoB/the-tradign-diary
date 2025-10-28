@@ -289,7 +289,7 @@ const Settings = () => {
         </header>
 
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="profile">
               <User className="w-4 h-4 mr-2" aria-hidden="true" />
               Profile
@@ -301,10 +301,6 @@ const Settings = () => {
             <TabsTrigger value="setups">
               <Edit2 className="w-4 h-4 mr-2" aria-hidden="true" />
               Setups
-            </TabsTrigger>
-            <TabsTrigger value="appearance">
-              <Badge className="w-4 h-4 mr-2" />
-              Appearance
             </TabsTrigger>
             <TabsTrigger value="notifications">
               <Bell className="w-4 h-4 mr-2" />
@@ -496,42 +492,6 @@ const Settings = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="appearance" className="space-y-6">
-            <Card className="p-6 glass">
-              <h2 className="text-xl font-semibold mb-4">Theme Preferences</h2>
-              <ThemeSelector />
-            </Card>
-
-            <CurrencySelector />
-
-            <BlurSettings />
-
-            <Card className="p-6 glass">
-              <h2 className="text-xl font-semibold mb-4">Animation & Sound</h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Calm Mode</p>
-                    <p className="text-sm text-muted-foreground">Reduce animations for a more focused experience</p>
-                  </div>
-                  <Switch
-                    checked={calmModeEnabled}
-                    onCheckedChange={toggleCalmMode}
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Sound Effects</p>
-                    <p className="text-sm text-muted-foreground">Play sounds for achievements and rewards</p>
-                  </div>
-                  <Switch
-                    checked={soundEnabled}
-                    onCheckedChange={toggleSound}
-                  />
-                </div>
-              </div>
-            </Card>
-          </TabsContent>
 
       <TabsContent value="notifications" className="space-y-6">
         <Card className="p-6 glass">
