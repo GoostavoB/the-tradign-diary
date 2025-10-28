@@ -5350,9 +5350,9 @@ Internal link: Read about [Strategy Tracking Best Practices](https://www.thetrad
 
 ### Win Rate Analysis
 
-```
+\`\`\`
 Win Rate = (Winning ETH Trades / Total ETH Trades) × 100
-```
+\`\`\`
 
 **ETH scalping benchmarks:**
 - Excellent: 55-65%
@@ -5369,9 +5369,9 @@ Win Rate = (Winning ETH Trades / Total ETH Trades) × 100
 
 ### Profit Factor
 
-```
+\`\`\`
 Profit Factor = Gross Profit on ETH / Gross Loss on ETH
-```
+\`\`\`
 
 **Benchmarks:**
 - Excellent: 2.0+
@@ -5393,9 +5393,9 @@ Internal link: Deep dive into [Profit Factor Analysis](https://www.thetradingdia
 
 ### Expectancy
 
-```
+\`\`\`
 Expectancy = (Win Rate × Avg Win) - (Loss Rate × Avg Loss)
-```
+\`\`\`
 
 **Example:**
 - Win rate: 52%
@@ -5834,9 +5834,9 @@ Internal link: Learn [Strategy Tracking Methods](https://www.thetradingdiary.com
 
 ### Win Rate
 
-```
+\`\`\`
 Win Rate = (Number of Profitable BTC Trades / Total BTC Trades) × 100
-```
+\`\`\`
 
 **Bitcoin trading benchmarks:**
 - Excellent: 55-65%
@@ -5856,9 +5856,9 @@ Internal link: Deep dive into [Win Rate Analysis](https://www.thetradingdiary.co
 
 ### Profit Factor
 
-```
+\`\`\`
 Profit Factor = Total Profit on Winning Trades / Total Loss on Losing Trades
-```
+\`\`\`
 
 **Benchmarks:**
 - Excellent: 2.0+ (making $2 for every $1 lost)
@@ -5880,9 +5880,9 @@ Internal link: Comprehensive guide to [Profit Factor Calculation](https://www.th
 
 ### Expectancy
 
-```
+\`\`\`
 Expectancy = (Win Rate × Average Win) - (Loss Rate × Average Loss)
-```
+\`\`\`
 
 **Example calculation:**
 - Win rate: 54%
