@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -34,6 +34,37 @@ export const UserMenu = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [profileName, setProfileName] = useState<string | null>(null);
+
+  // Fetch profile name from database
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchProfile = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+
+      if (data?.full_name) {
+        setProfileName(data.full_name);
+      }
+    };
+
+    fetchProfile();
+
+    // Listen for profile updates
+    const handleProfileUpdate = () => {
+      fetchProfile();
+    };
+
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener('profileUpdated', handleProfileUpdate);
+    };
+  }, [user]);
 
   const handleLogout = async () => {
     await signOut();
@@ -105,8 +136,8 @@ export const UserMenu = () => {
 
   if (!user) return null;
 
-  // Get display name from user metadata or email
-  const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+  // Get display name from profile, user metadata, or email
+  const displayName = profileName || user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
 
   return (
     <>

@@ -96,6 +96,8 @@ const Settings = () => {
       toast.error('Failed to update profile');
     } else {
       toast.success('Profile updated!');
+      // Trigger profile update event to refresh UserMenu
+      window.dispatchEvent(new Event('profileUpdated'));
     }
   };
 
