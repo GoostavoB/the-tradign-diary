@@ -102,6 +102,33 @@ export const useXPSystem = () => {
     if (!user || amount <= 0) return;
 
     try {
+      // Check daily XP cap before awarding XP
+      const { data: tierData } = await supabase
+        .from('user_xp_tiers')
+        .select('daily_xp_earned, daily_xp_cap, current_tier')
+        .eq('user_id', user.id)
+        .single();
+
+      const dailyXPEarned = tierData?.daily_xp_earned || 0;
+      const dailyXPCap = tierData?.daily_xp_cap || 750;
+      const currentTier = tierData?.current_tier || 0;
+
+      // Check if user has hit daily cap
+      if (dailyXPEarned >= dailyXPCap) {
+        toast.error('Daily XP limit reached!', {
+          description: 'Upgrade to Pro/Elite to keep earning XP',
+          duration: 5000
+        });
+        
+        analytics.trackDailyXPCapReached({
+          dailyXP: dailyXPEarned,
+          capLimit: dailyXPCap,
+          planType: currentTier === 0 ? 'free' : currentTier === 1 ? 'bronze' : currentTier === 2 ? 'silver' : 'gold'
+        });
+        
+        return; // Stop XP award
+      }
+
       // Check for streak multiplier using centralized XP engine
       const { data: progression } = await supabase
         .from('user_progression')
@@ -118,7 +145,17 @@ export const useXPSystem = () => {
       const streakType = activityType.includes('trade') ? 'trade' : 'login';
       const multiplier = getStreakMultiplier(streakType, bestStreak);
 
-      const finalAmount = Math.floor(amount * multiplier);
+      let finalAmount = Math.floor(amount * multiplier);
+      
+      // Cap the XP amount if it would exceed daily cap
+      const remainingDailyXP = dailyXPCap - dailyXPEarned;
+      if (finalAmount > remainingDailyXP) {
+        finalAmount = remainingDailyXP;
+        toast.warning('XP capped', {
+          description: `Only ${remainingDailyXP} XP remaining today`,
+          duration: 3000
+        });
+      }
 
       const newTotalXP = xpData.totalXPEarned + finalAmount;
       const { level: newLevel, currentXP: newCurrentXP } = calculateLevelFromXP(newTotalXP);
@@ -137,6 +174,12 @@ export const useXPSystem = () => {
         .eq('user_id', user.id);
 
       if (updateError) throw updateError;
+
+      // Update daily XP earned in user_xp_tiers
+      await supabase
+        .from('user_xp_tiers')
+        .update({ daily_xp_earned: dailyXPEarned + finalAmount })
+        .eq('user_id', user.id);
 
       // Log activity
       const { error: logError } = await supabase

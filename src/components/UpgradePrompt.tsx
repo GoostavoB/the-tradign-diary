@@ -13,19 +13,57 @@ interface UpgradePromptProps {
   open: boolean;
   onClose: () => void;
   feature?: string;
+  trigger?: 'daily_cap' | 'widget_lock' | 'upload_limit';
 }
 
-export function UpgradePrompt({ open, onClose, feature = 'this feature' }: UpgradePromptProps) {
+export function UpgradePrompt({ open, onClose, feature = 'this feature', trigger = 'widget_lock' }: UpgradePromptProps) {
   const navigate = useNavigate();
 
-  const proFeatures = [
-    'Fully customizable dashboard',
-    'Drag & drop widget placement',
-    'Access to all advanced widgets',
-    'Add widgets from Insights section',
-    'Save custom layouts',
-    'Priority support',
-  ];
+  const getContent = () => {
+    switch (trigger) {
+      case 'daily_cap':
+        return {
+          title: 'Daily XP Limit Reached!',
+          description: "You've earned your maximum XP for today",
+          features: [
+            'Free: 750 XP per day',
+            'Pro: 1,500 XP per day (2x more)',
+            'Elite: Unlimited XP earning',
+            'Keep your progress momentum',
+            'Unlock faster tier progression',
+            'Priority support',
+          ]
+        };
+      case 'upload_limit':
+        return {
+          title: 'Upload Limit Reached',
+          description: 'Upgrade to upload more trades today',
+          features: [
+            'Free: 1 upload per day',
+            'Pro: 5 uploads per day',
+            'Elite: 20 uploads per day',
+            'Bulk CSV import',
+            'Advanced trade analysis',
+            'Priority support',
+          ]
+        };
+      default:
+        return {
+          title: 'Upgrade to Pro or Elite',
+          description: `Unlock ${feature} and many more premium features`,
+          features: [
+            'Fully customizable dashboard',
+            'Drag & drop widget placement',
+            'Access to all advanced widgets',
+            'Add widgets from Insights section',
+            'Save custom layouts',
+            'Priority support',
+          ]
+        };
+    }
+  };
+
+  const content = getContent();
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -37,16 +75,16 @@ export function UpgradePrompt({ open, onClose, feature = 'this feature' }: Upgra
             </div>
           </div>
           <DialogTitle className="text-center text-2xl">
-            Upgrade to Pro or Elite
+            {content.title}
           </DialogTitle>
           <DialogDescription className="text-center">
-            Unlock {feature} and many more premium features
+            {content.description}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            {proFeatures.map((feature, index) => (
+            {content.features.map((feature, index) => (
               <div key={index} className="flex items-start gap-3">
                 <div className="mt-0.5">
                   <div className="p-1 rounded-full bg-primary/10">
