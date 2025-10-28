@@ -845,6 +845,42 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_rewards_log: {
+        Row: {
+          bonus_multiplier: number | null
+          claimed_at: string
+          consecutive_days: number
+          created_at: string
+          id: string
+          reward_date: string
+          reward_tier: number | null
+          user_id: string
+          xp_awarded: number
+        }
+        Insert: {
+          bonus_multiplier?: number | null
+          claimed_at?: string
+          consecutive_days?: number
+          created_at?: string
+          id?: string
+          reward_date: string
+          reward_tier?: number | null
+          user_id: string
+          xp_awarded?: number
+        }
+        Update: {
+          bonus_multiplier?: number | null
+          claimed_at?: string
+          consecutive_days?: number
+          created_at?: string
+          id?: string
+          reward_date?: string
+          reward_tier?: number | null
+          user_id?: string
+          xp_awarded?: number
+        }
+        Relationships: []
+      }
       dopamine_events: {
         Row: {
           animation_type: string | null
@@ -4129,6 +4165,7 @@ export type Database = {
       }
       user_xp_tiers: {
         Row: {
+          consecutive_login_days: number | null
           created_at: string | null
           current_tier: number
           daily_upload_count: number | null
@@ -4140,12 +4177,15 @@ export type Database = {
           last_login_date: string | null
           last_login_timezone: string | null
           last_reset_at: string | null
+          last_reward_claimed_date: string | null
           psychology_logs_today: number | null
           reminder_intensity: string | null
+          total_rewards_claimed: number | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          consecutive_login_days?: number | null
           created_at?: string | null
           current_tier?: number
           daily_upload_count?: number | null
@@ -4157,12 +4197,15 @@ export type Database = {
           last_login_date?: string | null
           last_login_timezone?: string | null
           last_reset_at?: string | null
+          last_reward_claimed_date?: string | null
           psychology_logs_today?: number | null
           reminder_intensity?: string | null
+          total_rewards_claimed?: number | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          consecutive_login_days?: number | null
           created_at?: string | null
           current_tier?: number
           daily_upload_count?: number | null
@@ -4174,8 +4217,10 @@ export type Database = {
           last_login_date?: string | null
           last_login_timezone?: string | null
           last_reset_at?: string | null
+          last_reward_claimed_date?: string | null
           psychology_logs_today?: number | null
           reminder_intensity?: string | null
+          total_rewards_claimed?: number | null
           updated_at?: string | null
           user_id?: string
         }
@@ -4416,6 +4461,14 @@ export type Database = {
       add_extra_credits: {
         Args: { p_amount: number; p_credits: number; p_user_id: string }
         Returns: boolean
+      }
+      calculate_daily_reward: {
+        Args: { p_consecutive_days: number; p_user_tier: number }
+        Returns: {
+          bonus_multiplier: number
+          reward_tier: number
+          xp_reward: number
+        }[]
       }
       can_add_account: { Args: { p_user_id: string }; Returns: boolean }
       can_create_custom_metric: {

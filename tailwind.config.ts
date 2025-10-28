@@ -196,6 +196,16 @@ export default {
             opacity: "0.7",
           },
         },
+        "bounce-slow": {
+          "0%, 100%": {
+            transform: "translateY(0)",
+            animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "50%": {
+            transform: "translateY(-10px)",
+            animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -211,6 +221,7 @@ export default {
         "shake": "shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97)",
         "pulse-error": "pulse-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "pulse-slow": "pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "bounce-slow": "bounce-slow 2s ease-in-out infinite",
       },
     },
   },

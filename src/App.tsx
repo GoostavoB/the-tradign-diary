@@ -29,6 +29,9 @@ import { ConversionTracking } from "@/components/ConversionTracking";
 import { LanguageSync } from "@/components/LanguageSync";
 import { WelcomeBackToast } from "@/components/gamification/WelcomeBackToast";
 import { OnboardingWrapper } from "@/components/onboarding/OnboardingWrapper";
+import { DailyRewardModal } from "@/components/rewards/DailyRewardModal";
+import { DailyRewardIndicator } from "@/components/rewards/DailyRewardIndicator";
+import { useDailyRewards } from "@/hooks/useDailyRewards";
 
 // Eagerly load critical pages (landing and auth)
 import Index from "./pages/Index";
@@ -133,12 +136,22 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const AppRoutes = () => {
   usePageTracking(); // Automatically track page views
   const { user } = useAuth();
+  const { reward, showRewardModal, setShowRewardModal, claimReward } = useDailyRewards();
   
   return (
     <>
       <LanguageSync />
       {user && <WelcomeBackToast />}
       {user && <OnboardingWrapper />}
+      {user && <DailyRewardIndicator />}
+      {user && (
+        <DailyRewardModal
+          open={showRewardModal}
+          onClose={() => setShowRewardModal(false)}
+          reward={reward}
+          onClaim={claimReward}
+        />
+      )}
       <Suspense fallback={<PageLoader />}>
         <Routes>
         {/* Landing page (English only) */}
