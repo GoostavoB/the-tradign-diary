@@ -29,12 +29,7 @@ const DashboardShowcase = () => {
             className="space-y-6 lg:pr-8 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             <h2 id="dashboard-showcase-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-              {t('landing.dashboardShowcase.title').split('This one shows progress.')[0]}
-              <span className="text-gradient-primary">
-                {t('landing.dashboardShowcase.title').includes('This one shows progress.') 
-                  ? 'This one shows progress.' 
-                  : t('landing.dashboardShowcase.title').split('.').pop()}
-              </span>
+              {t('landing.dashboardShowcase.title')}
             </h2>
             
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl">
