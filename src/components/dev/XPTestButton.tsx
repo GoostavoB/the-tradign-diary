@@ -1,10 +1,15 @@
 import { Button } from '@/components/ui/button';
-import { Zap, FlaskConical } from 'lucide-react';
+import { Zap, FlaskConical, RotateCcw } from 'lucide-react';
 import { useXPSystem } from '@/hooks/useXPSystem';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useUserTier } from '@/hooks/useUserTier';
 
 export function XPTestButton() {
-  const { addXP } = useXPSystem();
+  const { addXP, refresh: refreshXP } = useXPSystem();
+  const { refresh: refreshTier } = useUserTier();
+  const { user } = useAuth();
 
   // Only show in development mode
   if (!import.meta.env.DEV) {
@@ -24,8 +29,30 @@ export function XPTestButton() {
     }
   };
 
+  const handleResetDailyXP = async () => {
+    try {
+      if (!user) {
+        toast.error('Not signed in');
+        return;
+      }
+      if (!confirm("Reset today's XP to 0?")) return;
+      const { error } = await supabase
+        .from('user_xp_tiers')
+        .update({ daily_xp_earned: 0 })
+        .eq('user_id', user.id);
+      if (error) throw error;
+      refreshXP?.();
+      refreshTier?.();
+      toast.success("Today's XP reset to 0");
+    } catch (error) {
+      toast.error('Failed to reset daily XP', {
+        description: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  };
+
   return (
-    <div className="fixed bottom-4 left-4 z-50">
+    <div className="fixed bottom-4 left-4 z-50 space-y-2">
       <Button
         onClick={handleTestXP}
         variant="outline"
@@ -35,6 +62,15 @@ export function XPTestButton() {
         <FlaskConical className="w-4 h-4" />
         <Zap className="w-4 h-4" />
         +100 XP (Test Only)
+      </Button>
+      <Button
+        onClick={handleResetDailyXP}
+        variant="outline"
+        className="gap-2"
+        size="lg"
+      >
+        <RotateCcw className="w-4 h-4" />
+        Reset Daily XP (Dev)
       </Button>
     </div>
   );
