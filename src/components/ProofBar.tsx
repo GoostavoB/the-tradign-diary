@@ -14,12 +14,12 @@ export const ProofBar = () => {
     {
       icon: TrendingUp,
       value: "1M+",
-      label: t('landing.proofBar.tradesLogged', 'Trades Logged'),
+      label: t('landing.proofBar.tradesAnalyzed', 'Trades Analyzed'),
     },
     {
       icon: Star,
       value: "98%",
-      label: t('landing.proofBar.satisfaction', 'Satisfaction'),
+      label: t('landing.proofBar.averageRating', 'Average Rating'),
     },
   ];
 

@@ -41,13 +41,13 @@ const Hero = () => {
             <h1 id="hero-title" className="text-[clamp(40px,6vw,68px)] font-bold leading-[1.1] tracking-tight max-w-md lg:max-w-3xl" style={{
             textWrap: 'balance' as any
           }}>
-              Maximize your trading performance
+              {t('landing.hero.mainTitle', 'Maximize your trading performance')}
             </h1>
 
             {/* Subtitle - Centered on mobile, left-aligned on desktop */}
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-md lg:max-w-xl" style={{
             textWrap: 'balance' as any
-          }}>Upload your trades. TD tracks, analyzes, and reveals your performance with AI-powered insights</p>
+          }}>{t('landing.hero.mainSubtitle', 'Upload your trades. TD tracks, analyzes, and reveals your performance with AI-powered insights')}</p>
 
             {/* CTA Buttons */}
             <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-stretch sm:items-center w-full sm:w-auto">
