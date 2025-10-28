@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Link, useParams } from 'react-router-dom';
-import { MobileHeader } from '@/components/MobileHeader';
+import { PublicHeader } from '@/components/PublicHeader';
 import Footer from '@/components/Footer';
 import { SkipToContent } from '@/components/SkipToContent';
 import { Badge } from '@/components/ui/badge';
@@ -90,9 +90,9 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
       <SkipToContent />
-      <MobileHeader />
+      <PublicHeader />
       
-      <main id="main-content" className="pt-20 pb-16 px-4">
+      <main id="main-content" className="pt-28 pb-16 px-4">
         <div className="max-w-5xl mx-auto space-y-8">
         <div className="text-center space-y-3">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">

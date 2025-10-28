@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { MobileHeader } from '@/components/MobileHeader';
+import { PublicHeader } from '@/components/PublicHeader';
 import Footer from '@/components/Footer';
 import { SkipToContent } from '@/components/SkipToContent';
 import { Clock, Calendar, User, ArrowLeft, Share2 } from 'lucide-react';
@@ -51,7 +51,7 @@ export default function BlogArticle() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
         <SkipToContent />
-        <MobileHeader />
+        <PublicHeader />
         
         <main id="main-content" className="pt-20 pb-16 px-4">
           <div className="container max-w-4xl mx-auto px-4 py-12 text-center">
@@ -101,7 +101,7 @@ export default function BlogArticle() {
 
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
         <SkipToContent />
-        <MobileHeader />
+        <PublicHeader />
         
         <main id="main-content" className="pt-20 pb-16 px-4">
           <article className="container max-w-4xl mx-auto px-4 py-12">

@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { blogArticles, getRelatedArticles } from '@/data/blogArticles';
-import { MobileHeader } from '@/components/MobileHeader';
+import { PublicHeader } from '@/components/PublicHeader';
 import Footer from '@/components/Footer';
 import { SkipToContent } from '@/components/SkipToContent';
 import { ArrowLeft, Calendar, Clock, User, Share2 } from 'lucide-react';
@@ -156,7 +156,7 @@ const BlogPost = () => {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
         <SkipToContent />
-        <MobileHeader />
+        <PublicHeader />
         
         <main id="main-content" className="pt-20 pb-16 px-4">
           <div className="max-w-4xl mx-auto text-center py-12">
@@ -181,7 +181,7 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
       <SkipToContent />
-      <MobileHeader />
+      <PublicHeader />
       
       <main id="main-content" className="pt-20 pb-16 px-4">
         <div className="max-w-7xl mx-auto">

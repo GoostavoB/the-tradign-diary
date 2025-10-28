@@ -7,7 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import Pricing from "@/components/Pricing";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import { MobileHeader } from "@/components/MobileHeader";
+import { PublicHeader } from "@/components/PublicHeader";
 import { ProofBar } from "@/components/ProofBar";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -45,7 +45,7 @@ const IndexEs = () => {
 
   return (
     <div key={`landing-${language}`} className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">
-      <MobileHeader />
+      <PublicHeader />
       
       <main className="pt-14">
         <Hero />

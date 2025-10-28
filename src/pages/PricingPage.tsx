@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Check, HelpCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import { MobileHeader } from "@/components/MobileHeader";
+import { PublicHeader } from "@/components/PublicHeader";
 import Footer from "@/components/Footer";
 import { trackLandingEvents } from "@/utils/analyticsEvents";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -105,7 +105,7 @@ const PricingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">
-      <MobileHeader />
+      <PublicHeader />
       
       <main className="pt-20 pb-20 overflow-x-hidden">
         {/* Hero Section */}

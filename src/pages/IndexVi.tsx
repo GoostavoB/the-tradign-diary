@@ -16,7 +16,7 @@ import Pricing from "@/components/Pricing";
 import SecurityTrust from "@/components/landing/SecurityTrust";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import { MobileHeader } from "@/components/MobileHeader";
+import { PublicHeader } from "@/components/PublicHeader";
 import { SkipToContent } from "@/components/SkipToContent";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -60,7 +60,7 @@ const IndexVi = () => {
     <div key={`landing-${language}`} className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">
       <SkipToContent />
       <ValueBar />
-      <MobileHeader />
+      <PublicHeader />
       
       <main id="main-content" className="pt-14 overflow-x-hidden">
         {/* Mobile Hero with Dashboard Preview */}

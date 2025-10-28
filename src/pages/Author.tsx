@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MobileHeader } from '@/components/MobileHeader';
+import { PublicHeader } from '@/components/PublicHeader';
 import Footer from '@/components/Footer';
 import { SkipToContent } from '@/components/SkipToContent';
 import { blogArticles } from '@/data/blogArticles';
@@ -92,7 +92,7 @@ const Author = () => {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
         <SkipToContent />
-        <MobileHeader />
+        <PublicHeader />
         <main id="main-content" className="pt-20 pb-16 px-4">
           <div className="max-w-4xl mx-auto text-center py-12">
             <h1 className="text-3xl font-bold mb-4">Author Not Found</h1>
@@ -115,7 +115,7 @@ const Author = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
       <SkipToContent />
-      <MobileHeader />
+      <PublicHeader />
       <main id="main-content" className="pt-20 pb-16 px-4">
         <div className="max-w-4xl mx-auto space-y-6">
         <Link to="/blog">

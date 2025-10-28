@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Mail, Building2, User, MessageSquare } from 'lucide-react';
-import { MobileHeader } from '@/components/MobileHeader';
+import { PublicHeader } from '@/components/PublicHeader';
 import Footer from '@/components/Footer';
 import { SkipToContent } from '@/components/SkipToContent';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -105,7 +105,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
       <SkipToContent />
-      <MobileHeader />
+      <PublicHeader />
       
       <main id="main-content" className="pt-20 pb-16 px-4">
         <div className="max-w-4xl mx-auto space-y-8">
