@@ -345,6 +345,46 @@ const blogArticles = [
   {
     slug: 'strategy-tracker/grid-bots-ethereum-daily',
     lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/win-rate',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/profit-factor',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/max-drawdown',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/sharpe-ratio',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/sortino-ratio',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/expectancy',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/holding-time',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/pnl-by-coin',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/market-regime',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'metric-hub/trade-duration',
+    lastmod: '2025-10-28',
   }
 ];
 

@@ -8012,5 +8012,465 @@ Yes. You can export clean CSVs and reports any time.
 ## Next step
 Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
 `
+  },
+  {
+    title: "Win Rate in Crypto Trading",
+    slug: "metric-hub/win-rate",
+    metaTitle: "Win Rate in Crypto Trading | Calculate Your Trading Win Rate",
+    metaDescription: "Define and use win rate to review your trading results.",
+    description: "Learn how to calculate and use win rate to evaluate your crypto trading performance.",
+    focusKeyword: "crypto trading win rate",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["win rate", "metrics", "trading performance", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/win-rate",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Profit Factor in Crypto Trading",
+    slug: "metric-hub/profit-factor",
+    metaTitle: "Profit Factor in Crypto Trading | Calculate Trading Profit Factor",
+    metaDescription: "Define and use profit factor for risk-aware decisions.",
+    description: "Learn how to calculate and use profit factor for better risk management in crypto trading.",
+    focusKeyword: "crypto trading profit factor",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["profit factor", "metrics", "risk management", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/profit-factor",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Max Drawdown in Crypto Trading",
+    slug: "metric-hub/max-drawdown",
+    metaTitle: "Max Drawdown in Crypto Trading | Calculate Maximum Drawdown",
+    metaDescription: "Define and use max drawdown for capital protection.",
+    description: "Learn how to calculate and use max drawdown to protect your trading capital.",
+    focusKeyword: "crypto trading max drawdown",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["max drawdown", "metrics", "risk management", "capital protection"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/max-drawdown",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Sharpe Ratio in Crypto Trading",
+    slug: "metric-hub/sharpe-ratio",
+    metaTitle: "Sharpe Ratio in Crypto Trading | Calculate Risk-Adjusted Returns",
+    metaDescription: "Define and use the Sharpe ratio with examples.",
+    description: "Learn how to calculate and use the Sharpe ratio for risk-adjusted performance evaluation.",
+    focusKeyword: "crypto trading Sharpe ratio",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["Sharpe ratio", "metrics", "risk-adjusted returns", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/sharpe-ratio",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Sortino Ratio in Crypto Trading",
+    slug: "metric-hub/sortino-ratio",
+    metaTitle: "Sortino Ratio in Crypto Trading | Calculate Downside Risk",
+    metaDescription: "Define and use the Sortino ratio for downside risk.",
+    description: "Learn how to calculate and use the Sortino ratio for downside risk evaluation.",
+    focusKeyword: "crypto trading Sortino ratio",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["Sortino ratio", "metrics", "downside risk", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/sortino-ratio",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Expectancy in Crypto Trading",
+    slug: "metric-hub/expectancy",
+    metaTitle: "Expectancy in Crypto Trading | Calculate Trade Expectancy",
+    metaDescription: "Define and use expectancy and R-multiples.",
+    description: "Learn how to calculate and use expectancy and R-multiples for trading success.",
+    focusKeyword: "crypto trading expectancy",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["expectancy", "R-multiples", "metrics", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/expectancy",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Holding Time in Crypto Trading",
+    slug: "metric-hub/holding-time",
+    metaTitle: "Holding Time in Crypto Trading | Analyze Trade Duration",
+    metaDescription: "Measure holding time and outcome by strategy.",
+    description: "Learn how to measure and analyze holding time for different trading strategies.",
+    focusKeyword: "crypto trading holding time",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["holding time", "metrics", "trade duration", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/holding-time",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "PnL by Coin in Crypto Trading",
+    slug: "metric-hub/pnl-by-coin",
+    metaTitle: "PnL by Coin in Crypto Trading | Analyze Profit by Cryptocurrency",
+    metaDescription: "Review your PnL by coin and market regime.",
+    description: "Learn how to analyze your profit and loss performance by cryptocurrency and market conditions.",
+    focusKeyword: "crypto trading PnL by coin",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["PnL", "metrics", "coin analysis", "performance"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/pnl-by-coin",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Market Regime Performance in Crypto",
+    slug: "metric-hub/market-regime",
+    metaTitle: "Market Regime Performance | Analyze Trading by Market Conditions",
+    metaDescription: "See performance by bull, bear, and range regimes.",
+    description: "Learn how to analyze your trading performance across different market regimes.",
+    focusKeyword: "crypto market regime performance",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["market regime", "metrics", "bull market", "bear market", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/market-regime",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
+  },
+  {
+    title: "Trade Duration Distribution in Crypto",
+    slug: "metric-hub/trade-duration",
+    metaTitle: "Trade Duration Distribution | Analyze Trading Timeframes",
+    metaDescription: "Study trade duration and exit timing.",
+    description: "Learn how to analyze trade duration distribution and optimize your exit timing.",
+    focusKeyword: "crypto trade duration analysis",
+    readTime: "3 min read",
+    author: "Gustavo",
+    date: "2025-10-28",
+    category: "Metrics",
+    tags: ["trade duration", "metrics", "exit timing", "analysis"],
+    canonical: "https://www.thetradingdiary.com/blog/metric-hub/trade-duration",
+    language: "en",
+    heroImage: undefined,
+    heroImageAlt: undefined,
+    content: `
+You want clean tracking and faster reviews. A dedicated trading journal imports data, calculates metrics, and keeps one source of truth.
+
+Visit [TheTradingDiary.com](https://www.thetradingdiary.com)
+
+## Why this matters
+- Less manual work, fewer errors.
+- Clear metrics like win rate, profit factor, drawdown, and expectancy.
+- One place for all exchanges and strategies.
+
+## Quick steps
+1. Create your account on [TheTradingDiary.com](https://www.thetradingdiary.com).
+2. Connect your exchange or upload CSV.
+3. Tag strategies and timeframes.
+4. Review metrics and export reports.
+
+## FAQs
+### Is this free to try
+Yes. You can start a free trial and import recent trades.
+
+### Do you support multiple exchanges
+Yes. You can connect major exchanges and keep one unified journal.
+
+### Can I export my data
+Yes. You can export clean CSVs and reports any time.
+
+## Next step
+Start your free trial and import your last 90 days: [TheTradingDiary.com](https://www.thetradingdiary.com)
+`
   }
 ];
