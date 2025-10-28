@@ -149,6 +149,42 @@ const blogArticles = [
   {
     slug: 'strategy-tracker/copy-trading-ethereum',
     lastmod: '2025-10-28',
+  },
+  {
+    slug: 'journal-vs-excel/bybit',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'journal-vs-notion/bybit',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'journal-vs-google-sheets/bybit',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/kucoin-bitcoin',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/kucoin-avalanche',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/kraken-avalanche',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/coinbase-avalanche',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'strategy-tracker/day-trading-bitcoin',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'strategy-tracker/scalping-ethereum',
+    lastmod: '2025-10-28',
   }
 ];
 
