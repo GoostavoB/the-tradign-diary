@@ -149,30 +149,35 @@ const Pricing = () => {
             </p>
 
             {/* Billing Toggle */}
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <button
-                onClick={() => setBillingCycle('monthly')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  billingCycle === 'monthly'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {t('pricing.billing.monthly')}
-              </button>
-              <button
-                onClick={() => setBillingCycle('annual')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all relative ${
-                  billingCycle === 'annual'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {t('pricing.billing.annual')}
-                <span className="absolute -top-2 -right-2 bg-green-500 text-primary-foreground text-xs px-2 py-0.5 rounded-full font-semibold">
-                  {t('pricing.saveBadge', 'Save 2 months')}
-                </span>
-              </button>
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+              <div className="inline-flex items-center rounded-xl bg-card/40 backdrop-blur-sm border border-border/50 p-1">
+                <button
+                  onClick={() => setBillingCycle('monthly')}
+                  aria-pressed={billingCycle === 'monthly'}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    billingCycle === 'monthly'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {t('pricing.billing.monthly')}
+                </button>
+                <button
+                  onClick={() => setBillingCycle('annual')}
+                  aria-pressed={billingCycle === 'annual'}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                    billingCycle === 'annual'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {t('pricing.billing.annual')}
+                </button>
+              </div>
+
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-500/15 text-green-500 text-xs font-semibold">
+                {t('pricing.saveBadge', 'Save 2 months')}
+              </span>
             </div>
           </div>
 
