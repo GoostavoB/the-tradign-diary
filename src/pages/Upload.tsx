@@ -36,6 +36,9 @@ import { TradeEditCard } from '@/components/upload/TradeEditCard';
 import { useQuery } from '@tanstack/react-query';
 import { useTradeXPRewards } from '@/hooks/useTradeXPRewards';
 import type { Trade } from '@/types/trade';
+import { DailyUploadStatus } from '@/components/upload/DailyUploadStatus';
+import { useDailyUploadLimit } from '@/hooks/useDailyUploadLimit';
+import { UpgradePrompt } from '@/components/UpgradePrompt';
 
 interface ExtractedTrade {
   symbol: string;
@@ -98,6 +101,11 @@ const Upload = () => {
 
   // Process XP rewards for unrewarded trades
   useTradeXPRewards(recentTrades);
+  
+  // Daily upload limit tracking
+  const { canUpload, remainingUploads, incrementUploadCount } = useDailyUploadLimit();
+  const [showUpgradeLimitPrompt, setShowUpgradeLimitPrompt] = useState(false);
+  
   const [loading, setLoading] = useState(false);
   const [extracting, setExtracting] = useState(false);
   const [uploadStep, setUploadStep] = useState<1 | 2 | 3 | 4>(1);
@@ -407,6 +415,15 @@ const Upload = () => {
 
   const handleConfirmExtraction = async () => {
     if (!extractionPreview || extracting) return;
+    
+    // Check upload limit FIRST
+    if (!canUpload) {
+      setShowUpgradeLimitPrompt(true);
+      toast.error('Daily upload limit reached', {
+        description: `You've used all ${remainingUploads} uploads today. Upgrade for more!`
+      });
+      return;
+    }
     
     // Validate broker is selected
     if (!preSelectedBroker || preSelectedBroker.trim() === '') {
@@ -843,6 +860,9 @@ const Upload = () => {
         // Note: We're not using the hook here directly since we're in an async function
         // The dashboard will pick up the new badges on next render
 
+        // Increment upload counter
+        await incrementUploadCount();
+        
         // Show success feedback
         setSavedTradesCount(extractedTrades.length);
         setShowSuccess(true);
@@ -873,6 +893,15 @@ const Upload = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
+    
+    // Check upload limit for new trades (not edits)
+    if (!editId && !canUpload) {
+      setShowUpgradeLimitPrompt(true);
+      toast.error('Daily upload limit reached', {
+        description: `You've used all uploads today. Upgrade for more!`
+      });
+      return;
+    }
 
     setLoading(true);
 
@@ -944,6 +973,11 @@ const Upload = () => {
     if (error) {
       toast.error('Failed to save trade');
     } else {
+      // Increment upload counter for new trades
+      if (!editId) {
+        await incrementUploadCount();
+      }
+      
       toast.success(editId ? 'Trade updated successfully!' : 'Trade added successfully!');
       navigate('/dashboard');
     }
@@ -964,6 +998,9 @@ const Upload = () => {
           <h1 className="text-4xl font-bold mb-2">{editId ? 'Edit Trade' : 'Upload Trade'}</h1>
           <p className="text-muted-foreground">Record your trading activity manually or extract from image</p>
         </div>
+        
+        {/* Daily Upload Limit Display */}
+        <DailyUploadStatus />
 
         <Tabs defaultValue="ai-extract" className="w-full">
           <TabsList className="grid w-full grid-cols-4">
@@ -1909,6 +1946,14 @@ const Upload = () => {
         duplicateDate={duplicateDialog.trade?.existingDate}
         duplicateSymbol={duplicateDialog.trade?.existingSymbol}
         duplicatePnl={duplicateDialog.trade?.existingPnl}
+      />
+      
+      {/* Upload Limit Upgrade Prompt */}
+      <UpgradePrompt
+        open={showUpgradeLimitPrompt}
+        onClose={() => setShowUpgradeLimitPrompt(false)}
+        trigger="upload_limit"
+        feature="more daily uploads"
       />
     </AppLayout>
   );
