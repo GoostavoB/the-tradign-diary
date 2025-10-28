@@ -24,7 +24,9 @@ import { useCalmMode } from '@/contexts/CalmModeContext';
 import { SkipToContent } from '@/components/SkipToContent';
 import { ProfileFrameSelector } from '@/components/settings/ProfileFrameSelector';
 import { WidgetStyleCustomizer } from '@/components/settings/WidgetStyleCustomizer';
+import { ColorCustomizer } from '@/components/settings/ColorCustomizer';
 import { posthog } from '@/lib/posthog';
+import { Palette } from 'lucide-react';
 
 const Settings = () => {
   const { user } = useAuth();
@@ -539,10 +541,26 @@ const Settings = () => {
                 )}
               </div>
             </Card>
+
+            {/* Theme Colors Section */}
+            <Card className="p-6 glass">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Theme Colors</h2>
+                <Badge variant="secondary">
+                  <Palette className="w-3 h-3 mr-1" />
+                  Customizable
+                </Badge>
+              </div>
+              <p className="text-sm text-muted-foreground mb-6">
+                Personalize your dashboard with custom colors. 
+                Free users unlock primary color at <strong>Tier 5 + 30-day streak</strong>. 
+                Pro unlocks 3 colors. Elite unlocks all colors.
+              </p>
+              <ColorCustomizer />
+            </Card>
           </TabsContent>
 
-
-      <TabsContent value="notifications" className="space-y-6">
+          <TabsContent value="notifications" className="space-y-6">
         <Card className="p-6 glass">
           <h2 className="text-xl font-semibold mb-4">Notification Preferences</h2>
           <p className="text-sm text-muted-foreground mb-6">Choose what updates you want to receive</p>

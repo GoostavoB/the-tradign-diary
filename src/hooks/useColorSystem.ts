@@ -6,7 +6,14 @@ export interface ColorPreferences {
   primary: string;
   secondary: string;
   accent: string;
+  background?: string;
 }
+
+export interface UnlockedColors {
+  colors: ('primary' | 'secondary' | 'accent' | 'background')[];
+}
+
+export type ColorType = 'primary' | 'secondary' | 'accent' | 'background';
 
 const DEFAULT_COLORS: ColorPreferences = {
   primary: '217 91% 60%', // Blue
@@ -17,6 +24,7 @@ const DEFAULT_COLORS: ColorPreferences = {
 export function useColorSystem() {
   const { user } = useAuth();
   const [colors, setColors] = useState<ColorPreferences>(DEFAULT_COLORS);
+  const [unlockedColors, setUnlockedColors] = useState<ColorType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +47,19 @@ export function useColorSystem() {
     }
 
     // Load from database for authenticated users
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('unlocked_colors, subscription_tier')
+      .eq('id', user.id)
+      .single();
+
+    if (profileData?.unlocked_colors) {
+      const unlockedData = profileData.unlocked_colors as { colors?: ColorType[] };
+      if (unlockedData.colors) {
+        setUnlockedColors(unlockedData.colors);
+      }
+    }
+
     const { data, error } = await supabase
       .from('user_settings')
       .select('accent_color')
@@ -46,7 +67,6 @@ export function useColorSystem() {
       .single();
 
     if (!error && data?.accent_color) {
-      // For now, we only have accent_color in DB, use defaults for others
       const accentHsl = hexToHsl(data.accent_color);
       setColors({
         ...DEFAULT_COLORS,
@@ -57,19 +77,114 @@ export function useColorSystem() {
         accent: accentHsl,
       });
     }
+    
+    // Check for unlock conditions
+    await checkAndUnlockColors();
+    
     setLoading(false);
+  };
+
+  const checkAndUnlockColors = async () => {
+    if (!user) return;
+
+    // Fetch user tier and streak
+    const { data: tierData } = await supabase
+      .from('user_xp_tiers')
+      .select('current_tier')
+      .eq('user_id', user.id)
+      .single();
+
+    const { data: settingsData } = await supabase
+      .from('user_settings')
+      .select('current_visit_streak')
+      .eq('user_id', user.id)
+      .single();
+
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('subscription_tier, unlocked_colors')
+      .eq('id', user.id)
+      .single();
+
+    const tier = tierData?.current_tier || 0;
+    const streak = settingsData?.current_visit_streak || 0;
+    const plan = profileData?.subscription_tier || 'free';
+    
+    const unlockedData = profileData?.unlocked_colors as { colors?: ColorType[] } | null;
+    const currentUnlocked = unlockedData?.colors || [];
+
+    // Check if Free user qualifies for primary unlock
+    if (plan === 'free' && tier >= 5 && streak >= 30) {
+      if (!currentUnlocked.includes('primary')) {
+        // UNLOCK PRIMARY COLOR!
+        await supabase
+          .from('profiles')
+          .update({ 
+            unlocked_colors: { colors: ['primary'] } 
+          })
+          .eq('id', user.id);
+
+        // Trigger confetti
+        try {
+          const confetti = (await import('canvas-confetti')).default;
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        } catch (e) {
+          console.error('Failed to load confetti:', e);
+        }
+
+        // Show toast
+        const { toast } = await import('sonner');
+        toast.success('🎨 Primary color unlocked!', {
+          description: 'Customize your theme in Settings → Rewards',
+          duration: 5000,
+        });
+
+        // PostHog event
+        const { posthog } = await import('@/lib/posthog');
+        posthog.capture('color_unlocked', {
+          color_type: 'primary',
+          tier: tier,
+          streak: streak,
+        });
+
+        // Update state
+        setUnlockedColors(['primary']);
+      }
+    }
   };
 
   const applyColors = (newColors: ColorPreferences) => {
     document.documentElement.style.setProperty('--primary', newColors.primary);
     document.documentElement.style.setProperty('--secondary', newColors.secondary);
     document.documentElement.style.setProperty('--accent', newColors.accent);
+    if (newColors.background) {
+      document.documentElement.style.setProperty('--background', newColors.background);
+    }
     document.documentElement.style.setProperty('--chart-1', newColors.accent);
     document.documentElement.style.setProperty('--chart-2', newColors.primary);
     document.documentElement.style.setProperty('--chart-3', newColors.secondary);
   };
 
+  const canChangeColor = (colorType: ColorType): boolean => {
+    return unlockedColors.includes(colorType);
+  };
+
   const updateColors = async (newColors: Partial<ColorPreferences>) => {
+    // Check permissions for each color being updated
+    for (const [colorType, value] of Object.entries(newColors)) {
+      if (!canChangeColor(colorType as ColorType)) {
+        const { toast } = await import('sonner');
+        toast.error(`${colorType} color is locked`, {
+          description: 'Unlock this color to customize it'
+        });
+        return;
+      }
+    }
+
     const updatedColors = { ...colors, ...newColors };
     setColors(updatedColors);
     applyColors(updatedColors);
@@ -89,10 +204,15 @@ export function useColorSystem() {
 
   return {
     colors,
+    unlockedColors,
     loading,
     updateColors,
+    canChangeColor,
+    checkAndUnlockColors,
   };
 }
+
+export { hslToHex };
 
 // Helper function to convert hex to HSL
 function hexToHsl(hex: string): string {

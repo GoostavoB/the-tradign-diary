@@ -2059,6 +2059,7 @@ export type Database = {
           subscription_tier: string | null
           terms_accepted_at: string | null
           trial_end_date: string | null
+          unlocked_colors: Json | null
           updated_at: string | null
           username: string | null
         }
@@ -2083,6 +2084,7 @@ export type Database = {
           subscription_tier?: string | null
           terms_accepted_at?: string | null
           trial_end_date?: string | null
+          unlocked_colors?: Json | null
           updated_at?: string | null
           username?: string | null
         }
@@ -2107,6 +2109,7 @@ export type Database = {
           subscription_tier?: string | null
           terms_accepted_at?: string | null
           trial_end_date?: string | null
+          unlocked_colors?: Json | null
           updated_at?: string | null
           username?: string | null
         }
