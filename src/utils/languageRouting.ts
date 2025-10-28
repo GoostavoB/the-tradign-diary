@@ -2,7 +2,7 @@
  * Utility functions for language-aware routing
  */
 
-export const SUPPORTED_LANGUAGES = ['en', 'pt', 'es', 'ar', 'vi'] as const;
+export const SUPPORTED_LANGUAGES = ['en', 'vi'] as const;
 export type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
 
 export const DEFAULT_LANGUAGE: SupportedLanguage = 'en';

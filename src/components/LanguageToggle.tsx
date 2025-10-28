@@ -14,9 +14,10 @@ interface Language {
 
 const languages: Language[] = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'pt', name: 'Português', flag: '🇧🇷' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+  // TEMPORARILY HIDDEN
+  // { code: 'es', name: 'Español', flag: '🇪🇸' },
+  // { code: 'pt', name: 'Português', flag: '🇧🇷' },
+  // { code: 'ar', name: 'العربية', flag: '🇸🇦' },
   { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
 ];
 

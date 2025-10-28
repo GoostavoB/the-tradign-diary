@@ -17,11 +17,11 @@ export const LanguageSync = () => {
 
   // ===================================================================
   // ONLY responsibility: Set document direction
+  // NOTE: With Arabic hidden, direction is always LTR
   // ===================================================================
   useEffect(() => {
-    const direction = language === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.dir = direction;
-    console.log(`[LanguageSync] Set direction: ${direction} for language: ${language}`);
+    document.documentElement.dir = 'ltr';
+    console.log(`[LanguageSync] Set direction: ltr for language: ${language}`);
   }, [language]);
 
   return null;

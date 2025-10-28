@@ -4,13 +4,14 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import enTranslations from './locales/en/translation.json';
-import esTranslations from './locales/es/translation.json';
-import ptTranslations from './locales/pt/translation.json';
-import arTranslations from './locales/ar/translation.json';
+// TEMPORARILY HIDDEN
+// import esTranslations from './locales/es/translation.json';
+// import ptTranslations from './locales/pt/translation.json';
+// import arTranslations from './locales/ar/translation.json';
 import viTranslations from './locales/vi/translation.json';
 import { getLanguageFromPath, isPublicRoute, type SupportedLanguage } from './utils/languageRouting';
 
-const supportedLanguages: SupportedLanguage[] = ['en', 'es', 'pt', 'ar', 'vi'];
+const supportedLanguages: SupportedLanguage[] = ['en', 'vi'];
 
 // ===================================================================
 // FIX #1: Initialize from URL for public routes
@@ -50,9 +51,10 @@ i18n
   .init({
     resources: {
       en: { translation: enTranslations },
-      es: { translation: esTranslations },
-      pt: { translation: ptTranslations },
-      ar: { translation: arTranslations },
+      // TEMPORARILY HIDDEN
+      // es: { translation: esTranslations },
+      // pt: { translation: ptTranslations },
+      // ar: { translation: arTranslations },
       vi: { translation: viTranslations },
     },
     lng: initialLanguage, // ✅ Now uses URL for public routes

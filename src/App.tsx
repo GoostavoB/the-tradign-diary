@@ -29,9 +29,10 @@ import { LanguageSync } from "@/components/LanguageSync";
 
 // Eagerly load critical pages (landing and auth)
 import Index from "./pages/Index";
-import IndexPt from "./pages/IndexPt";
-import IndexEs from "./pages/IndexEs";
-import IndexAr from "./pages/IndexAr";
+// TEMPORARILY HIDDEN
+// import IndexPt from "./pages/IndexPt";
+// import IndexEs from "./pages/IndexEs";
+// import IndexAr from "./pages/IndexAr";
 import IndexVi from "./pages/IndexVi";
 import Auth from "./pages/Auth";
 
@@ -141,10 +142,19 @@ const AppRoutes = () => {
         <Routes>
         {/* Landing pages by language - wrapped with default theme */}
         <Route path="/" element={<PublicPageThemeWrapper><Index /></PublicPageThemeWrapper>} />
-        <Route path="/pt" element={<PublicPageThemeWrapper><IndexPt /></PublicPageThemeWrapper>} />
-        <Route path="/es" element={<PublicPageThemeWrapper><IndexEs /></PublicPageThemeWrapper>} />
-        <Route path="/ar" element={<PublicPageThemeWrapper><IndexAr /></PublicPageThemeWrapper>} />
+        {/* TEMPORARILY HIDDEN - Portuguese, Spanish, Arabic */}
+        {/* <Route path="/pt" element={<PublicPageThemeWrapper><IndexPt /></PublicPageThemeWrapper>} /> */}
+        {/* <Route path="/es" element={<PublicPageThemeWrapper><IndexEs /></PublicPageThemeWrapper>} /> */}
+        {/* <Route path="/ar" element={<PublicPageThemeWrapper><IndexAr /></PublicPageThemeWrapper>} /> */}
         <Route path="/vi" element={<PublicPageThemeWrapper><IndexVi /></PublicPageThemeWrapper>} />
+        
+        {/* Redirect hidden languages to English */}
+        <Route path="/pt" element={<Navigate to="/" replace />} />
+        <Route path="/pt/*" element={<Navigate to="/" replace />} />
+        <Route path="/es" element={<Navigate to="/" replace />} />
+        <Route path="/es/*" element={<Navigate to="/" replace />} />
+        <Route path="/ar" element={<Navigate to="/" replace />} />
+        <Route path="/ar/*" element={<Navigate to="/" replace />} />
         
         {/* Auth routes - wrapped with default theme */}
         <Route path="/auth" element={<PublicPageThemeWrapper><Auth /></PublicPageThemeWrapper>} />
