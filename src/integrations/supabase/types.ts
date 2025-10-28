@@ -4441,6 +4441,10 @@ export type Database = {
         Args: { p_broker_name: string }
         Returns: undefined
       }
+      increment_challenges_counter: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
       increment_daily_alert_count: {
         Args: { p_user_id: string }
         Returns: undefined

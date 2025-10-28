@@ -159,6 +159,11 @@ export const useDailyChallenges = () => {
 
       if (isCompleted && !challenge.isCompleted) {
         await addXP(challenge.xpReward, 'challenge_completed', challenge.title);
+        
+        // Track challenge completion in daily activity
+        await supabase.rpc('increment_challenges_counter', { 
+          p_user_id: user.id 
+        });
       }
 
       // Refresh challenges
