@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
   calculateTier, 
   getTierName, 
@@ -32,102 +32,97 @@ export interface TierData {
 
 export const useUserTier = () => {
   const { user } = useAuth();
-  const [tierData, setTierData] = useState<TierData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchTierData = async () => {
-    if (!user) {
-      setTierData(null);
-      setIsLoading(false);
-      return;
-    }
+  const { data: tierData, isLoading } = useQuery({
+    queryKey: ['user-tier', user?.id],
+    queryFn: async (): Promise<TierData> => {
+      if (!user) throw new Error('No user');
 
-    try {
-      // Fetch user XP levels
-      const { data: xpData } = await supabase
-        .from('user_xp_levels')
-        .select('total_xp_earned')
-        .eq('user_id', user.id)
-        .single();
+      try {
+        // Fetch user XP levels
+        const { data: xpData } = await supabase
+          .from('user_xp_levels')
+          .select('total_xp_earned')
+          .eq('user_id', user.id)
+          .maybeSingle();
 
-      // Fetch user tier data
-      const { data: tierInfo } = await supabase
-        .from('user_xp_tiers')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
+        // Fetch user tier data
+        const { data: tierInfo } = await supabase
+          .from('user_xp_tiers')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
 
-      // Fetch subscription to determine legacy tier mapping
-      const { data: subscription } = await supabase
-        .from('subscriptions')
-        .select('plan_type, status')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .single();
+        // Fetch subscription to determine legacy tier mapping
+        const { data: subscription } = await supabase
+          .from('subscriptions')
+          .select('plan_type, status')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .maybeSingle();
 
-      const totalXP = xpData?.total_xp_earned || 0;
-      const tierLevel = calculateTier(totalXP);
-      const tierName = getTierName(tierLevel);
-      const xpToNextTier = getXPToNextTier(totalXP);
-      const tierProgress = getTierProgress(totalXP);
+        const totalXP = xpData?.total_xp_earned || 0;
+        const tierLevel = calculateTier(totalXP);
+        const tierName = getTierName(tierLevel);
+        const xpToNextTier = getXPToNextTier(totalXP);
+        const tierProgress = getTierProgress(totalXP);
 
-      // Derive daily XP cap strictly from tier level for consistency
-      const dailyXPCap = getDailyXPCap(tierLevel);
-      const dailyXPEarned = tierInfo?.daily_xp_earned ?? 0;
-      const dailyUploadLimit = tierInfo?.daily_upload_limit ?? getDailyUploadLimit(tierLevel);
+        // Derive daily XP cap strictly from tier level for consistency
+        const dailyXPCap = getDailyXPCap(tierLevel);
+        const dailyXPEarned = tierInfo?.daily_xp_earned ?? 0;
+        const dailyUploadLimit = tierInfo?.daily_upload_limit ?? getDailyUploadLimit(tierLevel);
 
-      // Map to legacy tier system for backwards compatibility
-      let legacyTier: UserTier = 'free';
-      if (subscription?.plan_type === 'elite') {
-        legacyTier = 'elite';
-      } else if (subscription?.plan_type === 'pro') {
-        legacyTier = 'pro';
-      } else if (tierLevel >= 2) {
-        legacyTier = 'basic';
+        // Map to legacy tier system for backwards compatibility
+        let legacyTier: UserTier = 'free';
+        if (subscription?.plan_type === 'elite') {
+          legacyTier = 'elite';
+        } else if (subscription?.plan_type === 'pro') {
+          legacyTier = 'pro';
+        } else if (tierLevel >= 2) {
+          legacyTier = 'basic';
+        }
+
+        return {
+          tier: legacyTier,
+          tierLevel,
+          tierName,
+          totalXP,
+          xpToNextTier,
+          tierProgress,
+          dailyXPEarned,
+          dailyXPCap,
+          canEarnXP: canEarnXP(dailyXPEarned, dailyXPCap),
+          remainingDailyXP: getRemainingDailyXP(dailyXPEarned, dailyXPCap),
+          dailyUploadLimit,
+          uploadCreditsUsed: 0, // TODO: Track this separately
+        };
+      } catch (error) {
+        console.error('Error fetching tier data:', error);
+        // Return fallback free tier data
+        return {
+          tier: 'free',
+          tierLevel: 0,
+          tierName: 'Free',
+          totalXP: 0,
+          xpToNextTier: 1000,
+          tierProgress: 0,
+          dailyXPEarned: 0,
+          dailyXPCap: 750,
+          canEarnXP: true,
+          remainingDailyXP: 750,
+          dailyUploadLimit: 1,
+          uploadCreditsUsed: 0,
+        };
       }
-
-      setTierData({
-        tier: legacyTier,
-        tierLevel,
-        tierName,
-        totalXP,
-        xpToNextTier,
-        tierProgress,
-        dailyXPEarned,
-        dailyXPCap,
-        canEarnXP: canEarnXP(dailyXPEarned, dailyXPCap),
-        remainingDailyXP: getRemainingDailyXP(dailyXPEarned, dailyXPCap),
-        dailyUploadLimit,
-        uploadCreditsUsed: 0, // TODO: Track this separately
-      });
-    } catch (error) {
-      console.error('Error fetching tier data:', error);
-      // Fallback to free tier
-      setTierData({
-        tier: 'free',
-        tierLevel: 0,
-        tierName: 'Free',
-        totalXP: 0,
-        xpToNextTier: 1000,
-        tierProgress: 0,
-        dailyXPEarned: 0,
-        dailyXPCap: 750,
-        canEarnXP: true,
-        remainingDailyXP: 750,
-        dailyUploadLimit: 1,
-        uploadCreditsUsed: 0,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchTierData();
-  }, [user]);
+    },
+    enabled: !!user,
+    staleTime: 1000 * 30, // Consider data fresh for 30 seconds
+    gcTime: 1000 * 60 * 5, // Keep in cache for 5 minutes
+  });
 
   const refresh = () => {
-    fetchTierData();
+    queryClient.invalidateQueries({ queryKey: ['user-tier', user?.id] });
   };
 
   const isPro = tierData?.tier === 'pro' || tierData?.tier === 'elite';

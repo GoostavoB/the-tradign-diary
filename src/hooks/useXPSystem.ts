@@ -188,6 +188,9 @@ export const useXPSystem = () => {
           { onConflict: 'user_id' }
         );
 
+      // Invalidate user-tier cache to trigger DailyMissionBar refresh
+      queryClient.invalidateQueries({ queryKey: ['user-tier', user.id] });
+
       // Log activity
       const { error: logError } = await supabase
         .from('xp_activity_log')

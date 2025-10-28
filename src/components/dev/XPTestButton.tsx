@@ -4,12 +4,12 @@ import { useXPSystem } from '@/hooks/useXPSystem';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useUserTier } from '@/hooks/useUserTier';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function XPTestButton() {
-  const { addXP, refresh: refreshXP } = useXPSystem();
-  const { refresh: refreshTier } = useUserTier();
+  const { addXP } = useXPSystem();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   // Only show in development mode
   if (!import.meta.env.DEV) {
@@ -24,8 +24,7 @@ export function XPTestButton() {
       }
       console.debug('[XPTestButton] Adding +100 XP for user:', user.id);
       await addXP(100, 'test', 'Dev test XP award');
-      // Refresh both XP and tier data immediately
-      await Promise.all([refreshXP?.(), refreshTier?.()]);
+      // React Query will auto-refresh via cache invalidation in addXP
       toast.success('Test XP awarded! Check DailyMissionBar above.', {
         description: '+100 XP added to your daily total',
       });
@@ -57,11 +56,9 @@ export function XPTestButton() {
         );
       if (error) throw error;
       
-      // Force immediate refetch of both queries
-      await Promise.all([
-        refreshXP?.(),
-        refreshTier?.()
-      ]);
+      // Invalidate both queries to trigger automatic refetch
+      queryClient.invalidateQueries({ queryKey: ['user-xp', user.id] });
+      queryClient.invalidateQueries({ queryKey: ['user-tier', user.id] });
       
       toast.success("Today's XP reset to 0");
       console.debug('[XPTestButton] Daily XP reset successfully');
