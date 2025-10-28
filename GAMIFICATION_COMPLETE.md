@@ -122,11 +122,52 @@
 - Badge tiers (Bronze→Silver→Gold→Platinum→Diamond)
 - Theme unlocks tied to level progression
 
+### Phase 12: Daily Engagement Reminder System ✅
+**Status**: Fully Implemented (100%)
+
+**Features**:
+- `DailyGoalsWidget` - Real-time progress tracking for 4 activity types
+- `WelcomeBackToast` - Personalized login reminders with dynamic messaging
+- `useEngagementReminders` - Core hook managing activity tracking and analytics
+- Automated Tracking - Database triggers for trades, emotional logs, journal entries
+- Challenge Tracking - Hook-based counter for challenge completion
+- Reminder Intensity - User-configurable notification frequency (minimal/normal/aggressive)
+- Analytics Integration - PostHog events for reminder effectiveness tracking
+- Timezone-Aware - Respects user timezone for daily reset
+- SessionStorage Caching - Performance optimization for repeated loads
+
+**Activity Targets & XP**:
+- Trades (5 target, 40 XP each) → 200 XP total
+- Emotional Logs (3 target, 18 XP each) → 54 XP total
+- Journal Entries (2 target, 55 XP each) → 110 XP total
+- Challenges (3 target, 100 XP each) → 300 XP total
+- **Total Daily XP Potential**: 664 XP
+
+**Database**:
+- Triggers: `track_trade_activity`, `track_emotional_log`, `track_journal_entry`
+- Functions: `increment_challenges_counter`, `upsert_daily_activity`
+- Enhanced: `user_daily_activity` table with interaction counters
+
+**UI Components**:
+- Dashboard widget with expandable progress bars
+- Settings page for reminder intensity control
+- Toast notifications on first login of day
+
+**Analytics Events**:
+- `daily_goals_widget_clicked`
+- `welcome_toast_shown`
+- `welcome_toast_clicked`
+- `reminder_intensity_changed`
+- `widget_interaction_tracked`
+
+---
+
 ## 🔄 Real-time Features
 - XP updates sync across all dashboard widgets
 - Leaderboard with rank change indicators
 - Badge unlock notifications with share options
 - Trader of the Day updates daily
+- Daily goals widget updates in real-time ✨ NEW
 
 ## 🎨 Visual Polish
 - Trophy animations with bounce effects

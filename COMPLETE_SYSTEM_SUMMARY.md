@@ -159,6 +159,7 @@ A comprehensive, production-ready trading journal application with advanced feat
 8. **dopamine_events** - Reward triggers
 9. **streak_freeze_inventory** - Streak protection items
 10. **leaderboard_entries** - Competition rankings
+11. **user_daily_activity** - Daily goal tracking ✨ NEW
 
 ### Social Tables
 11. **social_posts** - User posts and shared trades
@@ -462,6 +463,14 @@ A comprehensive, production-ready trading journal application with advanced feat
 ✅ Trade linking ✨ NEW
 ✅ Tag system ✨ NEW
 ✅ Star ratings ✨ NEW
+
+### Engagement Features ✨ NEW
+✅ Daily goals widget
+✅ Welcome back toasts
+✅ Activity tracking (4 types)
+✅ Reminder intensity settings
+✅ Automated progress tracking
+✅ Timezone-aware reminders
 
 ### Customization Features
 ✅ Theme studio
