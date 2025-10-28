@@ -109,6 +109,46 @@ const blogArticles = [
   {
     slug: 'strategy-tracker/swing-trading-bitcoin',
     lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/okx-ethereum',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/kraken-bitcoin',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/kucoin-ethereum',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/bybit-ethereum',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/binance-avalanche',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/okx-avalanche',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'trading-journal/coinbase-ethereum',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'strategy-tracker/breakout-bitcoin',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'strategy-tracker/grid-bots-bitcoin',
+    lastmod: '2025-10-28',
+  },
+  {
+    slug: 'strategy-tracker/copy-trading-ethereum',
+    lastmod: '2025-10-28',
   }
 ];
 
