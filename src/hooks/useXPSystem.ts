@@ -98,7 +98,8 @@ export const useXPSystem = () => {
   const addXP = useCallback(async (
     amount: number, 
     activityType: string, 
-    description?: string
+    description?: string,
+    skipMultiplier: boolean = false
   ) => {
     if (!user || amount <= 0) return;
 
@@ -134,23 +135,28 @@ export const useXPSystem = () => {
         return; // Stop XP award
       }
 
-      // Check for streak multiplier using centralized XP engine
-      const { data: progression } = await supabase
-        .from('user_progression')
-        .select('login_streak, trade_streak')
-        .eq('user_id', user.id)
-        .single();
+      let multiplier = 1;
+      let finalAmount = amount;
 
-      // Use the higher streak for multiplier (rewards consistency)
-      const loginStreak = progression?.login_streak || 0;
-      const tradeStreak = progression?.trade_streak || 0;
-      const bestStreak = Math.max(loginStreak, tradeStreak);
-      
-      // Determine multiplier type based on activity
-      const streakType = activityType.includes('trade') ? 'trade' : 'login';
-      const multiplier = getStreakMultiplier(streakType, bestStreak);
+      // Only apply streak multiplier if not skipped (for dev/testing)
+      if (!skipMultiplier) {
+        // Check for streak multiplier using centralized XP engine
+        const { data: progression } = await supabase
+          .from('user_progression')
+          .select('login_streak, trade_streak')
+          .eq('user_id', user.id)
+          .single();
 
-      let finalAmount = Math.floor(amount * multiplier);
+        // Use the higher streak for multiplier (rewards consistency)
+        const loginStreak = progression?.login_streak || 0;
+        const tradeStreak = progression?.trade_streak || 0;
+        const bestStreak = Math.max(loginStreak, tradeStreak);
+        
+        // Determine multiplier type based on activity
+        const streakType = activityType.includes('trade') ? 'trade' : 'login';
+        multiplier = getStreakMultiplier(streakType, bestStreak);
+        finalAmount = Math.floor(amount * multiplier);
+      }
       
       // Cap the XP amount if it would exceed daily cap
       const remainingDailyXP = resolvedCap - dailyXPEarned;

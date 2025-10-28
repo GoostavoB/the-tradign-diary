@@ -23,7 +23,7 @@ export function XPTestButton() {
         return;
       }
       console.debug('[XPTestButton] Adding +100 XP for user:', user.id);
-      await addXP(100, 'test', 'Dev test XP award');
+      await addXP(100, 'test', 'Dev test XP award', true); // skipMultiplier = true
       // React Query will auto-refresh via cache invalidation in addXP
       toast.success('Test XP awarded! Check DailyMissionBar above.', {
         description: '+100 XP added to your daily total',
