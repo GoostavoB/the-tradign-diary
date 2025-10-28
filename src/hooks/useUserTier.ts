@@ -71,10 +71,13 @@ export const useUserTier = () => {
       const xpToNextTier = getXPToNextTier(totalXP);
       const tierProgress = getTierProgress(totalXP);
 
-      // Use tier data if exists, otherwise use subscription-based defaults
-      const dailyXPCap = tierInfo?.daily_xp_cap || getDailyXPCap(tierLevel);
-      const dailyXPEarned = tierInfo?.daily_xp_earned || 0;
-      const dailyUploadLimit = tierInfo?.daily_upload_limit || getDailyUploadLimit(tierLevel);
+      // Prefer DB cap; clamp unrealistic "unlimited" caps unless at max tier
+      let dailyXPCapRaw = tierInfo?.daily_xp_cap ?? getDailyXPCap(tierLevel);
+      const dailyXPCap = (dailyXPCapRaw === Infinity || dailyXPCapRaw >= 999999) && tierLevel < 4
+        ? getDailyXPCap(tierLevel)
+        : dailyXPCapRaw;
+      const dailyXPEarned = tierInfo?.daily_xp_earned ?? 0;
+      const dailyUploadLimit = tierInfo?.daily_upload_limit ?? getDailyUploadLimit(tierLevel);
 
       // Map to legacy tier system for backwards compatibility
       let legacyTier: UserTier = 'free';
