@@ -14,37 +14,37 @@ const Features = () => {
   const features = [
     {
       icon: <TrendingUp className="w-6 h-6" />,
-      title: "Leverage and position size by risk and stop",
-      description: "Calculate the right position size for every trade based on your risk tolerance",
-      action: "Set your risk parameters now",
+      title: t('landing.features.leverage.title', 'Leverage and position size by risk and stop'),
+      description: t('landing.features.leverage.description', 'Calculate the right position size for every trade based on your risk tolerance'),
+      action: t('landing.features.leverage.action', 'Set your risk parameters now'),
       blogLink: "/blog/trading-journal-for-crypto"
     },
     {
       icon: <Filter className="w-6 h-6" />,
-      title: "Fees dashboard and maker vs taker simulation with funding",
-      description: "Understand your true trading costs and optimize fee structures",
-      action: "Cut costs by switching high fee pairs in one click",
+      title: t('landing.features.fees.title', 'Fees dashboard and maker vs taker simulation with funding'),
+      description: t('landing.features.fees.description', 'Understand your true trading costs and optimize fee structures'),
+      action: t('landing.features.fees.action', 'Cut costs by switching high fee pairs in one click'),
       blogLink: "/blog/ai-tools-for-crypto-trading"
     },
     {
       icon: <Upload className="w-6 h-6" />,
-      title: "Weekly heatmap, best assets and hours",
-      description: "Identify your most profitable trading patterns and timeframes",
-      action: "Find your edge with visual analytics",
+      title: t('landing.features.heatmap.title', 'Weekly heatmap, best assets and hours'),
+      description: t('landing.features.heatmap.description', 'Identify your most profitable trading patterns and timeframes'),
+      action: t('landing.features.heatmap.action', 'Find your edge with visual analytics'),
       blogLink: "/blog/data-driven-trading"
     },
     {
       icon: <Repeat className="w-6 h-6" />,
-      title: "MFE and MAE to tune target and stop",
-      description: "Optimize your exit strategies with maximum favorable and adverse excursion analysis",
-      action: "Improve your exits today",
+      title: t('landing.features.mfeMae.title', 'MFE and MAE to tune target and stop'),
+      description: t('landing.features.mfeMae.description', 'Optimize your exit strategies with maximum favorable and adverse excursion analysis'),
+      action: t('landing.features.mfeMae.action', 'Improve your exits today'),
       blogLink: "/blog/ai-powered-trading-journal"
     },
     {
       icon: <Smartphone className="w-6 h-6" />,
-      title: "Risk alerts and pre-trade checklist",
-      description: "Stay disciplined with automated warnings and systematic trade validation",
-      action: "Enable smart protection",
+      title: t('landing.features.riskAlerts.title', 'Risk alerts and pre-trade checklist'),
+      description: t('landing.features.riskAlerts.description', 'Stay disciplined with automated warnings and systematic trade validation'),
+      action: t('landing.features.riskAlerts.action', 'Enable smart protection'),
       blogLink: "/blog/trading-psychology-control-emotions"
     },
   ];
@@ -59,10 +59,10 @@ const Features = () => {
           className="text-center mb-16 space-y-4"
         >
           <h2 id="features-heading" className="text-3xl md:text-4xl font-bold leading-tight">
-            Features That <span className="text-gradient-primary">Drive Results</span>
+            {t('landing.features.mainTitle', 'Features That Drive Results')}
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Tools designed to improve your trading performance
+            {t('landing.features.mainSubtitle', 'Tools designed to improve your trading performance')}
           </p>
         </motion.header>
 
