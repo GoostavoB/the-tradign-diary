@@ -37,58 +37,22 @@ const Hero = () => {
         }} transition={{
           duration: 0.6
         }} className="space-y-10 text-center lg:text-left flex flex-col items-center lg:items-start w-full max-w-[560px] lg:max-w-none">
-            {/* Hero Title - Staggered Animation */}
-            <motion.h1 
+            {/* Hero Title - Discipline-First Messaging */}
+            <h1 
               id="hero-title"
-              className="space-y-2 max-w-md lg:max-w-3xl"
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.15,
-                    delayChildren: 0.2
-                  }
-                }
+              className="font-bold leading-tight tracking-tight max-w-md lg:max-w-3xl"
+              style={{ 
+                fontSize: 'clamp(32px, 4.5vw, 52px)',
+                letterSpacing: '-0.01em'
               }}
             >
-              <motion.span 
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-                }}
-                className="block text-[clamp(28px,3.5vw,42px)] font-normal tracking-tight text-foreground/85 leading-tight"
-              >
-                Train Your Mind.
-              </motion.span>
-              <motion.span 
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-                }}
-                className="block text-[clamp(32px,4.5vw,52px)] font-bold tracking-tight text-primary leading-tight"
-              >
-                Track Your Trades.
-              </motion.span>
-              <motion.span 
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-                }}
-                className="block text-[clamp(28px,3.5vw,42px)] font-light tracking-normal text-muted-foreground leading-tight"
-              >
-                Transform Your Results.
-              </motion.span>
-            </motion.h1>
+              Train your discipline. Master your trading performance.
+            </h1>
 
-            {/* Subtitle - Refined hierarchy */}
-            <div className="space-y-3 max-w-md lg:max-w-xl">
-              <p className="text-[17px] text-muted-foreground/70 font-light tracking-wide leading-relaxed" style={{
-                textWrap: 'balance' as any
-              }}>
-                Multi-exchange sync • AI insights • Psychology tracking
+            {/* Subtitle - Performance Claim */}
+            <div className="space-y-3 max-w-md lg:max-w-2xl">
+              <p className="text-[17px] text-muted-foreground/70 font-light leading-relaxed">
+                Develop the mindset of top traders through our XP discipline system, proven to increase trading performance by 23% within 4 weeks.
               </p>
               <p className="text-[15px] text-foreground/90 font-semibold">
                 Free entry plan • No credit card • Cancel anytime

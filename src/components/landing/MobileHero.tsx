@@ -11,62 +11,27 @@ const MobileHero = () => {
     <section className="relative flex flex-col px-4 pt-8 pb-4 overflow-hidden lg:hidden">
       {/* Hero Content */}
       <div className="flex flex-col items-center text-center space-y-8 pb-4">
-        {/* Headline - Staggered Animation */}
+        {/* Headline - Discipline-First Messaging */}
         <motion.h1
-          className="space-y-2 max-w-[280px]"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.12,
-                delayChildren: 0.1
-              }
-            }
-          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-[36px] leading-[1.15] font-bold tracking-tight max-w-[320px]"
         >
-          <motion.span 
-            variants={{
-              hidden: { opacity: 0, y: 15 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
-            }}
-            className="block text-[32px] leading-[1.15] font-medium tracking-tight"
-          >
-            Train Your Mind.
-          </motion.span>
-          <motion.span 
-            variants={{
-              hidden: { opacity: 0, y: 15 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
-            }}
-            className="block text-[36px] leading-[1.15] font-bold tracking-tight text-primary"
-          >
-            Track Your Trades.
-          </motion.span>
-          <motion.span 
-            variants={{
-              hidden: { opacity: 0, y: 15 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
-            }}
-            className="block text-[32px] leading-[1.15] font-light tracking-wide text-muted-foreground/80"
-          >
-            Transform Results.
-          </motion.span>
+          Train your discipline. Master your trading performance.
         </motion.h1>
 
         {/* Subheadline */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="space-y-3 max-w-[300px]"
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="space-y-3 max-w-[320px]"
         >
-          <p className="text-base text-muted-foreground/80 font-light tracking-wide">
-            Multi-exchange sync • AI insights • Psychology tracking
+          <p className="text-base text-muted-foreground/80 font-light leading-relaxed">
+            Develop the mindset of top traders through our XP discipline system, proven to increase trading performance by 23% within 4 weeks.
           </p>
-          <p className="text-xs text-primary/80 font-medium">
+          <p className="text-xs text-foreground/90 font-semibold">
             Free entry plan • No credit card • Cancel anytime
           </p>
         </motion.div>
