@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
     const method = req.method;
 
     // GET /accounts - List all accounts
-    if (method === 'GET' && pathParts.length === 2) {
+    if (method === 'GET' && pathParts.length === 1) {
       const { data: accounts, error } = await supabase
         .from('accounts')
         .select('*')
@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
     }
 
     // POST /accounts - Create new account
-    if (method === 'POST' && pathParts.length === 2) {
+    if (method === 'POST' && pathParts.length === 1) {
       const body: CreateAccountRequest = await req.json();
 
       // Check plan limits
@@ -163,8 +163,8 @@ Deno.serve(async (req) => {
     }
 
     // PATCH /accounts/:id - Update account
-    if (method === 'PATCH' && pathParts.length === 3) {
-      const accountId = pathParts[2];
+    if (method === 'PATCH' && pathParts.length === 2) {
+      const accountId = pathParts[1];
       const body = await req.json();
 
       const slug = body.name
@@ -195,8 +195,8 @@ Deno.serve(async (req) => {
     }
 
     // POST /accounts/:id/activate - Set as active account
-    if (method === 'POST' && pathParts.length === 4 && pathParts[3] === 'activate') {
-      const accountId = pathParts[2];
+    if (method === 'POST' && pathParts.length === 3 && pathParts[2] === 'activate') {
+      const accountId = pathParts[1];
 
       // Verify ownership
       const { data: account } = await supabase
@@ -227,8 +227,8 @@ Deno.serve(async (req) => {
     }
 
     // POST /accounts/:id/duplicate - Duplicate account
-    if (method === 'POST' && pathParts.length === 4 && pathParts[3] === 'duplicate') {
-      const accountId = pathParts[2];
+    if (method === 'POST' && pathParts.length === 3 && pathParts[2] === 'duplicate') {
+      const accountId = pathParts[1];
       const body: DuplicateAccountRequest = await req.json();
 
       // Verify ownership of source account
@@ -366,8 +366,8 @@ Deno.serve(async (req) => {
     }
 
     // DELETE /accounts/:id - Soft delete account
-    if (method === 'DELETE' && pathParts.length === 3) {
-      const accountId = pathParts[2];
+    if (method === 'DELETE' && pathParts.length === 2) {
+      const accountId = pathParts[1];
 
       // Check if it's the active account
       const { data: profile } = await supabase
