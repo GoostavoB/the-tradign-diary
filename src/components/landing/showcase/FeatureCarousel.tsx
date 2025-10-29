@@ -28,7 +28,7 @@ import accountImg from "@/assets/showcase/features/account-distribution.png";
 import dashboardWidgetsImg from "@/assets/showcase/features/dashboard-widgets.png";
 import checklistImg from "@/assets/showcase/features/checklist.png";
 import emotionsImg from "@/assets/showcase/features/emotions.png";
-import brokerSelectImg from "@/assets/showcase/features/broker-select.png";
+import brokerSelectImg from "@/assets/showcase/features/broker-select-new.png";
 
 const FEATURES = [
   {
@@ -99,12 +99,12 @@ const FEATURES = [
   {
     id: 'sync',
     title: 'Multi-Exchange Sync',
-    description: 'Connect all your exchanges and view consolidated portfolio analytics',
+    description: 'Centralize all your trades and view consolidated portfolio analytics',
     icon: RefreshCw,
     screenshot: brokerSelectImg,
     details: [
-      'One-click API sync',
-      'Real-time balance updates',
+      'Upload trades from any exchange',
+      'AI-powered screenshot extraction',
       'Cross-exchange PnL',
       'Unified trade history'
     ]

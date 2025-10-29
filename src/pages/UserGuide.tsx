@@ -363,21 +363,21 @@ export default function UserGuide() {
                   </AccordionItem>
 
                   <AccordionItem value="exchanges">
-                    <AccordionTrigger>Exchange Connections</AccordionTrigger>
+                    <AccordionTrigger>Import Methods</AccordionTrigger>
                     <AccordionContent className="space-y-3">
-                      <p><strong>Purpose:</strong> Connect exchange APIs to automatically sync trades.</p>
+                      <p><strong>Purpose:</strong> Import your trades from any exchange using flexible methods.</p>
                       <p className="text-sm text-muted-foreground">
                         Supported exchanges include Binance, Bybit, Coinbase, and more.
                       </p>
                       <ol className="list-decimal list-inside text-sm text-muted-foreground space-y-1 ml-2">
-                        <li>Click "Connect" on any exchange</li>
-                        <li>Enter your API key and secret</li>
-                        <li>Click "Sync Trades" to fetch history</li>
+                        <li>Select your exchange</li>
+                        <li>Upload CSV files from your exchange</li>
+                        <li>Or use AI screenshot extraction</li>
                         <li>Review and import selected trades</li>
                       </ol>
                       <Badge variant="outline" className="mt-2">
                         <Shield className="h-3 w-3 mr-1" />
-                        API keys are encrypted and never shared
+                        Your data stays private and secure
                       </Badge>
                     </AccordionContent>
                   </AccordionItem>

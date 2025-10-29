@@ -40,7 +40,7 @@ const ProductShowcase = () => {
                 <li>Long/short ratio and open interest tracking for market analysis</li>
                 <li>Psychology and emotion tracking with decision quality scoring</li>
                 <li>Drag-and-drop dashboard widgets with custom layouts</li>
-                <li>Real-time API sync for multiple cryptocurrency exchanges</li>
+                <li>Multi-exchange trade uploads and centralized tracking</li>
                 <li>Advanced chart customization and technical indicators</li>
               </ul>
             </div>
