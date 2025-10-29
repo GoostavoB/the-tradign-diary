@@ -40,9 +40,8 @@ const Hero = () => {
             {/* Hero Title - Centered on mobile, left-aligned on desktop */}
             <h1 id="hero-title" className="text-[clamp(40px,6vw,68px)] font-bold leading-[1.1] tracking-tight max-w-md lg:max-w-3xl" style={{
             textWrap: 'balance' as any
-          }}>
-              Stop Guessing. Start Winning.
-            </h1>
+          }}>Stop Guessing
+Start Winning</h1>
 
             {/* Subtitle - Centered on mobile, left-aligned on desktop */}
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-md lg:max-w-xl" style={{
@@ -57,9 +56,7 @@ const Hero = () => {
               <Button onClick={() => navigate('/auth')} size="lg" className="h-14 px-10 text-base font-semibold rounded-xl bg-primary hover:bg-primary/90 transition-all duration-300" aria-label="Start free trial">
                 Start Free Trial
               </Button>
-              <Button onClick={() => navigate('/demo')} variant="outline" size="lg" className="h-14 px-10 text-base font-semibold rounded-xl" aria-label="Watch demo">
-                Watch 2-Min Demo
-              </Button>
+              
             </div>
 
             {/* Trust Bar */}

@@ -24,10 +24,14 @@ import { updateLandingMeta, addStructuredData, trackLandingView, trackCTAClick }
 import { useHreflang } from "@/hooks/useHreflang";
 import { SUPPORTED_LANGUAGES } from "@/utils/languageRouting";
 import { swCleanup } from "@/utils/swCleanup";
-
 const Index = () => {
   const navigate = useNavigate();
-  const { t, language, changeLanguage, isLoading } = useTranslation();
+  const {
+    t,
+    language,
+    changeLanguage,
+    isLoading
+  } = useTranslation();
 
   // Add hreflang tags for SEO
   useHreflang({
@@ -44,11 +48,10 @@ const Index = () => {
     // Update meta tags and SEO for English (USA)
     updateLandingMeta('en');
     addStructuredData('en');
-    
+
     // Track landing view
     trackLandingView('en');
   }, []);
-
   const handleCTAClick = (location: string) => {
     trackCTAClick('en', location);
     navigate('/auth?lang=en');
@@ -56,19 +59,18 @@ const Index = () => {
 
   // Loading is handled at App level - no need for page-level guard
 
-  return (
-    <div key={`landing-${language}`} className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">
+  return <div key={`landing-${language}`} className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">
       <SkipToContent />
       <ValueBar />
       <PublicHeader />
       <StickyMobileCTA />
       
-      <main id="main-content" className="pt-28 overflow-x-hidden">
+      <main id="main-content" className="pt-28 overflow-x-hidden my-0 py-px">
         {/* Mobile Hero with Dashboard Preview */}
         <MobileHero />
         
         {/* Desktop Hero */}
-        <Hero />
+        <Hero className="py-0 my-0" />
         
         {/* Mobile Feature Blocks */}
         <FeatureBlocks />
@@ -107,8 +109,6 @@ const Index = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
