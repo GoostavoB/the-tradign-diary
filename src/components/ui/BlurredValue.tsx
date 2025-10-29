@@ -26,7 +26,7 @@ export const BlurredValue = ({
   const shouldBlur = isBlurred && !localOverride;
 
   return (
-    <div className="inline-flex items-center gap-2">
+    <span className="inline-flex items-center gap-2">
       <span
         className={cn(
           "transition-all duration-200",
@@ -50,7 +50,7 @@ export const BlurredValue = ({
           )}
         </Button>
       )}
-    </div>
+    </span>
   );
 };
 
