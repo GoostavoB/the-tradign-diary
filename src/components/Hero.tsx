@@ -40,15 +40,22 @@ const Hero = () => {
             {/* Hero Title - Centered on mobile, left-aligned on desktop */}
             <h1 id="hero-title" className="text-[clamp(40px,6vw,68px)] font-bold leading-[1.1] tracking-tight max-w-md lg:max-w-3xl" style={{
             textWrap: 'balance' as any
-          }}>Stop Guessing
-Start Winning</h1>
+          }}>
+              Multi-Exchange Crypto Trading Journal
+              <span className="block text-[0.75em] mt-2 text-primary/90">
+                Automated Trade Tracking for Binance, Bybit & More
+              </span>
+            </h1>
 
             {/* Subtitle - Centered on mobile, left-aligned on desktop */}
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-md lg:max-w-xl" style={{
             textWrap: 'balance' as any
           }}>
-              Upload your trades in seconds. Get AI-powered insights that actually improve your win rate.
-              Train discipline through XP, streaks, and rewards that make consistency addictive.
+              Sync trades from Binance, Bybit, Coinbase & more automatically via API.
+              Multi-exchange analytics, risk management tools, and AI-powered insights in one place.
+              <span className="block mt-2 text-sm font-semibold text-primary">
+                Free 14-day trial • No credit card required • Export anytime
+              </span>
             </p>
 
             {/* CTA Buttons */}

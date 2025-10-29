@@ -16,12 +16,12 @@ export interface LandingMeta {
 
 export const landingMeta: Record<string, LandingMeta> = {
   en: {
-    title: 'The #1 Crypto Trading Journal | Track & Analyze Every Trade',
-    description: 'Track, analyze, and review every crypto trade with AI. Advanced analytics, automated insights, and performance tracking for serious traders.',
-    keywords: 'crypto trading journal, cryptocurrency trading, crypto trade tracker, bitcoin trading journal, crypto analytics, trading performance',
+    title: 'Free Crypto Trading Journal | Automated Multi-Exchange Trade Tracking & Analytics',
+    description: 'Best crypto trading journal software. Sync Binance, Bybit, Coinbase trades automatically via API. Multi-exchange analytics, risk management, AI insights. Start free trial - no credit card.',
+    keywords: 'crypto trading journal, automated trade tracking, multi-exchange crypto journal, binance trading journal, bybit trading journal, coinbase trading journal, API integration, trading journal vs spreadsheet, free crypto journal, trade tracking software',
     canonical: 'https://www.thetradingdiary.com/',
-    ogTitle: 'The #1 Crypto Trading Journal',
-    ogDescription: 'Track, analyze, and review every crypto trade with AI. Built for serious traders.',
+    ogTitle: 'Automated Crypto Trading Journal | Multi-Exchange Trade Tracking',
+    ogDescription: 'Sync trades from Binance, Bybit, Coinbase automatically. Multi-exchange crypto journal with API integration, advanced analytics, and AI-powered insights.',
     ogImage: 'https://www.thetradingdiary.com/og-image-en.png',
     lang: 'en',
     alternates: [
