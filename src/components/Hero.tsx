@@ -6,17 +6,22 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Expand } from "lucide-react";
 import dashboardScreenshot from "@/assets/dashboard-screenshot-new.png";
 import { useState } from "react";
+import { useMobileOptimization } from "@/hooks/useMobileOptimization";
+import Hero3D from "./landing/Hero3D";
 const Hero = () => {
   const navigate = useNavigate();
-  const {
-    t,
-    isLoading
-  } = useTranslation();
+  const { t, isLoading } = useTranslation();
+  const { isMobile, isTablet } = useMobileOptimization();
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   // Avoid rendering while language is switching
   if (isLoading) {
     return null;
+  }
+
+  // Show 3D hero for desktop and tablet
+  if (!isMobile && !isTablet) {
+    return <Hero3D />;
   }
   return <section className="relative min-h-screen flex items-center px-4 sm:px-6 pt-24 pb-32 overflow-hidden hidden lg:flex" aria-labelledby="hero-title">
       {/* Enhanced ambient glow effects - hidden on mobile to reduce visual bias */}

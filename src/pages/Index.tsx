@@ -88,7 +88,9 @@ const Index = () => {
         <Hero />
         
         {/* SEO Feature Banner - Keywords below hero */}
-        <HeroFeatureBanner />
+        <section id="features-section">
+          <HeroFeatureBanner />
+        </section>
         
         {/* Benefits Section - NEW */}
         <BenefitsSection />
