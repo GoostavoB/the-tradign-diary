@@ -259,12 +259,8 @@
       "sectionSubtitle": "Every plan includes our core features to help you track, analyze, and improve your trading.",
       "performanceGain": "more performance gain",
       "drawdownReduction": "less drawdown",
-      "fasterUploads": "faster uploads",
+      "fasterUploads": "10x faster uploads",
       "caption": "Every plan includes our core features to help you track, analyze, and improve your trading.",
-      "fasterUploads": {
-        "title": "40× Faster Uploads",
-        "description": "Batch upload from screenshots. No more manual entry."
-      },
       "knowEveryFee": {
         "title": "Know Every Fee",
         "description": "Compare exchanges and uncover hidden costs."

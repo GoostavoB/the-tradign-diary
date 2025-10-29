@@ -10,7 +10,7 @@ export const BenefitsSection = () => {
   const stats = [
     { value: 23, suffix: "%", label: t('landing.benefits.performanceGain', '23% more performance gain') },
     { value: 18, suffix: "%", label: t('landing.benefits.drawdownReduction', '18% less drawdown'), prefix: "–" },
-    { value: 40, suffix: "x", label: t('landing.benefits.fasterUploads', '40x faster uploads') },
+    { value: 10, suffix: "x", label: t('landing.benefits.fasterUploads', '10x faster uploads') },
   ];
 
   return (

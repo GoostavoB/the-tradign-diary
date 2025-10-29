@@ -10,7 +10,7 @@ export const AnimatedStats = () => {
   const stats = [
     { value: 23, suffix: "%", label: t('landing.stats.morePerformance.title', 'Performance gain') },
     { value: 18, suffix: "%", label: t('landing.stats.lessDrawdown.title', 'Drawdown reduction'), prefix: "–" },
-    { value: 40, suffix: "x", label: t('landing.stats.fasterUploads.title', 'Faster logging') },
+    { value: 10, suffix: "x", label: t('landing.stats.fasterUploads.title', 'Faster logging') },
   ];
 
   return (
