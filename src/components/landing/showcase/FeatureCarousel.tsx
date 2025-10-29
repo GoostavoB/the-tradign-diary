@@ -27,6 +27,7 @@ import aiUploadImg from "@/assets/showcase/features/ai-upload.png";
 import accountImg from "@/assets/showcase/features/account-distribution.png";
 import checklistImg from "@/assets/showcase/features/checklist.png";
 import emotionsImg from "@/assets/showcase/features/emotions.png";
+import brokerSelectImg from "@/assets/showcase/features/broker-select.png";
 
 const FEATURES = [
   {
@@ -99,7 +100,7 @@ const FEATURES = [
     title: 'Multi-Exchange Sync',
     description: 'Connect all your exchanges and view consolidated portfolio analytics',
     icon: RefreshCw,
-    screenshot: checklistImg,
+    screenshot: brokerSelectImg,
     details: [
       'One-click API sync',
       'Real-time balance updates',
