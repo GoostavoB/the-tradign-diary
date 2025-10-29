@@ -25,6 +25,7 @@ import taxImg from "@/assets/showcase/features/tax-reports.png";
 import analyticsImg from "@/assets/showcase/features/analytics-charts.png";
 import aiUploadImg from "@/assets/showcase/features/ai-upload.png";
 import accountImg from "@/assets/showcase/features/account-distribution.png";
+import dashboardWidgetsImg from "@/assets/showcase/features/dashboard-widgets.png";
 import checklistImg from "@/assets/showcase/features/checklist.png";
 import emotionsImg from "@/assets/showcase/features/emotions.png";
 import brokerSelectImg from "@/assets/showcase/features/broker-select.png";
@@ -87,7 +88,7 @@ const FEATURES = [
     title: 'Customizable Dashboard',
     description: 'Drag-and-drop widgets, custom layouts, and personalized views',
     icon: LayoutDashboard,
-    screenshot: accountImg,
+    screenshot: dashboardWidgetsImg,
     details: [
       'Drag-and-drop widgets',
       'Multiple layout presets',
