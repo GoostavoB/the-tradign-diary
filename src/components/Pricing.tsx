@@ -143,7 +143,7 @@ const Pricing = () => {
               Start free. Upgrade anytime. Save up to $60/year.
             </p>
             <p className="text-sm text-orange-400 font-semibold">
-              Launch pricing available until November 1, 2025
+              Launch pricing available until November 30, 2025
             </p>
 
             {/* Billing Toggle */}

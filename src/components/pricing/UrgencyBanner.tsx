@@ -7,8 +7,8 @@ const UrgencyBanner = () => {
   const [dismissed, setDismissed] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   
-  // Fixed end date: November 1, 2025 at 23:59:59
-  const PROMO_END_DATE = new Date('2025-11-01T23:59:59').getTime();
+  // Fixed end date: November 30, 2025 at 23:59:59
+  const PROMO_END_DATE = new Date('2025-11-30T23:59:59').getTime();
 
   useEffect(() => {
     const isDismissed = sessionStorage.getItem('urgency-banner-dismissed');
@@ -105,7 +105,7 @@ const UrgencyBanner = () => {
           
           <div className="flex-1">
             <p className="text-sm md:text-base font-bold">
-              <span className="text-orange-400">Early Access Ends November 1</span>
+              <span className="text-orange-400">Early Access Ends November 30</span>
               <span className="text-foreground mx-2">•</span>
               <span className="text-green-400">Save up to $60/year with annual billing</span>
             </p>
