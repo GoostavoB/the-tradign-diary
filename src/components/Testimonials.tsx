@@ -7,7 +7,7 @@ const Testimonials = () => {
 
   const testimonials = [
     {
-      quote: "Finally, a journal that is easy to build and keeps me engaged. Writing trades manually made me lose track, but now I upload them all at once and everything's there — simple and perfect.",
+      quote: "Finally, a journal that is easy to build and keeps me engaged. Writing trades manually made me lose track, but now I upload them all at once and everything's there, simple and perfect.",
       author: "Mark L.",
       role: "Day Trader"
     },
