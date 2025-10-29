@@ -18,7 +18,7 @@ import { AnimatedStats } from "@/components/pricing/AnimatedStats";
 import { PricingStorySection } from "@/components/pricing/PricingStorySection";
 import { XPProgressAnimation } from "@/components/pricing/XPProgressAnimation";
 import { ProblemVisual } from "@/components/pricing/ProblemVisual";
-import { SpeedComparisonVisual } from "@/components/pricing/SpeedComparisonVisual";
+import InteractiveSpeedChart from "@/components/pricing/InteractiveSpeedChart";
 import { SecurityVisual } from "@/components/pricing/SecurityVisual";
 import { SocialProofSection } from "@/components/pricing/SocialProofSection";
 
@@ -279,17 +279,17 @@ const PricingPage = () => {
             <>
               <p>
                 Most traders skip journaling because it's slow. Our AI-based uploader lets you upload 
-                up to 10 trades at once from a single image. That's <strong>12x to 30x faster</strong> per trade 
-                (3-5 min manual → 10-15 sec upload).
+                trades from screenshots instantly. <strong>14x faster for single trades</strong> 
+                (140s manual → 10s upload).
               </p>
               <p>
-                With our <strong>Batch Analyzer</strong>, you're <strong>up to 300x faster</strong>: 
-                10 trades in 10-15 seconds vs. 30-50 minutes manually. 
-                With 50 trades (5 images), you save <strong>2h30 to 4h10</strong> of work time.
+                With our <strong>Batch Analyzer</strong>, you're <strong>93x faster for 10 trades</strong> 
+                (23 minutes → 15 seconds) and <strong>700x faster for 100 trades</strong> 
+                (3h 53min → 20 seconds). Save hours of manual data entry every week.
               </p>
             </>
           }
-          visual={<SpeedComparisonVisual />}
+          visual={<InteractiveSpeedChart />}
         />
 
         {/* Storytelling Section 4 - Security and Privacy */}
