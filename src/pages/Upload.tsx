@@ -475,6 +475,7 @@ const Upload = () => {
 
   const extractTradeInfo = async () => {
     setExtractedTrades([]);
+    const startedAt = Date.now();
 
     try {
       // Step 1: Uploading
@@ -486,9 +487,25 @@ const Upload = () => {
       setUploadStep(2);
       setProcessingMessage(getRandomThinkingPhrase());
       
-      const { data, error } = await supabase.functions.invoke('extract-trade-info', {
+      // Guard against oversized payloads - recompress if needed
+      let imageToSend = extractionPreview;
+      const approxBytes = Math.floor((imageToSend?.length || 0) * 0.75);
+      const LIMIT = 10 * 1024 * 1024; // 10MB
+      
+      if (approxBytes > LIMIT && extractionImage) {
+        console.warn('⚠️ Image >10MB base64, recompressing...');
+        toast.info('Compressing large image...', { duration: 1000 });
+        imageToSend = await compressAndResizeImage(extractionImage, false);
+        setExtractionPreview(imageToSend);
+      }
+      
+      console.log('📊 Extraction payload size (approx bytes):', Math.floor((imageToSend?.length || 0) * 0.75));
+      
+      // Add hard timeout for backend call (15 seconds)
+      const INVOKE_TIMEOUT_MS = 15000;
+      const invokePromise = supabase.functions.invoke('extract-trade-info', {
         body: { 
-          imageBase64: extractionPreview,
+          imageBase64: imageToSend,
           broker: preSelectedBroker || null,
           annotations: annotations.length > 0 ? annotations : null,
           // Include OCR data for cost optimization
@@ -498,6 +515,12 @@ const Upload = () => {
           perceptualHash: ocrResult?.perceptualHash,
         }
       });
+      
+      const timeoutPromise = new Promise<never>((_, reject) => 
+        setTimeout(() => reject(new Error('Extraction timed out after 15s')), INVOKE_TIMEOUT_MS)
+      );
+      
+      const { data, error } = await Promise.race([invokePromise, timeoutPromise]) as any;
 
       if (error) {
         console.error('Extraction error:', error);
@@ -585,10 +608,21 @@ const Upload = () => {
       }
     } catch (error) {
       console.error('Error extracting trade info:', error);
-      toast.error('Failed to extract trade information', {
-        description: 'An unexpected error occurred'
-      });
+      
+      const isTimeout = error instanceof Error && error.message.includes('timed out');
+      
+      if (isTimeout) {
+        toast.error('Extraction timed out', {
+          description: 'Please try again. The image will be recompressed if needed.'
+        });
+      } else {
+        toast.error('Failed to extract trade information', {
+          description: 'An unexpected error occurred'
+        });
+      }
     } finally {
+      const duration = Date.now() - startedAt;
+      console.log('⏱️ Extraction duration (ms):', duration);
       setExtracting(false);
     }
   };
@@ -1250,13 +1284,8 @@ const Upload = () => {
                   )}
                   <div className="mt-2">
                     <EnhancedFileUpload
-                      onFileSelected={(file) => {
-                        setExtractionImage(file);
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setExtractionPreview(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
+                      onFileSelected={async (file) => {
+                        await processImageFile(file);
                       }}
                       existingPreview={extractionPreview}
                       onRemove={removeExtractionImage}
