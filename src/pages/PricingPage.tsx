@@ -13,6 +13,14 @@ import PricingComparison from "@/components/pricing/PricingComparison";
 import PricingFAQ from "@/components/pricing/PricingFAQ";
 import PricingAddOns from "@/components/pricing/PricingAddOns";
 import FirstWeekBlock from "@/components/pricing/FirstWeekBlock";
+import { StickyOfferBar } from "@/components/pricing/StickyOfferBar";
+import { AnimatedStats } from "@/components/pricing/AnimatedStats";
+import { PricingStorySection } from "@/components/pricing/PricingStorySection";
+import { XPProgressAnimation } from "@/components/pricing/XPProgressAnimation";
+import { ProblemVisual } from "@/components/pricing/ProblemVisual";
+import { SpeedComparisonVisual } from "@/components/pricing/SpeedComparisonVisual";
+import { SecurityVisual } from "@/components/pricing/SecurityVisual";
+import { SocialProofSection } from "@/components/pricing/SocialProofSection";
 
 const PricingPage = () => {
   const navigate = useNavigate();
@@ -110,11 +118,14 @@ const PricingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden">
+      {/* Sticky Offer Bar */}
+      <StickyOfferBar />
+      
       <PublicHeader />
       
       <main className="pt-20 pb-20 overflow-x-hidden">
         {/* Hero Section */}
-        <section className="px-6 mb-16">
+        <section className="px-6 mb-8">
           <div className="container mx-auto max-w-4xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -149,7 +160,10 @@ const PricingPage = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => trackLandingEvents.trackEvent('track_view_sample_report_click')}
+                  onClick={() => {
+                    const element = document.getElementById('pricing-cards');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   className="px-8 py-6 text-[15px] font-semibold"
                 >
                   See Plans
@@ -164,8 +178,15 @@ const PricingPage = () => {
           </div>
         </section>
 
+        {/* Animated Stats */}
+        <section className="px-6 mb-20">
+          <div className="container mx-auto max-w-4xl">
+            <AnimatedStats />
+          </div>
+        </section>
+
         {/* Included in all plans */}
-        <section className="px-6 mb-12">
+        <section className="px-6 mb-20">
           <div className="container mx-auto max-w-6xl">
             <div className="bg-primary/10 border border-primary/20 rounded-2xl p-6">
               <h3 className="text-[18px] font-semibold mb-4 text-center">Included in all plans</h3>
@@ -181,9 +202,98 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* Billing Toggle */}
-        <section className="px-6 mb-12">
+        {/* Storytelling Section 1 - The Problem */}
+        <PricingStorySection
+          headline="Most traders fail because they lack consistency."
+          copy={
+            <>
+              <p>
+                90% of traders lose money because they don't journal, track performance, or follow 
+                a daily structure. Emotions take over. Discipline disappears. Losses pile up.
+              </p>
+              <p>
+                Our system fixes that. Automatically. By making discipline rewarding through gamification, 
+                we help you build the habits that separate winning traders from the rest.
+              </p>
+            </>
+          }
+          visual={<ProblemVisual />}
+        />
+
+        {/* Storytelling Section 2 - The XP System */}
+        <PricingStorySection
+          headline="Discipline, gamified."
+          copy={
+            <>
+              <p>
+                Our XP system rewards consistency and discipline. Every time you follow your plan, 
+                journal your trades, and stick to your rules, you earn XP and level up your profile.
+              </p>
+              <p>
+                The system trains your mind through repetition and small wins. It's not just tracking—it's 
+                behavioral transformation backed by real performance data.
+              </p>
+            </>
+          }
+          dataFact="Traders who journal and review trades consistently show an average 23% performance improvement in 4 weeks (based on data from over 1,000 active users)."
+          visual={<XPProgressAnimation />}
+          reverse
+        />
+
+        {/* Storytelling Section 3 - Speed and Efficiency */}
+        <PricingStorySection
+          headline="Upload 10 trades in one click."
+          copy={
+            <>
+              <p>
+                Most traders skip journaling because it's slow. Our AI-based uploader lets you upload 
+                up to 10 trades at once from a single image. That's 40 times faster than manual entry.
+              </p>
+              <p>
+                Scalpers who make 30+ trades a day can now journal everything in minutes instead of hours. 
+                No more excuses. No more missed insights.
+              </p>
+            </>
+          }
+          visual={<SpeedComparisonVisual />}
+        />
+
+        {/* Storytelling Section 4 - Security and Privacy */}
+        <PricingStorySection
+          headline="Safe by design. Your data, your trades."
+          copy={
+            <>
+              <p>
+                We never connect to APIs or exchanges. Your trading data is encrypted and saved securely 
+                on our cloud infrastructure. Only you can access it.
+              </p>
+              <p>
+                No risk of external tracking or data leaks. No third-party integrations that compromise 
+                your privacy. 100% trader-owned data.
+              </p>
+            </>
+          }
+          visual={<SecurityVisual />}
+          reverse
+        />
+
+        {/* Pricing Cards Section */}
+        <section id="pricing-cards" className="px-6 mb-12 scroll-mt-20">
           <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-12">
+              <h2 
+                className="font-bold leading-tight tracking-tight mb-4"
+                style={{ 
+                  fontSize: 'clamp(28px, 4vw, 42px)',
+                  letterSpacing: '-0.01em'
+                }}
+              >
+                Choose your plan. Train like a pro.
+              </h2>
+              <p className="text-[17px] text-muted-foreground/80 max-w-2xl mx-auto">
+                No credit card required. Upgrade anytime. Plans built to keep you disciplined.
+              </p>
+            </div>
             <div className="flex flex-col items-center justify-center gap-3 mb-8">
               {/* Badge above buttons */}
               <div className="inline-block bg-green-500 text-white text-[13px] px-3 py-1.5 rounded-full font-semibold">
@@ -344,23 +454,6 @@ const PricingPage = () => {
               ))}
             </div>
 
-            {/* Micro-proof badges */}
-            <div className="mt-12 text-center">
-              <div className="flex flex-wrap justify-center gap-4 mb-3">
-                <div className="px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-[14px] font-medium">
-                  Up to 40x faster logging
-                </div>
-                <div className="px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-[14px] font-medium">
-                  +23% performance gain
-                </div>
-                <div className="px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-[14px] font-medium">
-                  –18% drawdown reduction
-                </div>
-              </div>
-              <p className="text-[12px] text-muted-foreground/60">
-                Based on real user data from 1,000+ active traders
-              </p>
-            </div>
           </div>
         </section>
 
@@ -401,17 +494,20 @@ const PricingPage = () => {
           </div>
         </section>
 
-        {/* First Week Block */}
-        <FirstWeekBlock />
-
         {/* Comparison Table */}
         <PricingComparison />
+
+        {/* First Week Block */}
+        <FirstWeekBlock />
 
         {/* Add-ons */}
         <PricingAddOns />
 
         {/* FAQ */}
         <PricingFAQ />
+
+        {/* Social Proof & Testimonials */}
+        <SocialProofSection />
 
         {/* Trust and Security */}
         <section className="px-6 mb-12">
@@ -432,7 +528,7 @@ const PricingPage = () => {
         </section>
 
         {/* Bottom CTA */}
-        <section className="px-6">
+        <section className="px-6 mb-20">
           <div className="container mx-auto max-w-3xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -440,17 +536,28 @@ const PricingPage = () => {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Start today</h2>
-              <p className="text-lg text-muted-foreground mb-6">
-                Upload your last 30 days and get AI-powered insights to raise your average R
+              <h2 
+                className="font-bold leading-tight tracking-tight mb-4"
+                style={{ 
+                  fontSize: 'clamp(28px, 4vw, 40px)',
+                  letterSpacing: '-0.01em'
+                }}
+              >
+                Start your free plan. Begin training your discipline today.
+              </h2>
+              <p className="text-[17px] text-muted-foreground/80 mb-6 max-w-xl mx-auto">
+                Upload your trades and start earning XP. Build the habits of top traders.
               </p>
               <Button
                 size="lg"
                 onClick={() => handleStartTrial('pro')}
-                className="px-10 py-7 text-base font-medium"
+                className="px-10 py-7 text-[15px] font-semibold"
               >
-                Start 7-day trial
+                Start Free
               </Button>
+              <p className="text-[13px] text-muted-foreground mt-4">
+                No credit card required • Free entry plan
+              </p>
             </motion.div>
           </div>
         </section>

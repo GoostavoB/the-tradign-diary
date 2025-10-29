@@ -1,9 +1,12 @@
 import { Check, X, HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTranslation } from "@/hooks/useTranslation";
+import { motion } from "framer-motion";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const PricingComparison = () => {
   const { t } = useTranslation();
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
   
   const features = [
     {
@@ -70,57 +73,91 @@ const PricingComparison = () => {
   };
 
   return (
-    <section className="px-6 mb-16">
-      <div className="container mx-auto max-w-6xl">
-        <h2 className="text-3xl font-bold text-center mb-8">{t('pricingComparison.title')}</h2>
+    <section ref={ref} className="px-6 mb-20 relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[200px] pointer-events-none" />
+      
+      <div className="container mx-auto max-w-6xl relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 
+            className="font-bold leading-tight tracking-tight mb-4"
+            style={{ 
+              fontSize: 'clamp(28px, 4vw, 42px)',
+              letterSpacing: '-0.01em'
+            }}
+          >
+            {t('pricingComparison.title')}
+          </h2>
+          <p className="text-[17px] text-muted-foreground/80 max-w-2xl mx-auto">
+            Compare features across all plans
+          </p>
+        </motion.div>
         
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="border-b border-primary/20">
-                <th className="text-left py-4 px-4 font-semibold">{t('pricingComparison.feature')}</th>
-                <th className="text-center py-4 px-4 font-semibold">{t('pricingComparison.basic')}</th>
-                <th className="text-center py-4 px-4 font-semibold">{t('pricingComparison.pro')}</th>
-                <th className="text-center py-4 px-4 font-semibold">{t('pricingComparison.elite')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {features.map((category, categoryIndex) => (
-                <>
-                  <tr key={`category-${categoryIndex}`} className="bg-primary/5">
-                    <td colSpan={4} className="py-3 px-4 font-semibold text-sm uppercase tracking-wide">
-                      {t(category.categoryKey)}
-                    </td>
-                  </tr>
-                  {category.items.map((item, itemIndex) => (
-                    <tr key={`item-${categoryIndex}-${itemIndex}`} className="border-b border-primary/10 hover:bg-secondary/20">
-                      <td className="py-3 px-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          {t(item.nameKey)}
-                          {item.tooltipKey && (
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <HelpCircle className="w-4 h-4 text-muted-foreground" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>{t(item.tooltipKey)}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          )}
-                        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="glass-card overflow-hidden"
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-b border-primary/20 bg-primary/5">
+                  <th className="text-left py-4 px-4 font-semibold text-[14px]">{t('pricingComparison.feature')}</th>
+                  <th className="text-center py-4 px-4 font-semibold text-[14px]">{t('pricingComparison.basic')}</th>
+                  <th className="text-center py-4 px-4 font-semibold text-[14px]">{t('pricingComparison.pro')}</th>
+                  <th className="text-center py-4 px-4 font-semibold text-[14px]">{t('pricingComparison.elite')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {features.map((category, categoryIndex) => (
+                  <>
+                    <tr key={`category-${categoryIndex}`} className="bg-primary/10">
+                      <td colSpan={4} className="py-4 px-4 font-semibold text-[13px] uppercase tracking-wide text-primary">
+                        {t(category.categoryKey)}
                       </td>
-                      <td className="py-3 px-4 text-center">{renderCell(item.basic)}</td>
-                      <td className="py-3 px-4 text-center">{renderCell(item.pro)}</td>
-                      <td className="py-3 px-4 text-center">{renderCell(item.elite)}</td>
                     </tr>
-                  ))}
-                </>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    {category.items.map((item, itemIndex) => (
+                      <motion.tr
+                        key={`item-${categoryIndex}-${itemIndex}`}
+                        initial={{ opacity: 0 }}
+                        animate={isVisible ? { opacity: 1 } : {}}
+                        transition={{ duration: 0.3, delay: (categoryIndex * 0.1) + (itemIndex * 0.05) }}
+                        className="border-b border-primary/10 hover:bg-primary/5 transition-colors group"
+                      >
+                        <td className="py-4 px-4 text-[14px]">
+                          <div className="flex items-center gap-2">
+                            <span className="group-hover:text-foreground transition-colors">{t(item.nameKey)}</span>
+                            {item.tooltipKey && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <HelpCircle className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors cursor-help" />
+                                  </TooltipTrigger>
+                                  <TooltipContent className="max-w-xs">
+                                    <p className="text-[13px]">{t(item.tooltipKey)}</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 text-center">{renderCell(item.basic)}</td>
+                        <td className="py-4 px-4 text-center">{renderCell(item.pro)}</td>
+                        <td className="py-4 px-4 text-center">{renderCell(item.elite)}</td>
+                      </motion.tr>
+                    ))}
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

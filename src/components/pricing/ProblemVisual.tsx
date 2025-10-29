@@ -1,0 +1,91 @@
+import { motion } from "framer-motion";
+import { TrendingDown, TrendingUp, BarChart3, CheckCircle2 } from "lucide-react";
+import { useInView } from "react-intersection-observer";
+
+export const ProblemVisual = () => {
+  const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Before state - Chaotic */}
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={inView ? { opacity: 0 } : {}}
+        transition={{ duration: 0.8, delay: 1 }}
+        className="glass-card p-6 space-y-4"
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <TrendingDown className="w-5 h-5 text-destructive" />
+          <span className="text-[14px] font-semibold text-muted-foreground">Without System</span>
+        </div>
+        
+        <div className="space-y-3">
+          {[40, 60, 30, 70, 20].map((height, i) => (
+            <motion.div
+              key={i}
+              initial={{ scaleX: 0 }}
+              animate={inView ? { scaleX: 1 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="h-8 bg-destructive/20 rounded origin-left relative overflow-hidden"
+              style={{ width: `${height}%` }}
+            >
+              <motion.div
+                animate={{
+                  x: ['-100%', '100%'],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-destructive/30 to-transparent"
+              />
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* After state - Organized */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.8, delay: 1.2 }}
+        className="glass-card p-6 space-y-4 absolute inset-0"
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <TrendingUp className="w-5 h-5 text-primary" />
+          <span className="text-[14px] font-semibold text-foreground">With Discipline System</span>
+        </div>
+        
+        <div className="space-y-3">
+          {[70, 75, 85, 90, 95].map((height, i) => (
+            <motion.div
+              key={i}
+              initial={{ scaleX: 0 }}
+              animate={inView ? { scaleX: 1 } : {}}
+              transition={{ duration: 0.6, delay: 1.2 + i * 0.1 }}
+              className="flex items-center gap-2"
+            >
+              <div
+                className="h-8 bg-primary/30 rounded origin-left flex items-center justify-end pr-2"
+                style={{ width: `${height}%` }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: 2 }}
+          className="flex items-center gap-2 text-[13px] text-primary font-semibold pt-2"
+        >
+          <BarChart3 className="w-4 h-4" />
+          <span>+23% performance improvement</span>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
