@@ -4,6 +4,8 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Lock, Check } from 'lucide-react';
 import type { TierInfo } from '@/hooks/useTierPreview';
+import { fadeInUp, springIn } from '@/utils/animations';
+import { memo } from 'react';
 
 interface TierProgressCardProps {
   tierInfo: TierInfo;
@@ -13,7 +15,7 @@ interface TierProgressCardProps {
   index: number;
 }
 
-export const TierProgressCard = ({ 
+const TierProgressCardComponent = ({ 
   tierInfo, 
   currentXP, 
   isUnlocked, 
@@ -24,14 +26,15 @@ export const TierProgressCard = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
+      variants={fadeInUp}
+      className="h-full"
     >
       <Card 
-        className={`relative overflow-hidden transition-all duration-300 ${
-          isCurrent ? 'ring-2 ring-primary shadow-lg scale-105' : ''
-        } ${!isUnlocked ? 'opacity-70' : ''}`}
+        className={`relative overflow-hidden transition-all duration-300 h-full ${
+          isCurrent ? 'ring-2 ring-primary shadow-glow scale-[1.02]' : ''
+        } ${!isUnlocked ? 'opacity-70' : ''} glass-subtle hover:glass-strong`}
+        role="article"
+        aria-label={`${tierInfo.name} tier`}
       >
         {isCurrent && (
           <div className="absolute top-0 right-0 m-3">
@@ -110,3 +113,5 @@ export const TierProgressCard = ({
     </motion.div>
   );
 };
+
+export const TierProgressCard = memo(TierProgressCardComponent);

@@ -1,51 +1,56 @@
 import { useCallback } from 'react';
-import { useCalmMode } from '@/contexts/CalmModeContext';
 
-type HapticPattern = 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error';
+type HapticIntensity = 'light' | 'medium' | 'heavy';
 
-const HAPTIC_PATTERNS: Record<HapticPattern, number | number[]> = {
-  light: 10,
-  medium: 20,
-  heavy: 30,
-  success: [10, 50, 10],
-  warning: [20, 100, 20],
-  error: [50, 100, 50],
-};
-
+/**
+ * Provides haptic feedback for supported devices
+ * Gracefully degrades on unsupported devices
+ */
 export const useHapticFeedback = () => {
-  const { calmModeEnabled } = useCalmMode();
-
-  const triggerHaptic = useCallback((pattern: HapticPattern = 'light') => {
-    if (calmModeEnabled) return;
+  const vibrate = useCallback((intensity: HapticIntensity = 'medium') => {
+    // Check if device supports vibration
     if (!('vibrate' in navigator)) return;
 
-    try {
-      const vibrationPattern = HAPTIC_PATTERNS[pattern];
-      navigator.vibrate(vibrationPattern);
-    } catch (error) {
-      console.error('Error triggering haptic feedback:', error);
-    }
-  }, [calmModeEnabled]);
-
-  const hapticForEvent = useCallback((eventType: string) => {
-    const eventPatterns: Record<string, HapticPattern> = {
-      xp_gain: 'light',
-      level_up: 'success',
-      badge_unlock: 'medium',
-      achievement_unlock: 'heavy',
-      challenge_complete: 'success',
-      trade_win: 'medium',
-      trade_loss: 'light',
-      error: 'error',
-      warning: 'warning',
+    const patterns = {
+      light: [10],
+      medium: [20],
+      heavy: [30],
     };
 
-    const pattern = eventPatterns[eventType] || 'light';
-    triggerHaptic(pattern);
-  }, [triggerHaptic]);
+    try {
+      navigator.vibrate(patterns[intensity]);
+    } catch (error) {
+      console.warn('Haptic feedback not available:', error);
+    }
+  }, []);
+
+  const success = useCallback(() => {
+    vibrate('light');
+  }, [vibrate]);
+
+  const warning = useCallback(() => {
+    vibrate('medium');
+  }, [vibrate]);
+
+  const error = useCallback(() => {
+    if (!('vibrate' in navigator)) return;
+    try {
+      // Double vibration for errors
+      navigator.vibrate([30, 100, 30]);
+    } catch (err) {
+      console.warn('Haptic feedback not available:', err);
+    }
+  }, []);
+
+  const selection = useCallback(() => {
+    vibrate('light');
+  }, [vibrate]);
 
   return {
-    triggerHaptic,
-    hapticForEvent,
+    vibrate,
+    success,
+    warning,
+    error,
+    selection,
   };
 };

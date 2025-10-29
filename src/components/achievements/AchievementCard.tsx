@@ -1,16 +1,18 @@
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Lock, Star, TrendingUp, Zap, Crown } from 'lucide-react';
-import { AchievementProgress } from '@/hooks/useAchievementProgress';
+import { Badge } from '@/components/ui/badge';
+import { Lock, Trophy, Star, Sparkles, Award, Crown, Zap, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { AchievementProgress } from '@/hooks/useAchievementProgress';
+import { fadeInUp, cardHover } from '@/utils/animations';
+import { memo } from 'react';
 
 interface AchievementCardProps {
   progress: AchievementProgress;
   index: number;
 }
 
-export const AchievementCard = ({ progress, index }: AchievementCardProps) => {
+const AchievementCardComponent = ({ progress, index }: AchievementCardProps) => {
   const { achievement, current_progress, max_progress, completed } = progress;
 
   const getRarityInfo = (rarity: string) => {
@@ -55,7 +57,8 @@ export const AchievementCard = ({ progress, index }: AchievementCardProps) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
+      whileHover={{ scale: 1.02, y: -4 }}
+      transition={{ delay: index * 0.05, duration: 0.15 }}
     >
       <Card 
         className={`relative p-4 transition-all duration-300 hover:shadow-lg ${
@@ -121,3 +124,5 @@ export const AchievementCard = ({ progress, index }: AchievementCardProps) => {
     </motion.div>
   );
 };
+
+export const AchievementCard = memo(AchievementCardComponent);

@@ -2,6 +2,10 @@ import { Button } from '@/components/ui/button';
 import { Twitter, Linkedin, Facebook, Send, MessageCircle, Loader2 } from 'lucide-react';
 import { useSocialSharing } from '@/hooks/useSocialSharing';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { staggerContainer, fadeInUp } from '@/utils/animations';
+import { spacing } from '@/utils/designTokens';
 
 type Platform = 'twitter' | 'linkedin' | 'facebook' | 'telegram' | 'whatsapp';
 type ContentType = 'trade' | 'achievement' | 'milestone' | 'general';
@@ -56,10 +60,15 @@ export const QuickShareButtons = ({
 }: QuickShareButtonsProps) => {
   const { recordShare, getShareUrl, canShare, sharesThisWeek } = useSocialSharing();
   const [sharingPlatform, setSharingPlatform] = useState<Platform | null>(null);
+  const { success, error: errorHaptic } = useHapticFeedback();
 
   const handleShare = async (platform: Platform) => {
-    if (!canShare) return;
+    if (!canShare) {
+      errorHaptic();
+      return;
+    }
 
+    success();
     setSharingPlatform(platform);
 
     // Open share window
@@ -73,38 +82,49 @@ export const QuickShareButtons = ({
       }
       
       await recordShare(platform, contentType, contentId);
+      success();
       setSharingPlatform(null);
     }, 3000);
   };
 
   return (
-    <div className="space-y-2">
-      <div className={`flex ${compact ? 'gap-2' : 'gap-3'} flex-wrap`}>
-        {platformConfig.map(({ platform, icon: Icon, label, color }) => (
-          <Button
-            key={platform}
-            variant="outline"
-            size={compact ? "sm" : "default"}
-            onClick={() => handleShare(platform)}
-            disabled={!canShare || sharingPlatform !== null}
-            className={`${color} transition-colors`}
-          >
-            {sharingPlatform === platform ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Icon className="h-4 w-4" />
-            )}
-            {!compact && <span className="ml-2">{label}</span>}
-          </Button>
+    <motion.div 
+      variants={staggerContainer}
+      initial="initial"
+      animate="animate"
+      className="space-y-3"
+    >
+      <div className={`grid ${compact ? 'grid-cols-5 gap-2' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3'}`}>
+        {platformConfig.map(({ platform, icon: Icon, label, color }, index) => (
+          <motion.div key={platform} variants={fadeInUp}>
+            <Button
+              variant="outline"
+              size={compact ? "sm" : "default"}
+              onClick={() => handleShare(platform)}
+              disabled={!canShare || sharingPlatform !== null}
+              className={`${color} transition-all w-full min-h-[44px] ${compact ? 'p-2' : ''}`}
+              aria-label={`Share on ${label}`}
+            >
+              {sharingPlatform === platform ? (
+                <Loader2 className={`${compact ? 'h-4 w-4' : 'h-5 w-5'} animate-spin`} />
+              ) : (
+                <Icon className={`${compact ? 'h-4 w-4' : 'h-5 w-5'}`} />
+              )}
+              {!compact && <span className="ml-2 hidden sm:inline">{label}</span>}
+            </Button>
+          </motion.div>
         ))}
       </div>
       
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>Earn 50 XP per share</span>
-        <span className={canShare ? 'text-primary' : 'text-destructive'}>
-          {sharesThisWeek}/3 shares this week
+      <motion.div 
+        variants={fadeInUp}
+        className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground px-1"
+      >
+        <span className="font-medium">+50 XP per share</span>
+        <span className={`font-semibold ${canShare ? 'text-primary' : 'text-destructive'}`}>
+          {sharesThisWeek}/3 this week
         </span>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

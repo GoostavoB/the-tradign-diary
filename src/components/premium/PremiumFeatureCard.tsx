@@ -6,6 +6,8 @@ import { Check, Lock, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { PremiumFeature } from '@/hooks/usePremiumShowcase';
+import { fadeInUp, cardHover } from '@/utils/animations';
+import { memo } from 'react';
 
 interface PremiumFeatureCardProps {
   feature: PremiumFeature;
@@ -13,7 +15,7 @@ interface PremiumFeatureCardProps {
   index: number;
 }
 
-export const PremiumFeatureCard = ({ feature, isUnlocked, index }: PremiumFeatureCardProps) => {
+const PremiumFeatureCardComponent = ({ feature, isUnlocked, index }: PremiumFeatureCardProps) => {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const currentLang = i18n.language;
@@ -25,18 +27,18 @@ export const PremiumFeatureCard = ({ feature, isUnlocked, index }: PremiumFeatur
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+      variants={fadeInUp}
+      whileHover={{ scale: 1.02, y: -4 }}
+      transition={{ duration: 0.15 }}
     >
       <Card className={`h-full transition-all duration-300 ${
         isUnlocked 
-          ? 'border-primary/50 bg-gradient-to-br from-primary/5 to-transparent' 
-          : 'border-muted hover:border-primary/30'
+          ? 'border-primary/50 bg-gradient-to-br from-primary/5 to-transparent glass-card' 
+          : 'border-muted hover:border-primary/30 glass-subtle hover:glass-strong'
       }`}>
-        <CardHeader>
+        <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
-            <div className="text-4xl mb-2">{feature.icon}</div>
+            <div className="text-3xl sm:text-4xl mb-2" aria-hidden="true">{feature.icon}</div>
             <Badge 
               variant={isUnlocked ? "default" : "secondary"}
               className="gap-1"
@@ -44,24 +46,24 @@ export const PremiumFeatureCard = ({ feature, isUnlocked, index }: PremiumFeatur
               {isUnlocked ? (
                 <>
                   <Check className="h-3 w-3" />
-                  Unlocked
+                  <span className="hidden sm:inline">Unlocked</span>
                 </>
               ) : (
                 <>
                   <Lock className="h-3 w-3" />
-                  {feature.requiredPlan === 'elite' ? 'Elite' : 'Pro'}
+                  <span>{feature.requiredPlan === 'elite' ? 'Elite' : 'Pro'}</span>
                 </>
               )}
             </Badge>
           </div>
-          <CardTitle className="text-xl">{feature.title}</CardTitle>
-          <CardDescription>{feature.description}</CardDescription>
+          <CardTitle className="text-lg sm:text-xl">{feature.title}</CardTitle>
+          <CardDescription className="text-sm">{feature.description}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             {feature.benefits.map((benefit, idx) => (
               <div key={idx} className="flex items-start gap-2 text-sm">
-                <Sparkles className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <Sparkles className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
                 <span className={isUnlocked ? 'text-foreground' : 'text-muted-foreground'}>
                   {benefit}
                 </span>
@@ -74,7 +76,8 @@ export const PremiumFeatureCard = ({ feature, isUnlocked, index }: PremiumFeatur
               onClick={handleUpgrade}
               variant="outline"
               size="sm"
-              className="w-full gap-2 mt-4"
+              className="w-full gap-2 mt-4 min-h-[44px]"
+              aria-label={`Upgrade to ${feature.requiredPlan} plan to unlock ${feature.title}`}
             >
               <Lock className="h-4 w-4" />
               Upgrade to {feature.requiredPlan === 'elite' ? 'Elite' : 'Pro'}
@@ -85,3 +88,5 @@ export const PremiumFeatureCard = ({ feature, isUnlocked, index }: PremiumFeatur
     </motion.div>
   );
 };
+
+export const PremiumFeatureCard = memo(PremiumFeatureCardComponent);
