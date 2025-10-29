@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Expand } from "lucide-react";
-import dashboardScreenshot from "@/assets/dashboard-screenshot-new.png";
+import dashboardScreenshot from "@/assets/dashboard-screenshot-3d.png";
 import { useState } from "react";
 const Hero = () => {
   const navigate = useNavigate();
