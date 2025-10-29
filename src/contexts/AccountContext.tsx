@@ -44,12 +44,21 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
         method: 'GET',
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching accounts:', error);
+        // Set empty state on error to allow dashboard to load
+        setAccounts([]);
+        setActiveAccountId(null);
+        return;
+      }
 
       setAccounts(data.accounts || []);
       setActiveAccountId(data.activeAccountId);
     } catch (error) {
       console.error('Error fetching accounts:', error);
+      // Set empty state on error to allow dashboard to load
+      setAccounts([]);
+      setActiveAccountId(null);
     } finally {
       setIsLoading(false);
     }

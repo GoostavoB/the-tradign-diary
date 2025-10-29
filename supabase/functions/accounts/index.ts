@@ -52,8 +52,10 @@ Deno.serve(async (req) => {
     const pathParts = url.pathname.split('/').filter(Boolean);
     const method = req.method;
 
+    console.log('Request:', method, url.pathname, 'pathParts:', pathParts);
+
     // GET /accounts - List all accounts
-    if (method === 'GET' && pathParts.length === 1) {
+    if (method === 'GET' && pathParts.length === 1 && pathParts[0] === 'accounts') {
       const { data: accounts, error } = await supabase
         .from('accounts')
         .select('*')
@@ -81,7 +83,7 @@ Deno.serve(async (req) => {
     }
 
     // POST /accounts - Create new account
-    if (method === 'POST' && pathParts.length === 1) {
+    if (method === 'POST' && pathParts.length === 1 && pathParts[0] === 'accounts') {
       const body: CreateAccountRequest = await req.json();
 
       // Check plan limits
@@ -163,7 +165,7 @@ Deno.serve(async (req) => {
     }
 
     // PATCH /accounts/:id - Update account
-    if (method === 'PATCH' && pathParts.length === 2) {
+    if (method === 'PATCH' && pathParts.length === 2 && pathParts[0] === 'accounts') {
       const accountId = pathParts[1];
       const body = await req.json();
 
@@ -195,7 +197,7 @@ Deno.serve(async (req) => {
     }
 
     // POST /accounts/:id/activate - Set as active account
-    if (method === 'POST' && pathParts.length === 3 && pathParts[2] === 'activate') {
+    if (method === 'POST' && pathParts.length === 3 && pathParts[0] === 'accounts' && pathParts[2] === 'activate') {
       const accountId = pathParts[1];
 
       // Verify ownership
@@ -227,7 +229,7 @@ Deno.serve(async (req) => {
     }
 
     // POST /accounts/:id/duplicate - Duplicate account
-    if (method === 'POST' && pathParts.length === 3 && pathParts[2] === 'duplicate') {
+    if (method === 'POST' && pathParts.length === 3 && pathParts[0] === 'accounts' && pathParts[2] === 'duplicate') {
       const accountId = pathParts[1];
       const body: DuplicateAccountRequest = await req.json();
 
@@ -366,7 +368,7 @@ Deno.serve(async (req) => {
     }
 
     // DELETE /accounts/:id - Soft delete account
-    if (method === 'DELETE' && pathParts.length === 2) {
+    if (method === 'DELETE' && pathParts.length === 2 && pathParts[0] === 'accounts') {
       const accountId = pathParts[1];
 
       // Check if it's the active account
