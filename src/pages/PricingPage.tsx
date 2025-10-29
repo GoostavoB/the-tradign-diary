@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Check, HelpCircle, Clock } from "lucide-react";
+import { Check, HelpCircle, Clock, CircleCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { usePromoStatus } from "@/hooks/usePromoStatus";
@@ -188,18 +188,49 @@ const PricingPage = () => {
 
         {/* Included in all plans */}
         <section className="px-6 mb-20">
-          <div className="container mx-auto max-w-6xl">
-            <div className="bg-primary/10 border border-primary/20 rounded-2xl p-6">
-              <h3 className="text-[18px] font-semibold mb-4 text-center">Included in all plans</h3>
-              <div className="grid md:grid-cols-3 gap-4">
-                {includedFeatures.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-2 text-[14px]">
-                    <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-foreground/80">{feature}</span>
-                  </div>
-                ))}
+          <div className="container mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="glass-card p-8 md:p-10 border border-primary/30 relative overflow-hidden"
+            >
+              {/* Subtle background gradient */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 pointer-events-none" />
+              
+              <div className="relative z-10">
+                <h3 className="text-[24px] md:text-[28px] font-bold mb-3 text-center bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                  Included in all plans
+                </h3>
+                <p className="text-[14px] text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+                  Every plan includes our core features to help you track, analyze, and improve your trading
+                </p>
+                
+                <div className="grid md:grid-cols-2 gap-x-8 gap-y-5">
+                  {includedFeatures.map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className="flex items-start gap-3 group"
+                    >
+                      <div className="mt-0.5 flex-shrink-0">
+                        <div className="relative">
+                          <div className="absolute inset-0 bg-primary/20 rounded-full blur-md group-hover:bg-primary/30 transition-colors" />
+                          <CircleCheck className="w-5 h-5 text-primary relative z-10" strokeWidth={2} />
+                        </div>
+                      </div>
+                      <span className="text-[15px] leading-relaxed text-foreground/90 font-medium">
+                        {feature}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
