@@ -25,12 +25,12 @@ export const SecurityVisual = () => {
         {[1, 2, 3].map((ring) => (
           <motion.div
             key={ring}
-            initial={{ scale: 1, opacity: 0.5 }}
+            initial={{ scale: 1, opacity: 0.6 }}
             animate={
               inView
                 ? {
                     scale: [1, 1.5, 2],
-                    opacity: [0.5, 0.2, 0],
+                    opacity: [0.6, 0.3, 0],
                   }
                 : {}
             }
@@ -40,7 +40,10 @@ export const SecurityVisual = () => {
               delay: ring * 0.4,
               ease: "easeOut",
             }}
-            className="absolute inset-0 rounded-full border-2 border-primary"
+            className="absolute inset-0 rounded-full border-2 border-blue-500"
+            style={{
+              boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)'
+            }}
           />
         ))}
 
@@ -58,9 +61,12 @@ export const SecurityVisual = () => {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="relative z-10 w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center"
+          className="relative z-10 w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 to-primary flex items-center justify-center"
+          style={{
+            boxShadow: '0 0 40px rgba(59, 130, 246, 0.6)'
+          }}
         >
-          <Shield className="w-12 h-12 text-primary" />
+          <Shield className="w-14 h-14 text-white" strokeWidth={2} />
         </motion.div>
       </motion.div>
 
@@ -74,12 +80,16 @@ export const SecurityVisual = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: feature.delay }}
-              className="glass-card p-4 flex flex-col items-center text-center"
+              className="glass-card p-4 flex flex-col items-center text-center border border-primary/30"
             >
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mb-2">
-                <Icon className="w-5 h-5 text-primary" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-primary flex items-center justify-center mb-2"
+                style={{
+                  boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)'
+                }}
+              >
+                <Icon className="w-6 h-6 text-white" strokeWidth={2} />
               </div>
-              <p className="text-[12px] text-muted-foreground font-medium">
+              <p className="text-[13px] text-foreground font-semibold">
                 {feature.label}
               </p>
             </motion.div>
@@ -93,8 +103,8 @@ export const SecurityVisual = () => {
         transition={{ duration: 0.5, delay: 1.2 }}
         className="mt-6 text-center"
       >
-        <p className="text-[13px] text-primary font-semibold">
-          🔒 100% trader-owned data
+        <p className="text-[14px] text-primary font-bold flex items-center justify-center gap-2">
+          <span className="text-[16px]">🔒</span> 100% trader-owned data
         </p>
       </motion.div>
     </div>

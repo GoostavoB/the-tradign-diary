@@ -141,13 +141,17 @@ export const SpeedComparisonVisual = () => {
         </div>
 
         {/* AI Upload - Instant Magic */}
-        <div className="glass-card p-6 border-2 border-primary relative overflow-hidden">
+        <div className="glass-card p-6 border-2 border-blue-500/60 relative overflow-hidden"
+          style={{
+            boxShadow: '0 0 30px rgba(59, 130, 246, 0.3)'
+          }}
+        >
           <div className="flex items-center gap-2 mb-4">
-            <Zap className="w-5 h-5 text-primary" />
-            <span className="text-[14px] font-semibold text-primary">AI Upload System</span>
+            <Zap className="w-5 h-5 text-blue-500" strokeWidth={2.5} />
+            <span className="text-[14px] font-semibold text-blue-500">AI Upload System</span>
           </div>
           
-          <p className="text-[13px] text-primary/90 mb-4">
+          <p className="text-[13px] text-blue-500/90 mb-4 font-medium">
             Upload a screenshot or CSV from any exchange. Our AI recognizes trades instantly.
           </p>
           
@@ -158,14 +162,14 @@ export const SpeedComparisonVisual = () => {
             transition={{ duration: 0.5, delay: 2.2 }}
             className="relative mb-4"
           >
-            <div className="h-32 bg-primary/10 border-2 border-dashed border-primary/30 rounded-lg flex flex-col items-center justify-center relative overflow-hidden">
+            <div className="h-32 bg-gradient-to-br from-blue-500/20 to-primary/20 border-2 border-dashed border-blue-500/40 rounded-lg flex flex-col items-center justify-center relative overflow-hidden">
               {/* File icon animation */}
               <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={inView ? { y: 0, opacity: 1 } : {}}
                 transition={{ duration: 0.3, delay: 2.4 }}
               >
-                <FileText className="w-10 h-10 text-primary/60 mb-2" />
+                <FileText className="w-10 h-10 text-blue-500 mb-2" strokeWidth={2} />
               </motion.div>
               
               {/* Scanning effect */}
@@ -173,7 +177,7 @@ export const SpeedComparisonVisual = () => {
                 initial={{ scaleX: 0, opacity: 0 }}
                 animate={inView ? { scaleX: 1, opacity: [0, 1, 0] } : {}}
                 transition={{ duration: 0.8, delay: 2.6, times: [0, 0.5, 1] }}
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent"
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/40 to-transparent"
               />
               
               {/* AI processing indicator */}
@@ -181,7 +185,7 @@ export const SpeedComparisonVisual = () => {
                 initial={{ opacity: 0 }}
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.3, delay: 2.5 }}
-                className="text-[11px] text-primary/70 flex items-center gap-1"
+                className="text-[11px] text-blue-500 font-semibold flex items-center gap-1"
               >
                 <Sparkles className="w-3 h-3" />
                 AI Processing...
@@ -202,10 +206,13 @@ export const SpeedComparisonVisual = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={inView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.3, delay: 2.8 + i * 0.1 }}
-                className="flex items-center gap-2 h-8 bg-primary/10 rounded-md px-3"
+                className="flex items-center gap-2 h-8 bg-gradient-to-r from-blue-500/20 to-primary/20 rounded-md px-3 border border-blue-500/20"
+                style={{
+                  boxShadow: '0 0 10px rgba(59, 130, 246, 0.2)'
+                }}
               >
-                <CheckCircle2 className="w-4 h-4 text-primary" />
-                <span className="text-[11px] text-primary/80">Trade #{i} detected</span>
+                <CheckCircle2 className="w-4 h-4 text-blue-500" strokeWidth={2.5} />
+                <span className="text-[11px] text-primary font-semibold">Trade #{i} detected</span>
               </motion.div>
             ))}
           </motion.div>
@@ -214,15 +221,15 @@ export const SpeedComparisonVisual = () => {
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5, delay: 3.2 }}
-            className="pt-4 border-t border-primary/20"
+            className="pt-4 border-t border-blue-500/30"
           >
             <div className="flex items-center justify-center gap-2">
-              <Zap className="w-4 h-4 text-primary" />
-              <p className="text-[16px] font-mono font-bold text-primary">
+              <Zap className="w-5 h-5 text-blue-500" strokeWidth={2.5} />
+              <p className="text-[18px] font-mono font-bold text-blue-500">
                 00:{aiTimer.toString().padStart(2, '0')}
               </p>
             </div>
-            <p className="text-[11px] text-primary/70 text-center mt-1">
+            <p className="text-[11px] text-primary/90 font-medium text-center mt-1">
               10 trades processed instantly
             </p>
           </motion.div>
@@ -234,11 +241,13 @@ export const SpeedComparisonVisual = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, delay: 3.4 }}
-        className="glass-card p-6 text-center"
+        className="glass-card p-6 text-center border border-primary/30"
       >
-        <p className="text-[24px] md:text-[32px] font-bold text-primary mb-2">40x faster</p>
-        <p className="text-[14px] text-muted-foreground mb-1">Save 19.5 minutes per session</p>
-        <p className="text-[12px] text-muted-foreground/70">That's over 10 hours per month</p>
+        <p className="text-[28px] md:text-[36px] font-bold bg-gradient-to-r from-blue-500 to-primary bg-clip-text text-transparent mb-2">
+          40x faster
+        </p>
+        <p className="text-[15px] text-foreground font-semibold mb-1">Save 19.5 minutes per session</p>
+        <p className="text-[13px] text-muted-foreground">That&apos;s over 10 hours per month</p>
       </motion.div>
     </div>
   );

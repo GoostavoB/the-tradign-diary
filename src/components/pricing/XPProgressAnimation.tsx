@@ -15,12 +15,15 @@ export const XPProgressAnimation = () => {
     <div ref={ref} className="max-w-2xl mx-auto space-y-6">
       {/* XP Progress Bar */}
       <div className="relative">
-        <div className="h-3 bg-muted/30 rounded-full overflow-hidden backdrop-blur-sm">
+        <div className="h-4 bg-muted/30 rounded-full overflow-hidden backdrop-blur-sm border border-primary/20">
           <motion.div
             initial={{ width: 0 }}
             animate={inView ? { width: "75%" } : {}}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="h-full bg-gradient-to-r from-primary to-accent rounded-full relative"
+            className="h-full bg-gradient-to-r from-blue-500 via-blue-600 to-primary rounded-full relative"
+            style={{
+              boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+            }}
           >
             <motion.div
               animate={{
@@ -31,7 +34,7 @@ export const XPProgressAnimation = () => {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
             />
           </motion.div>
         </div>
@@ -41,7 +44,11 @@ export const XPProgressAnimation = () => {
           transition={{ duration: 0.5, delay: 1.5 }}
           className="absolute -top-8 left-3/4 -translate-x-1/2"
         >
-          <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-[12px] font-bold">
+          <div className="bg-gradient-to-r from-blue-500 to-primary text-white px-3 py-1 rounded-full text-[12px] font-bold shadow-lg"
+            style={{
+              boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)'
+            }}
+          >
             750 XP
           </div>
         </motion.div>
@@ -57,24 +64,27 @@ export const XPProgressAnimation = () => {
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: badge.delay }}
-              className="glass-card p-4 text-center relative overflow-hidden"
+              className="glass-card p-4 text-center relative overflow-hidden border border-primary/30"
             >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={inView ? { scale: [0, 1.2, 1] } : {}}
                 transition={{ duration: 0.6, delay: badge.delay + 0.2 }}
-                className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/20 mb-2"
+                className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-primary mb-2 relative"
+                style={{
+                  boxShadow: '0 0 25px rgba(59, 130, 246, 0.5)'
+                }}
               >
-                <Icon className="w-6 h-6 text-primary" />
+                <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
               </motion.div>
-              <p className="text-[12px] text-muted-foreground font-medium">{badge.label}</p>
+              <p className="text-[12px] text-foreground font-semibold">{badge.label}</p>
               
               {/* Unlock shimmer effect */}
               <motion.div
                 initial={{ x: "-100%" }}
                 animate={inView ? { x: "200%" } : {}}
                 transition={{ duration: 1, delay: badge.delay + 0.3 }}
-                className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
+                className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent skew-x-12"
               />
             </motion.div>
           );
