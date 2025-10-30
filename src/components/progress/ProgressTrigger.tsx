@@ -8,7 +8,28 @@ export function ProgressTrigger() {
   const [isOpen, setIsOpen] = useState(false);
   const { activityData } = useEngagementReminders();
 
-  if (!activityData) return null;
+  // Always show the trigger even if no data yet
+  if (!activityData) {
+    return (
+      <>
+        <button
+          onClick={() => setIsOpen(true)}
+          className={cn(
+            "fixed top-20 right-6 z-30",
+            "p-3 rounded-full shadow-lg",
+            "transition-all duration-300 hover:scale-110",
+            "bg-gradient-to-br from-amber-500 to-amber-600",
+            "hover:from-amber-400 hover:to-amber-500",
+            "border-2 border-amber-400/50"
+          )}
+          aria-label="Open progress panel"
+        >
+          <Zap className="h-5 w-5 text-white" strokeWidth={2.5} fill="currentColor" />
+        </button>
+        <ProgressPanel isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      </>
+    );
+  }
 
   const activities = [
     { current: activityData.trades_uploaded, target: 5 },
