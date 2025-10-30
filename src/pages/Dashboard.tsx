@@ -16,7 +16,7 @@ import { CostEfficiencyPanel } from '@/components/insights/CostEfficiencyPanel';
 import { BehaviorAnalytics } from '@/components/insights/BehaviorAnalytics';
 import { DashboardSkeleton } from '@/components/DashboardSkeleton';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
-import { AIInsightsBox } from '@/components/insights/AIInsightsBox';
+import { PinnedWidgetsArea } from '@/components/PinnedWidgetsArea';
 import { AITrainingQuestionnaire } from '@/components/ai-training/AITrainingQuestionnaire';
 import { useAITrainingProfile } from '@/hooks/useAITrainingProfile';
 import { LevelUpModal } from '@/components/gamification/LevelUpModal';
@@ -1083,10 +1083,15 @@ const Dashboard = () => {
               <DailyMissionBar />
             </div>
 
-            {/* AI Insights Box */}
-            <div className="mb-6 animate-fade-in" style={{animationDelay: '0.4s'}}>
-              <AIInsightsBox />
-            </div>
+            {/* Pinned Widgets Area */}
+            <PinnedWidgetsArea 
+              winRate={dashboardStats.winRate}
+              winCount={dashboardStats.winningTrades.length}
+              lossCount={dashboardStats.losingTrades.length}
+              totalProfit={dashboardStats.totalPnL}
+              currentROI={dashboardStats.avgRoi}
+              totalTrades={dashboardStats.totalTrades}
+            />
 
             {/* Main Content Tabs */}
             <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6 animate-fade-in" style={{animationDelay: '0.5s'}}>

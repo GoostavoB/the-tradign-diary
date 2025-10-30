@@ -1,151 +1,102 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, Activity } from 'lucide-react';
-import { format } from 'date-fns';
-import { WidgetProps } from '@/types/widget';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Card } from '@/components/ui/card';
+import { TrendingUp, TrendingDown } from 'lucide-react';
+import { PinButton } from './PinButton';
+import { usePinnedWidgets } from '@/contexts/PinnedWidgetsContext';
 
-const SYMBOLS = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT'];
-const PERIODS = [
-  { label: '24H', value: '5m', limit: 288 },
-  { label: '7D', value: '1h', limit: 168 },
-  { label: '30D', value: '4h', limit: 180 }
-];
-
-interface OIDataPoint {
-  timestamp: number;
-  value: number;
+interface OIData {
+  openInterest: string;
+  openInterestValue: string;
+  change: number;
+  isIncreasing: boolean;
 }
 
-export function OpenInterestWidget({ id, isEditMode }: WidgetProps) {
-  const [symbol, setSymbol] = useState('BTCUSDT');
-  const [period, setPeriod] = useState('5m');
-  const [data, setData] = useState<OIDataPoint[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentOI, setCurrentOI] = useState(0);
-  const [change, setChange] = useState(0);
+export function OpenInterestWidget() {
+  const [oiData, setOiData] = useState<OIData | null>(null);
+  const { isPinned, togglePin } = usePinnedWidgets();
+  const widgetId = 'open-interest';
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    const fetchOI = async () => {
       try {
-        const periodConfig = PERIODS.find(p => p.value === period) || PERIODS[0];
         const response = await fetch(
-          `https://fapi.binance.com/futures/data/openInterestHist?symbol=${symbol}&period=${period}&limit=${periodConfig.limit}`
+          'https://fapi.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=1d&limit=2'
         );
-        const result = await response.json();
+        const data = await response.json();
 
-        if (result && result.length > 0) {
-          const processed = result.map((item: any) => ({
-            timestamp: item.timestamp,
-            value: parseFloat(item.sumOpenInterest)
-          }));
+        const current = parseFloat(data[0].sumOpenInterest);
+        const previous = parseFloat(data[1].sumOpenInterest);
+        const change = ((current - previous) / previous) * 100;
 
-          setData(processed);
-          const current = processed[processed.length - 1].value;
-          const previous = processed[0].value;
-          setCurrentOI(current);
-          setChange(((current - previous) / previous) * 100);
-        }
+        const currentValue = parseFloat(data[0].sumOpenInterestValue);
+
+        setOiData({
+          openInterest: current.toLocaleString(undefined, { maximumFractionDigits: 2 }),
+          openInterestValue: (currentValue / 1_000_000_000).toFixed(2),
+          change,
+          isIncreasing: change > 0,
+        });
       } catch (error) {
-        console.error('OI fetch error:', error);
-      } finally {
-        setLoading(false);
+        console.error('Error fetching OI:', error);
       }
     };
 
-    fetchData();
-  }, [symbol, period]);
+    fetchOI();
+    const interval = setInterval(fetchOI, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!oiData) {
+    return (
+      <Card className="p-4 animate-pulse">
+        <div className="space-y-3">
+          <div className="h-4 bg-muted rounded w-3/4"></div>
+          <div className="h-6 bg-muted rounded w-1/2"></div>
+          <div className="h-3 bg-muted rounded w-full"></div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold flex items-center gap-2">
-            <Activity className="h-5 w-5" />
-            Open Interest
-          </CardTitle>
-          <div className="flex gap-2">
-            <Select value={symbol} onValueChange={setSymbol} disabled={isEditMode}>
-              <SelectTrigger className="w-32 h-8 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {SYMBOLS.map(s => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={period} onValueChange={setPeriod} disabled={isEditMode}>
-              <SelectTrigger className="w-20 h-8 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {PERIODS.map(p => (
-                  <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+    <Card className="relative p-4 hover:shadow-lg transition-all">
+      <div className="absolute top-2 right-2">
+        <PinButton isPinned={isPinned(widgetId)} onToggle={() => togglePin(widgetId)} />
+      </div>
+
+      <div className="space-y-3">
+        <div>
+          <span className="text-xs text-muted-foreground">Open Interest (BTC)</span>
+          <div className="flex items-end gap-2 mt-1">
+            <span className="text-2xl font-bold">
+              {oiData.openInterest}
+            </span>
+            <div className={`flex items-center gap-1 text-xs ${
+              oiData.isIncreasing ? 'text-success' : 'text-destructive'
+            }`}>
+              {oiData.isIncreasing ? (
+                <TrendingUp className="h-3 w-3" />
+              ) : (
+                <TrendingDown className="h-3 w-3" />
+              )}
+              <span>{Math.abs(oiData.change).toFixed(2)}%</span>
+            </div>
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-8 w-48" />
-            <Skeleton className="h-[200px] w-full" />
-          </div>
-        ) : (
-          <>
-            <div className="mb-4 flex items-baseline gap-3">
-              <div className="text-2xl font-bold">
-                {(currentOI / 1000000).toFixed(2)}M
-              </div>
-              <div className={`flex items-center gap-1 text-sm ${change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                <TrendingUp className={`h-4 w-4 ${change < 0 ? 'rotate-180' : ''}`} />
-                {Math.abs(change).toFixed(2)}%
-              </div>
-            </div>
 
-            <div className="h-[200px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis 
-                    dataKey="timestamp" 
-                    tickFormatter={(ts) => format(new Date(ts), 'MMM dd')}
-                    className="text-xs"
-                    tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                  />
-                  <YAxis 
-                    tickFormatter={(value) => `${(value / 1000000).toFixed(1)}M`}
-                    className="text-xs"
-                    tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                  />
-                  <Tooltip 
-                    formatter={(value: number) => [`${(value / 1000000).toFixed(2)}M`, 'Open Interest']}
-                    labelFormatter={(ts) => format(new Date(ts), 'PPpp')}
-                    contentStyle={{
-                      backgroundColor: 'hsl(var(--background))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
-                    }}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="value" 
-                    stroke="hsl(var(--primary))" 
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </>
-        )}
-      </CardContent>
+        <div>
+          <span className="text-xs text-muted-foreground">Value (USD)</span>
+          <p className="text-lg font-semibold">
+            ${oiData.openInterestValue}B
+          </p>
+        </div>
+
+        <p className="text-xs text-muted-foreground">
+          {oiData.isIncreasing 
+            ? 'Growing open interest suggests increasing market activity'
+            : 'Declining open interest suggests decreasing market activity'}
+        </p>
+      </div>
     </Card>
   );
 }

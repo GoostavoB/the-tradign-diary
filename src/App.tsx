@@ -16,6 +16,7 @@ import { WidgetStyleProvider } from "@/contexts/WidgetStyleContext";
 import { ThemeProvider } from "next-themes";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { PinnedWidgetsProvider } from "@/contexts/PinnedWidgetsContext";
 import { lazy, Suspense, useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import i18n from "@/i18n";
@@ -309,6 +310,7 @@ const App = () => {
                 <AuthProvider>
                   <SubscriptionProvider>
                   <AccountProvider>
+                  <PinnedWidgetsProvider>
                   <CalmModeProvider>
                     <WidgetStyleProvider>
                       <CurrencyProvider>
@@ -327,6 +329,7 @@ const App = () => {
                       </CurrencyProvider>
                     </WidgetStyleProvider>
                   </CalmModeProvider>
+                  </PinnedWidgetsProvider>
                   </AccountProvider>
                   </SubscriptionProvider>
                 </AuthProvider>

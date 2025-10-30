@@ -44,13 +44,14 @@ export const AIInsightsBox = memo(({
     setIsCollapsed(!isCollapsed);
   };
   
-  // Filter out unwanted insights
+  // Filter out LSR, OI and Goals (now standalone widgets)
   const filteredMarketInsights = data?.market_insights.filter(insight => {
-    // Remove duplicate "Long-short ratio" and "Market overview"
-    return insight.title !== 'Long-short ratio' && insight.title !== 'Market overview';
+    return insight.title !== 'Long-short ratio' && 
+           insight.title !== 'Market overview' &&
+           insight.title !== 'Your Goals';
   }) || [];
   
-  const allInsights = data ? [...data.user_insights, ...filteredMarketInsights] : [];
+  const allInsights = filteredMarketInsights.length > 0 ? [...data?.user_insights || [], ...filteredMarketInsights] : [];
 
   const {
     visibleInsights,
@@ -127,8 +128,6 @@ export const AIInsightsBox = memo(({
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <LSRInsightCard />
-            <GoalInsightCard />
             {visibleInsights.map((insight, index) => (
               <AIInsightCard
                 key={`${insight.id}-${index}`}
