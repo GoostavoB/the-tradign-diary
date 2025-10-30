@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { CalendarIcon, ChevronsUpDown, Check, Loader2, TrendingUp } from 'lucide-react';
+import { CalendarIcon, ChevronsUpDown, Check, Loader2, TrendingUp, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useTokenSearch } from '@/hooks/useTokenSearch';
@@ -61,6 +61,7 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showTokenResults, setShowTokenResults] = useState(false);
   const [isManualPrice, setIsManualPrice] = useState(false);
+  const [exchangeInput, setExchangeInput] = useState('');
   
   const { results: tokenResults, loading: searchLoading } = useTokenSearch(searchQuery);
   const { data: priceData, isLoading: priceLoading } = useTokenPrice(tokenSymbol);
@@ -96,6 +97,7 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
     setIsManualPrice(false);
     setSearchQuery('');
     setShowTokenResults(false);
+    setExchangeInput('');
     onClose();
   };
 
@@ -299,16 +301,23 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0 bg-popover z-50" align="start">
                   <Command>
-                    <CommandInput placeholder="Search exchanges..." />
+                    <CommandInput 
+                      placeholder="Search or type custom exchange..." 
+                      value={exchangeInput}
+                      onValueChange={setExchangeInput}
+                    />
                     <CommandList>
                       <CommandEmpty>No exchange found.</CommandEmpty>
                       <CommandGroup>
-                        {EXCHANGES.map((ex) => (
+                        {EXCHANGES.filter(ex => 
+                          ex.toLowerCase().includes(exchangeInput.toLowerCase())
+                        ).map((ex) => (
                           <CommandItem
                             key={ex}
                             value={ex}
                             onSelect={(currentValue) => {
                               setExchange(currentValue === exchange.toLowerCase() ? "" : ex);
+                              setExchangeInput('');
                               setOpenExchange(false);
                             }}
                           >
@@ -321,12 +330,34 @@ export const AddTokenModal = ({ open, onClose, onAdd }: AddTokenModalProps) => {
                             {ex}
                           </CommandItem>
                         ))}
+                        {exchangeInput.trim() && !EXCHANGES.some(ex => 
+                          ex.toLowerCase() === exchangeInput.trim().toLowerCase()
+                        ) && (
+                          <CommandItem
+                            key="custom-exchange"
+                            value={exchangeInput.trim()}
+                            onSelect={() => {
+                              setExchange(exchangeInput.trim());
+                              setExchangeInput('');
+                              setOpenExchange(false);
+                            }}
+                            className="text-primary"
+                          >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Use custom: "{exchangeInput.trim()}"
+                          </CommandItem>
+                        )}
                       </CommandGroup>
                     </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
+                </Command>
+              </PopoverContent>
+            </Popover>
+            {exchange && !EXCHANGES.includes(exchange) && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Custom exchange
+              </p>
+            )}
+          </div>
           </div>
 
           <div className="space-y-2">
