@@ -86,17 +86,6 @@ export const AIInsightsBox = memo(({
     return null;
   }
 
-  if (!visibleInsights.length) {
-    return (
-      <Card className="p-8 text-center">
-        <Sparkles className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-        <h3 className="text-lg font-semibold mb-2">No insights available</h3>
-        <p className="text-sm text-muted-foreground">
-          Market insights will appear here when data is available.
-        </p>
-      </Card>
-    );
-  }
 
   return (
     <div className="space-y-4">
