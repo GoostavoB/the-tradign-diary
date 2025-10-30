@@ -3,6 +3,9 @@ import { usePinnedWidgets, WidgetId } from '@/contexts/PinnedWidgetsContext';
 import { LongShortRatioWidget } from '@/components/widgets/LongShortRatioWidget';
 import { OpenInterestWidget } from '@/components/widgets/OpenInterestWidget';
 import { PersonalGoalsWidget } from '@/components/widgets/PersonalGoalsWidget';
+import { CapitalGrowthWidget } from '@/components/widgets/CapitalGrowthWidget';
+import { SpotWalletWidget } from '@/components/widgets/SpotWalletWidget';
+import { TotalBalanceWidget } from '@/components/widgets/TotalBalanceWidget';
 
 // Import pinnable stats widgets
 import { 
@@ -19,6 +22,13 @@ interface PinnedWidgetsAreaProps {
   totalProfit?: number;
   currentROI?: number;
   totalTrades?: number;
+  totalBalance?: number;
+  change24h?: number;
+  changePercent24h?: number;
+  spotTotalValue?: number;
+  spotChange24h?: number;
+  spotChangePercent24h?: number;
+  tokenCount?: number;
 }
 
 const renderWidget = (widgetId: WidgetId, props: PinnedWidgetsAreaProps) => {
@@ -31,6 +41,12 @@ const renderWidget = (widgetId: WidgetId, props: PinnedWidgetsAreaProps) => {
       return <CurrentROIWidget currentROI={props.currentROI} />;
     case 'totalTrades':
       return <TotalTradesWidget totalTrades={props.totalTrades} />;
+    case 'totalBalance':
+      return <TotalBalanceWidget id={widgetId} totalBalance={props.totalBalance || 0} change24h={props.change24h} changePercent24h={props.changePercent24h} />;
+    case 'spotWallet':
+      return <SpotWalletWidget id={widgetId} totalValue={props.spotTotalValue || 0} change24h={props.spotChange24h || 0} changePercent24h={props.spotChangePercent24h || 0} tokenCount={props.tokenCount || 0} />;
+    case 'capitalGrowth':
+      return <CapitalGrowthWidget id={widgetId} />;
     case 'lsrMarketData':
       return <LongShortRatioWidget />;
     case 'openInterestChart':

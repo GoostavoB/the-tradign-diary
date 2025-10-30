@@ -1099,6 +1099,15 @@ const Dashboard = () => {
               totalProfit={dashboardStats.totalPnL}
               currentROI={dashboardStats.avgRoi}
               totalTrades={dashboardStats.totalTrades}
+              totalBalance={(totalCapitalAdditions > 0 ? totalCapitalAdditions : initialInvestment) + (stats?.total_pnl || 0) - totalWithdrawals}
+              change24h={stats?.total_pnl || 0}
+              changePercent24h={(totalCapitalAdditions > 0 ? totalCapitalAdditions : initialInvestment) > 0 
+                ? ((stats?.total_pnl || 0) / (totalCapitalAdditions > 0 ? totalCapitalAdditions : initialInvestment)) * 100 
+                : 0}
+              spotTotalValue={spotWalletTotal}
+              spotChange24h={0}
+              spotChangePercent24h={0}
+              tokenCount={holdings?.length || 0}
             />
 
             {/* Main Content Tabs */}
