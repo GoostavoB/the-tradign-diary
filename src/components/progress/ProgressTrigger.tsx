@@ -30,16 +30,14 @@ export function ProgressTrigger() {
           "transition-all duration-300 hover:scale-110",
           "bg-gradient-to-br from-amber-500 to-amber-600",
           "hover:from-amber-400 hover:to-amber-500",
-          "border-2 border-amber-400/50",
-          "animate-pulse"
+          "border-2 border-amber-400/50"
         )}
         aria-label="Open progress panel"
       >
         <Zap className="h-5 w-5 text-white" strokeWidth={2.5} fill="currentColor" />
         {hasIncomplete && (
           <span className="absolute -top-1 -right-1 flex h-5 w-5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center">
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center shadow-md border-2 border-background">
               <span className="text-[10px] font-bold text-white">{activities.length - completedCount}</span>
             </span>
           </span>
