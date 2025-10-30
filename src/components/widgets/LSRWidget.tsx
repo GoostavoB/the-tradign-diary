@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { WidgetProps } from '@/types/widget';
+import { PinButton } from '@/components/widgets/PinButton';
+import { usePinnedWidgets } from '@/contexts/PinnedWidgetsContext';
 
 interface LSRData {
   ratio: number;
@@ -14,6 +16,8 @@ interface LSRData {
 export function LSRWidget({ id, isEditMode }: WidgetProps) {
   const [data, setData] = useState<LSRData | null>(null);
   const navigate = useNavigate();
+  const { isPinned, togglePin } = usePinnedWidgets();
+  const pinnedId = 'lsrMarketData' as const;
 
   useEffect(() => {
     const fetchLSRData = async () => {
@@ -68,7 +72,10 @@ export function LSRWidget({ id, isEditMode }: WidgetProps) {
 
   if (!data) {
     return (
-      <Card className="cursor-pointer hover:border-primary/50 transition-colors">
+      <Card className="relative cursor-pointer hover:border-primary/50 transition-colors">
+        <div className="absolute top-2 right-2 z-10">
+          <PinButton isPinned={isPinned(pinnedId)} onToggle={() => togglePin(pinnedId)} />
+        </div>
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium flex items-center gap-2">
             <Activity className="h-4 w-4" />
@@ -87,9 +94,15 @@ export function LSRWidget({ id, isEditMode }: WidgetProps) {
 
   return (
     <Card 
-      className="cursor-pointer hover:border-primary/50 transition-colors"
+      className="relative cursor-pointer hover:border-primary/50 transition-colors"
       onClick={handleClick}
     >
+      <div className="absolute top-2 right-2 z-10">
+        <PinButton 
+          isPinned={isPinned(pinnedId)} 
+          onToggle={() => togglePin(pinnedId)} 
+        />
+      </div>
       <CardHeader className="pb-3">
         <CardTitle className="text-sm font-medium flex items-center gap-2">
           <Activity className="h-4 w-4" />

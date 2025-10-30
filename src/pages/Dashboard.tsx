@@ -17,6 +17,7 @@ import { BehaviorAnalytics } from '@/components/insights/BehaviorAnalytics';
 import { DashboardSkeleton } from '@/components/DashboardSkeleton';
 import { ExportTradesDialog } from '@/components/ExportTradesDialog';
 import { PinnedWidgetsArea } from '@/components/PinnedWidgetsArea';
+import { usePinnedWidgets, CATALOG_TO_PINNED_MAP } from '@/contexts/PinnedWidgetsContext';
 import { AITrainingQuestionnaire } from '@/components/ai-training/AITrainingQuestionnaire';
 import { useAITrainingProfile } from '@/hooks/useAITrainingProfile';
 import { LevelUpModal } from '@/components/gamification/LevelUpModal';
@@ -114,6 +115,7 @@ const Dashboard = () => {
   usePageMeta(pageMeta.dashboard);
   const { user } = useAuth();
   const { t } = useTranslation();
+  const { pinnedWidgets } = usePinnedWidgets();
   const [searchParams, setSearchParams] = useSearchParams();
   const [stats, setStats] = useState<TradeStats | null>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
@@ -289,20 +291,26 @@ const Dashboard = () => {
     }
   }, [isCustomizing, positions, addWidget]);
 
-  // Organize widgets by column and row
+  // Organize widgets by column and row, filtering out pinned widgets
   const grid = useMemo(() => {
     const result: { [col: number]: { [row: number]: string } } = {};
     
     console.log('Building grid from positions:', positions);
     
-    positions.forEach(pos => {
+    // Filter out pinned widgets
+    const filteredPositions = positions.filter(pos => {
+      const pinnedId = CATALOG_TO_PINNED_MAP[pos.id];
+      return !(pinnedId && pinnedWidgets.includes(pinnedId));
+    });
+    
+    filteredPositions.forEach(pos => {
       if (!result[pos.column]) result[pos.column] = {};
       result[pos.column][pos.row] = pos.id;
     });
     
-    console.log('Grid structure:', result);
+    console.log('Grid structure (after filtering pinned):', result);
     return result;
-  }, [positions]);
+  }, [positions, pinnedWidgets]);
 
   const activeWidgets = useMemo(() => {
     const widgets = positions.map(p => p.id);

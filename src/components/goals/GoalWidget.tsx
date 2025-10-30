@@ -7,6 +7,8 @@ import { Target, TrendingUp, Calendar, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
+import { PinButton } from '@/components/widgets/PinButton';
+import { usePinnedWidgets } from '@/contexts/PinnedWidgetsContext';
 
 interface GoalProjection {
   daily_progress: number;
@@ -19,6 +21,8 @@ interface GoalProjection {
 
 export function GoalWidget() {
   const { user } = useAuth();
+  const { isPinned, togglePin } = usePinnedWidgets();
+  const pinnedId = 'goals' as const;
 
   const { data: goals = [] } = useQuery({
     queryKey: ['goals-widget', user?.id],
@@ -62,7 +66,10 @@ export function GoalWidget() {
 
   if (goals.length === 0) {
     return (
-      <Card className="col-span-full">
+      <Card className="relative col-span-full">
+        <div className="absolute top-2 right-2 z-10">
+          <PinButton isPinned={isPinned(pinnedId)} onToggle={() => togglePin(pinnedId)} />
+        </div>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
@@ -104,7 +111,10 @@ export function GoalWidget() {
   };
 
   return (
-    <Card className="col-span-full">
+    <Card className="relative col-span-full">
+      <div className="absolute top-2 right-2 z-10">
+        <PinButton isPinned={isPinned(pinnedId)} onToggle={() => togglePin(pinnedId)} />
+      </div>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target className="h-5 w-5" />
