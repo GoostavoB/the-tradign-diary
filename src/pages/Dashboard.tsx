@@ -54,6 +54,7 @@ import { DailyMissionBar } from '@/components/dashboard/DailyMissionBar';
 import { XPTestButton } from '@/components/dev/XPTestButton';
 import { Tier3PreviewModal } from '@/components/tier/Tier3PreviewModal';
 import { DailyGoalsWidget } from '@/components/gamification/DailyGoalsWidget';
+import { useSearchParams } from 'react-router-dom';
 
 // Lazy load heavy components
 const TradeHistory = lazy(() => import('@/components/TradeHistory').then(m => ({ default: m.TradeHistory })));
@@ -113,6 +114,7 @@ const Dashboard = () => {
   usePageMeta(pageMeta.dashboard);
   const { user } = useAuth();
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [stats, setStats] = useState<TradeStats | null>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
@@ -124,7 +126,7 @@ const Dashboard = () => {
   const [includeFeesInPnL, setIncludeFeesInPnL] = useState(true);
   const { dateRange, setDateRange, clearDateRange, isToday } = useDateRange();
   const [filteredTrades, setFilteredTrades] = useState<Trade[]>([]);
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [activeTab, setActiveTab] = useState<string>(searchParams.get('tab') || 'overview');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const [customWidgets, setCustomWidgets] = useState<any[]>([]);
   
@@ -153,11 +155,13 @@ const Dashboard = () => {
     const container = tabsContainerRef.current?.closest('main') as HTMLElement | null;
     const prevScrollTop = container ? container.scrollTop : window.scrollY;
     setActiveTab(val);
+    // Update URL with new tab
+    setSearchParams({ tab: val });
     requestAnimationFrame(() => {
       if (container) container.scrollTop = prevScrollTop;
       else window.scrollTo({ top: prevScrollTop });
     });
-  }, []);
+  }, [setSearchParams]);
   
   // Fix positions state management
   const [positions, setPositions] = useState<WidgetPosition[]>([]);

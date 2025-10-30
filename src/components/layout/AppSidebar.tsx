@@ -61,6 +61,8 @@ export function AppSidebar() {
       defaultOpen: true,
       items: [
         { title: t('navigation.dashboard'), url: '/dashboard', icon: BarChart3, iconName: 'BarChart3', keywords: ['home', 'overview', 'main', 'summary', 'stats', 'statistics', 'metrics', 'performance', 'snapshot', 'widgets', 'customize', 'view', 'monitor', 'landing', 'central', 'hub'] },
+        { title: 'Insights', url: '/dashboard?tab=insights', icon: Brain, iconName: 'Brain', keywords: ['insights', 'analytics', 'performance', 'analysis', 'metrics', 'quality', 'behavior', 'patterns', 'trends', 'deep dive', 'detailed', 'advanced'] },
+        { title: 'Trade History', url: '/dashboard?tab=history', icon: ClipboardList, iconName: 'ClipboardList', keywords: ['history', 'trades', 'past', 'records', 'transactions', 'log', 'list', 'archive', 'previous', 'all trades', 'complete', 'full'] },
       ],
     },
     {
