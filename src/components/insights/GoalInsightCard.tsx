@@ -10,7 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export const GoalInsightCard = memo(() => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const { data: goal, isLoading } = useQuery({
     queryKey: ['active-goal', user?.id],
@@ -36,7 +36,7 @@ export const GoalInsightCard = memo(() => {
     navigate('/goals');
   };
 
-  if (isLoading) {
+  if (authLoading || (isLoading && user)) {
     return (
       <Card className="p-4 animate-pulse">
         <div className="space-y-3">
