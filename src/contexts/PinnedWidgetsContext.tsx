@@ -12,8 +12,10 @@ export type WidgetId =
   | 'quickActions'
   | 'avgPnLPerTrade'
   | 'avgPnLPerDay'
+  | 'avgROIPerTrade'
   | 'currentROI'
   | 'capitalGrowth'
+  | 'portfolioOverview'
   | 'behaviorAnalytics'
   | 'costEfficiency'
   | 'performanceHighlights'
@@ -36,8 +38,10 @@ export const CATALOG_TO_PINNED_MAP: Record<string, WidgetId> = {
   'quickActions': 'quickActions',
   'avgPnLPerTrade': 'avgPnLPerTrade',
   'avgPnLPerDay': 'avgPnLPerDay',
+  'avgROIPerTrade': 'avgROIPerTrade',
   'currentROI': 'currentROI',
   'capitalGrowth': 'capitalGrowth',
+  'portfolioOverview': 'portfolioOverview',
   'behaviorAnalytics': 'behaviorAnalytics',
   'costEfficiency': 'costEfficiency',
   'performanceHighlights': 'performanceHighlights',

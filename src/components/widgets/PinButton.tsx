@@ -22,7 +22,7 @@ export function PinButton({ isPinned, onToggle, className }: PinButtonProps) {
               onToggle();
             }}
             className={cn(
-              "h-8 w-8 rounded-full transition-all hover:scale-110",
+              "h-8 w-8 rounded-full transition-all hover:scale-110 relative z-10",
               isPinned 
                 ? "bg-primary/10 text-primary hover:bg-primary/20" 
                 : "bg-muted/50 text-muted-foreground hover:bg-muted",

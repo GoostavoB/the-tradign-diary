@@ -5,6 +5,8 @@ import { formatPercent } from '@/utils/formatNumber';
 import { TrendingUp, TrendingDown, Info } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { PinButton } from '@/components/widgets/PinButton';
+import { usePinnedWidgets } from '@/contexts/PinnedWidgetsContext';
 
 interface AvgROIPerTradeWidgetProps {
   id: string;
@@ -22,6 +24,8 @@ export const AvgROIPerTradeWidget = memo(({
   totalTrades,
 }: AvgROIPerTradeWidgetProps) => {
   const { t } = useTranslation();
+  const { isPinned, togglePin } = usePinnedWidgets();
+  const pinnedId = 'avgROIPerTrade' as const;
   const isPositive = avgROIPerTrade >= 0;
 
   return (
@@ -31,18 +35,26 @@ export const AvgROIPerTradeWidget = memo(({
       isEditMode={isEditMode}
       onRemove={onRemove}
       headerActions={
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Info className="h-4 w-4 text-muted-foreground cursor-help" />
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs">
-              <p className="text-sm">
-                Weighted average based on capital used per trade. Larger positions have more influence on the average, giving you a true picture of overall performance.
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        !isEditMode && (
+          <div className="flex items-center gap-2">
+            <PinButton
+              isPinned={isPinned(pinnedId)}
+              onToggle={() => togglePin(pinnedId)}
+            />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="text-sm">
+                    Weighted average based on capital used per trade. Larger positions have more influence on the average, giving you a true picture of overall performance.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        )
       }
     >
       <div className="space-y-3">

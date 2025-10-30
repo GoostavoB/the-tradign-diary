@@ -76,7 +76,7 @@ export const WidgetWrapper = memo(({
         {title && (
           <div className="flex items-center justify-between mb-3">
             <h3 className={cn("font-semibold", isCompact ? "text-base" : "text-lg")}>{title}</h3>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 relative z-10">
               {headerActions}
               {onExpand && !isEditMode && (
                 <Button

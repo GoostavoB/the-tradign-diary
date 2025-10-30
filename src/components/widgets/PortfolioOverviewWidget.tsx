@@ -5,6 +5,8 @@ import { formatCurrency } from '@/utils/formatNumber';
 import { WidgetProps } from '@/types/widget';
 import { WidgetWrapper } from './WidgetWrapper';
 import { BlurredCurrency } from '@/components/ui/BlurredValue';
+import { PinButton } from '@/components/widgets/PinButton';
+import { usePinnedWidgets } from '@/contexts/PinnedWidgetsContext';
 
 interface PortfolioOverviewWidgetProps extends WidgetProps {
   data: Array<{ date: string; value: number }>;
@@ -19,6 +21,9 @@ export const PortfolioOverviewWidget = memo(({
   data,
   totalValue,
 }: PortfolioOverviewWidgetProps) => {
+  const { isPinned, togglePin } = usePinnedWidgets();
+  const pinnedId = 'portfolioOverview' as const;
+
   return (
     <WidgetWrapper
       id={id}
@@ -26,6 +31,14 @@ export const PortfolioOverviewWidget = memo(({
       isEditMode={isEditMode}
       onRemove={onRemove}
       onExpand={onExpand}
+      headerActions={
+        !isEditMode && (
+          <PinButton
+            isPinned={isPinned(pinnedId)}
+            onToggle={() => togglePin(pinnedId)}
+          />
+        )
+      }
     >
       <div className="space-y-4">
         <div>
