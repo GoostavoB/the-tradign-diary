@@ -41,77 +41,94 @@ export const UploadHistory = () => {
   const [showDeleted, setShowDeleted] = useState(false);
 
   const fetchBatches = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
-    
-    let query = supabase
-      .from('upload_batches')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(50);
+    const safetyTimeout = setTimeout(() => setLoading(false), 7000);
 
-    // Filter by deleted status
-    if (showDeleted) {
-      query = query.not('deleted_at', 'is', null);
-    } else {
-      query = query.is('deleted_at', null);
-    }
+    try {
+      let query = supabase
+        .from('upload_batches')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
 
-    const { data, error } = await query;
+      // Filter by deleted status
+      if (showDeleted) {
+        query = query.not('deleted_at', 'is', null);
+      } else {
+        query = query.is('deleted_at', null);
+      }
 
-    if (error) {
-      console.error('Error fetching batches:', error);
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error fetching batches:', error);
+        setBatches([]);
+        setLoading(false);
+        return;
+      }
+
+      if (!data) {
+        setBatches([]);
+        setLoading(false);
+        return;
+      }
+
+      // Set basic batches immediately to avoid long loading
+      const baseBatches = data.map((b) => ({
+        ...b,
+        most_recent_trade_date: b.created_at,
+        position_types: [],
+        brokers: [],
+        total_pnl: 0,
+      }));
+
+      setBatches(baseBatches.slice(0, 20));
       setLoading(false);
-      return;
-    }
 
-    if (!data) {
-      setBatches([]);
+      // Enrich asynchronously (do not block UI)
+      Promise.all(
+        baseBatches.map(async (batch) => {
+          const { data: trades } = await supabase
+            .from('trades')
+            .select('trade_date, side, broker, profit_loss')
+            .eq('user_id', user.id)
+            .gte('created_at', new Date(new Date(batch.created_at).getTime() - 5000).toISOString())
+            .lte('created_at', new Date(new Date(batch.created_at).getTime() + 5000).toISOString())
+            .order('trade_date', { ascending: false });
+
+          const positionTypes = trades ? [...new Set(trades.map(t => t.side).filter(Boolean))] : [];
+          const brokers = trades ? [...new Set(trades.map(t => t.broker).filter(Boolean))] : [];
+          const totalPnl = trades ? trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) : 0;
+          const mostRecentTradeDate = trades && trades.length > 0 ? trades[0].trade_date : batch.created_at;
+
+          return {
+            ...batch,
+            most_recent_trade_date: mostRecentTradeDate,
+            position_types: positionTypes as string[],
+            brokers: brokers as string[],
+            total_pnl: totalPnl,
+          } as UploadBatch;
+        })
+      )
+        .then((enrichedBatches) => {
+          enrichedBatches.sort((a, b) => new Date(b.most_recent_trade_date!).getTime() - new Date(a.most_recent_trade_date!).getTime());
+          setBatches(enrichedBatches.slice(0, 20));
+        })
+        .catch((e) => {
+          console.error('Enrichment error:', e);
+        });
+    } catch (e) {
+      console.error('fetchBatches error:', e);
       setLoading(false);
-      return;
+    } finally {
+      clearTimeout(safetyTimeout);
     }
-
-    // Fetch additional info for each batch
-    const enrichedBatches = await Promise.all(
-      data.map(async (batch) => {
-        // Fetch trades for this batch (within 5 seconds of batch creation)
-        const { data: trades } = await supabase
-          .from('trades')
-          .select('trade_date, side, broker, profit_loss')
-          .eq('user_id', user.id)
-          .gte('created_at', new Date(new Date(batch.created_at).getTime() - 5000).toISOString())
-          .lte('created_at', new Date(new Date(batch.created_at).getTime() + 5000).toISOString())
-          .order('trade_date', { ascending: false });
-
-        // Get unique position types and brokers
-        const positionTypes = trades ? [...new Set(trades.map(t => t.side).filter(Boolean))] : [];
-        const brokers = trades ? [...new Set(trades.map(t => t.broker).filter(Boolean))] : [];
-        
-        // Calculate total P&L
-        const totalPnl = trades ? trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) : 0;
-        
-        // Get most recent trade date
-        const mostRecentTradeDate = trades && trades.length > 0 ? trades[0].trade_date : batch.created_at;
-
-        return {
-          ...batch,
-          most_recent_trade_date: mostRecentTradeDate,
-          position_types: positionTypes as string[],
-          brokers: brokers as string[],
-          total_pnl: totalPnl
-        };
-      })
-    );
-
-    // Sort by most recent trade date
-    enrichedBatches.sort((a, b) => 
-      new Date(b.most_recent_trade_date).getTime() - new Date(a.most_recent_trade_date).getTime()
-    );
-
-    setBatches(enrichedBatches.slice(0, 20));
-    setLoading(false);
   }, [user, showDeleted]);
 
   useEffect(() => {
