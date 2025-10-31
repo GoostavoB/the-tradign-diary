@@ -24,7 +24,7 @@ const DEFAULT_POSITIONS: WidgetPosition[] = [
 
 export const useGridLayout = (userId: string | undefined, availableWidgets: string[]) => {
   const [positions, setPositions] = useState<WidgetPosition[]>(DEFAULT_POSITIONS);
-  const [columnCount, setColumnCount] = useState<number>(3);
+  const [columnCount, setColumnCount] = useState<number>(4);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -65,15 +65,15 @@ export const useGridLayout = (userId: string | undefined, availableWidgets: stri
         }
 
         if (!data?.layout_json) {
-          // No saved layout - create first-time default with 3 columns
-          console.log('[useGridLayout] No saved layout, creating default with 3 columns');
-          const packed = packRowMajor(DEFAULT_DASHBOARD_LAYOUT, 3);
+          // No saved layout - create first-time default with 4 columns
+          console.log('[useGridLayout] No saved layout, creating default with 4 columns');
+          const packed = packRowMajor(DEFAULT_DASHBOARD_LAYOUT, 4);
           setPositions(packed);
-          setColumnCount(3);
+          setColumnCount(4);
           
           // Persist immediately so user's first view becomes their preference
           try {
-            const layoutToSave: LayoutData = { positions: packed, columnCount: 3 };
+            const layoutToSave: LayoutData = { positions: packed, columnCount: 4 };
             await supabase
               .from('user_settings')
               .update({ layout_json: layoutToSave as any, updated_at: new Date().toISOString() })
@@ -92,12 +92,12 @@ export const useGridLayout = (userId: string | undefined, availableWidgets: stri
           
           if (isEmptyObject) {
             console.log('[useGridLayout] Empty layout object, creating default');
-            const packed = packRowMajor(DEFAULT_DASHBOARD_LAYOUT, 3);
+            const packed = packRowMajor(DEFAULT_DASHBOARD_LAYOUT, 4);
             setPositions(packed);
-            setColumnCount(3);
+            setColumnCount(4);
             
             try {
-              const layoutToSave: LayoutData = { positions: packed, columnCount: 3 };
+              const layoutToSave: LayoutData = { positions: packed, columnCount: 4 };
               await supabase
                 .from('user_settings')
                 .update({ layout_json: layoutToSave as any, updated_at: new Date().toISOString() })
@@ -116,12 +116,12 @@ export const useGridLayout = (userId: string | undefined, availableWidgets: stri
             // If positions array is empty, create default
             if (layoutData.positions.length === 0) {
               console.log('[useGridLayout] Empty positions array, creating default');
-              const packed = packRowMajor(DEFAULT_DASHBOARD_LAYOUT, 3);
+              const packed = packRowMajor(DEFAULT_DASHBOARD_LAYOUT, 4);
               setPositions(packed);
-              setColumnCount(3);
+              setColumnCount(4);
               
               try {
-                const layoutToSave: LayoutData = { positions: packed, columnCount: 3 };
+                const layoutToSave: LayoutData = { positions: packed, columnCount: 4 };
                 await supabase
                   .from('user_settings')
                   .update({ layout_json: layoutToSave as any, updated_at: new Date().toISOString() })

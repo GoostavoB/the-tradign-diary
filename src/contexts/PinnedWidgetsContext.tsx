@@ -68,14 +68,7 @@ interface PinnedWidgetsContextType {
 
 const PinnedWidgetsContext = createContext<PinnedWidgetsContextType | undefined>(undefined);
 
-const DEFAULT_PINNED_WIDGETS: WidgetId[] = [
-  'goals',
-  'leverageCalculator',
-  'winRate',
-  'absoluteProfit',
-  'currentROI',
-  'totalTrades'
-];
+const DEFAULT_PINNED_WIDGETS: WidgetId[] = [];
 
 const STORAGE_KEY = 'pinned-widgets';
 
