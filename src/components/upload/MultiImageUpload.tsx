@@ -116,13 +116,11 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
     console.log('🎬 Opening pre-analysis dialog');
     setShowPreAnalysisDialog(true);
     
-    // Refetch credits in background without blocking
-    if (credits.isLoading) {
-      console.log('⏳ Credits loading, background refetch...');
-      credits.refetch()
-        .then(() => console.log('✅ Credits refetched:', credits.balance))
-        .catch((e) => console.error('❌ Refetch error:', e));
-    }
+    // Always refetch credits in background to avoid stale 0
+    console.log('⏳ Refreshing credits in background...');
+    credits.refetch()
+      .then(() => console.log('✅ Credits refetched:', credits.balance))
+      .catch((e) => console.error('❌ Refetch error:', e));
   };
 
   const analyzeImages = async () => {

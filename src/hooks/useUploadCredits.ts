@@ -43,7 +43,7 @@ export const useUploadCredits = () => {
         .from('subscriptions')
         .select('upload_credits_balance, upload_credits_used_this_month, monthly_upload_limit, extra_credits_purchased')
         .eq('user_id', user.id)
-        .eq('status', 'active')
+        .in('status', ['active', 'trial'])
         .maybeSingle();
 
       // If no active subscription, check user_xp_tiers for daily upload limits
@@ -52,7 +52,7 @@ export const useUploadCredits = () => {
           .from('user_xp_tiers')
           .select('daily_upload_count, daily_upload_limit')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
 
         if (tierError) {
           console.error('Error fetching user tier data:', tierError);
@@ -95,12 +95,21 @@ export const useUploadCredits = () => {
         return;
       }
 
+      // Compute balance robustly for active or trial
+      const usedSub = subscriptionData?.upload_credits_used_this_month ?? 0;
+      const limitSub = subscriptionData?.monthly_upload_limit ?? 0;
+      const extraSub = subscriptionData?.extra_credits_purchased ?? 0;
+      let balanceSub = subscriptionData?.upload_credits_balance;
+      if (balanceSub === null || balanceSub === undefined) {
+        balanceSub = Math.max(0, limitSub - usedSub) + extraSub;
+      }
+
       setCredits({
-        balance: subscriptionData?.upload_credits_balance || 0,
-        used: subscriptionData?.upload_credits_used_this_month || 0,
-        limit: subscriptionData?.monthly_upload_limit || 20,
-        extraPurchased: subscriptionData?.extra_credits_purchased || 0,
-        canUpload: (subscriptionData?.upload_credits_balance || 0) > 0,
+        balance: balanceSub || 0,
+        used: usedSub,
+        limit: limitSub,
+        extraPurchased: extraSub,
+        canUpload: (balanceSub || 0) > 0,
         isLoading: false,
       });
     } catch (error) {
