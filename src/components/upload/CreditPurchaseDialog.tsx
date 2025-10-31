@@ -25,8 +25,7 @@ interface CreditPackage {
 }
 
 const packages: CreditPackage[] = [
-  { credits: 10, price: 3, elitePrice: 1.5 },
-  { credits: 20, price: 5, elitePrice: 2.5, popular: true },
+  { credits: 10, price: 5, elitePrice: 2.5, popular: true },
 ];
 
 export const CreditPurchaseDialog = ({
@@ -77,7 +76,8 @@ export const CreditPurchaseDialog = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex justify-center">
+            <div className="w-full max-w-sm">
             {packages.map((pkg) => {
               const price = isElite ? pkg.elitePrice : pkg.price;
               const discount = isElite ? '50% OFF' : null;
@@ -136,6 +136,7 @@ export const CreditPurchaseDialog = ({
                 </div>
               );
             })}
+            </div>
           </div>
 
           <div className="mt-6 p-4 bg-muted/50 rounded-lg">
