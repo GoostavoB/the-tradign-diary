@@ -1064,7 +1064,7 @@ const Dashboard = () => {
         xpAmount={150}
         message="Great start! You just unlocked your performance dashboard."
         isVisible={shouldShowFirstUploadReward}
-        onComplete={() => markInsightsViewed()}
+        onComplete={markInsightsViewed}
         type="milestone"
       />
       
