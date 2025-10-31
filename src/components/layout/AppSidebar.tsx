@@ -57,7 +57,7 @@ export function AppSidebar() {
 
   const menuStructure: MenuGroup[] = [
     {
-      label: t('sidebar.groups.dashboard'),
+      label: 'Main',
       defaultOpen: true,
       items: [
         { title: t('navigation.dashboard'), url: '/dashboard', icon: BarChart3, iconName: 'BarChart3', keywords: ['home', 'overview', 'main', 'summary', 'stats', 'statistics', 'metrics', 'performance', 'snapshot', 'widgets', 'customize', 'view', 'monitor', 'landing', 'central', 'hub'] },
