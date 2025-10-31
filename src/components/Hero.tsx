@@ -98,13 +98,13 @@ const Hero = () => {
                 size="lg" 
                 className="h-14 px-10 text-lg font-semibold rounded-full relative overflow-hidden group"
                 style={{
-                  background: 'linear-gradient(135deg, #fb923c 0%, #f97316 100%)',
-                  boxShadow: '0 10px 40px rgba(251, 146, 60, 0.3)',
+                  background: 'linear-gradient(135deg, hsl(210, 90%, 58%) 0%, hsl(200, 80%, 65%) 100%)',
+                  boxShadow: '0 10px 40px rgba(59, 130, 246, 0.3)',
                 }}
               >
                 <span className="relative z-10">Start Your Journey</span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600"
                   initial={{ x: '-100%' }}
                   whileHover={{ x: '100%' }}
                   transition={{ duration: 0.6 }}
@@ -116,17 +116,17 @@ const Hero = () => {
             {/* Trust indicators */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400 pt-6">
               <span className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-orange-500" />
+                <div className="w-2 h-2 rounded-full bg-primary" />
                 10,000+ traders
               </span>
               <span className="text-gray-600">•</span>
               <span className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-orange-500" />
+                <div className="w-2 h-2 rounded-full bg-primary" />
                 500,000+ trades tracked
               </span>
               <span className="text-gray-600">•</span>
               <span className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-orange-500" />
+                <div className="w-2 h-2 rounded-full bg-primary" />
                 4.8★ rating
               </span>
             </div>
