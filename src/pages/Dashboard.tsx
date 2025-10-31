@@ -1247,25 +1247,43 @@ const Dashboard = () => {
                     items={positions.map(p => p.id)}
                     strategy={rectSortingStrategy}
                   >
-                    <div 
-                      ref={gridRef} 
-                      className="dashboard-grid-free"
-                      style={{ '--column-count': columnCount } as React.CSSProperties}
-                    >
-                      {Array.from({ length: columnCount }, (_, colIdx) => (
-                        <div key={`col-${colIdx}`} className="dashboard-column-free">
-                          {Object.entries(grid[colIdx] || {})
-                            .sort(([rowA], [rowB]) => parseInt(rowA) - parseInt(rowB))
-                            .map(([row, widgetId]) => (
-                              <div key={widgetId}>
-                                {renderWidget(widgetId)}
-                              </div>
-                            ))}
-                          {isCustomizing && (
-                            <DropZone id={`dropzone-${colIdx}-${Object.keys(grid[colIdx] || {}).length}`} />
-                          )}
+                    <div className="relative">
+                      <div 
+                        ref={gridRef} 
+                        className="dashboard-grid-free"
+                        style={{ '--column-count': columnCount } as React.CSSProperties}
+                      >
+                        {Array.from({ length: columnCount }, (_, colIdx) => (
+                          <div key={`col-${colIdx}`} className="dashboard-column-free">
+                            {Object.entries(grid[colIdx] || {})
+                              .sort(([rowA], [rowB]) => parseInt(rowA) - parseInt(rowB))
+                              .map(([row, widgetId]) => (
+                                <div key={widgetId}>
+                                  {renderWidget(widgetId)}
+                                </div>
+                              ))}
+                            {isCustomizing && (
+                              <DropZone id={`dropzone-${colIdx}-${Object.keys(grid[colIdx] || {}).length}`} />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {/* Empty state message when few widgets */}
+                      {positions.length <= 4 && !isCustomizing && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none mt-48">
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5, duration: 0.6 }}
+                            className="text-center"
+                          >
+                            <p className="text-muted-foreground/40 text-lg font-light tracking-wide">
+                              + Customize your dashboard
+                            </p>
+                          </motion.div>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </SortableContext>
                 </DndContext>

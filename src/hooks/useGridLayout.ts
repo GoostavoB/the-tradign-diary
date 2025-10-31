@@ -15,36 +15,11 @@ export interface LayoutData {
 }
 
 const DEFAULT_POSITIONS: WidgetPosition[] = [
-  // Row 0: Starter Pack - Core metrics (always unlocked)
-  { id: 'winRate', column: 0, row: 0 },
-  { id: 'currentROI', column: 1, row: 0 },
-  { id: 'totalTrades', column: 2, row: 0 },
-  { id: 'avgPnLPerDay', column: 3, row: 0 },
-  
-  // Row 1: Total Balance / Absolute Profit / Avg PNL Per Trade / Capital Growth
-  { id: 'totalBalance', column: 0, row: 1 },
-  { id: 'absoluteProfit', column: 1, row: 1 },
-  { id: 'avgPnLPerTrade', column: 2, row: 1 },
-  { id: 'capitalGrowth', column: 3, row: 1 },
-  
-  // Row 2: Quick Actions / Recent Transactions / Spot Wallet / Top Movers
-  { id: 'quickActions', column: 0, row: 2 },
-  { id: 'recentTransactions', column: 1, row: 2 },
-  { id: 'spotWallet', column: 2, row: 2 },
-  { id: 'topMovers', column: 3, row: 2 },
-  
-  // Row 3: Trading Quality / Weekly Heatmap / Goals
-  { id: 'tradingQuality', column: 0, row: 3 },
-  { id: 'heatmap', column: 1, row: 3 },
-  { id: 'goals', column: 2, row: 3 },
-  
-  // Row 4: Behavior Analytics / Week Performance
-  { id: 'behaviorAnalytics', column: 0, row: 4 },
-  { id: 'weekPerformance', column: 2, row: 4 },
-  
-  // Row 5: AI Insights / Weekly PnL Chart
-  { id: 'aiInsights', column: 0, row: 5 },
-  { id: 'weeklyPnLChart', column: 2, row: 5 },
+  // Starter Pack - Only 4 core metrics (always unlocked)
+  { id: 'currentROI', column: 0, row: 0 },
+  { id: 'winRate', column: 1, row: 0 },
+  { id: 'avgPnLPerDay', column: 2, row: 0 },
+  { id: 'totalTrades', column: 3, row: 0 },
 ];
 
 export const useGridLayout = (userId: string | undefined, availableWidgets: string[]) => {
