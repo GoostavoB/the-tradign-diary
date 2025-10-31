@@ -80,7 +80,7 @@ const Index = () => {
       <PublicHeader />
       <StickyMobileCTA />
       
-      <main id="main-content" className="pt-28 overflow-x-hidden my-0 py-0">
+      <main id="main-content" className="pt-28 overflow-x-hidden my-0 py-[28px]">
         {/* Mobile Hero with Dashboard Preview */}
         <MobileHero />
         
