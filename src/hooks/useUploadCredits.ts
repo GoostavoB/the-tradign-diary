@@ -38,15 +38,52 @@ export const useUploadCredits = () => {
     }
 
     try {
-      const { data, error } = await supabase
+      // First try to get subscription data
+      const { data: subscriptionData, error: subscriptionError } = await supabase
         .from('subscriptions')
         .select('upload_credits_balance, upload_credits_used_this_month, monthly_upload_limit, extra_credits_purchased')
         .eq('user_id', user.id)
         .eq('status', 'active')
-        .single();
+        .maybeSingle();
 
-      if (error) {
-        console.error('Error fetching upload credits:', error);
+      // If no active subscription, check user_xp_tiers for daily upload limits
+      if (!subscriptionData) {
+        const { data: tierData, error: tierError } = await supabase
+          .from('user_xp_tiers')
+          .select('daily_upload_count, daily_upload_limit')
+          .eq('user_id', user.id)
+          .single();
+
+        if (tierError) {
+          console.error('Error fetching user tier data:', tierError);
+          setCredits({
+            balance: 5, // Default free credits
+            used: 0,
+            limit: 5,
+            extraPurchased: 0,
+            canUpload: true,
+            isLoading: false,
+          });
+          return;
+        }
+
+        const used = tierData?.daily_upload_count || 0;
+        const limit = tierData?.daily_upload_limit || 5;
+        const remaining = Math.max(0, limit - used);
+
+        setCredits({
+          balance: remaining,
+          used: used,
+          limit: limit,
+          extraPurchased: 0,
+          canUpload: remaining > 0,
+          isLoading: false,
+        });
+        return;
+      }
+
+      if (subscriptionError) {
+        console.error('Error fetching upload credits:', subscriptionError);
         setCredits({
           balance: 0,
           used: 0,
@@ -59,21 +96,21 @@ export const useUploadCredits = () => {
       }
 
       setCredits({
-        balance: data?.upload_credits_balance || 0,
-        used: data?.upload_credits_used_this_month || 0,
-        limit: data?.monthly_upload_limit || 20,
-        extraPurchased: data?.extra_credits_purchased || 0,
-        canUpload: (data?.upload_credits_balance || 0) > 0,
+        balance: subscriptionData?.upload_credits_balance || 0,
+        used: subscriptionData?.upload_credits_used_this_month || 0,
+        limit: subscriptionData?.monthly_upload_limit || 20,
+        extraPurchased: subscriptionData?.extra_credits_purchased || 0,
+        canUpload: (subscriptionData?.upload_credits_balance || 0) > 0,
         isLoading: false,
       });
     } catch (error) {
       console.error('Error checking upload credits:', error);
       setCredits({
-        balance: 0,
+        balance: 5, // Default free credits for new users
         used: 0,
-        limit: 20,
+        limit: 5,
         extraPurchased: 0,
-        canUpload: false,
+        canUpload: true,
         isLoading: false,
       });
     }
