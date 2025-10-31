@@ -47,7 +47,10 @@ export const UploadHistory = () => {
     }
 
     setLoading(true);
-    const safetyTimeout = setTimeout(() => setLoading(false), 7000);
+    const safetyTimeout = setTimeout(() => {
+      console.warn('UploadHistory fetch timed out, forcing loading to false');
+      setLoading(false);
+    }, 5000);
 
     try {
       let query = supabase
@@ -94,26 +97,37 @@ export const UploadHistory = () => {
       // Enrich asynchronously (do not block UI)
       Promise.all(
         baseBatches.map(async (batch) => {
-          const { data: trades } = await supabase
-            .from('trades')
-            .select('trade_date, side, broker, profit_loss')
-            .eq('user_id', user.id)
-            .gte('created_at', new Date(new Date(batch.created_at).getTime() - 5000).toISOString())
-            .lte('created_at', new Date(new Date(batch.created_at).getTime() + 5000).toISOString())
-            .order('trade_date', { ascending: false });
+          try {
+            const { data: trades } = await supabase
+              .from('trades')
+              .select('trade_date, side, broker, profit_loss')
+              .eq('user_id', user.id)
+              .gte('created_at', new Date(new Date(batch.created_at).getTime() - 5000).toISOString())
+              .lte('created_at', new Date(new Date(batch.created_at).getTime() + 5000).toISOString())
+              .order('trade_date', { ascending: false });
 
-          const positionTypes = trades ? [...new Set(trades.map(t => t.side).filter(Boolean))] : [];
-          const brokers = trades ? [...new Set(trades.map(t => t.broker).filter(Boolean))] : [];
-          const totalPnl = trades ? trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) : 0;
-          const mostRecentTradeDate = trades && trades.length > 0 ? trades[0].trade_date : batch.created_at;
+            const positionTypes = trades ? [...new Set(trades.map(t => t.side).filter(Boolean))] : [];
+            const brokers = trades ? [...new Set(trades.map(t => t.broker).filter(Boolean))] : [];
+            const totalPnl = trades ? trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) : 0;
+            const mostRecentTradeDate = trades && trades.length > 0 ? trades[0].trade_date : batch.created_at;
 
-          return {
-            ...batch,
-            most_recent_trade_date: mostRecentTradeDate,
-            position_types: positionTypes as string[],
-            brokers: brokers as string[],
-            total_pnl: totalPnl,
-          } as UploadBatch;
+            return {
+              ...batch,
+              most_recent_trade_date: mostRecentTradeDate,
+              position_types: positionTypes as string[],
+              brokers: brokers as string[],
+              total_pnl: totalPnl,
+            } as UploadBatch;
+          } catch (err) {
+            console.error('Error enriching batch:', err);
+            return {
+              ...batch,
+              most_recent_trade_date: batch.created_at,
+              position_types: [],
+              brokers: [],
+              total_pnl: 0,
+            } as UploadBatch;
+          }
         })
       )
         .then((enrichedBatches) => {
@@ -122,11 +136,13 @@ export const UploadHistory = () => {
         })
         .catch((e) => {
           console.error('Enrichment error:', e);
+        })
+        .finally(() => {
+          clearTimeout(safetyTimeout);
         });
     } catch (e) {
       console.error('fetchBatches error:', e);
       setLoading(false);
-    } finally {
       clearTimeout(safetyTimeout);
     }
   }, [user, showDeleted]);
@@ -170,7 +186,7 @@ export const UploadHistory = () => {
     if (user) {
       fetchBatches();
     }
-  }, [user, showDeleted, fetchBatches]);
+  }, [showDeleted]);
 
   const fetchBatchTrades = async (batchId: string, createdAt: string) => {
     if (!user || batchTrades[batchId]) return;
