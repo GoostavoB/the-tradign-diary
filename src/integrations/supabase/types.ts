@@ -4349,6 +4349,42 @@ export type Database = {
         }
         Relationships: []
       }
+      weekly_pnl_snapshots: {
+        Row: {
+          created_at: string | null
+          id: string
+          losing_trades: number
+          total_pnl: number
+          trade_count: number
+          user_id: string
+          week_end: string
+          week_start: string
+          winning_trades: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          losing_trades?: number
+          total_pnl?: number
+          trade_count?: number
+          user_id: string
+          week_end: string
+          week_start: string
+          winning_trades?: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          losing_trades?: number
+          total_pnl?: number
+          trade_count?: number
+          user_id?: string
+          week_end?: string
+          week_start?: string
+          winning_trades?: number
+        }
+        Relationships: []
+      }
       widget_styles: {
         Row: {
           created_at: string

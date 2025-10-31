@@ -24,7 +24,9 @@ export type WidgetId =
   | 'goals'
   | 'lsrMarketData'
   | 'openInterestChart'
-  | 'leverageCalculator';
+  | 'leverageCalculator'
+  | 'weekPerformance'
+  | 'weeklyPnLChart';
 
 // Map catalog widget IDs to pinned widget IDs (they're the same now)
 export const CATALOG_TO_PINNED_MAP: Record<string, WidgetId> = {
@@ -52,6 +54,8 @@ export const CATALOG_TO_PINNED_MAP: Record<string, WidgetId> = {
   'lsrMarketData': 'lsrMarketData',
   'openInterestChart': 'openInterestChart',
   'leverageCalculator': 'leverageCalculator',
+  'weekPerformance': 'weekPerformance',
+  'weeklyPnLChart': 'weeklyPnLChart',
 };
 
 interface PinnedWidgetsContextType {

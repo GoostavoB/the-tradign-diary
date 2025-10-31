@@ -39,6 +39,8 @@ import { LSRWidget } from '@/components/widgets/LSRWidget';
 import { OpenInterestWidget } from '@/components/widgets/OpenInterestWidget';
 import { PersonalGoalsWidget } from '@/components/widgets/PersonalGoalsWidget';
 import { LeverageCalculatorWidget } from '@/components/widgets/LeverageCalculatorWidget';
+import { WeekPerformanceWidget } from '@/components/widgets/WeekPerformanceWidget';
+import { WeeklyPnLChartWidget } from '@/components/widgets/WeeklyPnLChartWidget';
 
 /**
  * Widget Catalog - Registry of all available dashboard widgets
@@ -280,6 +282,26 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     icon: Activity,
     defaultSize: 'large',
     component: LeverageCalculatorWidget as any,
+    requiresData: [],
+  },
+  weekPerformance: {
+    id: 'weekPerformance',
+    title: 'Week Performance',
+    description: 'Current week P&L (Monday to Sunday) - resets every Monday',
+    category: 'performance',
+    icon: Calendar,
+    defaultSize: 'small',
+    component: WeekPerformanceWidget as any,
+    requiresData: ['trades'],
+  },
+  weeklyPnLChart: {
+    id: 'weeklyPnLChart',
+    title: 'Weekly P&L History',
+    description: 'Historical weekly P&L chart - 8 weeks (24 when expanded)',
+    category: 'performance',
+    icon: LineChart,
+    defaultSize: 'large',
+    component: WeeklyPnLChartWidget as any,
     requiresData: [],
   },
 };
