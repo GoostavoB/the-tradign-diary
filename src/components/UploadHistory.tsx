@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -40,41 +40,7 @@ export const UploadHistory = () => {
   const [visibleCount, setVisibleCount] = useState(5);
   const [showDeleted, setShowDeleted] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      fetchBatches();
-      
-      // Subscribe to new batches
-      const channel = supabase
-        .channel('upload-batches-changes')
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'upload_batches',
-            filter: `user_id=eq.${user.id}`
-          },
-          (payload) => {
-            // Refresh the entire list when a new batch is added
-            fetchBatches();
-            setNewBatchId(payload.new.id as string);
-            
-            // Remove the animation class after animation completes
-            setTimeout(() => {
-              setNewBatchId(null);
-            }, 600);
-          }
-        )
-        .subscribe();
-
-      return () => {
-        supabase.removeChannel(channel);
-      };
-    }
-  }, [user]);
-
-  const fetchBatches = async () => {
+  const fetchBatches = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -146,7 +112,48 @@ export const UploadHistory = () => {
 
     setBatches(enrichedBatches.slice(0, 20));
     setLoading(false);
-  };
+  }, [user, showDeleted]);
+
+  useEffect(() => {
+    if (user) {
+      fetchBatches();
+      
+      // Subscribe to new batches
+      const channel = supabase
+        .channel('upload-batches-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'upload_batches',
+            filter: `user_id=eq.${user.id}`
+          },
+          (payload) => {
+            // Refresh the entire list when a new batch is added
+            fetchBatches();
+            setNewBatchId(payload.new.id as string);
+            
+            // Remove the animation class after animation completes
+            setTimeout(() => {
+              setNewBatchId(null);
+            }, 600);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [user, fetchBatches]);
+
+  // Re-fetch batches when showDeleted changes
+  useEffect(() => {
+    if (user) {
+      fetchBatches();
+    }
+  }, [user, showDeleted, fetchBatches]);
 
   const fetchBatchTrades = async (batchId: string, createdAt: string) => {
     if (!user || batchTrades[batchId]) return;
