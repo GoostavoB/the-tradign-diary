@@ -24,7 +24,7 @@ const Hero = () => {
 
   return (
     <section 
-      className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden"
+      className="relative h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden"
       aria-labelledby="hero-title"
     >
       {/* Animated Candlestick Background */}
@@ -135,13 +135,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Bottom gradient fade */}
-      <div 
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8))',
-        }}
-      />
     </section>
   );
 };
