@@ -62,7 +62,7 @@ export const FeatureComparison = () => {
   };
 
   return (
-    <section id="comparison" className="py-16 md:py-20 px-6 bg-gradient-to-b from-background to-secondary/10">
+    <section id="comparison" className="py-16 md:py-20 px-6">
       <div className="container mx-auto max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

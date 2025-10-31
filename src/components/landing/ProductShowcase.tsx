@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 const ProductShowcase = () => {
   return (
     <section 
-      className="py-20 md:py-28 px-6 bg-gradient-to-b from-background to-secondary/20" 
+      className="py-20 md:py-28 px-6" 
       aria-label="Interactive product showcase and customization features"
     >
       <div className="container mx-auto max-w-7xl space-y-20">

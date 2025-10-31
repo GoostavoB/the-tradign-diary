@@ -75,7 +75,7 @@ const Index = () => {
 
   // Loading is handled at App level - no need for page-level guard
 
-  return <div key={`landing-${language}`} className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black overflow-x-hidden relative">
+  return <div key={`landing-${language}`} className="min-h-screen bg-gray-950 overflow-x-hidden relative">
       <AnimatedBackground />
       <SkipToContent />
       <ValueBar />
@@ -124,8 +124,6 @@ const Index = () => {
 
         {/* Pain Points Section */}
         <section className="px-6 py-20 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
-          
           <div className="container mx-auto max-w-5xl relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -346,7 +344,7 @@ const Index = () => {
         </section>
         
         {/* Featured Trading Resources */}
-        <section className="py-20 px-4 bg-secondary/20">
+        <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">

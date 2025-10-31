@@ -25,7 +25,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 px-6 bg-gradient-to-b from-background to-secondary/20" aria-labelledby="how-it-works-heading">
+    <section className="py-20 md:py-28 px-6" aria-labelledby="how-it-works-heading">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

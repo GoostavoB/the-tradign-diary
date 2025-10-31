@@ -28,7 +28,7 @@ const Hero = () => {
       aria-labelledby="hero-title"
     >
       {/* Animated Candlestick Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-950 via-gray-900 to-black">
+      <div className="absolute inset-0">
         <AnimatedCandlestickBackground />
       </div>
 

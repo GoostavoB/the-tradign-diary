@@ -13,7 +13,7 @@ const PainFOMO = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 px-6 bg-gradient-to-b from-destructive/5 to-background" aria-label="Pain points and urgency">
+    <section className="py-20 md:py-28 px-6" aria-label="Pain points and urgency">
       <div className="container mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

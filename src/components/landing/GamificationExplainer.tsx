@@ -25,7 +25,7 @@ const GamificationExplainer = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 px-6 bg-gradient-to-b from-primary/5 to-background" aria-label="Gamification explanation">
+    <section className="py-20 md:py-28 px-6" aria-label="Gamification explanation">
       <div className="container mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
