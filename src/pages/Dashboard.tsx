@@ -234,6 +234,7 @@ const Dashboard = () => {
     shouldShowFirstUploadReward,
     markWelcomeSeen, 
     markFirstUploadComplete,
+    markInsightsViewed,
     hasCompletedFirstUpload
   } = useOnboardingState();
   
@@ -1063,7 +1064,7 @@ const Dashboard = () => {
         xpAmount={150}
         message="Great start! You just unlocked your performance dashboard."
         isVisible={shouldShowFirstUploadReward}
-        onComplete={() => markFirstUploadComplete()}
+        onComplete={() => markInsightsViewed()}
         type="milestone"
       />
       
