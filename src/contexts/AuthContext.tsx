@@ -190,7 +190,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    navigate('/');
+    // Immediately clear local auth state and redirect
+    setUser(null);
+    setSession(null);
+    navigate('/auth');
   };
 
   return (

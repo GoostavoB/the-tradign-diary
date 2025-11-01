@@ -90,9 +90,9 @@
     --popover: 210 18% 3%;
     --popover-foreground: 0 0% 95%;
     
-    /* Muted metallic accents */
-    --primary: 200 15% 65%;
-    --primary-foreground: 210 20% 10%;
+    /* Brand primary in dark mode */
+    --primary: var(--neon-blue); /* 210 90% 58% */
+    --primary-foreground: 0 0% 98%;
     --secondary: 210 10% 25%;
     --secondary-foreground: 0 0% 95%;
     --muted: 210 15% 15%;
