@@ -91,6 +91,14 @@ export const WidgetWrapper = memo(({
             </div>
           </div>
         )}
+        
+        {/* Header Actions for widgets without titles */}
+        {!title && headerActions && !isEditMode && (
+          <div className="absolute top-3 right-3 z-10">
+            {headerActions}
+          </div>
+        )}
+        
         {children}
       </div>
     </GlassCard>
