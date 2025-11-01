@@ -1,6 +1,6 @@
 // Service Worker for The Trading Diary
-const CACHE_NAME = 'trading-diary-v5';
-const RUNTIME_CACHE = 'runtime-cache-v5';
+const CACHE_NAME = 'trading-diary-v6';
+const RUNTIME_CACHE = 'runtime-cache-v6';
 
 // Static assets to cache on install
 const STATIC_CACHE_URLS = [

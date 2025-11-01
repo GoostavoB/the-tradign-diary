@@ -35,6 +35,15 @@
       ]
     },
     {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/(.*\\.(js|css|png|jpg|jpeg|webp|avif|svg|woff|woff2|ico))",
       "headers": [
         {
