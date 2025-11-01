@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { AccountProvider } from "@/contexts/AccountContext";
@@ -143,19 +143,29 @@ const AppRoutes = () => {
   // Only initialize daily rewards for authenticated users
   const dailyRewards = user ? useDailyRewards() : null;
   
+  // Define public pages where rewards should not show
+  const location = useLocation();
+  const isPublicPage =
+    location.pathname === '/' ||
+    location.pathname.startsWith('/blog') ||
+    location.pathname.startsWith('/pricing') ||
+    location.pathname.startsWith('/legal') ||
+    location.pathname.startsWith('/terms') ||
+    location.pathname.startsWith('/privacy');
+  
   return (
     <>
       <LanguageSync />
-      {user && <WelcomeBackToast />}
-      {user && <OnboardingWrapper />}
-      {user && dailyRewards && (
+      {user && !isPublicPage && <WelcomeBackToast />}
+      {user && !isPublicPage && <OnboardingWrapper />}
+      {user && dailyRewards && !isPublicPage && (
         <DailyRewardIndicator 
           reward={dailyRewards.reward}
           loading={false}
           setShowRewardModal={dailyRewards.setShowRewardModal}
         />
       )}
-      {user && dailyRewards && (
+      {user && dailyRewards && !isPublicPage && (
         <DailyRewardModal
           open={dailyRewards.showRewardModal}
           onClose={() => dailyRewards.setShowRewardModal(false)}

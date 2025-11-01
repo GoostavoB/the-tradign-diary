@@ -71,7 +71,9 @@ export const useUploadCredits = () => {
         subscriptionData,
         subscriptionError,
         rawBalance: subscriptionData?.upload_credits_balance,
+        rawUsed: subscriptionData?.upload_credits_used_this_month,
         rawLimit: subscriptionData?.monthly_upload_limit,
+        rawExtra: subscriptionData?.extra_credits_purchased,
         rawPlan: subscriptionData?.plan_type,
         rawStatus: subscriptionData?.status,
       });

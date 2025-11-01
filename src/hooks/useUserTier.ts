@@ -59,8 +59,15 @@ export const useUserTier = () => {
           .from('subscriptions')
           .select('plan_type, status')
           .eq('user_id', user.id)
-          .eq('status', 'active')
+          .in('status', ['active', 'trial'])
           .maybeSingle();
+
+        console.log('[UserTier-Debug]', {
+          userId: user.id,
+          subscription,
+          tierInfo,
+          xpData,
+        });
 
         const totalXP = xpData?.total_xp_earned || 0;
         const tierLevel = calculateTier(totalXP);

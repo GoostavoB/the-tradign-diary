@@ -31,7 +31,7 @@ export const usePremiumFeatures = (): PremiumFeaturesHook => {
         .from('subscriptions')
         .select('plan_type, status')
         .eq('user_id', user.id)
-        .eq('status', 'active')
+        .in('status', ['active', 'trial'])
         .maybeSingle();
 
       console.log('[PremiumFeatures]', { data, error, userId: user.id });
@@ -40,7 +40,13 @@ export const usePremiumFeatures = (): PremiumFeaturesHook => {
         console.error('[PremiumFeatures] Error:', error);
         setCurrentPlan('basic');
       } else {
-        setCurrentPlan((data?.plan_type as PlanType) || 'basic');
+        const plan: PlanType =
+          data?.plan_type === 'elite'
+            ? 'elite'
+            : data?.plan_type === 'pro'
+            ? 'pro'
+            : 'basic';
+        setCurrentPlan(plan);
       }
       
       setIsLoading(false);
