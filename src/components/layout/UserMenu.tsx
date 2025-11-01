@@ -9,14 +9,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { User, LogOut, KeyRound } from 'lucide-react';
+import { User, LogOut, KeyRound, Coins, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useUploadCredits } from '@/hooks/useUploadCredits';
+import { useAccount } from '@/contexts/AccountContext';
 
 const passwordChangeSchema = z.object({
   newPassword: z.string().min(6, 'Password must be at least 6 characters').max(128, 'Password is too long'),
@@ -30,6 +33,8 @@ export const UserMenu = () => {
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { balance, limit } = useUploadCredits();
+  const { accounts, activeAccount, switchAccount } = useAccount();
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -67,9 +72,25 @@ export const UserMenu = () => {
   }, [user]);
 
   const handleLogout = async () => {
-    await signOut();
-    navigate('/auth');
-    toast.success(t('auth.toast.signOutSuccess'));
+    try {
+      await signOut();
+      navigate('/auth');
+      toast.success(t('auth.toast.signOutSuccess'));
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Failed to logout');
+    }
+  };
+
+  const handleSwitchAccount = async (accountId: string) => {
+    if (accountId === activeAccount?.id) return;
+    
+    try {
+      await switchAccount(accountId);
+      toast.success('Account switched successfully');
+    } catch (error) {
+      toast.error('Failed to switch account');
+    }
   };
 
   const handleChangePassword = async (e: React.FormEvent) => {
@@ -148,18 +169,80 @@ export const UserMenu = () => {
             <span className="hidden md:inline">{t('userMenu.hello')}, {displayName}</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-64">
           <DropdownMenuLabel>{t('userMenu.myAccount')}</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          
+          {/* User Email */}
           <div className="px-2 py-1.5 text-sm text-muted-foreground">
             {user.email}
           </div>
+          
           <DropdownMenuSeparator />
+          
+          {/* Credits Display */}
+          <div className="px-2 py-2">
+            <div className="flex items-center justify-between p-2 rounded-md bg-muted/50">
+              <div className="flex items-center gap-2">
+                <Coins className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">Upload Credits</span>
+              </div>
+              <span className="text-sm font-bold">{balance} / {limit}</span>
+            </div>
+            <Button
+              variant="link"
+              size="sm"
+              className="w-full mt-1 h-auto p-1 text-xs"
+              onClick={() => navigate('/pricing')}
+            >
+              {balance < 5 ? 'Buy More Credits' : 'Manage Credits'}
+            </Button>
+          </div>
+          
+          <DropdownMenuSeparator />
+          
+          {/* Account Switcher Section */}
+          {accounts.length > 1 && (
+            <>
+              <DropdownMenuLabel className="text-xs text-muted-foreground">
+                Accounts ({accounts.length})
+              </DropdownMenuLabel>
+              <DropdownMenuGroup>
+                {accounts.map((account) => (
+                  <DropdownMenuItem
+                    key={account.id}
+                    onClick={() => handleSwitchAccount(account.id)}
+                    className="gap-2"
+                  >
+                    {account.color && (
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: account.color }}
+                      />
+                    )}
+                    <span className="flex-1 truncate">{account.name}</span>
+                    {account.id === activeAccount?.id && (
+                      <span className="text-xs text-primary">Active</span>
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+              <DropdownMenuItem onClick={() => navigate('/settings/accounts')}>
+                <ChevronRight className="w-4 h-4 mr-2" />
+                Manage Accounts
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
+          
+          {/* Settings */}
           <DropdownMenuItem onClick={() => setChangePasswordOpen(true)}>
             <KeyRound className="w-4 h-4 mr-2" />
             {t('userMenu.changePassword')}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleLogout} className="text-destructive">
+          
+          {/* Logout */}
+          <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
             <LogOut className="w-4 h-4 mr-2" />
             {t('userMenu.logout')}
           </DropdownMenuItem>
