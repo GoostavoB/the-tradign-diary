@@ -30,8 +30,8 @@ export const useUserRole = () => {
           .from('subscriptions')
           .select('plan_type, status')
           .eq('user_id', user.id)
-          .eq('status', 'active')
-          .single();
+          .in('status', ['active', 'trial'])
+          .maybeSingle();
 
         setRole('user');
         setSubscription({

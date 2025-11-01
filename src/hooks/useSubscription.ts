@@ -38,10 +38,12 @@ export const useSubscription = (): UseSubscriptionReturn => {
         .from('subscriptions')
         .select('id, plan_type, status, billing_cycle, current_period_end, cancel_at_period_end')
         .eq('user_id', user.id)
-        .eq('status', 'active')
-        .single();
+        .in('status', ['active', 'trial'])
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      console.log('[Subscription-Debug]', { data, error, userId: user.id });
+
+      if (error) throw error;
       
       if (data) {
         setSubscription({

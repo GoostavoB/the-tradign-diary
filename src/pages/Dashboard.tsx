@@ -659,6 +659,9 @@ const Dashboard = () => {
   }, [setDateRange]);
 
   const handleStartCustomize = useCallback(() => {
+    // Wait for tier data to load before checking permissions
+    if (tierLoading) return;
+    
     // Check if user has permission to customize
     if (!canCustomizeDashboard) {
       setShowUpgradePrompt(true);
@@ -667,7 +670,7 @@ const Dashboard = () => {
     
     setOriginalPositions([...positions]);
     setIsCustomizing(true);
-  }, [positions, canCustomizeDashboard]);
+  }, [positions, canCustomizeDashboard, tierLoading]);
 
   const handleSaveLayout = useCallback(() => {
     saveGridLayout(positions);
@@ -1131,6 +1134,9 @@ const Dashboard = () => {
               onCancel={handleCancelCustomize}
               onReset={resetLayout}
               onAddWidget={() => {
+                // Wait for tier data to load before checking permissions
+                if (tierLoading) return;
+                
                 if (!canCustomizeDashboard) {
                   setShowUpgradePrompt(true);
                   return;

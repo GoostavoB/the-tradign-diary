@@ -15,13 +15,13 @@ interface SubscriptionContextType {
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
-  const { subscription, isActive, isLoading } = useSubscription();
-  const { canAccessFeature, isFeatureLocked } = usePremiumFeatures();
+  const { isActive, isLoading: subscriptionLoading } = useSubscription();
+  const { currentPlan, canAccessFeature, isFeatureLocked, isLoading: premiumLoading } = usePremiumFeatures();
 
   const value: SubscriptionContextType = {
-    currentPlan: subscription?.plan_type || 'basic',
+    currentPlan,
     isActive,
-    isLoading,
+    isLoading: subscriptionLoading || premiumLoading,
     canAccessFeature,
     isFeatureLocked
   };

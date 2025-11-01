@@ -80,8 +80,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               .from('subscriptions')
               .select('plan_type, status')
               .eq('user_id', session.user.id)
-              .eq('status', 'active')
-              .single();
+              .in('status', ['active', 'trial'])
+              .maybeSingle();
 
             analytics.identify(session.user.id, {
               email: session.user.email,
