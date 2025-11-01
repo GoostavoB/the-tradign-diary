@@ -17,11 +17,11 @@ export const TourButton = () => {
         transition-all duration-300 ease-out
         hover:scale-[1.02]
         flex items-center gap-2"
-      aria-label="Explorar TD"
+      aria-label="Take a Tour"
     >
       <Sparkles className="h-4 w-4 text-primary" />
       <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent font-semibold">
-        Explorar TD
+        Take a Tour
       </span>
       {hasNewUpdates && (
         <span className="absolute -top-1 -right-1 flex h-3 w-3">
