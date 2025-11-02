@@ -107,6 +107,7 @@ const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const FeaturesPage = lazy(() => import("./pages/FeaturesPage"));
 const TierPreview = lazy(() => import("./pages/TierPreview"));
 const PremiumFeatures = lazy(() => import("./pages/PremiumFeatures"));
+const CheckoutRedirect = lazy(() => import("./pages/CheckoutRedirect"));
 const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 const CheckoutCancel = lazy(() => import("./pages/CheckoutCancel"));
 
@@ -226,6 +227,7 @@ const AppRoutes = () => {
         <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} />
         <Route path="/tier-preview" element={<ProtectedRoute><TierPreview /></ProtectedRoute>} />
         <Route path="/premium-features" element={<ProtectedRoute><PremiumFeatures /></ProtectedRoute>} />
+        <Route path="/checkout" element={<CheckoutRedirect />} />
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
         <Route path="/checkout-cancel" element={<CheckoutCancel />} />
         <Route path="/market-data" element={<ProtectedRoute><MarketData /></ProtectedRoute>} />

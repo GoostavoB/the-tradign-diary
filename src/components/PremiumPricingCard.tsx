@@ -63,11 +63,8 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
       const price = billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice;
       trackCheckoutFunnel.selectPlan(plan.nameKey, billingCycle, price || 0);
       
-      // Initiate checkout
-      await initiateStripeCheckout({
-        priceId: stripeProduct.priceId,
-        productType: stripeProduct.productType as any,
-      });
+      // Navigate to checkout interstitial
+      navigate(`/checkout?priceId=${stripeProduct.priceId}&productType=${stripeProduct.productType}`);
     } catch (error) {
       console.error('Checkout error:', error);
       toast({

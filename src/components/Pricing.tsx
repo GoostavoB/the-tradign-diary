@@ -54,10 +54,8 @@ const Pricing = () => {
       const product = getSubscriptionProduct(tier, billingCycle);
       console.log('Stripe product:', product);
       
-      await initiateStripeCheckout({
-        priceId: product.priceId,
-        productType: billingCycle === 'monthly' ? 'subscription_monthly' : 'subscription_annual',
-      });
+      const productType = billingCycle === 'monthly' ? 'subscription_monthly' : 'subscription_annual';
+      navigate(`/checkout?priceId=${product.priceId}&productType=${productType}`);
       
       // Only reset loading if redirect didn't happen
       setTimeout(() => setLoadingPlan(null), 5000);

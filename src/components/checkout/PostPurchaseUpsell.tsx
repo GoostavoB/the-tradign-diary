@@ -44,14 +44,13 @@ export const PostPurchaseUpsell = ({ onDismiss, subscriptionTier }: PostPurchase
       // Track upsell acceptance
       trackCheckoutFunnel.upsellAccepted(totalCredits, totalPrice);
 
-      // For now, use the regular credit product but we'll handle the discount in the checkout
-      // In production, you'd want to create specific discounted price IDs in Stripe
-      await initiateStripeCheckout({
-        priceId: 'price_1SOxyYFqnRj6eB66CnowBEBN', // Pro credits - would need a discounted version
-        productType: 'credits_pro',
-        successUrl: `${window.location.origin}/dashboard?upsell=success`,
-        cancelUrl: `${window.location.origin}/checkout-cancel`,
-      });
+      // Navigate to checkout with custom success/cancel URLs for upsell
+      const priceId = 'price_1SOxyYFqnRj6eB66CnowBEBN';
+      const productType = 'credits_pro';
+      const successUrl = encodeURIComponent(`${window.location.origin}/dashboard?upsell=success`);
+      const cancelUrl = encodeURIComponent(`${window.location.origin}/checkout-cancel`);
+      
+      window.location.href = `/checkout?priceId=${priceId}&productType=${productType}&successUrl=${successUrl}&cancelUrl=${cancelUrl}`;
     } catch (error) {
       console.error('Upsell purchase error:', error);
       toast({

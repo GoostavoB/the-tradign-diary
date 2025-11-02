@@ -75,11 +75,8 @@ export const CreditsCheckout = ({ onSuccess }) => {
       // Track checkout initiation
       trackCheckoutFunnel.initiateCheckout(creditProduct.productType, creditProduct.priceId, totalPrice);
 
-      // Initiate Stripe checkout
-      await initiateStripeCheckout({
-        priceId: creditProduct.priceId,
-        productType: creditProduct.productType as any,
-      });
+      // Navigate to checkout interstitial
+      navigate(`/checkout?priceId=${creditProduct.priceId}&productType=${creditProduct.productType}`);
 
     } catch (err) {
       console.error('Purchase error:', err);
