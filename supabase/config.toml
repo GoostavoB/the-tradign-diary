@@ -1,5 +1,8 @@
 project_id = "qziawervfvptoretkjrn"
 
+[functions.claude-database-api]
+verify_jwt = false
+
 [functions.ai-dashboard-assistant]
 verify_jwt = true
 

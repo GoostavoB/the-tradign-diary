@@ -571,6 +571,48 @@ export type Database = {
         }
         Relationships: []
       }
+      claude_api_usage: {
+        Row: {
+          created_at: string | null
+          error_code: string | null
+          error_message: string | null
+          id: string
+          operation: string
+          query_params: Json | null
+          response_size_bytes: number | null
+          response_time_ms: number | null
+          row_count: number | null
+          success: boolean
+          table_name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          operation: string
+          query_params?: Json | null
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          row_count?: number | null
+          success: boolean
+          table_name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          operation?: string
+          query_params?: Json | null
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          row_count?: number | null
+          success?: boolean
+          table_name?: string | null
+        }
+        Relationships: []
+      }
       connected_accounts: {
         Row: {
           account_name: string | null
@@ -4674,6 +4716,12 @@ export type Database = {
       cleanup_expired_deleted_batches: { Args: never; Returns: undefined }
       cleanup_expired_pending_trades: { Args: never; Returns: undefined }
       deduct_upload_credit: { Args: { p_user_id: string }; Returns: boolean }
+      get_subscription_metrics: { Args: never; Returns: Json }
+      get_trading_analytics: {
+        Args: { end_date?: string; start_date?: string; user_uuid: string }
+        Returns: Json
+      }
+      get_user_dashboard_stats: { Args: { user_uuid: string }; Returns: Json }
       get_week_start: { Args: { date_input?: string }; Returns: string }
       has_role: {
         Args: {
