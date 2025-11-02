@@ -45,13 +45,39 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
       console.log('[SubscriptionContext-Debug] Fetching subscription for user:', user.id);
 
-      // CRITICAL: Single query for ALL subscription data
-      const { data, error: fetchError } = await supabase
+      // Fetch profile with subscription data
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) {
+        throw profileError;
+      }
+
+      // Fetch active subscription details (if exists)
+      const { data: subscriptionData, error: subError } = await supabase
         .from('subscriptions')
         .select('*')
         .eq('user_id', user.id)
-        .in('status', ['active', 'trial'])
+        .in('status', ['active', 'trialing'])
         .maybeSingle();
+
+      // Combine profile and subscription data
+      const data = subscriptionData ? {
+        ...subscriptionData,
+        subscription_tier: (profileData as any).subscription_tier || 'free',
+        credits_remaining: (profileData as any).credits_remaining || 0,
+        plan_type: (subscriptionData as any).tier, // Map tier to plan_type for backward compatibility
+      } : {
+        subscription_tier: (profileData as any).subscription_tier || 'free',
+        credits_remaining: (profileData as any).credits_remaining || 0,
+        plan_type: 'free',
+        status: 'free',
+      };
+
+      const fetchError = subError?.code !== 'PGRST116' ? subError : null;
 
       console.log('[SubscriptionContext-Debug] Result:', { data, error: fetchError });
 
@@ -125,23 +151,23 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     elite: 3
   };
 
-  // Compute plan from subscription - NEVER default during loading
+  // Compute plan from subscription tier - NEVER default during loading
   const plan: PlanType | null = isLoading 
     ? null 
-    : subscription?.plan_type === 'elite'
+    : (subscription?.subscription_tier === 'elite' || subscription?.plan_type === 'elite')
     ? 'elite'
-    : subscription?.plan_type === 'pro'
+    : (subscription?.subscription_tier === 'pro' || subscription?.plan_type === 'pro')
     ? 'pro'
-    : subscription?.plan_type === 'basic'
+    : (subscription?.subscription_tier === 'basic' || subscription?.plan_type === 'basic')
     ? 'basic'
     : 'basic';
 
   // Computed boolean properties
-  const isElite = !isLoading && subscription?.plan_type === 'elite';
-  const isPro = !isLoading && subscription?.plan_type === 'pro';
-  const isBasic = !isLoading && subscription?.plan_type === 'basic';
-  const isFree = !isLoading && !subscription;
-  const hasActiveSubscription = !isLoading && !!subscription;
+  const isElite = !isLoading && (subscription?.subscription_tier === 'elite' || subscription?.plan_type === 'elite');
+  const isPro = !isLoading && (subscription?.subscription_tier === 'pro' || subscription?.plan_type === 'pro');
+  const isBasic = !isLoading && (subscription?.subscription_tier === 'basic' || subscription?.plan_type === 'basic');
+  const isFree = !isLoading && !subscription?.subscription_tier && subscription?.plan_type !== 'elite' && subscription?.plan_type !== 'pro';
+  const hasActiveSubscription = !isLoading && (subscription?.status === 'active' || subscription?.status === 'trialing');
 
   const canAccessFeature = (requiredPlan: PlanType): boolean => {
     if (isLoading || !plan) return false;
@@ -154,7 +180,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   const value: SubscriptionContextType = {
     subscription,
-    credits: subscription?.upload_credits_balance ?? 0,
+    credits: subscription?.credits_remaining ?? 0,
     plan,
     isLoading,
     error,

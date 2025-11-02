@@ -101,106 +101,80 @@ serve(async (req) => {
       throw new Error('Invalid credits amount');
     }
 
-    // Get or create Stripe customer
-    const { data: userData, error: userError } = await supabaseClient
-      .from('users')
-      .select('stripe_customer_id')
+    // Get user's current tier for pricing
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('subscription_tier')
       .eq('id', user.id)
       .single();
 
-    if (userError && userError.code !== 'PGRST116') {
-      throw userError;
-    }
-
-    let customerId = userData?.stripe_customer_id;
-
-    // Create Stripe customer if doesn't exist
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          userId: user.id,
-        },
-      });
-      customerId = customer.id;
-
-      // Update user with Stripe customer ID
-      await supabaseClient
-        .from('users')
-        .update({ stripe_customer_id: customerId })
-        .eq('id', user.id);
-    }
-
-    // Get user's subscription tier for credit pricing
-    const { data: subscription } = await supabaseClient
-      .from('subscriptions')
-      .select('tier')
-      .eq('user_id', user.id)
-      .in('status', ['active', 'trialing'])
-      .single();
-
-    const userTier = subscription?.tier || 'free';
+    const userTier = profile?.subscription_tier || 'free';
 
     // Create checkout session based on type
-    let session;
+    let sessionConfig: Stripe.Checkout.SessionCreateParams;
 
     if (type === 'subscription') {
-      // Subscription checkout
-      session = await stripe.checkout.sessions.create({
-        customer: customerId,
+      if (!tier || !['pro', 'elite'].includes(tier)) {
+        throw new Error('Invalid subscription tier');
+      }
+
+      const pricing = PRICING.subscriptions[tier as 'pro' | 'elite'];
+
+      sessionConfig = {
         mode: 'subscription',
-        payment_method_types: ['card'],
         line_items: [
           {
-            price: PRICING.subscriptions[tier as 'pro' | 'elite'].priceId,
+            price: pricing.priceId,
             quantity: 1,
           },
         ],
-        success_url: `${Deno.env.get('FRONTEND_URL')}/dashboard?session_id={CHECKOUT_SESSION_ID}&upgrade=success`,
-        cancel_url: `${Deno.env.get('FRONTEND_URL')}/pricing?canceled=true`,
         metadata: {
           userId: user.id,
           type: 'subscription',
           tier,
+          credits: pricing.credits.toString(),
         },
-        subscription_data: {
-          metadata: {
-            userId: user.id,
-            tier,
-          },
-        },
-      });
+      };
     } else {
-      // Credit purchase checkout
-      const pricing = userTier === 'free' ? PRICING.credits.free : PRICING.credits.pro;
-      const amount = pricing.base + (pricing.perCredit * credits);
+      // Credits purchase
+      if (!credits || credits < 10) {
+        throw new Error('Minimum credit purchase is 10 credits');
+      }
 
-      session = await stripe.checkout.sessions.create({
-        customer: customerId,
+      const pricing = PRICING.credits[userTier as 'free' | 'pro'];
+      const amount = Math.ceil(credits / 10) * pricing.base;
+
+      sessionConfig = {
         mode: 'payment',
-        payment_method_types: ['card'],
         line_items: [
           {
             price_data: {
               currency: 'usd',
               product_data: {
                 name: `${credits} AI Extraction Credits`,
-                description: userTier === 'pro' ? 'Pro Member Discount Applied (60% off)' : undefined,
+                description: `Additional credits for The Trading Diary`,
               },
               unit_amount: amount,
             },
             quantity: 1,
           },
         ],
-        success_url: `${Deno.env.get('FRONTEND_URL')}/dashboard?session_id={CHECKOUT_SESSION_ID}&purchase=success`,
-        cancel_url: `${Deno.env.get('FRONTEND_URL')}/pricing?canceled=true`,
         metadata: {
           userId: user.id,
           type: 'credits',
           credits: credits.toString(),
         },
-      });
+      };
     }
+
+    // Common session configuration
+    const session = await stripe.checkout.sessions.create({
+      ...sessionConfig,
+      customer_email: user.email,
+      success_url: `${Deno.env.get('FRONTEND_URL')}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${Deno.env.get('FRONTEND_URL')}/pricing`,
+      client_reference_id: user.id,
+    });
 
     return new Response(
       JSON.stringify({
