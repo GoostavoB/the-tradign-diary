@@ -47,15 +47,20 @@ const Pricing = () => {
     // User is authenticated - initiate Stripe checkout
     try {
       setLoadingPlan(planId);
+      console.log('Starting checkout for plan:', planId, 'tier:', planId === 'pro' ? 'pro' : 'elite');
       
       // Map plan to Stripe product
       const tier = planId === 'pro' ? 'pro' : 'elite';
       const product = getSubscriptionProduct(tier, billingCycle);
+      console.log('Stripe product:', product);
       
       await initiateStripeCheckout({
         priceId: product.priceId,
         productType: billingCycle === 'monthly' ? 'subscription_monthly' : 'subscription_annual',
       });
+      
+      // Only reset loading if redirect didn't happen
+      setTimeout(() => setLoadingPlan(null), 5000);
     } catch (error) {
       console.error('Checkout error:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to start checkout');
