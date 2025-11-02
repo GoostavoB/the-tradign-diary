@@ -74,6 +74,42 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- SEO Landing Pages - High Priority -->
+  <url>
+    <loc>https://www.thetradingdiary.com/best-crypto-trading-journal</loc>
+    <lastmod>2025-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.thetradingdiary.com/free-crypto-trading-journal</loc>
+    <lastmod>2025-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.thetradingdiary.com/multi-exchange-trading-journal</loc>
+    <lastmod>2025-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://www.thetradingdiary.com/trading-journal-vs-spreadsheet</loc>
+    <lastmod>2025-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.thetradingdiary.com/how-to-track-crypto-trades</loc>
+    <lastmod>2025-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Blog Articles (English Only) -->
   <url>
     <loc>https://www.thetradingdiary.com/blog/crypto-trading-journal-ai</loc>

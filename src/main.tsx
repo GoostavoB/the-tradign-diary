@@ -7,6 +7,7 @@ import { reportWebVitals, sendVitalsToAnalytics } from "./utils/webVitals";
 import { setupGlobalErrorHandling } from "./utils/errorTracking";
 import { swCleanup } from "./utils/swCleanup";
 import { initPostHog } from "./lib/posthog";
+import { HelmetProvider } from "react-helmet-async";
 
 // Set up global error tracking
 setupGlobalErrorHandling();
@@ -36,7 +37,11 @@ if (storedBuildId !== currentBuildId || forceCleanup) {
 // Update build ID
 localStorage.setItem('build-id', currentBuildId);
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <HelmetProvider>
+    <App />
+  </HelmetProvider>
+);
 
 // Phase 7: Defer analytics until after page is interactive
 if ('requestIdleCallback' in window) {
