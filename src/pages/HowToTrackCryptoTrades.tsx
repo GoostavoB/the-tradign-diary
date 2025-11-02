@@ -345,11 +345,11 @@ export default function HowToTrackCryptoTrades() {
             </p>
             <Link to="/auth">
               <Button size="lg" className="text-lg px-12 py-6">
-                Start Free - 20 Uploads/Month
+                Start Free - 5 Free Uploads
               </Button>
             </Link>
             <p className="text-sm text-muted-foreground mt-4">
-              No credit card required. Works with ALL exchanges.
+              No credit card required. Works with ALL exchanges. Add more for $5/10 uploads.
             </p>
           </div>
         </section>

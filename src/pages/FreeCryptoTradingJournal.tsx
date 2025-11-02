@@ -23,10 +23,10 @@ export default function FreeCryptoTradingJournal() {
               <span className="text-primary font-semibold">100% FREE FOREVER</span>
             </div>
             <h1 className="text-5xl font-bold mb-6">
-              Free Crypto Trading Journal<br />20 Uploads Per Month, Forever
+              Free Crypto Trading Journal<br />5 Free Uploads to Get Started
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Screenshot your trades, upload, and let AI track everything. No credit card required. No hidden fees. Just pure value.
+              Screenshot your trades, upload, and let AI track everything. No credit card required. Add more uploads for just $5 per 10 trades.
             </p>
             <Link to="/auth">
               <Button size="lg" className="text-lg px-8 py-6">
@@ -47,10 +47,10 @@ export default function FreeCryptoTradingJournal() {
               <Card className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Camera className="h-8 w-8 text-primary" />
-                  <h3 className="text-xl font-bold">20 Uploads/Month</h3>
+                  <h3 className="text-xl font-bold">5 Free Uploads</h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Screenshot and upload 20 trades every month. Perfect for swing traders and part-time traders.
+                  Get started with 5 free uploads. Perfect to test the system. Add more anytime for $5 per 10 uploads (~100 trades).
                 </p>
               </Card>
 
@@ -81,8 +81,8 @@ export default function FreeCryptoTradingJournal() {
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
                   <div>
-                    <p className="font-semibold">20 Trade Uploads/Month</p>
-                    <p className="text-sm text-muted-foreground">Perfect for 2-5 trades per week</p>
+                    <p className="font-semibold">5 Free Uploads</p>
+                    <p className="text-sm text-muted-foreground">Get started for free, add more for $5/10 uploads</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -159,8 +159,8 @@ export default function FreeCryptoTradingJournal() {
                 <tbody>
                   <tr className="border-b">
                     <td className="p-4 font-semibold">Trade Uploads</td>
-                    <td className="p-4 text-center">20/month</td>
-                    <td className="p-4 text-center bg-primary/5">Unlimited</td>
+                    <td className="p-4 text-center">5 total</td>
+                    <td className="p-4 text-center bg-primary/5">30/month</td>
                     <td className="p-4 text-center">Unlimited</td>
                   </tr>
                   <tr className="border-b">
@@ -170,10 +170,10 @@ export default function FreeCryptoTradingJournal() {
                     <td className="p-4 text-center">✅</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="p-4 font-semibold">History Access</td>
-                    <td className="p-4 text-center">30 days</td>
-                    <td className="p-4 text-center bg-primary/5">Unlimited</td>
-                    <td className="p-4 text-center">Unlimited</td>
+                    <td className="p-4 font-semibold">Extra Uploads</td>
+                    <td className="p-4 text-center">$5/10 uploads</td>
+                    <td className="p-4 text-center bg-primary/5">$2/10 uploads</td>
+                    <td className="p-4 text-center">Included</td>
                   </tr>
                   <tr className="border-b">
                     <td className="p-4 font-semibold">Advanced Analytics</td>
@@ -218,7 +218,7 @@ export default function FreeCryptoTradingJournal() {
               <Card className="p-6">
                 <h3 className="text-xl font-bold mb-3">Build the Habit Risk-Free</h3>
                 <p className="text-muted-foreground">
-                  20 uploads per month means you can build the consistency habit without any financial commitment. Upgrade only when you need more.
+                  5 free uploads let you test the system completely free. Build the consistency habit, then add more uploads for just $5 per 10 trades when you need them.
                 </p>
               </Card>
             </div>

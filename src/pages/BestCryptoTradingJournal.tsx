@@ -203,7 +203,7 @@ export default function BestCryptoTradingJournal() {
                 <ul className="space-y-2 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-                    <span>20 trade uploads/month</span>
+                    <span>5 uploads total</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
@@ -212,6 +212,10 @@ export default function BestCryptoTradingJournal() {
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
                     <span>AI data extraction</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                    <span>$5 for 10 more uploads</span>
                   </li>
                 </ul>
                 <Link to="/auth">
@@ -224,11 +228,15 @@ export default function BestCryptoTradingJournal() {
                   Popular
                 </div>
                 <h3 className="text-2xl font-bold mb-2">Pro</h3>
-                <p className="text-3xl font-bold mb-4">$9.99<span className="text-sm font-normal">/month</span></p>
+                <p className="text-3xl font-bold mb-4">$12<span className="text-sm font-normal">/month</span></p>
                 <ul className="space-y-2 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-                    <span>Unlimited uploads</span>
+                    <span>30 uploads per month</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                    <span>Unlimited accounts</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
@@ -236,7 +244,7 @@ export default function BestCryptoTradingJournal() {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-                    <span>Unlimited history</span>
+                    <span>$2 per 10 extra uploads</span>
                   </li>
                 </ul>
                 <Link to="/pricing">
@@ -246,19 +254,23 @@ export default function BestCryptoTradingJournal() {
 
               <Card className="p-6">
                 <h3 className="text-2xl font-bold mb-2">Elite</h3>
-                <p className="text-3xl font-bold mb-4">$29.99<span className="text-sm font-normal">/month</span></p>
+                <p className="text-3xl font-bold mb-4">$25<span className="text-sm font-normal">/month</span></p>
                 <ul className="space-y-2 mb-6">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                    <span>Unlimited uploads</span>
+                  </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
                     <span>Everything in Pro</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-                    <span>AI insights & patterns</span>
+                    <span>Priority support</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
-                    <span>Multi-account support</span>
+                    <span>No extra costs</span>
                   </li>
                 </ul>
                 <Link to="/pricing">

@@ -15,7 +15,7 @@
           "emotionTagging": "Emotion tagging & basic analytics",
           "xpSystem": "XP system access",
           "oneAccount": "One account only",
-          "extraUploads": "Add 10 extra uploads for $5"
+          "extraUploads": "$5 for 10 uploads (~100 trades)"
         }
       },
       "pro": {
@@ -32,13 +32,13 @@
       },
       "elite": {
         "features": {
-          "uploads": "150 uploads per month",
+          "uploads": "Unlimited uploads",
           "allWidgets": "All widgets unlocked",
           "unlimitedAccounts": "Unlimited accounts",
           "fullCustomization": "Full color + background customization",
           "prioritySupport": "Priority support & early feature access",
           "systemCustomization": "Total system customization",
-          "extraUploads": "$1 per 10 extra uploads (50% off)",
+          "noExtraCosts": "No extra costs ever",
           "everythingPro": "Everything in Pro"
         }
       }

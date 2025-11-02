@@ -81,13 +81,14 @@ const PricingPage = () => {
       regularMonthlyPrice: 15,
       regularYearlyPrice: 10,
       features: [
-        '50 uploads per month',
+        '30 uploads per month',
+        'Unlimited accounts',
         'Full XP system + gamified progression',
         'Advanced analytics suite',
         'Custom widgets and color themes',
         'Upload up to 10 trades at once',
         'Fee analysis and optimization',
-        'Weekly drawdown alerts',
+        '$2 per 10 extra uploads',
         'Email support'
       ],
       cta: 'Go Pro Now',
@@ -102,12 +103,15 @@ const PricingPage = () => {
       yearlyTotal: 240,
       features: [
         'Unlimited uploads',
+        'Unlimited accounts',
+        'Everything in Pro',
         'Elite XP tiers and rewards',
         'Priority analytics reports',
-        'Full customization and API exports',
+        'Full customization',
         'MFE/MAE analysis',
         'Automated weekly email reports',
         'Priority support',
+        'No extra costs ever',
         'Early access to new features'
       ],
       cta: 'Join Elite',

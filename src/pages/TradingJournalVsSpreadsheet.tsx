@@ -360,7 +360,7 @@ export default function TradingJournalVsSpreadsheet() {
               </Button>
             </Link>
             <p className="text-sm text-muted-foreground mt-4">
-              20 free uploads per month. No credit card required.
+              5 free uploads to start. Add more for $5 per 10 uploads. No credit card required.
             </p>
           </div>
         </section>

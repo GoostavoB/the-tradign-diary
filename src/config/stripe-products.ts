@@ -36,10 +36,11 @@ export const SUBSCRIPTION_PRODUCTS: Record<SubscriptionTier, Record<Subscription
       price: 12,
       interval: 'monthly',
       features: [
-        'Unlimited AI extractions',
+        '30 uploads per month',
+        'Unlimited accounts',
         'Advanced analytics',
         'Priority support',
-        '60% discount on credits'
+        '$2 per 10 extra uploads'
       ]
     },
     annual: {
@@ -50,10 +51,11 @@ export const SUBSCRIPTION_PRODUCTS: Record<SubscriptionTier, Record<Subscription
       price: 10, // $120/year = $10/month
       interval: 'annual',
       features: [
-        'Unlimited AI extractions',
+        '30 uploads per month',
+        'Unlimited accounts',
         'Advanced analytics',
         'Priority support',
-        '60% discount on credits',
+        '$2 per 10 extra uploads',
         'Save $24 per year'
       ]
     }
@@ -67,11 +69,11 @@ export const SUBSCRIPTION_PRODUCTS: Record<SubscriptionTier, Record<Subscription
       price: 25,
       interval: 'monthly',
       features: [
+        'Unlimited uploads',
         'Everything in Pro',
-        'AI trading assistant',
-        'Custom dashboards',
-        'API access',
-        'White-glove support'
+        'Priority support',
+        'Early feature access',
+        'No extra costs'
       ]
     },
     annual: {
@@ -82,11 +84,11 @@ export const SUBSCRIPTION_PRODUCTS: Record<SubscriptionTier, Record<Subscription
       price: 20, // $240/year = $20/month
       interval: 'annual',
       features: [
+        'Unlimited uploads',
         'Everything in Pro',
-        'AI trading assistant',
-        'Custom dashboards',
-        'API access',
-        'White-glove support',
+        'Priority support',
+        'Early feature access',
+        'No extra costs',
         'Save $60 per year'
       ]
     }
@@ -103,17 +105,17 @@ export const CREDIT_PRODUCTS: Record<CreditPackType, StripeProduct> = {
     priceId: 'price_1SOxpUFqnRj6eB66kn8f9Kzs',
     productType: 'credits_starter',
     name: 'Starter Credits',
-    description: '10 AI extraction credits for free users',
-    price: 2.00,
-    features: ['10 AI extraction credits', 'Never expires']
+    description: '10 uploads (~100 trades) for free users',
+    price: 5.00,
+    features: ['10 upload credits', 'Approx 100 trades', 'Never expires']
   },
   pro: {
     priceId: 'price_1SOxyYFqnRj6eB66CnowBEBN',
     productType: 'credits_pro',
-    name: 'Pro Credits',
-    description: '10 AI extraction credits for Pro/Elite members',
+    name: 'Pro Extra Credits',
+    description: '10 extra uploads for Pro members',
     price: 2.00,
-    features: ['10 AI extraction credits', 'Never expires', 'Pro member pricing']
+    features: ['10 upload credits', 'Approx 100 trades', 'Never expires', 'Pro member pricing']
   }
 };
 

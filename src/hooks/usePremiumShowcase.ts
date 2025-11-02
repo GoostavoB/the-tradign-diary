@@ -57,11 +57,11 @@ export const usePremiumShowcase = () => {
     {
       id: 'multi-account',
       title: 'Multiple Trading Accounts',
-      description: 'Connect and manage multiple brokerage accounts',
+      description: 'Track unlimited accounts via image upload',
       icon: '🔗',
-      requiredPlan: 'elite',
+      requiredPlan: 'pro',
       benefits: [
-        'Connect up to 10 accounts',
+        'Track unlimited accounts',
         'Cross-account analytics',
         'Portfolio-level insights',
         'Unified performance tracking'
