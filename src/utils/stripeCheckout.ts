@@ -25,12 +25,17 @@ export interface CheckoutResponse {
  * @returns Promise that resolves when redirect happens
  */
 export const initiateStripeCheckout = async (params: CheckoutParams): Promise<void> => {
+  console.log('🚀 initiateStripeCheckout called with:', params);
   const { priceId, productType, successUrl, cancelUrl } = params;
 
   // Verify user is authenticated
+  console.log('🔐 Checking authentication...');
   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
   
+  console.log('🔐 Session:', session ? 'Found' : 'Not found', 'Error:', sessionError);
+  
   if (sessionError || !session) {
+    console.error('❌ Authentication failed:', sessionError);
     throw new Error('You must be logged in to make a purchase');
   }
 
@@ -40,6 +45,13 @@ export const initiateStripeCheckout = async (params: CheckoutParams): Promise<vo
   const defaultCancelUrl = `${frontendUrl}/checkout-cancel`;
 
   // Call Edge Function to create Stripe checkout session
+  console.log('📞 Calling edge function with body:', {
+    priceId,
+    productType,
+    successUrl: successUrl || defaultSuccessUrl,
+    cancelUrl: cancelUrl || defaultCancelUrl,
+  });
+  
   const invokePromise = supabase.functions.invoke('create-stripe-checkout', {
     body: {
       priceId,
@@ -53,25 +65,34 @@ export const initiateStripeCheckout = async (params: CheckoutParams): Promise<vo
     setTimeout(() => reject(new Error('Checkout request timed out')), 15000)
   );
 
+  console.log('⏳ Waiting for response...');
   const { data, error } = await Promise.race([invokePromise, timeout]) as any;
 
+  console.log('📦 Response received:', { data, error });
+
   if (error) {
-    console.error('Checkout error:', error);
+    console.error('❌ Checkout error:', error);
     throw new Error(error.message || 'Failed to create checkout session');
   }
 
   if (!data?.url) {
+    console.error('❌ No checkout URL in response:', data);
     throw new Error('No checkout URL received from server');
   }
 
   // Track checkout initiation (before redirect)
   const amount = parseFloat(priceId.includes('annual') ? '99' : priceId.includes('monthly') ? '29' : '0');
+  console.log('📊 Tracking checkout initiation');
   trackCheckoutFunnel.initiateCheckout(productType, priceId, amount);
 
   // Redirect to Stripe Checkout (try new tab first to avoid sandbox issues)
+  console.log('🔗 Redirecting to Stripe checkout:', data.url);
   const opened = window.open(data.url, '_blank', 'noopener,noreferrer');
   if (!opened) {
+    console.log('🔗 Popup blocked, using direct redirect');
     window.location.href = data.url;
+  } else {
+    console.log('✅ Opened in new tab');
   }
 };
 
