@@ -40,7 +40,7 @@ export const initiateStripeCheckout = async (params: CheckoutParams): Promise<vo
   const defaultCancelUrl = `${frontendUrl}/checkout-cancel`;
 
   // Call Edge Function to create Stripe checkout session
-  const { data, error } = await supabase.functions.invoke('create-stripe-checkout', {
+  const invokePromise = supabase.functions.invoke('create-stripe-checkout', {
     body: {
       priceId,
       productType,
@@ -48,6 +48,12 @@ export const initiateStripeCheckout = async (params: CheckoutParams): Promise<vo
       cancelUrl: cancelUrl || defaultCancelUrl,
     },
   });
+
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Checkout request timed out')), 15000)
+  );
+
+  const { data, error } = await Promise.race([invokePromise, timeout]) as any;
 
   if (error) {
     console.error('Checkout error:', error);
@@ -62,8 +68,11 @@ export const initiateStripeCheckout = async (params: CheckoutParams): Promise<vo
   const amount = parseFloat(priceId.includes('annual') ? '99' : priceId.includes('monthly') ? '29' : '0');
   trackCheckoutFunnel.initiateCheckout(productType, priceId, amount);
 
-  // Redirect to Stripe Checkout
-  window.location.href = data.url;
+  // Redirect to Stripe Checkout (try new tab first to avoid sandbox issues)
+  const opened = window.open(data.url, '_blank', 'noopener,noreferrer');
+  if (!opened) {
+    window.location.href = data.url;
+  }
 };
 
 /**
