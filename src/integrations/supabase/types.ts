@@ -2123,6 +2123,7 @@ export type Database = {
           bio: string | null
           country: string | null
           created_at: string | null
+          credits_balance: number | null
           email: string | null
           followers_count: number | null
           following_count: number | null
@@ -2148,6 +2149,7 @@ export type Database = {
           bio?: string | null
           country?: string | null
           created_at?: string | null
+          credits_balance?: number | null
           email?: string | null
           followers_count?: number | null
           following_count?: number | null
@@ -2173,6 +2175,7 @@ export type Database = {
           bio?: string | null
           country?: string | null
           created_at?: string | null
+          credits_balance?: number | null
           email?: string | null
           followers_count?: number | null
           following_count?: number | null
@@ -2883,6 +2886,7 @@ export type Database = {
           extra_credits_purchased: number | null
           has_fee_analysis_access: boolean | null
           id: string
+          interval: string | null
           last_reset_date: string | null
           monthly_upload_limit: number | null
           plan_type: string
@@ -2908,6 +2912,7 @@ export type Database = {
           extra_credits_purchased?: number | null
           has_fee_analysis_access?: boolean | null
           id?: string
+          interval?: string | null
           last_reset_date?: string | null
           monthly_upload_limit?: number | null
           plan_type: string
@@ -2933,6 +2938,7 @@ export type Database = {
           extra_credits_purchased?: number | null
           has_fee_analysis_access?: boolean | null
           id?: string
+          interval?: string | null
           last_reset_date?: string | null
           monthly_upload_limit?: number | null
           plan_type?: string
@@ -4686,6 +4692,10 @@ export type Database = {
       }
     }
     Functions: {
+      add_credits: {
+        Args: { p_amount: number; p_user_id: string }
+        Returns: undefined
+      }
       add_extra_credits: {
         Args: { p_amount: number; p_credits: number; p_user_id: string }
         Returns: boolean
@@ -4715,6 +4725,10 @@ export type Database = {
       cleanup_deleted_trades: { Args: never; Returns: undefined }
       cleanup_expired_deleted_batches: { Args: never; Returns: undefined }
       cleanup_expired_pending_trades: { Args: never; Returns: undefined }
+      deduct_credits: {
+        Args: { p_amount: number; p_user_id: string }
+        Returns: boolean
+      }
       deduct_upload_credit: { Args: { p_user_id: string }; Returns: boolean }
       get_subscription_metrics: { Args: never; Returns: Json }
       get_trading_analytics: {
