@@ -5,6 +5,7 @@ import { CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { PostPurchaseUpsell } from '@/components/checkout/PostPurchaseUpsell';
 
 export default function CheckoutSuccess() {
   const navigate = useNavigate();
@@ -12,8 +13,11 @@ export default function CheckoutSuccess() {
   const { toast } = useToast();
   const [verifying, setVerifying] = useState(true);
   const [verified, setVerified] = useState(false);
+  const [showUpsell, setShowUpsell] = useState(false);
+  const [subscriptionTier, setSubscriptionTier] = useState<'pro' | 'elite' | null>(null);
 
   const sessionId = searchParams.get('session_id');
+  const isUpsellSuccess = searchParams.get('upsell') === 'success';
 
   useEffect(() => {
     // Simulate payment verification
@@ -24,28 +28,52 @@ export default function CheckoutSuccess() {
         return;
       }
 
-      // Simulate API call
+      // Simulate API call to verify payment
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       setVerified(true);
       setVerifying(false);
 
+      // Check if this was an annual subscription purchase (not an upsell)
+      // In production, you'd get this from the session metadata
+      const isAnnualSubscription = !isUpsellSuccess; // Simplified check
+      
+      if (isAnnualSubscription) {
+        // Show upsell after a brief delay
+        setTimeout(() => {
+          // You'd determine tier from session metadata
+          setSubscriptionTier('pro'); // or 'elite'
+          setShowUpsell(true);
+        }, 1500);
+      }
+
       toast({
         title: 'Payment Successful!',
-        description: 'Your purchase has been completed successfully.',
+        description: isUpsellSuccess 
+          ? 'Your credits have been added to your account!' 
+          : 'Your purchase has been completed successfully.',
       });
     };
 
     verifyPayment();
-  }, [sessionId, toast]);
+  }, [sessionId, toast, isUpsellSuccess]);
 
   return (
-    <div className="container max-w-2xl mx-auto p-6 min-h-screen flex items-center justify-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full"
-      >
+    <>
+      {/* Upsell Modal */}
+      {showUpsell && subscriptionTier && (
+        <PostPurchaseUpsell
+          onDismiss={() => setShowUpsell(false)}
+          subscriptionTier={subscriptionTier}
+        />
+      )}
+
+      <div className="container max-w-2xl mx-auto p-6 min-h-screen flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full"
+        >
         <Card>
           <CardHeader className="text-center">
             {verifying ? (
@@ -128,7 +156,8 @@ export default function CheckoutSuccess() {
             )}
           </CardContent>
         </Card>
-      </motion.div>
-    </div>
+        </motion.div>
+      </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 import { GlassCard } from './GlassCard';
 import { MagneticButton } from './MagneticButton';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { getSubscriptionProduct } from '@/config/stripe-products';
 import { initiateStripeCheckout } from '@/utils/stripeCheckout';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface PricingPlan {
   id: string;
@@ -131,6 +132,23 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
             {plan.comingSoon ? plan.descriptionKey : t(plan.descriptionKey)}
           </p>
         </div>
+
+        {/* Annual Upgrade Promotion for Monthly Plans */}
+        {billingCycle === 'monthly' && !plan.comingSoon && plan.id !== 'free' && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="mb-6"
+          >
+            <Alert className="border-primary/30 bg-gradient-to-r from-primary/10 to-accent/10">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-sm">
+                <strong>Upgrade to Annual:</strong> Get 50% off all credit purchases - exclusive one-time offer!
+              </AlertDescription>
+            </Alert>
+          </motion.div>
+        )}
 
         <div className="mb-8">
           {getDisplayPrice() !== null ? (
