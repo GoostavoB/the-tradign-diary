@@ -88,6 +88,13 @@ export default function FreeCryptoTradingJournal() {
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
                   <div>
+                    <p className="font-semibold">1 Account Only</p>
+                    <p className="text-sm text-muted-foreground">Track trades from one exchange</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
+                  <div>
                     <p className="font-semibold">AI Data Extraction</p>
                     <p className="text-sm text-muted-foreground">Full AI capabilities included</p>
                   </div>
@@ -161,6 +168,12 @@ export default function FreeCryptoTradingJournal() {
                     <td className="p-4 font-semibold">Trade Uploads</td>
                     <td className="p-4 text-center">5 total</td>
                     <td className="p-4 text-center bg-primary/5">30/month</td>
+                    <td className="p-4 text-center">Unlimited</td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-4 font-semibold">Accounts</td>
+                    <td className="p-4 text-center">1 account</td>
+                    <td className="p-4 text-center bg-primary/5">Unlimited</td>
                     <td className="p-4 text-center">Unlimited</td>
                   </tr>
                   <tr className="border-b">
