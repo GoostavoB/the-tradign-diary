@@ -46,22 +46,22 @@ export const initiateStripeCheckout = async (params: CheckoutParams): Promise<st
   const defaultCancelUrl = `${frontendUrl}/checkout-cancel`;
 
   // Call Edge Function to create Stripe checkout session
-  console.log('📞 Calling edge function with body:', {
+  // Build request body - only include upsellCredits if defined
+  const requestBody: any = {
     priceId,
     productType,
     successUrl: successUrl || defaultSuccessUrl,
     cancelUrl: cancelUrl || defaultCancelUrl,
-    upsellCredits,
-  });
+  };
+  
+  if (upsellCredits !== undefined) {
+    requestBody.upsellCredits = upsellCredits;
+  }
+
+  console.log('📞 Calling edge function with body:', requestBody);
   
   const invokePromise = supabase.functions.invoke('create-stripe-checkout', {
-    body: {
-      priceId,
-      productType,
-      successUrl: successUrl || defaultSuccessUrl,
-      cancelUrl: cancelUrl || defaultCancelUrl,
-      upsellCredits,
-    },
+    body: requestBody,
   });
 
   const timeout = new Promise((_, reject) =>
