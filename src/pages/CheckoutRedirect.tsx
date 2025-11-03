@@ -13,6 +13,8 @@ const CheckoutRedirect = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
   const [showManualLink, setShowManualLink] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [longWait, setLongWait] = useState(false);
   const [isInIframe] = useState(() => {
     try {
       return window.self !== window.top;
@@ -22,44 +24,53 @@ const CheckoutRedirect = () => {
   });
 
   useEffect(() => {
+    let safetyLinkTimer: number | undefined;
+    let safetyStopLoadingTimer: number | undefined;
+
     const initiateCheckout = async () => {
       console.info('🛒 Starting Stripe checkout via Edge Function...');
       console.info('🖼️ Running in iframe:', isInIframe);
-      
+
       const priceId = searchParams.get('priceId');
       const productType = searchParams.get('productType') as 'subscription_monthly' | 'subscription_annual' | 'credits_starter' | 'credits_pro';
-      
+
       if (!priceId || !productType) {
         setError('No product selected. Please select a plan.');
         setIsLoading(false);
         return;
       }
 
+      // Safety: show manual option after 3s even if the request hangs
+      safetyLinkTimer = window.setTimeout(() => {
+        console.info('⏰ Safety timer: showing manual option');
+        setShowManualLink(true);
+        setLongWait(true);
+      }, 3000);
+      // Safety: stop spinner after 10s
+      safetyStopLoadingTimer = window.setTimeout(() => {
+        console.warn('⏰ Safety timer: stopping loading state');
+        setIsLoading(false);
+      }, 10000);
+
       try {
         console.info('📞 Calling initiateStripeCheckout with:', { priceId, productType });
-        
-        // Get the checkout URL from the Edge Function
+
         const url = await initiateStripeCheckout({
           priceId,
           productType,
           successUrl: `${window.location.origin}/success`,
           cancelUrl: `${window.location.origin}/pricing`,
         });
-        
+
         console.info('✅ Got checkout URL:', url);
         setRedirectUrl(url);
-        
-        // Fallback timer: show manual link after 1 second
-        setTimeout(() => {
-          console.info('⏰ Showing manual fallback link');
-          setShowManualLink(true);
-        }, 1000);
-        
+        setLongWait(false);
+
+        // In iframe: show manual link immediately and try popup
         if (isInIframe) {
-          // In iframe: show manual link immediately and try popup
           console.info('🪟 In iframe - showing manual link and attempting popup');
           setShowManualLink(true);
-          
+
           const popup = window.open(url, '_blank', 'noopener,noreferrer');
           if (!popup || popup.closed || typeof popup.closed === 'undefined') {
             console.warn('⚠️ Popup blocked - user must click manual link');
@@ -75,13 +86,23 @@ const CheckoutRedirect = () => {
         }
       } catch (err) {
         console.error('❌ Checkout error:', err);
-        setError(err instanceof Error ? err.message : 'Failed to initiate checkout. Please try again.');
         setIsLoading(false);
+        setShowManualLink(true);
+        setLongWait(true);
+        setError(err instanceof Error ? err.message : 'Failed to initiate checkout. Please try again.');
+      } finally {
+        if (safetyLinkTimer) clearTimeout(safetyLinkTimer);
+        if (safetyStopLoadingTimer) clearTimeout(safetyStopLoadingTimer);
       }
     };
 
     initiateCheckout();
-  }, [searchParams, isInIframe]);
+
+    return () => {
+      if (safetyLinkTimer) clearTimeout(safetyLinkTimer);
+      if (safetyStopLoadingTimer) clearTimeout(safetyStopLoadingTimer);
+    };
+  }, [searchParams, isInIframe, retryCount]);
 
   // Show error UI
   if (error) {
@@ -119,8 +140,8 @@ const CheckoutRedirect = () => {
     );
   }
 
-  // Show loading UI while checkout is being initiated
-  if (isLoading && !showManualLink) {
+  // Show loading UI with progressive messages
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-primary/5 to-background">
         <motion.div
@@ -132,10 +153,45 @@ const CheckoutRedirect = () => {
             <div className="mx-auto w-20 h-20 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
               <Loader2 className="w-12 h-12 text-primary animate-spin" />
             </div>
-            <h2 className="text-2xl font-bold mb-4">Creating checkout session...</h2>
-            <p className="text-muted-foreground">
-              Setting up your secure payment with Stripe.
+            <h2 className="text-2xl font-bold mb-4">
+              {longWait ? "This is taking longer than expected..." : "Creating checkout session..."}
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              {longWait 
+                ? "Don't worry, this sometimes happens. You can continue manually below." 
+                : "Setting up your secure payment with Stripe."
+              }
             </p>
+            
+            {showManualLink && (
+              <div className="space-y-3">
+                {redirectUrl ? (
+                  <Button 
+                    onClick={() => window.open(redirectUrl, '_blank', 'noopener,noreferrer')}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Continue to Stripe Manually
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={() => setRetryCount(prev => prev + 1)}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    Retry Connection
+                  </Button>
+                )}
+                <Button 
+                  onClick={() => navigate('/pricing')}
+                  variant="ghost"
+                  className="w-full"
+                >
+                  Back to Pricing
+                </Button>
+              </div>
+            )}
           </Card>
         </motion.div>
       </div>
