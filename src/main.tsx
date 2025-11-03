@@ -1,4 +1,4 @@
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import "./i18n"; // Initialize i18n before App
 // Removed duplicate i18n config to prevent overriding resources
 import App from "./App.tsx";
@@ -37,11 +37,19 @@ if (storedBuildId !== currentBuildId || forceCleanup) {
 // Update build ID
 localStorage.setItem('build-id', currentBuildId);
 
-createRoot(document.getElementById("root")!).render(
+// React-Snap SSR support: hydrate if pre-rendered, render if not
+const rootElement = document.getElementById("root")!;
+const app = (
   <HelmetProvider>
     <App />
   </HelmetProvider>
 );
+
+if (rootElement.hasChildNodes()) {
+  hydrateRoot(rootElement, app);
+} else {
+  createRoot(rootElement).render(app);
+}
 
 // Phase 7: Defer analytics until after page is interactive
 if ('requestIdleCallback' in window) {

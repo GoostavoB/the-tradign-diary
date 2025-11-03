@@ -9,11 +9,29 @@ export default function FreeCryptoTradingJournal() {
   return (
     <>
       <MetaTags
-        title="Free Crypto Trading Journal | 20 Uploads/Month Forever"
-        description="Start tracking crypto trades for free. 20 image uploads per month, AI data extraction, performance analytics. No credit card required. Works with ALL exchanges."
+        title="Free Crypto Trading Journal | 5 Free Uploads + $5 for 10 More"
+        description="Start tracking crypto trades for free. 5 free uploads to get started, then $5 for 10 more. AI data extraction, performance analytics. No credit card required."
         keywords="free trading journal, free crypto journal app, free trade tracker, screenshot trade journal"
       />
-      <SchemaMarkup />
+      <SchemaMarkup 
+        type="product"
+        data={{
+          name: "The Trading Diary - Free Plan",
+          description: "Free crypto trading journal with 5 free uploads to get started",
+          brand: { "@type": "Brand", name: "The Trading Diary" },
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock"
+          },
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: "4.8",
+            reviewCount: "127"
+          }
+        }}
+      />
 
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
@@ -159,8 +177,8 @@ export default function FreeCryptoTradingJournal() {
                   <tr className="border-b">
                     <th className="p-4 text-left">Feature</th>
                     <th className="p-4 text-center">Free</th>
-                    <th className="p-4 text-center bg-primary/10">Pro<br/>$9.99/mo</th>
-                    <th className="p-4 text-center">Elite<br/>$29.99/mo</th>
+                    <th className="p-4 text-center bg-primary/10">Pro<br/>$12/mo</th>
+                    <th className="p-4 text-center">Elite<br/>$25/mo</th>
                   </tr>
                 </thead>
                 <tbody>

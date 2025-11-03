@@ -124,12 +124,45 @@ export const PublicHeader = () => {
               >
                 {t('navigation.howItWorks', 'How it Works')}
               </button>
-              <button
-                onClick={() => handleNavigate('/blog')}
-                className="text-gray-300 hover:text-white transition-colors"
-              >
-                {t('navigation.blog', 'Blog')}
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors focus:outline-none">
+                  Resources
+                  <ChevronDown className="w-4 h-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="bg-gray-900/95 backdrop-blur-sm border-gray-800 z-[100]">
+                  <DropdownMenuItem 
+                    onClick={() => handleNavigate('/free-crypto-trading-journal')}
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer focus:bg-gray-800 focus:text-white"
+                  >
+                    Free Trading Journal
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleNavigate('/multi-exchange-trading-journal')}
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer focus:bg-gray-800 focus:text-white"
+                  >
+                    Multi-Exchange Guide
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleNavigate('/trading-journal-vs-spreadsheet')}
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer focus:bg-gray-800 focus:text-white"
+                  >
+                    Journal vs Spreadsheet
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleNavigate('/how-to-track-crypto-trades')}
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer focus:bg-gray-800 focus:text-white"
+                  >
+                    How to Track Trades
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleNavigate('/blog')}
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 cursor-pointer focus:bg-gray-800 focus:text-white"
+                  >
+                    {t('navigation.blog', 'Blog')}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
               <button
                 onClick={() => handleNavigate('/contact')}
                 className="text-gray-300 hover:text-white transition-colors"
@@ -238,12 +271,41 @@ export const PublicHeader = () => {
                   {t('navigation.howItWorks', 'How it Works')}
                 </button>
 
-                <button
-                  onClick={() => handleNavigate('/blog')}
-                  className="w-full text-left px-4 py-3 text-white hover:bg-gray-800 rounded-lg transition-colors"
-                >
-                  {t('navigation.blog', 'Blog')}
-                </button>
+                <div className="space-y-1">
+                  <div className="px-4 py-2 text-sm font-semibold text-gray-400">
+                    Resources
+                  </div>
+                  <button
+                    onClick={() => handleNavigate('/free-crypto-trading-journal')}
+                    className="w-full text-left px-6 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                  >
+                    Free Trading Journal
+                  </button>
+                  <button
+                    onClick={() => handleNavigate('/multi-exchange-trading-journal')}
+                    className="w-full text-left px-6 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                  >
+                    Multi-Exchange Guide
+                  </button>
+                  <button
+                    onClick={() => handleNavigate('/trading-journal-vs-spreadsheet')}
+                    className="w-full text-left px-6 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                  >
+                    Journal vs Spreadsheet
+                  </button>
+                  <button
+                    onClick={() => handleNavigate('/how-to-track-crypto-trades')}
+                    className="w-full text-left px-6 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                  >
+                    How to Track Trades
+                  </button>
+                  <button
+                    onClick={() => handleNavigate('/blog')}
+                    className="w-full text-left px-6 py-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                  >
+                    {t('navigation.blog', 'Blog')}
+                  </button>
+                </div>
 
                 <button
                   onClick={() => handleNavigate('/contact')}
