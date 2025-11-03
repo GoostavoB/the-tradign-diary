@@ -79,8 +79,18 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
         return;
       }
       
-      // Navigate to checkout interstitial
-      navigate(`/checkout?priceId=${stripeProduct.priceId}&productType=${stripeProduct.productType}`);
+      // Pre-open a new tab for smooth editor experience
+      const checkoutWindow = window.open('about:blank', '_blank');
+      
+      // Navigate to checkout interstitial which will handle the redirect
+      const checkoutUrl = `/checkout?priceId=${stripeProduct.priceId}&productType=${stripeProduct.productType}`;
+      
+      // If we successfully opened a window, navigate it; otherwise use standard navigation
+      if (checkoutWindow) {
+        checkoutWindow.location.href = window.location.origin + checkoutUrl;
+      } else {
+        navigate(checkoutUrl);
+      }
     } catch (error) {
       console.error('Checkout error:', error);
       toast({

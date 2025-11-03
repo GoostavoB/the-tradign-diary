@@ -58,7 +58,7 @@ const CheckoutRedirect = () => {
         const url = await initiateStripeCheckout({
           priceId,
           productType,
-          successUrl: `${window.location.origin}/success`,
+          successUrl: `${window.location.origin}/checkout-success`,
           cancelUrl: `${window.location.origin}/pricing`,
         });
 
