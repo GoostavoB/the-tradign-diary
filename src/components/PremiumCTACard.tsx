@@ -18,8 +18,7 @@ export const PremiumCTACard = memo(({ className }: PremiumCTACardProps) => {
   const promoStatus = usePromoStatus();
   
   const handleUpgrade = () => {
-    const pricingPath = currentLang === 'en' ? '/pricing' : `/${currentLang}/pricing`;
-    navigate(pricingPath);
+    window.location.href = '/#pricing-section';
   };
 
   return (

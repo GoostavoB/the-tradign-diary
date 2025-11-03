@@ -21,8 +21,7 @@ const PremiumFeatureCardComponent = ({ feature, isUnlocked, index }: PremiumFeat
   const currentLang = i18n.language;
 
   const handleUpgrade = () => {
-    const pricingPath = currentLang === 'en' ? '/pricing' : `/${currentLang}/pricing`;
-    navigate(pricingPath);
+    window.location.href = '/#pricing-section';
   };
 
   return (

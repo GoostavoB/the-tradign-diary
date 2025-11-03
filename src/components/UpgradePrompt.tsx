@@ -128,7 +128,7 @@ export function UpgradePrompt({ open, onClose, feature = 'this feature', trigger
             <Button
               className="w-full gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-primary-foreground"
               onClick={() => {
-                navigate('/pricing');
+                window.location.href = '/#pricing-section';
                 onClose();
               }}
               aria-label="View pricing plans to upgrade account"

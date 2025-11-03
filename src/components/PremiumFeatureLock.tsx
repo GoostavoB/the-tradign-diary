@@ -32,8 +32,7 @@ export const PremiumFeatureLock = ({
   };
   
   const handleUpgrade = () => {
-    const pricingPath = currentLang === 'en' ? '/pricing' : `/${currentLang}/pricing`;
-    navigate(pricingPath);
+    window.location.href = '/#pricing-section';
   };
 
   if (!isLocked) {

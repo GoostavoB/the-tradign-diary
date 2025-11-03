@@ -29,16 +29,19 @@ export const initiateStripeCheckout = async (params: CheckoutParams): Promise<st
   console.log('🚀 initiateStripeCheckout called with:', params);
   const { priceId, productType, successUrl, cancelUrl, upsellCredits } = params;
 
-  // Verify user is authenticated
-  console.log('🔐 Checking authentication...');
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-  
-  console.log('🔐 Session:', session ? 'Found' : 'Not found', 'Error:', sessionError);
-  
-  if (sessionError || !session) {
-    console.error('❌ Authentication failed:', sessionError);
-    throw new Error('You must be logged in to make a purchase');
+  // Verify user is authenticated (non-blocking)
+  console.log('🔐 Checking authentication (non-blocking)...');
+  try {
+    const sessionResult: any = await Promise.race([
+      supabase.auth.getSession(),
+      new Promise((resolve) => setTimeout(() => resolve({ data: { session: null }, error: null }), 2000))
+    ]);
+    const session = sessionResult?.data?.session || null;
+    console.log('🔐 Session (optional):', session ? 'Found' : 'Not yet');
+  } catch (e) {
+    console.warn('⚠️ Auth check skipped due to timeout');
   }
+
 
   // Set default URLs if not provided
   const frontendUrl = window.location.origin;

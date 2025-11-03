@@ -71,7 +71,7 @@ export function Tier3PreviewModal({ open, onClose, totalXP, currentTier }: Tier3
               variant="outline"
               className="w-full"
               onClick={() => {
-                navigate('/pricing');
+                window.location.href = '/#pricing-section';
                 onClose();
               }}
             >
