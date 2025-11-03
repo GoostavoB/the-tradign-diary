@@ -258,13 +258,6 @@ export const PublicHeader = () => {
                   {t('navigation.pricing', 'Pricing')}
                 </button>
 
-                <button
-                  onClick={() => handleNavigate('/how-it-works')}
-                  className="w-full text-left px-4 py-3 text-white hover:bg-gray-800 rounded-lg transition-colors"
-                >
-                  {t('navigation.howItWorks', 'How it Works')}
-                </button>
-
                 <div className="space-y-1">
                   <div className="px-4 py-2 text-sm font-semibold text-gray-400">
                     Resources
