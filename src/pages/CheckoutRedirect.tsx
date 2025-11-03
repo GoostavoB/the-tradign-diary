@@ -15,6 +15,7 @@ const CheckoutRedirect = () => {
   const [showManualLink, setShowManualLink] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [longWait, setLongWait] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('Initializing secure checkout...');
   const [isInIframe] = useState(() => {
     try {
       return window.self !== window.top;
@@ -26,6 +27,8 @@ const CheckoutRedirect = () => {
   useEffect(() => {
     let safetyLinkTimer: number | undefined;
     let safetyStopLoadingTimer: number | undefined;
+    let message10sTimer: number | undefined;
+    let message20sTimer: number | undefined;
 
     const initiateCheckout = async () => {
       console.info('🛒 Starting Stripe checkout via Edge Function...');
@@ -40,17 +43,24 @@ const CheckoutRedirect = () => {
         return;
       }
 
-      // Safety: show manual option after 3s even if the request hangs
-      safetyLinkTimer = window.setTimeout(() => {
-        console.info('⏰ Safety timer: showing manual option');
+      // Progressive message updates for cold start awareness
+      message10sTimer = window.setTimeout(() => {
+        console.info('⏰ 10s: Updating message');
+        setLoadingMessage('Almost ready...');
+      }, 10000);
+      
+      message20sTimer = window.setTimeout(() => {
+        console.info('⏰ 20s: Showing manual option');
+        setLoadingMessage('This is taking longer than expected...');
         setShowManualLink(true);
         setLongWait(true);
-      }, 3000);
-      // Safety: stop spinner after 10s
+      }, 20000);
+      
+      // Safety: stop spinner after 35s
       safetyStopLoadingTimer = window.setTimeout(() => {
         console.warn('⏰ Safety timer: stopping loading state');
         setIsLoading(false);
-      }, 10000);
+      }, 35000);
 
       try {
         console.info('📞 Calling initiateStripeCheckout with:', { priceId, productType });
@@ -91,7 +101,8 @@ const CheckoutRedirect = () => {
         setLongWait(true);
         setError(err instanceof Error ? err.message : 'Failed to initiate checkout. Please try again.');
       } finally {
-        if (safetyLinkTimer) clearTimeout(safetyLinkTimer);
+        if (message10sTimer) clearTimeout(message10sTimer);
+        if (message20sTimer) clearTimeout(message20sTimer);
         if (safetyStopLoadingTimer) clearTimeout(safetyStopLoadingTimer);
       }
     };
@@ -99,7 +110,8 @@ const CheckoutRedirect = () => {
     initiateCheckout();
 
     return () => {
-      if (safetyLinkTimer) clearTimeout(safetyLinkTimer);
+      if (message10sTimer) clearTimeout(message10sTimer);
+      if (message20sTimer) clearTimeout(message20sTimer);
       if (safetyStopLoadingTimer) clearTimeout(safetyStopLoadingTimer);
     };
   }, [searchParams, isInIframe, retryCount]);
@@ -154,12 +166,12 @@ const CheckoutRedirect = () => {
               <Loader2 className="w-12 h-12 text-primary animate-spin" />
             </div>
             <h2 className="text-2xl font-bold mb-4">
-              {longWait ? "This is taking longer than expected..." : "Creating checkout session..."}
+              {loadingMessage}
             </h2>
             <p className="text-muted-foreground mb-6">
               {longWait 
-                ? "Don't worry, this sometimes happens. You can continue manually below." 
-                : "Setting up your secure payment with Stripe."
+                ? "Don't worry, this sometimes happens during cold starts. You can continue manually below." 
+                : "Setting up your secure payment with Stripe. This may take a moment..."
               }
             </p>
             
