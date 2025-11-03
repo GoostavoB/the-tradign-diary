@@ -6,13 +6,10 @@ import { CheckCircle2 } from "lucide-react";
  * Contains keyword-rich content while maintaining clean design
  */
 export const HeroFeatureBanner = () => {
-  const features = [
-    "Binance",
-    "Bybit", 
-    "Coinbase",
-    "All Exchanges Accepted",
-    "Real-time Analytics",
-    "Risk Management"
+  const stats = [
+    { title: "40× Faster Uploads", description: "Batch upload from screenshots. No more manual entry." },
+    { title: "Know Every Fee", description: "Compare exchanges and uncover hidden costs." },
+    { title: "Your Dashboard, Your Rules", description: "Fully customizable metrics, colors, and layout." }
   ];
 
   return (
@@ -35,18 +32,18 @@ export const HeroFeatureBanner = () => {
           and AI-powered insights in one place.
         </p>
 
-        {/* Feature badges */}
-        <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
-          {features.map((feature, index) => (
+        {/* Stats cards */}
+        <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          {stats.map((stat, index) => (
             <motion.div
-              key={feature}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs md:text-sm font-medium"
+              key={stat.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+              className="p-4 rounded-xl bg-card/50 border border-primary/20"
             >
-              <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-              <span>{feature}</span>
+              <h3 className="font-semibold mb-1 text-sm">{stat.title}</h3>
+              <p className="text-xs text-muted-foreground">{stat.description}</p>
             </motion.div>
           ))}
         </div>
