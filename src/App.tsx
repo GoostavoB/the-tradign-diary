@@ -35,9 +35,10 @@ import { DailyRewardModal } from "@/components/rewards/DailyRewardModal";
 import { DailyRewardIndicator } from "@/components/rewards/DailyRewardIndicator";
 import { useDailyRewards } from "@/hooks/useDailyRewards";
 
-// Eagerly load critical pages (landing and auth)
+// Eagerly load critical pages (landing, auth, and checkout)
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import CheckoutRedirect from "./pages/CheckoutRedirect";
 
 // Lazy load all other pages for better performance
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -109,7 +110,6 @@ const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const FeaturesPage = lazy(() => import("./pages/FeaturesPage"));
 const TierPreview = lazy(() => import("./pages/TierPreview"));
 const PremiumFeatures = lazy(() => import("./pages/PremiumFeatures"));
-const CheckoutRedirect = lazy(() => import("./pages/CheckoutRedirect"));
 const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 const CheckoutCancel = lazy(() => import("./pages/CheckoutCancel"));
 
@@ -152,8 +152,8 @@ const AppRoutes = () => {
   usePageTracking(); // Automatically track page views
   const { user } = useAuth();
   
-  // Only initialize daily rewards for authenticated users
-  const dailyRewards = user ? useDailyRewards() : null;
+  // Always call hooks - React requires consistent hook order
+  const dailyRewards = useDailyRewards();
   
   // Define public pages where rewards should not show
   const location = useLocation();

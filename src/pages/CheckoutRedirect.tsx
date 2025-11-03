@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, ExternalLink, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,8 @@ const CheckoutRedirect = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [error, setError] = useState<string | null>(null);
+  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
+  const [showManualLink, setShowManualLink] = useState(false);
 
   useEffect(() => {
     console.info('🛒 Direct Stripe checkout - no Edge Function needed!');
@@ -46,12 +48,25 @@ const CheckoutRedirect = () => {
       : stripeUrl;
     
     console.info('🔗 Redirecting to Stripe Payment Link:', finalUrl);
+    setRedirectUrl(finalUrl);
     
-    // Immediate redirect to Stripe - no timeout needed!
-    window.location.href = finalUrl;
+    // Small timeout to ensure component has mounted
+    const redirectTimer = setTimeout(() => {
+      window.location.href = finalUrl;
+    }, 150);
+    
+    // Fallback: Show manual link if redirect doesn't happen within 3 seconds
+    const fallbackTimer = setTimeout(() => {
+      setShowManualLink(true);
+    }, 3000);
+    
+    return () => {
+      clearTimeout(redirectTimer);
+      clearTimeout(fallbackTimer);
+    };
   }, [searchParams, user, navigate]);
 
-  // Only show error UI if there's an error - otherwise redirect happens immediately
+  // Show error UI
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-destructive/5 to-background">
@@ -87,8 +102,45 @@ const CheckoutRedirect = () => {
     );
   }
 
-  // This should never be seen - redirect happens immediately in useEffect
-  return null;
+  // Show redirecting UI
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-primary/5 to-background">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card className="max-w-md w-full p-8 text-center glass-strong">
+          <div className="mx-auto w-20 h-20 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <Loader2 className="w-12 h-12 text-primary animate-spin" />
+          </div>
+          <h2 className="text-2xl font-bold mb-4">Redirecting to Stripe...</h2>
+          <p className="text-muted-foreground mb-6">
+            You'll be redirected to complete your purchase in just a moment.
+          </p>
+          {showManualLink && redirectUrl && (
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">Taking too long?</p>
+              <Button 
+                onClick={() => window.location.href = redirectUrl}
+                className="w-full"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Click here to continue
+              </Button>
+              <Button 
+                onClick={() => navigate('/pricing')}
+                variant="outline"
+                className="w-full"
+              >
+                Back to Pricing
+              </Button>
+            </div>
+          )}
+        </Card>
+      </motion.div>
+    </div>
+  );
 };
 
 export default CheckoutRedirect;
