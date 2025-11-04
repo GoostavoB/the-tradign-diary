@@ -331,11 +331,30 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
             </div>
           </div>
           
-          {/* Rotating ring - hidden on mobile for performance */}
-          <div 
-            className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-br from-primary to-accent opacity-30 animate-spin-slow hidden md:block" 
-            style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}
-          />
+          {/* Trending arrows - semantic meaning for trading */}
+          <div className="absolute inset-0 hidden md:block">
+            {[0, 90, 180, 270].map((rotation, i) => (
+              <motion.div
+                key={i}
+                className="absolute top-1/2 left-1/2"
+                style={{
+                  transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-60px)`,
+                }}
+                animate={{
+                  y: [-2, -6, -2],
+                  opacity: [0.3, 0.7, 0.3],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: i * 0.3,
+                  ease: "easeInOut"
+                }}
+              >
+                <TrendingUp className="w-4 h-4 text-primary" />
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* Title - Responsive */}
