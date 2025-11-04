@@ -311,28 +311,6 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
     <div className="space-y-6">
       {/* Hero Section - Mobile Optimized Premium */}
       <div className="text-center mb-8 md:mb-12 px-4">
-        {/* Animated Icon - Responsive */}
-        <div className="relative mb-6 md:mb-8 inline-flex items-center justify-center">
-          {/* Floating particles - hidden on mobile */}
-          <div className="absolute inset-0 -z-10 hidden md:block">
-            <div className="particle-float particle-1" />
-            <div className="particle-float particle-2" />
-            <div className="particle-float particle-3" />
-            <div className="particle-float particle-4" />
-          </div>
-          
-          {/* Outer glow ring */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 opacity-20 blur-3xl scale-150 animate-pulse-slow" />
-          
-          {/* Inner gradient circle - responsive size */}
-          <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-primary via-secondary to-accent p-1 shadow-2xl">
-            <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
-              <Sparkles className="w-14 h-14 md:w-20 md:h-20 text-transparent bg-clip-text bg-gradient-to-br from-primary to-accent" strokeWidth={1.5} />
-            </div>
-          </div>
-          
-        </div>
-
         {/* Title - Responsive */}
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-3 md:mb-4 tracking-tight">
           <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent drop-shadow-2xl">
