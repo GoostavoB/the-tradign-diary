@@ -11,7 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
 import { toast } from 'sonner';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { X, FileSpreadsheet, Check, ChevronsUpDown, Plus } from 'lucide-react';
+import { X, FileSpreadsheet, Check, ChevronsUpDown, Plus, ChevronDown } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { UploadHistory } from '@/components/UploadHistory';
 import { DuplicateTradeDialog } from '@/components/DuplicateTradeDialog';
