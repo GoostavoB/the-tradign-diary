@@ -4,12 +4,16 @@
       "source": "/(.*)",
       "headers": [
         {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.lovable.app https://*.lovable.dev https://fonts.googleapis.com https://qziawervfvptoretkjrn.supabase.co https://api.openai.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.lovable.app https://*.lovable.dev https://qziawervfvptoretkjrn.supabase.co https://api.openai.com wss://*.lovable.app wss://*.lovable.dev wss://qziawervfvptoretkjrn.supabase.co; frame-src 'self' https://*.lovable.app https://*.lovable.dev; worker-src 'self' blob:; frame-ancestors 'self' https://*.lovable.app https://*.lovable.dev;"
+        },
+        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
         },
         {
           "key": "X-Frame-Options",
-          "value": "DENY"
+          "value": "SAMEORIGIN"
         },
         {
           "key": "X-XSS-Protection",
