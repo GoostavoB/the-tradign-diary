@@ -50,39 +50,30 @@ serve(async (req) => {
     });
 
     // Build prompt based on whether annotations are provided
-    let userPrompt = `Extract ALL trades from this trading screenshot. Analyze the image carefully and return a JSON array of trade objects.
+    let userPrompt = `Look at this trading history screenshot and organize all the trading data you can see.
 
-CRITICAL FIELDS (MUST be present):
-- direction: 'long' or 'short' (REQUIRED)
-- symbol: asset/pair like 'BTC', 'BTCUSDT', 'ETHUSDT' (REQUIRED)
-- pnl: profit/loss as a number (REQUIRED)
+For each trade row, extract whatever information is visible:
+- Symbol/Asset (like BTC, BTCUSDT, ETHUSDT, LINKUSDT, SOLUSDT)
+- Direction (Long/Short or Buy/Sell - either format works)
+- PnL (profit/loss - can be a number, percentage, or both)
+- Entry and Exit prices (if shown)
+- Position size
+- Leverage
+- Margin used
+- Fees (trading fee, funding fee)
+- Timestamps (open time, close time)
 
-IMPORTANT FIELDS (extract if visible):
-- entry_price: entry price number
-- exit_price: exit price number
-- position_size: position size number
-- leverage: leverage multiplier (default 1)
-- margin: margin used
-- trading_fee: trading fee paid
-- funding_fee: funding fee paid
-- opened_at: ISO timestamp when trade opened
-- closed_at: ISO timestamp when trade closed
+Don't worry about the exact broker or format - just extract what you see clearly.
+If a field isn't visible or readable, skip it.
 
-Return ONLY valid JSON array with this structure:
+Return as a JSON array where each trade is an object with the fields you found. Example:
 [
   {
-    "direction": "long",
     "symbol": "BTCUSDT",
+    "direction": "long",
     "pnl": 150.50,
     "entry_price": 45000,
-    "exit_price": 46000,
-    "position_size": 0.5,
-    "leverage": 10,
-    "margin": 2250,
-    "trading_fee": 5.25,
-    "funding_fee": 2.15,
-    "opened_at": "2025-01-15T10:30:00Z",
-    "closed_at": "2025-01-15T14:45:00Z"
+    "exit_price": 46000
   }
 ]`;
 
@@ -112,7 +103,7 @@ Return ONLY valid JSON array with this structure:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-pro',
+        model: 'openai/gpt-5',
         messages: [
           {
             role: 'system',
@@ -124,13 +115,14 @@ Return ONLY valid JSON array with this structure:
               { type: 'text', text: userPrompt },
               {
                 type: 'image_url',
-                image_url: { url: imageBase64 }
+                image_url: { 
+                  url: imageBase64.startsWith('data:') ? imageBase64 : `data:image/png;base64,${imageBase64}`
+                }
               }
             ]
           }
         ],
-        temperature: 0.1,
-        max_tokens: 4000
+        max_completion_tokens: 4000
       })
     });
 
@@ -214,15 +206,20 @@ Return ONLY valid JSON array with this structure:
       tradesData = [tradesData];
     }
 
-    // Validate and normalize trades
+    // Validate and normalize trades - accept trades with flexible criteria
     const validTrades = tradesData
       .filter((t: any) => {
-        // Must have critical fields
+        // Must have at minimum: direction + symbol
         const hasDirection = t.direction || t.side;
         const hasSymbol = t.symbol || t.asset || t.pair;
-        const hasPnL = typeof t.pnl === 'number' || typeof t.profit_loss === 'number';
         
-        return hasDirection && hasSymbol && hasPnL;
+        // Accept if we have PnL, OR entry/exit prices, OR percentage
+        const hasPnL = typeof t.pnl === 'number' || typeof t.profit_loss === 'number';
+        const hasPrices = (t.entry_price && t.exit_price);
+        const hasPercent = typeof t.roi === 'number' || String(t.pnl || '').includes('%');
+        
+        // Accept trade if we have direction + symbol + any price/pnl info
+        return hasDirection && hasSymbol && (hasPnL || hasPrices || hasPercent);
       })
       .map((t: any) => {
         // Normalize field names
@@ -279,6 +276,14 @@ Return ONLY valid JSON array with this structure:
       });
 
     console.log(`✅ Extracted ${validTrades.length} valid trades`);
+    
+    // Log when 0 trades found for debugging
+    if (validTrades.length === 0) {
+      console.log('⚠️ Zero trades extracted');
+      console.log('Raw AI response length:', content.length);
+      console.log('Parsed trades count:', tradesData.length);
+      console.log('Failed validation:', tradesData.length - validTrades.length);
+    }
 
     // Determine if we need annotation based on results
     const needsAnnotation = validTrades.length === 0 && !annotations;

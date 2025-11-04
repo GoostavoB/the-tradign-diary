@@ -216,13 +216,12 @@ export function SmartUpload({
           error
         } = await supabase.functions.invoke('vision-extract-trades', {
           body: {
-            imageBase64: imageBase64.split(',')[1],
+            imageBase64: imageBase64,  // Send full data URL
             broker: broker || undefined
           }
         });
-        if (error) throw error;
-        if (!data.success) {
-          throw new Error(data.error || 'Extraction failed');
+        if (error || data?.error) {
+          throw new Error(data?.error || error?.message || 'Extraction failed');
         }
         const trades = data.trades || [];
 
