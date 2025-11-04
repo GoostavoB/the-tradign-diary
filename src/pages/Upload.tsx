@@ -28,6 +28,9 @@ import { BrokerSelect } from '@/components/upload/BrokerSelect';
 import { EnhancedFileUpload } from '@/components/upload/EnhancedFileUpload';
 import { MultiImageUpload } from '@/components/upload/MultiImageUpload';
 import { AIFeedback } from '@/components/upload/AIFeedback';
+import { TradeSelectionModal } from '@/components/upload/TradeSelectionModal';
+import { BulkReviewModal } from '@/components/upload/BulkReviewModal';
+import { ManualTradeEntryModal } from '@/components/upload/ManualTradeEntryModal';
 import { runOCR, type OCRResult } from '@/utils/ocrPipeline';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { pageMeta } from '@/utils/seoHelpers';
@@ -155,6 +158,15 @@ const Upload = () => {
   const [ocrRunning, setOcrRunning] = useState(false);
   const [brokerError, setBrokerError] = useState(false);
   const brokerFieldRef = useRef<HTMLDivElement>(null);
+  
+  // Vision extraction states
+  const [needsAnnotation, setNeedsAnnotation] = useState(false);
+  const [annotationReason, setAnnotationReason] = useState('');
+  const [allExtractedTrades, setAllExtractedTrades] = useState<ExtractedTrade[]>([]);
+  const [showTradeSelection, setShowTradeSelection] = useState(false);
+  const [showBulkReview, setShowBulkReview] = useState(false);
+  const [showManualEntry, setShowManualEntry] = useState(false);
+  const [blurDetected, setBlurDetected] = useState(false);
   
   const [formData, setFormData] = useState({
     symbol: '',
@@ -308,6 +320,54 @@ const Upload = () => {
     }
   };
 
+  const detectBlur = async (imageBase64: string): Promise<number> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(0);
+          return;
+        }
+
+        // Use smaller canvas for faster blur detection
+        const size = 100;
+        canvas.width = size;
+        canvas.height = size;
+        ctx.drawImage(img, 0, 0, size, size);
+
+        const imageData = ctx.getImageData(0, 0, size, size);
+        const data = imageData.data;
+
+        // Laplacian variance method (simple blur detection)
+        let sum = 0;
+        let count = 0;
+
+        for (let y = 1; y < size - 1; y++) {
+          for (let x = 1; x < size - 1; x++) {
+            const i = (y * size + x) * 4;
+            const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+            
+            const grayLeft = data[i - 4] * 0.299 + data[i - 3] * 0.587 + data[i - 2] * 0.114;
+            const grayRight = data[i + 4] * 0.299 + data[i + 5] * 0.587 + data[i + 6] * 0.114;
+            const grayUp = data[i - size * 4] * 0.299 + data[i - size * 4 + 1] * 0.587 + data[i - size * 4 + 2] * 0.114;
+            const grayDown = data[i + size * 4] * 0.299 + data[i + size * 4 + 1] * 0.587 + data[i + size * 4 + 2] * 0.114;
+
+            const variance = Math.abs(4 * gray - grayLeft - grayRight - grayUp - grayDown);
+            sum += variance;
+            count++;
+          }
+        }
+
+        const blurScore = sum / count / 255; // Normalize 0-1
+        resolve(blurScore);
+      };
+      img.onerror = () => resolve(0);
+      img.src = imageBase64;
+    });
+  };
+
   const compressAndResizeImage = async (file: File, forOCR: boolean = false): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -382,38 +442,30 @@ const Upload = () => {
         compressionTimeout
       ]);
       
+      // Client-side blur detection
+      toast.info('Checking image quality...', { duration: 500 });
+      const blurScore = await detectBlur(compressedBase64);
+      console.log('📸 Blur score:', blurScore.toFixed(2));
+      
+      if (blurScore < 0.15) {
+        setBlurDetected(true);
+        toast.error('Image is too blurry', {
+          description: 'Please upload a clearer screenshot for better extraction results.',
+          duration: 5000
+        });
+        return;
+      }
+      
+      setBlurDetected(false);
       setExtractionImage(file);
       setExtractionPreview(compressedBase64);
       
-      toast.info('Running OCR...', { duration: 500 });
-      
-      // Run OCR in background with timeout (5 seconds via runOCR)
-      setOcrRunning(true);
-      try {
-        const ocr = await runOCR(file);
-        setOcrResult(ocr);
-        console.log('✅ OCR Quality Score:', ocr.qualityScore.toFixed(2), 
-                    'Confidence:', ocr.confidence.toFixed(2));
-        
-        if (ocr.qualityScore >= 0.80) {
-          toast.success('Image ready! High OCR quality - using cost-efficient processing.', {
-            description: `Quality: ${Math.round(ocr.qualityScore * 100)}%`
-          });
-        } else {
-          toast.success('Image ready for extraction!');
-        }
-      } catch (ocrError) {
-        console.warn('⚠️ OCR failed or timeout, will use vision fallback:', ocrError);
-        toast.success('Image ready for extraction!');
-      } finally {
-        setOcrRunning(false);
-      }
+      toast.success('Image ready for extraction!');
     } catch (error) {
       console.error('Image processing error:', error);
       toast.error('Failed to process image', {
         description: error instanceof Error ? error.message : 'Please try with a different image'
       });
-      setOcrRunning(false);
     }
   };
 
@@ -489,29 +541,28 @@ const Upload = () => {
 
   const extractTradeInfo = async () => {
     setExtractedTrades([]);
+    setAllExtractedTrades([]);
     const startedAt = Date.now();
     
-    uploadLogger.extraction('Starting trade extraction', {
+    uploadLogger.extraction('Starting vision-based trade extraction', {
       hasAnnotations: annotations.length > 0,
-      preSelectedBroker,
-      hasOCRResult: !!ocrResult
+      preSelectedBroker
     });
 
     try {
-      // Step 1: Uploading (0-20%)
+      // Step 1: Uploading (0-30%)
       setUploadStep(1);
-      setUploadProgress({ stage: 'uploading', percentage: 10, message: 'Uploading image...' });
-      setProcessingMessage('Uploading your image...');
-      uploadLogger.extraction('Step 1: Uploading image');
-      await new Promise(resolve => setTimeout(resolve, 500));
+      setUploadProgress({ stage: 'uploading', percentage: 15, message: 'Preparing image...' });
+      setProcessingMessage('Preparing your image...');
+      uploadLogger.extraction('Step 1: Preparing image');
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-      // Step 2: OCR & AI Extraction (20-70%)
+      // Step 2: Vision AI Extraction (30-90%)
       setUploadStep(2);
-      setUploadProgress({ stage: 'ocr', percentage: 30, message: 'Reading text from image...' });
-      setProcessingMessage('Extracting trade data with AI...');
-      uploadLogger.extraction('Step 2: OCR & AI extraction');
+      setUploadProgress({ stage: 'extraction', percentage: 40, message: 'AI analyzing your trades...' });
+      setProcessingMessage('Extracting trade data with vision AI...');
+      uploadLogger.extraction('Step 2: Vision AI extraction');
       
-      // Guard against oversized payloads - recompress if needed
       let imageToSend = extractionPreview;
       const approxBytes = Math.floor((imageToSend?.length || 0) * 0.75);
       const LIMIT = 10 * 1024 * 1024; // 10MB
@@ -521,183 +572,121 @@ const Upload = () => {
         toast.info('Compressing large image...', { duration: 1000 });
         imageToSend = await compressAndResizeImage(extractionImage, false);
         setExtractionPreview(imageToSend);
-        uploadLogger.compression('Image compressed successfully', {
-          originalBytes: approxBytes,
-          newBytes: Math.floor((imageToSend?.length || 0) * 0.75)
-        });
       }
       
-      setUploadProgress({ stage: 'extraction', percentage: 50, message: 'AI analyzing your trades...' });
-      uploadLogger.extraction('Sending image to AI', {
+      setUploadProgress({ stage: 'extraction', percentage: 60, message: 'Vision model analyzing...' });
+      uploadLogger.extraction('Calling vision-extract-trades', {
         payloadSizeBytes: Math.floor((imageToSend?.length || 0) * 0.75),
         broker: preSelectedBroker,
         annotationCount: annotations.length
       });
       
-      // Progressive timeout messages
-      const progressTimer1 = setTimeout(() => {
-        setProcessingMessage('Still processing your image... This can take up to 45 seconds.');
-        toast.info('Still processing...', { duration: 2000 });
-        uploadLogger.extraction('Processing taking longer than 15s');
-      }, 15000);
-      
-      const progressTimer2 = setTimeout(() => {
-        setProcessingMessage('Almost done... Thanks for your patience!');
-        toast.info('Almost there...', { duration: 2000 });
-        uploadLogger.extraction('Processing taking longer than 30s');
-      }, 30000);
-      
-      // Extended timeout for backend call (45 seconds)
-      const INVOKE_TIMEOUT_MS = 45000;
-      const invokePromise = supabase.functions.invoke('extract-trade-info', {
+      const INVOKE_TIMEOUT_MS = 30000; // 30 seconds (faster than old system)
+      const invokePromise = supabase.functions.invoke('vision-extract-trades', {
         body: { 
           imageBase64: imageToSend,
           broker: preSelectedBroker || null,
-          annotations: annotations.length > 0 ? annotations : null,
-          // Include OCR data for cost optimization
-          ocrText: ocrResult?.text,
-          ocrConfidence: ocrResult?.confidence,
-          imageHash: ocrResult?.imageHash,
-          perceptualHash: ocrResult?.perceptualHash,
+          annotations: annotations.length > 0 ? annotations : null
         }
       });
       
       const timeoutPromise = new Promise<never>((_, reject) => 
         setTimeout(() => {
-          uploadLogger.extractionError('Extraction timeout after 45 seconds', new Error('Timeout'));
-          reject(new Error('Extraction timed out after 45 seconds. Please try again or use manual entry.'));
+          uploadLogger.extractionError('Extraction timeout after 30 seconds', new Error('Timeout'));
+          reject(new Error('Extraction timed out. Please try again.'));
         }, INVOKE_TIMEOUT_MS)
       );
       
       const { data, error } = await Promise.race([invokePromise, timeoutPromise]) as any;
-      
-      // Clear progress timers
-      clearTimeout(progressTimer1);
-      clearTimeout(progressTimer2);
 
       if (error) {
-        uploadLogger.extractionError('Edge function returned error', error);
+        uploadLogger.extractionError('Vision extraction error', error);
         setUploadProgress({ stage: 'idle', percentage: 0, message: '' });
         const status = (error as any)?.status || (error as any)?.cause?.status;
         const errMsg = (data as any)?.error || (error as any)?.message || 'Failed to extract trade information';
-        const errDetails = (data as any)?.details || '';
-        const retryAfter = (data as any)?.retryAfter || 60;
         
-        // Enhanced error messages with actions
-        if (status === 402 || /credit/i.test(errMsg)) {
-          uploadLogger.extractionError('Credits exhausted', new Error(errMsg));
-          toast.error('No Credits Remaining', {
-            description: 'You need at least 1 credit to extract trades. Purchase more credits or upgrade your plan.',
-            action: {
-              label: 'Get Credits',
-              onClick: () => (window.location.href = '/#pricing-section')
-            }
+        if (status === 402 || /credit/i.test(errMsg) || /payment/i.test(errMsg)) {
+          toast.error('AI Credits Exhausted', {
+            description: 'Please add funds to your Lovable workspace to continue using AI extraction.',
+            duration: 8000
           });
         } else if (status === 429 || /rate limit/i.test(errMsg)) {
-          uploadLogger.extractionError('Rate limit hit', new Error(errMsg));
-          toast.error('Upload Limit Reached', {
-            description: `You've reached the rate limit. Wait ${retryAfter} seconds or upgrade to Pro for unlimited uploads.`,
-            duration: 6000,
-            action: {
-              label: 'Upgrade',
-              onClick: () => (window.location.href = '/#pricing-section')
-            }
+          toast.error('Rate Limit Exceeded', {
+            description: 'Too many requests. Please wait a moment and try again.',
+            duration: 6000
           });
-        } else if (/timeout/i.test(errMsg)) {
-          uploadLogger.extractionError('Timeout', new Error(errMsg));
-          toast.error('Processing Timeout', {
-            description: 'The image took too long to process. Try with a smaller or clearer image.'
-          });
-        } else if (status === 401 || /unauthorized|authentication/i.test(errMsg)) {
-          uploadLogger.extractionError('Auth error', new Error(errMsg));
+        } else if (status === 401) {
           toast.error('Session Expired', {
-            description: 'Your login session has expired. Please log in again to continue.',
+            description: 'Please log in again.',
             action: {
               label: 'Log In',
               onClick: () => navigate('/auth')
             }
           });
-        } else if (/parse/i.test(errMsg)) {
-          uploadLogger.extractionError('Parse error from AI', new Error(errMsg));
-          toast.error('Invalid Trade Data', {
-            description: 'The extracted data is incomplete or invalid. Please use manual entry instead.'
-          });
         } else {
-          uploadLogger.extractionError('Extraction failed', new Error(`${errMsg}: ${errDetails}`));
-          toast.error(errMsg || 'Extraction Failed', {
-            description: errDetails || error instanceof Error ? error.message : 'Could not extract trade data from this image. Please try a clearer screenshot.',
-            action: errDetails ? undefined : {
-              label: 'Tips',
-              onClick: () => window.open('/docs/upload-tips', '_blank')
+          toast.error('Extraction Failed', {
+            description: errMsg,
+            action: {
+              label: 'Try Manual Entry',
+              onClick: () => setShowManualEntry(true)
             }
           });
         }
         return;
       }
 
-      if (data?.trades && data.trades.length > 0) {
-        uploadLogger.success('Extraction', `Extracted ${data.trades.length} trades`, {
-          tradeCount: data.trades.length,
-          cached: data.cached
+      // Handle response
+      if (data?.needsAnnotation) {
+        // Needs annotation - show annotation UI
+        setUploadProgress({ stage: 'idle', percentage: 0, message: '' });
+        setNeedsAnnotation(true);
+        setAnnotationReason(data.reason || data.message || 'Could not detect trade layout');
+        
+        toast.info('Annotation Needed', {
+          description: data.message || 'Please mark ONE example trade to help identify the data layout.',
+          duration: 8000
         });
         
-        // Step 3: Parsing trades (70-85%)
-        setUploadStep(3);
-        setUploadProgress({ stage: 'parsing', percentage: 80, message: `Parsing ${data.trades.length} trades...` });
-        setProcessingMessage('Parsing extracted trades...');
-        uploadLogger.extraction('Step 3: Parsing trades');
-        await new Promise(resolve => setTimeout(resolve, 800));
+        // Auto-open annotator with guided mode
+        setShowAnnotator(true);
+        uploadLogger.extraction('Needs annotation', { reason: data.reason });
+        return;
+      }
 
-        // Step 4: Checking duplicates (85-95%)
-        setUploadStep(4);
-        setUploadProgress({ stage: 'duplicates', percentage: 90, message: 'Checking for duplicates...' });
-        setProcessingMessage('Checking for duplicates...');
-        uploadLogger.extraction('Step 4: Checking duplicates');
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Normalize trades (defensive fallback for older edge function versions)
-        const normalizedTrades = data.trades.map((t: any) => ({
-          symbol: t.symbol ?? t.asset ?? '',
-          side: (t.side ?? t.position_type ?? 'long').toLowerCase() as 'long' | 'short',
-          broker: t.broker ?? '',
-          setup: t.setup ?? '',
-          emotional_tag: t.emotional_tag ?? '',
-          entry_price: Number(t.entry_price) || 0,
-          exit_price: Number(t.exit_price) || 0,
-          position_size: Number(t.position_size) || 0,
-          leverage: Number(t.leverage) || 1,
-          profit_loss: Number(t.profit_loss) || 0,
-          funding_fee: Number(t.funding_fee) || 0,
-          trading_fee: Number(t.trading_fee) || 0,
-          roi: Number(t.roi) || 0,
-          margin: Number(t.margin) || 0,
-          opened_at: t.opened_at ?? '',
-          closed_at: t.closed_at ?? '',
-          period_of_day: t.period_of_day ?? 'morning',
-          duration_days: Number(t.duration_days) || 0,
-          duration_hours: Number(t.duration_hours) || 0,
-          duration_minutes: Number(t.duration_minutes) || 0,
-          notes: t.notes ?? ''
-        }));
-        
-        setExtractedTrades(normalizedTrades);
-        
-        // Complete! (100%)
-        setUploadProgress({ stage: 'complete', percentage: 100, message: 'Extraction complete!' });
-        uploadLogger.success('Extraction', 'All steps complete');
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        toast.success(`✅ Extracted ${data.trades.length} trade(s) from image!`, {
-          description: 'Review and save your trades below'
+      if (data?.trades && data.trades.length > 0) {
+        uploadLogger.success('Vision extraction', `Extracted ${data.trades.length} trades`, {
+          tradeCount: data.trades.length,
+          confidence: data.confidence
         });
+        
+        setUploadProgress({ stage: 'complete', percentage: 100, message: 'Extraction complete!' });
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        const trades = data.trades as ExtractedTrade[];
+        
+        // Check trade count: 1-10 = bulk review, 11+ = selection UI
+        if (trades.length <= 10) {
+          setAllExtractedTrades(trades);
+          setShowBulkReview(true);
+          toast.success(`Extracted ${trades.length} trade(s)!`, {
+            description: 'Review your trades before saving'
+          });
+        } else {
+          // More than 10 trades - show selection UI
+          setAllExtractedTrades(trades);
+          setShowTradeSelection(true);
+          toast.info(`Found ${trades.length} trades!`, {
+            description: 'Please select up to 10 trades to import'
+          });
+        }
       } else {
         setUploadProgress({ stage: 'idle', percentage: 0, message: '' });
-        uploadLogger.extraction('No trades found in response');
+        uploadLogger.extraction('No trades in successful response');
         toast.error('No Trades Detected', {
-          description: 'Could not find any trade data in this image. Make sure the screenshot clearly shows entry/exit prices, position size, and P&L.',
+          description: 'This does not appear to be a trade screenshot.',
           action: {
-            label: 'Tips',
-            onClick: () => window.open('/docs/upload-tips', '_blank')
+            label: 'Try Manual Entry',
+            onClick: () => setShowManualEntry(true)
           }
         });
       }
@@ -732,8 +721,12 @@ const Upload = () => {
     setExtractionImage(null);
     setExtractionPreview(null);
     setExtractedTrades([]);
+    setAllExtractedTrades([]);
     setAnnotations([]);
     setShowAnnotator(false);
+    setNeedsAnnotation(false);
+    setShowTradeSelection(false);
+    setShowBulkReview(false);
   };
 
   const uploadScreenshot = async (tradeId: string): Promise<string | null> => {

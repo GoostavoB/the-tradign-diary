@@ -1,5 +1,8 @@
 project_id = "qziawervfvptoretkjrn"
 
+[functions.vision-extract-trades]
+verify_jwt = true
+
 [functions.claude-database-api]
 verify_jwt = false
 
