@@ -187,6 +187,105 @@
     background-clip: text;
   }
 
+  /* AI gradient for Smart Upload */
+  .gradient-ai {
+    background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+  }
+
+  .gradient-ai-border {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(hsl(var(--background)), hsl(var(--background))) padding-box,
+                linear-gradient(135deg, #8b5cf6, #3b82f6) border-box;
+  }
+
+  /* Shimmer effect for premium buttons */
+  .shimmer-button {
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: shimmer-slide 3s infinite;
+  }
+
+  @keyframes shimmer-slide {
+    0% {
+      transform: translateX(-100%) translateY(-100%);
+    }
+    100% {
+      transform: translateX(100%) translateY(100%);
+    }
+  }
+
+  /* Premium drop zone */
+  .drop-zone-premium {
+    border: 2px dashed hsl(var(--border));
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.03) 0%,
+      rgba(59, 130, 246, 0.03) 100%
+    );
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .drop-zone-premium:hover {
+    border-color: hsl(var(--primary));
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.08) 0%,
+      rgba(59, 130, 246, 0.08) 100%
+    );
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
+  }
+
+  .drop-zone-premium.dragging {
+    border-color: #8b5cf6;
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.12) 0%,
+      rgba(59, 130, 246, 0.12) 100%
+    );
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.25);
+    transform: scale(1.02);
+  }
+
+  /* Image preview cards */
+  .image-card-premium {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .image-card-premium:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Processing states */
+  .processing-pulse {
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
   /* Hero-specific gradient text (blue brand) */
   .gradient-text-hero {
     background: linear-gradient(135deg, 

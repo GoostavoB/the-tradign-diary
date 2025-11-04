@@ -25,12 +25,11 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useProfitMilestoneBadges } from '@/hooks/useProfitMilestoneBadges';
 import { ImageAnnotator, Annotation } from '@/components/upload/ImageAnnotator';
 import { BrokerSelect } from '@/components/upload/BrokerSelect';
-import { EnhancedFileUpload } from '@/components/upload/EnhancedFileUpload';
-import { MultiImageUpload } from '@/components/upload/MultiImageUpload';
 import { AIFeedback } from '@/components/upload/AIFeedback';
 import { TradeSelectionModal } from '@/components/upload/TradeSelectionModal';
 import { BulkReviewModal } from '@/components/upload/BulkReviewModal';
 import { ManualTradeEntryModal } from '@/components/upload/ManualTradeEntryModal';
+import { SmartUpload } from '@/components/upload/SmartUpload';
 import { runOCR, type OCRResult } from '@/utils/ocrPipeline';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { pageMeta } from '@/utils/seoHelpers';
@@ -1200,44 +1199,48 @@ const Upload = () => {
         {/* Daily Upload Limit Display */}
         <DailyUploadStatus />
 
-        <Tabs defaultValue="ai-extract" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="ai-extract">
-              <Sparkles className="w-4 h-4 mr-2" />
-              AI Extract
-            </TabsTrigger>
-            <TabsTrigger value="csv-import">
-              <FileSpreadsheet className="w-4 h-4 mr-2" />
-              CSV Import
-            </TabsTrigger>
-            <TabsTrigger value="batch-upload">
-              <Images className="w-4 h-4 mr-2" />
-              Batch Upload
-            </TabsTrigger>
-            <TabsTrigger value="manual">Manual Entry</TabsTrigger>
-          </TabsList>
+        {/* Hero: Smart Upload */}
+        <Card className="glass-card-refined">
+          <div className="p-6">
+            <SmartUpload 
+              onTradesExtracted={(trades) => {
+                setAllExtractedTrades(trades);
+                if (trades.length > 10) {
+                  setShowTradeSelection(true);
+                } else {
+                  setShowBulkReview(true);
+                }
+              }}
+            />
+          </div>
+        </Card>
 
-          <TabsContent value="csv-import" className="space-y-6">
-            <Card className="p-6 glass">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold">Import from CSV</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Import your trades directly from your exchange or your existing trading journal.
-                  </p>
-                </div>
-                
-                <UploadErrorBoundary>
-                  <CSVUpload 
-                    onTradesExtracted={(trades) => {
-                      setExtractedTrades(trades);
-                      setTradeEdits({});
-                      toast.success(`Parsed ${trades.length} trades from CSV`);
-                    }} 
-                  />
-                </UploadErrorBoundary>
+        {/* Secondary: CSV Import */}
+        <Card className="glass p-6">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-muted/50">
+                <FileSpreadsheet className="w-5 h-5 text-primary" />
               </div>
-            </Card>
+              <div>
+                <h3 className="text-lg font-semibold">Import from CSV</h3>
+                <p className="text-sm text-muted-foreground">
+                  Import trades directly from exchange exports
+                </p>
+              </div>
+            </div>
+            
+            <UploadErrorBoundary>
+              <CSVUpload 
+                onTradesExtracted={(trades) => {
+                  setExtractedTrades(trades);
+                  setTradeEdits({});
+                  toast.success(`Parsed ${trades.length} trades from CSV`);
+                }} 
+              />
+            </UploadErrorBoundary>
+          </div>
+        </Card>
 
             {/* CSV Extracted Trades Preview */}
             {extractedTrades.length > 0 && (
@@ -1305,13 +1308,61 @@ const Upload = () => {
                 </div>
               </Card>
             )}
-          </TabsContent>
 
-          <TabsContent value="batch-upload" className="space-y-6">
+        {/* Tertiary: Manual Entry Link */}
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            onClick={() => setShowManualEntry(true)}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Enter Trade Manually
+          </Button>
+        </div>
+
+        {/* Modals */}
+        <TradeSelectionModal
+          open={showTradeSelection}
+          trades={allExtractedTrades}
+          onConfirm={(selectedTrades) => {
+            setShowTradeSelection(false);
+            setAllExtractedTrades(selectedTrades);
+            setShowBulkReview(true);
+          }}
+          onCancel={() => setShowTradeSelection(false)}
+        />
+
+        <BulkReviewModal
+          open={showBulkReview}
+          trades={allExtractedTrades}
+          onSaveAll={async (editedTrades) => {
+            setShowBulkReview(false);
+            toast.success(`${editedTrades.length} trades saved!`);
+          }}
+          onCancel={() => {
+            setShowBulkReview(false);
+            setAllExtractedTrades([]);
+          }}
+        />
+
+        <ManualTradeEntryModal
+          open={showManualEntry}
+          onClose={() => setShowManualEntry(false)}
+          onSave={async (trade) => {
+            setShowManualEntry(false);
+            toast.success('Trade saved!');
+          }}
+        />
+
+        <Tabs defaultValue="manual" className="w-full mt-8">
+          <TabsList className="grid w-full grid-cols-1">
+            <TabsTrigger value="manual">Legacy Manual Entry</TabsTrigger>
+          </TabsList>
+          <TabsContent value="manual" className="space-y-6">
             <Card className="p-6 glass">
               <div className="space-y-4">
-                <UploadErrorBoundary>
-                  <MultiImageUpload
+                {/* Keep existing manual form */}
                     onTradesExtracted={(trades) => {
                       setExtractedTrades(trades);
                       // Clear any existing edits
