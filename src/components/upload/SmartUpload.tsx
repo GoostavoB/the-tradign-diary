@@ -9,13 +9,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { BrokerSelect } from './BrokerSelect';
 import type { ExtractedTrade } from '@/types/trade';
 import { cn } from '@/lib/utils';
-
 interface SmartUploadProps {
   onTradesExtracted: (trades: ExtractedTrade[]) => void;
   onShowAnnotator?: () => void;
   maxImages?: number;
 }
-
 interface ImageQueueItem {
   file: File;
   preview: string;
@@ -25,8 +23,11 @@ interface ImageQueueItem {
   trades?: ExtractedTrade[];
   error?: string;
 }
-
-export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10 }: SmartUploadProps) {
+export function SmartUpload({
+  onTradesExtracted,
+  onShowAnnotator,
+  maxImages = 10
+}: SmartUploadProps) {
   const [imageQueue, setImageQueue] = useState<ImageQueueItem[]>([]);
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -38,16 +39,14 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
 
   // Client-side blur detection
   const detectBlur = async (file: File): Promise<boolean> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const img = new Image();
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
         ctx?.drawImage(img, 0, 0);
-
         const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
         if (!imageData) return resolve(false);
 
@@ -55,80 +54,66 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
         const data = imageData.data;
         let sum = 0;
         const step = 4;
-
         for (let i = 0; i < data.length; i += step * 4) {
           const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
           sum += gray * gray;
         }
-
         const variance = sum / (data.length / 4);
         const isBlurry = variance < 100; // Hard block only if extremely blurry
         resolve(isBlurry);
       };
-
       img.src = URL.createObjectURL(file);
     });
   };
-
   const getImageVariance = async (file: File): Promise<number> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const img = new Image();
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
         ctx?.drawImage(img, 0, 0);
-
         const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
         if (!imageData) {
           resolve(1000); // Assume high quality if can't process
           return;
         }
-
-        const { data } = imageData;
+        const {
+          data
+        } = imageData;
         let sum = 0;
-        
         for (let i = 0; i < data.length; i += 4) {
           const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
           const laplacian = Math.abs(gray);
           sum += laplacian * laplacian;
         }
-
         const variance = sum / (data.length / 4);
         resolve(variance);
       };
-
       img.onerror = () => resolve(1000); // Assume high quality on error
       img.src = URL.createObjectURL(file);
     });
   };
-
   const handleFileSelect = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
-
     const newFiles = Array.from(files).slice(0, maxImages - imageQueue.length);
     const validatedFiles: ImageQueueItem[] = [];
     let warningCount = 0;
-    
     for (const file of newFiles) {
       if (!file.type.startsWith('image/')) {
         toast.error(`${file.name} is not an image file`);
         continue;
       }
-
       if (file.size > 10 * 1024 * 1024) {
         toast.error(`${file.name} is too large (max 10MB)`);
         continue;
       }
-
       const isBlurry = await detectBlur(file);
-      
+
       // Determine quality level based on blur detection
       const variance = await getImageVariance(file);
       let quality: 'high' | 'medium' | 'low' = 'high';
-      
       if (variance < 50) {
         quality = 'low';
         warningCount++;
@@ -136,165 +121,151 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
         quality = 'medium';
         warningCount++;
       }
-
       validatedFiles.push({
         file,
         preview: URL.createObjectURL(file),
         status: 'queued',
-        quality,
+        quality
       });
     }
-
     if (validatedFiles.length > 0) {
-      setImageQueue((prev) => [...prev, ...validatedFiles]);
-      
+      setImageQueue(prev => [...prev, ...validatedFiles]);
       if (warningCount > 0) {
-        toast.warning(
-          `${warningCount} image${warningCount > 1 ? 's' : ''} may have quality issues`,
-          { description: "We'll still try to extract data. You can review and edit results." }
-        );
+        toast.warning(`${warningCount} image${warningCount > 1 ? 's' : ''} may have quality issues`, {
+          description: "We'll still try to extract data. You can review and edit results."
+        });
       } else {
         toast.success(`${validatedFiles.length} image${validatedFiles.length > 1 ? 's' : ''} added successfully`);
       }
     }
   };
-
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
-
   const handleDragLeave = () => {
     setIsDragging(false);
   };
-
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     await handleFileSelect(e.dataTransfer.files);
   };
-
   const removeImage = (index: number) => {
-    setImageQueue((prev) => {
+    setImageQueue(prev => {
       const newQueue = [...prev];
       URL.revokeObjectURL(newQueue[index].preview);
       newQueue.splice(index, 1);
       return newQueue;
     });
   };
-
   const clearAll = () => {
-    imageQueue.forEach((item) => URL.revokeObjectURL(item.preview));
+    imageQueue.forEach(item => URL.revokeObjectURL(item.preview));
     setImageQueue([]);
     setProgress(0);
     setCurrentImageIndex(0);
     setTotalTradesFound(0);
   };
-
   const processImages = async () => {
     if (imageQueue.length === 0) return;
-
     setProcessing(true);
     setProgress(0);
     setCurrentImageIndex(0);
     setTotalTradesFound(0);
-
     const allTrades: ExtractedTrade[] = [];
-    
     for (let i = 0; i < imageQueue.length; i++) {
       setCurrentImageIndex(i);
       const item = imageQueue[i];
-      
+
       // Update status to processing
-      setImageQueue((prev) => {
+      setImageQueue(prev => {
         const updated = [...prev];
-        updated[i] = { ...updated[i], status: 'processing', progress: 0 };
+        updated[i] = {
+          ...updated[i],
+          status: 'processing',
+          progress: 0
+        };
         return updated;
       });
 
       // Simulate progress animation
       const progressInterval = setInterval(() => {
-        setImageQueue((prev) => {
+        setImageQueue(prev => {
           const updated = [...prev];
           if (updated[i] && updated[i].progress !== undefined && updated[i].status === 'processing') {
-            updated[i] = { 
-              ...updated[i], 
-              progress: Math.min((updated[i].progress || 0) + 10, 90) 
+            updated[i] = {
+              ...updated[i],
+              progress: Math.min((updated[i].progress || 0) + 10, 90)
             };
           }
           return updated;
         });
       }, 300);
-
       try {
         // Convert file to base64
         const reader = new FileReader();
-        const base64Promise = new Promise<string>((resolve) => {
+        const base64Promise = new Promise<string>(resolve => {
           reader.onload = () => resolve(reader.result as string);
           reader.readAsDataURL(item.file);
         });
         const imageBase64 = await base64Promise;
 
         // Call vision extraction
-        const { data, error } = await supabase.functions.invoke('vision-extract-trades', {
+        const {
+          data,
+          error
+        } = await supabase.functions.invoke('vision-extract-trades', {
           body: {
             imageBase64: imageBase64.split(',')[1],
-            broker: broker || undefined,
-          },
+            broker: broker || undefined
+          }
         });
-
         if (error) throw error;
-
         if (!data.success) {
           throw new Error(data.error || 'Extraction failed');
         }
-
         const trades = data.trades || [];
-        
+
         // Determine quality by calculating variance
         const variance = await getImageVariance(item.file);
         const quality = variance > 1000 ? 'high' : variance > 500 ? 'medium' : 'low';
-        
+
         // Update status to success
         clearInterval(progressInterval);
-        setImageQueue((prev) => {
+        setImageQueue(prev => {
           const updated = [...prev];
-          updated[i] = { 
-            ...updated[i], 
+          updated[i] = {
+            ...updated[i],
             status: 'success',
             quality,
             progress: 100,
-            trades,
+            trades
           };
           return updated;
         });
-
         allTrades.push(...trades);
-        setTotalTradesFound((prev) => prev + trades.length);
-
+        setTotalTradesFound(prev => prev + trades.length);
       } catch (error: any) {
         console.error('Extraction error:', error);
-        
+
         // Update status to error
         clearInterval(progressInterval);
-        setImageQueue((prev) => {
+        setImageQueue(prev => {
           const updated = [...prev];
-          updated[i] = { 
-            ...updated[i], 
+          updated[i] = {
+            ...updated[i],
             status: 'error',
             progress: 0,
-            error: error.message || 'Failed to extract',
+            error: error.message || 'Failed to extract'
           };
           return updated;
         });
-
         toast.error(`Failed to extract from image ${i + 1}`);
       }
 
       // Update progress
-      setProgress(((i + 1) / imageQueue.length) * 100);
+      setProgress((i + 1) / imageQueue.length * 100);
     }
-
     setProcessing(false);
 
     // Call the callback with all trades
@@ -304,13 +275,10 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
       toast.error('No trades found in any images');
     }
   };
-
   const hasQueuedImages = imageQueue.length > 0;
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Hero Section - Mobile Optimized Premium */}
-      <div className="text-center mb-8 md:mb-12 px-4">
+      <div className="text-center mb-8 md:mb-12 px-4 my-[21px] py-[46px]">
         {/* Title - Responsive */}
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-3 md:mb-4 tracking-tight">
           <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent drop-shadow-2xl">
@@ -337,24 +305,10 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
       </div>
 
       {/* Drop Zone - Mobile-First Design */}
-      {!hasQueuedImages && (
-        <div className="relative group">
+      {!hasQueuedImages && <div className="relative group">
           <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-blue-600/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            onClick={() => fileInputRef.current?.click()}
-            className={cn(
-              "relative rounded-xl p-8 md:p-12 text-center cursor-pointer min-h-[180px] md:min-h-[220px]",
-              "border-2 border-dashed transition-all duration-300",
-              "bg-muted/30 flex flex-col items-center justify-center",
-              isDragging 
-                ? "border-blue-500 bg-blue-500/10 scale-[1.02]" 
-                : "border-border/50 hover:border-blue-500/50 active:scale-[0.98]"
-            )}
-          >
+          <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => fileInputRef.current?.click()} className={cn("relative rounded-xl p-8 md:p-12 text-center cursor-pointer min-h-[180px] md:min-h-[220px]", "border-2 border-dashed transition-all duration-300", "bg-muted/30 flex flex-col items-center justify-center", isDragging ? "border-blue-500 bg-blue-500/10 scale-[1.02]" : "border-border/50 hover:border-blue-500/50 active:scale-[0.98]")}>
             <Upload className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-3 md:mb-4 text-muted-foreground" />
             
             <p className="text-sm md:text-base text-foreground mb-1">
@@ -367,72 +321,66 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
               PNG, JPG, WEBP • Max 10 MB
             </p>
           </div>
-        </div>
-      )}
+        </div>}
 
       {/* Image List - Premium */}
-      {hasQueuedImages && (
-        <div className="space-y-4">
+      {hasQueuedImages && <div className="space-y-4">
           <AnimatePresence>
-            {imageQueue.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                transition={{ 
-                  delay: index * 0.05,
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 20
-                }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-muted/30 border border-border/50 hover:border-blue-500/30 transition-colors group"
-              >
+            {imageQueue.map((item, index) => <motion.div key={index} initial={{
+          opacity: 0,
+          scale: 0.95,
+          y: 10
+        }} animate={{
+          opacity: 1,
+          scale: 1,
+          y: 0
+        }} exit={{
+          opacity: 0,
+          scale: 0.95,
+          y: -10
+        }} transition={{
+          delay: index * 0.05,
+          type: "spring",
+          stiffness: 200,
+          damping: 20
+        }} className="flex items-center gap-4 p-4 rounded-xl bg-muted/30 border border-border/50 hover:border-blue-500/30 transition-colors group">
                 <div className="relative flex-shrink-0 w-16 h-16 rounded-lg bg-muted overflow-hidden">
                   <img src={item.preview} alt="" className="w-full h-full object-cover" />
                   
-                  {item.status === 'queued' && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-blue-600/20 backdrop-blur-[2px] flex flex-col items-center justify-center gap-1">
+                  {item.status === 'queued' && <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-blue-600/20 backdrop-blur-[2px] flex flex-col items-center justify-center gap-1">
                       <ImagePlus className="w-5 h-5 text-primary" />
                       <span className="text-[10px] font-bold text-primary">READY</span>
-                    </div>
-                  )}
+                    </div>}
                   
-                  {item.status === 'processing' && (
-                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
-                      <motion.div
-                        animate={{
-                          y: [0, -4, 0],
-                          opacity: [0.6, 1, 0.6],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      >
+                  {item.status === 'processing' && <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
+                      <motion.div animate={{
+                y: [0, -4, 0],
+                opacity: [0.6, 1, 0.6]
+              }} transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}>
                         <TrendingUp className="w-6 h-6 text-primary" />
                       </motion.div>
-                    </div>
-                  )}
+                    </div>}
                   
-                  {item.status === 'success' && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-600/20 backdrop-blur-[2px] flex items-center justify-center">
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
+                  {item.status === 'success' && <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-600/20 backdrop-blur-[2px] flex items-center justify-center">
+                      <motion.div initial={{
+                scale: 0
+              }} animate={{
+                scale: 1
+              }} transition={{
+                type: "spring",
+                stiffness: 300
+              }}>
                         <Check className="w-6 h-6 text-green-500" />
                       </motion.div>
-                    </div>
-                  )}
+                    </div>}
                   
-                  {item.status === 'error' && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-rose-600/20 backdrop-blur-[2px] flex items-center justify-center">
+                  {item.status === 'error' && <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-rose-600/20 backdrop-blur-[2px] flex items-center justify-center">
                       <AlertCircle className="w-6 h-6 text-red-500" />
-                    </div>
-                  )}
+                    </div>}
                 </div>
                 
                 <div className="flex-1 min-w-0">
@@ -447,95 +395,71 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
                     {item.status === 'error' && ' • Failed'}
                   </p>
                   
-                  {item.status === 'processing' && item.progress !== undefined && (
-                    <>
+                  {item.status === 'processing' && item.progress !== undefined && <>
                       <div className="h-1 bg-muted rounded-full overflow-hidden mb-1">
-                        <motion.div 
-                          className="h-full bg-blue-500"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${item.progress}%` }}
-                          transition={{ duration: 0.3 }}
-                        />
+                        <motion.div className="h-full bg-blue-500" initial={{
+                  width: 0
+                }} animate={{
+                  width: `${item.progress}%`
+                }} transition={{
+                  duration: 0.3
+                }} />
                       </div>
                       <p className="text-xs text-blue-500 font-medium">
                         {item.progress}%
                       </p>
-                    </>
-                  )}
+                    </>}
                   
-                  {item.status === 'success' && item.trades && (
-                    <p className="text-xs text-green-500 font-medium">
+                  {item.status === 'success' && item.trades && <p className="text-xs text-green-500 font-medium">
                       ✓ {item.trades.length} trade{item.trades.length !== 1 ? 's' : ''} found
-                    </p>
-                  )}
+                    </p>}
                   
-                  {item.status === 'error' && item.error && (
-                    <p className="text-xs text-red-500 font-medium">
+                  {item.status === 'error' && item.error && <p className="text-xs text-red-500 font-medium">
                       {item.error}
-                    </p>
-                  )}
+                    </p>}
                 </div>
                 
-                {item.quality && item.quality !== 'high' && (
-                  <div className={cn(
-                    "quality-indicator flex-shrink-0",
-                    item.quality === 'medium' && "quality-medium",
-                    item.quality === 'low' && "quality-low"
-                  )}>
+                {item.quality && item.quality !== 'high' && <div className={cn("quality-indicator flex-shrink-0", item.quality === 'medium' && "quality-medium", item.quality === 'low' && "quality-low")}>
                     <span className="text-xs uppercase font-bold">{item.quality}</span>
-                  </div>
-                )}
+                  </div>}
                 
-                {!processing && item.status === 'queued' && (
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => removeImage(index)}
-                    className="flex-shrink-0 w-8 h-8 rounded-full bg-muted hover:bg-destructive/20 flex items-center justify-center transition-colors"
-                  >
+                {!processing && item.status === 'queued' && <motion.button whileHover={{
+            scale: 1.1
+          }} whileTap={{
+            scale: 0.9
+          }} onClick={() => removeImage(index)} className="flex-shrink-0 w-8 h-8 rounded-full bg-muted hover:bg-destructive/20 flex items-center justify-center transition-colors">
                     <X className="w-4 h-4 text-muted-foreground hover:text-destructive" />
-                  </motion.button>
-                )}
+                  </motion.button>}
                 
-                {item.status === 'success' && (
-                  <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                )}
-                {item.status === 'error' && (
-                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                )}
-              </motion.div>
-            ))}
+                {item.status === 'success' && <Check className="w-5 h-5 text-green-500 flex-shrink-0" />}
+                {item.status === 'error' && <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />}
+              </motion.div>)}
           </AnimatePresence>
           
-          {imageQueue.length < maxImages && !processing && (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              onClick={() => fileInputRef.current?.click()}
-              className="w-full p-4 rounded-xl border-2 border-dashed border-border/50 hover:border-blue-500/50 bg-muted/20 hover:bg-muted/40 flex items-center justify-center gap-2 transition-all group"
-            >
+          {imageQueue.length < maxImages && !processing && <motion.button initial={{
+        opacity: 0
+      }} animate={{
+        opacity: 1
+      }} onClick={() => fileInputRef.current?.click()} className="w-full p-4 rounded-xl border-2 border-dashed border-border/50 hover:border-blue-500/50 bg-muted/20 hover:bg-muted/40 flex items-center justify-center gap-2 transition-all group">
               <Plus className="w-5 h-5 text-muted-foreground group-hover:text-blue-500 transition-colors" />
               <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                 Add More Images
               </span>
-            </motion.button>
-          )}
+            </motion.button>}
 
           {/* Broker Select */}
           <div className="flex items-center gap-4 pt-2">
-            <BrokerSelect
-              value={broker}
-              onChange={setBroker}
-            />
+            <BrokerSelect value={broker} onChange={setBroker} />
           </div>
 
           {/* Progress Bar (when processing) */}
-          {processing && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-2"
-            >
+          {processing && <motion.div initial={{
+        opacity: 0,
+        y: -10
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">
                   Processing Image {currentImageIndex + 1} of {imageQueue.length}
@@ -546,8 +470,7 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
               <p className="text-center text-sm text-muted-foreground">
                 {totalTradesFound} trades found so far
               </p>
-            </motion.div>
-          )}
+            </motion.div>}
 
           {/* Action Buttons - Mobile Optimized */}
           <div className="flex flex-col gap-4 pt-6 border-t border-border/50">
@@ -563,55 +486,29 @@ export function SmartUpload({ onTradesExtracted, onShowAnnotator, maxImages = 10
             
             {/* Buttons - Stack on mobile */}
             <div className="flex flex-col sm:flex-row items-stretch gap-3">
-              {!processing && (
-                <Button
-                  variant="ghost"
-                  onClick={clearAll}
-                  disabled={imageQueue.length === 0}
-                  size="lg"
-                  className="w-full sm:w-auto text-muted-foreground hover:text-foreground"
-                >
+              {!processing && <Button variant="ghost" onClick={clearAll} disabled={imageQueue.length === 0} size="lg" className="w-full sm:w-auto text-muted-foreground hover:text-foreground">
                   Cancel
-                </Button>
-              )}
-              <Button
-                onClick={processImages}
-                disabled={processing || imageQueue.length === 0}
-                size="lg"
-                className="w-full sm:flex-1 shimmer-button-premium text-white rounded-xl group relative overflow-hidden min-h-[44px]"
-              >
+                </Button>}
+              <Button onClick={processImages} disabled={processing || imageQueue.length === 0} size="lg" className="w-full sm:flex-1 shimmer-button-premium text-white rounded-xl group relative overflow-hidden min-h-[44px]">
                 {/* Background glow */}
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
                 
                 {/* Content */}
                 <div className="relative flex items-center justify-center gap-2 md:gap-3">
-                  {processing ? (
-                    <>
+                  {processing ? <>
                       <TrendingUp className="w-4 h-4 md:w-5 md:h-5 animate-pulse" />
                       <span className="text-sm md:text-base">Processing {currentImageIndex + 1}/{imageQueue.length}</span>
-                    </>
-                  ) : (
-                    <>
+                    </> : <>
                       <Sparkles className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-180 transition-transform duration-500" />
                       <span className="text-sm md:text-base">Upload {imageQueue.filter(i => i.status === 'queued').length} File{imageQueue.filter(i => i.status === 'queued').length !== 1 ? 's' : ''}</span>
-                    </>
-                  )}
+                    </>}
                 </div>
               </Button>
             </div>
           </div>
-        </div>
-      )}
+        </div>}
 
       {/* Hidden file input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        className="hidden"
-        onChange={(e) => handleFileSelect(e.target.files)}
-      />
-    </div>
-  );
+      <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={e => handleFileSelect(e.target.files)} />
+    </div>;
 }
