@@ -123,8 +123,7 @@ export default function RiskManagement() {
   };
 
   return (
-    <AppLayout>
-      <div className="container mx-auto p-6 max-w-7xl">
+    <div className="container mx-auto p-6 max-w-7xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <Shield className="h-8 w-8" />
@@ -238,6 +237,5 @@ export default function RiskManagement() {
           </TabsContent>
         </Tabs>
       </div>
-    </AppLayout>
   );
 }

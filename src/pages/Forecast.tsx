@@ -4,7 +4,6 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import AppLayout from '@/components/layout/AppLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { ForecastScenarioCard } from '@/components/forecast/ForecastScenarioCard';
@@ -37,11 +36,9 @@ const Forecast = () => {
   
   if (subscriptionLoading) {
     return (
-      <AppLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-pulse text-muted-foreground">Loading...</div>
-        </div>
-      </AppLayout>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
     );
   }
   
@@ -162,7 +159,7 @@ const Forecast = () => {
   };
 
   return (
-    <AppLayout>
+    <>
       <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
         <div className="max-w-5xl mx-auto space-y-8">
         <header>
@@ -508,7 +505,7 @@ const Forecast = () => {
         onOpenChange={setShowCalculationModal}
       />
       </PremiumFeatureLock>
-    </AppLayout>
+    </>
   );
 };
 

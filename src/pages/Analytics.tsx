@@ -1,4 +1,3 @@
-import AppLayout from "@/components/layout/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BlurToggleButton } from "@/components/ui/BlurToggleButton";
 import { InteractivePnLChart } from "@/components/charts/InteractivePnLChart";
@@ -97,7 +96,7 @@ export default function Analytics() {
   ], []);
 
   return (
-    <AppLayout>
+    <>
       <SkipToContent />
       <main id="main-content" className={layout.container}>
         <div className={spacing.section}>
@@ -200,6 +199,6 @@ export default function Analytics() {
         </Tabs>
         </div>
       </main>
-    </AppLayout>
+    </>
   );
 }

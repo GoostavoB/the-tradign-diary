@@ -1,5 +1,4 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AppLayout from "@/components/layout/AppLayout";
 import { EmotionalStateLogger } from "@/components/psychology/EmotionalStateLogger";
 import { EmotionalTimeline } from "@/components/psychology/EmotionalTimeline";
 import { BehaviorPatternAnalysis } from "@/components/psychology/BehaviorPatternAnalysis";
@@ -17,19 +16,16 @@ export default function Psychology() {
 
   if (isLoading) {
     return (
-      <AppLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-pulse text-muted-foreground">Loading...</div>
-        </div>
-      </AppLayout>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
     );
   }
   
   const isPremiumLocked = isFeatureLocked('pro');
 
   return (
-    <AppLayout>
-      <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+    <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
         <div className="container mx-auto p-6 max-w-7xl">
         <div className="flex items-center gap-2 mb-6">
           <Brain className="h-8 w-8" />
@@ -94,6 +90,5 @@ export default function Psychology() {
         </Tabs>
       </div>
       </PremiumFeatureLock>
-    </AppLayout>
   );
 }

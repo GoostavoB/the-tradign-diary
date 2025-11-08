@@ -132,7 +132,7 @@ export default function Goals() {
   ];
 
   return (
-    <AppLayout>
+    <>
       <SkipToContent />
       <main id="main-content" className={layout.container}>
         <div className={spacing.section}>
@@ -327,6 +327,6 @@ export default function Goals() {
         {/* Floating Action Button - Temporarily disabled */}
         </div>
       </main>
-    </AppLayout>
+    </>
   );
 }

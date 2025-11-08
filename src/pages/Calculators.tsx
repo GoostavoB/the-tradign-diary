@@ -1,4 +1,3 @@
-import AppLayout from '@/components/layout/AppLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -108,8 +107,7 @@ const Calculators = () => {
   })).filter(category => category.calculators.length > 0);
 
   return (
-    <AppLayout>
-      <main className="space-y-6 pb-20 md:pb-6">
+    <main className="space-y-6 pb-20 md:pb-6">
         {/* Header */}
         <header>
           <h1 className="text-3xl font-bold">Trading Calculators</h1>
@@ -191,7 +189,6 @@ const Calculators = () => {
           </Card>
         )}
       </main>
-    </AppLayout>
   );
 };
 

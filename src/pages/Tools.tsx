@@ -1,4 +1,3 @@
-import AppLayout from '@/components/layout/AppLayout';
 import { TradingJournal } from '@/components/TradingJournal';
 import { RiskCalculator } from '@/components/RiskCalculator';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
@@ -12,7 +11,7 @@ import { SkipToContent } from '@/components/SkipToContent';
 const Tools = () => {
   usePageMeta(pageMeta.tools);
   return (
-    <AppLayout>
+    <>
       <SkipToContent />
       <main id="main-content" className="space-y-6">
         <header>
@@ -63,7 +62,7 @@ const Tools = () => {
           </TabsContent>
         </Tabs>
       </main>
-    </AppLayout>
+    </>
   );
 };
 
