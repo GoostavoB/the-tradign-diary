@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useFavorites } from '@/hooks/useFavorites';
+import { usePrefetchRoute } from '@/hooks/usePrefetchRoute';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface MenuItem {
@@ -53,6 +54,7 @@ export function AppSidebar() {
   const [archivedGroups, setArchivedGroups] = useState<string[]>([]);
   const [allExpanded, setAllExpanded] = useState(false);
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
+  const { prefetch } = usePrefetchRoute();
 
   const menuStructure: MenuGroup[] = [
     {
@@ -314,6 +316,7 @@ export function AppSidebar() {
                             <NavLink 
                               to={fav.page_url} 
                               end 
+                              onMouseEnter={() => prefetch(fav.page_url)}
                               className={getNavCls}
                             >
                               <Star className="h-4 w-4 fill-primary text-primary" />
@@ -403,6 +406,7 @@ export function AppSidebar() {
                               <NavLink 
                                 to={item.url} 
                                 end 
+                                onMouseEnter={() => prefetch(item.url)}
                                 className={cn(
                                   getNavCls,
                                   isHighlighted && "ring-2 ring-primary/50 bg-primary/10"

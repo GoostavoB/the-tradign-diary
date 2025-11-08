@@ -21,6 +21,7 @@ import { ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { TourButton } from '@/components/tour/TourButton';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -93,6 +94,7 @@ const AppLayout = ({ children, isGamificationOpen, onGamificationToggle }: AppLa
 
           <div className="flex-1 flex overflow-hidden relative">
             <main id="main-content" className="flex-1 p-3 md:p-6 overflow-y-auto overflow-x-hidden pb-20 md:pb-6 custom-scrollbar mobile-safe" role="main" aria-label="Main content">
+              <Breadcrumbs />
               {children}
             </main>
             
