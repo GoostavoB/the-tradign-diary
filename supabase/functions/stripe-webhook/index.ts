@@ -110,6 +110,28 @@ serve(async (req) => {
           } catch (err: any) {
             console.log('Analytics logging skipped:', err.message)
           }
+
+          // Save order to orders table
+          try {
+            await supabase.from('orders').insert({
+              user_id: userId,
+              stripe_session_id: session.id,
+              stripe_payment_intent_id: session.payment_intent as string,
+              stripe_invoice_id: session.invoice as string,
+              amount_total: session.amount_total || 0,
+              currency: session.currency || 'usd',
+              customer_email: session.customer_details?.email || '',
+              customer_name: session.customer_details?.name || null,
+              payment_status: session.payment_status || 'unpaid',
+              product_type: productType || 'subscription',
+              product_name: `${tier.toUpperCase()} ${interval === 'year' ? 'Annual' : 'Monthly'} Subscription`,
+              quantity: 1,
+              metadata: { mode: session.mode, interval, tier }
+            })
+            console.log('Order saved successfully')
+          } catch (err: any) {
+            console.error('Error saving order:', err)
+          }
         }
 
         // Handle credit purchases
@@ -152,6 +174,28 @@ serve(async (req) => {
               console.log('Transaction recorded')
             } catch (err: any) {
               console.log('Transaction recording skipped (table may not exist):', err.message)
+            }
+
+            // Save order to orders table
+            try {
+              await supabase.from('orders').insert({
+                user_id: userId,
+                stripe_session_id: session.id,
+                stripe_payment_intent_id: session.payment_intent as string,
+                stripe_invoice_id: session.invoice as string,
+                amount_total: session.amount_total || 0,
+                currency: session.currency || 'usd',
+                customer_email: session.customer_details?.email || '',
+                customer_name: session.customer_details?.name || null,
+                payment_status: session.payment_status || 'unpaid',
+                product_type: productType || 'credits',
+                product_name: `${creditQuantity} Upload Credits`,
+                quantity: creditQuantity,
+                metadata: { mode: session.mode, credits: creditQuantity }
+              })
+              console.log('Order saved successfully')
+            } catch (err: any) {
+              console.error('Error saving order:', err)
             }
           }
         }

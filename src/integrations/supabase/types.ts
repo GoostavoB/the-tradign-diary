@@ -1883,6 +1883,66 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          amount_total: number
+          created_at: string
+          currency: string
+          customer_email: string
+          customer_name: string | null
+          id: string
+          metadata: Json | null
+          payment_status: string
+          product_name: string | null
+          product_type: string
+          quantity: number | null
+          stripe_invoice_id: string | null
+          stripe_invoice_pdf: string | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_total: number
+          created_at?: string
+          currency?: string
+          customer_email: string
+          customer_name?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_status: string
+          product_name?: string | null
+          product_type: string
+          quantity?: number | null
+          stripe_invoice_id?: string | null
+          stripe_invoice_pdf?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_total?: number
+          created_at?: string
+          currency?: string
+          customer_email?: string
+          customer_name?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_status?: string
+          product_name?: string | null
+          product_type?: string
+          quantity?: number | null
+          stripe_invoice_id?: string | null
+          stripe_invoice_pdf?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       performance_alerts: {
         Row: {
           alert_name: string

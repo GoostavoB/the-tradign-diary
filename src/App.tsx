@@ -115,6 +115,7 @@ const TierPreview = lazy(() => import("./pages/TierPreview"));
 const PremiumFeatures = lazy(() => import("./pages/PremiumFeatures"));
 const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 const CheckoutCancel = lazy(() => import("./pages/CheckoutCancel"));
+const OrderHistory = lazy(() => import("./pages/OrderHistory"));
 
 // SEO Landing Pages
 const BestCryptoTradingJournal = lazy(() => import("./pages/BestCryptoTradingJournal"));
@@ -253,6 +254,7 @@ const AppRoutes = () => {
         <Route path="/premium-features" element={<ProtectedRoute><PremiumFeatures /></ProtectedRoute>} />
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
         <Route path="/checkout-cancel" element={<CheckoutCancel />} />
+        <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
         <Route path="/market-data" element={<ProtectedRoute><MarketData /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         {/* Phase 2: Social features - temporarily disabled for backlog #34 */}
