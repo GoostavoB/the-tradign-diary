@@ -45,59 +45,71 @@ export const CurrentROIWidget = memo(({
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
-    console.info('[ROI] Save clicked');
-    
     const newValue = parseFloat(capitalValue);
-    
     if (isNaN(newValue) || newValue < 0) {
-      toast.error(t('errors.validationError'));
-      return;
-    }
-
-    if (!user) {
-      toast.error("You're not signed in", {
-        description: "Please log in and try again."
-      });
+      toast.error(t('errors.invalidAmount'));
       return;
     }
 
     setIsSaving(true);
     
-    // Optimistic update - update UI immediately
+    // Store previous value for rollback
     const previousValue = initialInvestment;
+    
+    // Optimistic update
     if (onInitialInvestmentUpdate) {
       onInitialInvestmentUpdate(newValue);
     }
     
-    toast.success("Updating...", { duration: 1000 });
+    const optimisticToast = toast.loading("Updating initial capital...");
     setIsDialogOpen(false);
     
     try {
       const { error } = await supabase
         .from('user_settings')
-        .upsert(
-          { user_id: user.id, initial_investment: newValue },
-          { onConflict: 'user_id' }
-        );
+        .upsert({
+          user_id: user?.id,
+          initial_capital: newValue,
+        });
 
       if (error) {
         console.error('[ROI] Save failed:', error);
-        // Revert optimistic update on error
+        
+        // Rollback on error
         if (onInitialInvestmentUpdate) {
           onInitialInvestmentUpdate(previousValue);
         }
-        throw error;
+        
+        // Reopen dialog for retry
+        setIsDialogOpen(true);
+        
+        toast.error("Failed to update initial capital", {
+          id: optimisticToast,
+          description: error?.message || "Please try again."
+        });
+        
+        return;
       }
 
       console.info('[ROI] Saved successfully');
-      toast.success(t('success.updated'));
+      toast.success("Initial capital updated", {
+        id: optimisticToast,
+        description: "Your ROI calculations have been updated."
+      });
       
     } catch (error: any) {
       console.error('[ROI] Save error:', error);
-      toast.error(t('errors.generic'), {
+      
+      // Rollback
+      if (onInitialInvestmentUpdate) {
+        onInitialInvestmentUpdate(previousValue);
+      }
+      
+      toast.error("Failed to update", {
+        id: optimisticToast,
         description: error?.message || "Please try again."
       });
-      // Reopen dialog on error so user can retry
+      
       setIsDialogOpen(true);
     } finally {
       setIsSaving(false);
@@ -175,11 +187,11 @@ export const CurrentROIWidget = memo(({
                           }
                         }}
                       />
-                      <p className="text-xs text-muted-foreground">
-                        {t('widgets.currentBalance')}: <BlurredCurrency amount={currentBalance} className="inline" />
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Current Balance: <BlurredCurrency amount={currentBalance} />
                       </p>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        💡 Tip: Use Capital Management in Settings → Trading to track capital additions over time for accurate ROI calculation.
+                      <p className="text-xs text-muted-foreground/70 mb-4">
+                        Note: This updates your ROI calculations. To track deposits/withdrawals, visit Track Capital.
                       </p>
                     </div>
                     <div className="flex gap-2 justify-end">
