@@ -31,6 +31,29 @@
     
     <!-- Universal Service Worker Kill Switch -->
     <script>
+      // EMERGENCY: Unregister all service workers immediately
+      // This prevents module loading errors from broken service workers
+      (function() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+              console.log('[SW Cleanup] Unregistered service worker');
+            }
+          });
+        }
+        
+        // Clear all caches to remove stale data
+        if ('caches' in window) {
+          caches.keys().then(function(names) {
+            for (let name of names) {
+              caches.delete(name);
+              console.log('[SW Cleanup] Deleted cache:', name);
+            }
+          });
+        }
+      })();
+      
       // Force cleanup if ?no-sw=1 or #no-sw is in URL (support/debugging)
       // This runs immediately, before any modules load
       if (location.search.includes('no-sw=1') || location.hash.includes('no-sw')) {

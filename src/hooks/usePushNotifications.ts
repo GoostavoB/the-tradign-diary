@@ -34,31 +34,18 @@ export const usePushNotifications = () => {
         return;
       }
 
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        const registration = await navigator.serviceWorker.register('/sw.js');
-        
-        // Subscribe to push notifications (placeholder - would need VAPID keys for real implementation)
-        const subscription = {
-          endpoint: 'placeholder',
-          keys: {
-            p256dh: 'placeholder',
-            auth: 'placeholder',
-          },
-        };
+      // Service worker disabled - use browser notifications directly
+      // Store notification preference in database
+      await supabase
+        .from('browser_notifications')
+        .upsert({
+          user_id: user.id,
+          push_subscription: { enabled: true }, // Simplified subscription
+        });
 
-        // Store subscription in database
-        await supabase
-          .from('browser_notifications')
-          .upsert({
-            user_id: user.id,
-            push_subscription: subscription,
-          });
-
-        toast.success('Notifications enabled!');
-      }
+      toast.success('Notifications enabled!');
     } catch (error) {
-      console.error('Error subscribing to push:', error);
+      console.error('Error enabling notifications:', error);
       toast.error('Failed to enable notifications');
     }
   }, [user, requestPermission]);
