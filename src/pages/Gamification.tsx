@@ -47,17 +47,15 @@ const Gamification = () => {
 
   if (xpLoading || challengesLoading) {
     return (
-      <AppLayout>
-        <div className="container mx-auto py-6 space-y-6">
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-96 w-full" />
-        </div>
-      </AppLayout>
+      <div className="container mx-auto py-6 space-y-6">
+        <Skeleton className="h-48 w-full" />
+        <Skeleton className="h-96 w-full" />
+      </div>
     );
   }
 
   return (
-    <AppLayout>
+    <>
       <RareAchievementEffect />
       <LevelUpModal 
         show={showLevelUp} 
@@ -192,7 +190,7 @@ const Gamification = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </AppLayout>
+    </>
   );
 };
 

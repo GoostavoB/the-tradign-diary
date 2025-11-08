@@ -119,7 +119,7 @@ export default function SpotWallet() {
 
   if (showEmpty) {
     return (
-      <AppLayout>
+      <>
         <SkipToContent />
         <main id="main-content" className="space-y-6 p-6">
           <header className="flex flex-col gap-2">
@@ -171,7 +171,7 @@ export default function SpotWallet() {
             }}
           />
         </main>
-      </AppLayout>
+      </>
     );
   }
 
@@ -184,7 +184,7 @@ export default function SpotWallet() {
   })) || [];
 
   return (
-    <AppLayout>
+    <>
       <SkipToContent />
       <main id="main-content" className="space-y-6 p-6">
         {/* Page Header */}
@@ -391,7 +391,7 @@ export default function SpotWallet() {
         }}
       />
       </main>
-    </AppLayout>
+    </>
   );
 };
 

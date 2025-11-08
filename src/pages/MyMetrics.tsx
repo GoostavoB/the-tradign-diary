@@ -1,5 +1,4 @@
-import AppLayout from '@/components/layout/AppLayout';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Star } from 'lucide-react';
 import { useState } from 'react';
@@ -76,8 +75,7 @@ const MyMetrics = () => {
   ];
 
   return (
-    <AppLayout>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">My Metrics</h1>
@@ -158,7 +156,6 @@ const MyMetrics = () => {
           </div>
         </Card>
       </div>
-    </AppLayout>
   );
 };
 

@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Trade } from '@/types/trade';
-import AppLayout from '@/components/layout/AppLayout';
 import { FeeOverviewCards } from '@/components/fee-analysis/FeeOverviewCards';
 import { ExchangeComparisonTable } from '@/components/fee-analysis/ExchangeComparisonTable';
 import { TradeDetailsTable } from '@/components/fee-analysis/TradeDetailsTable';
@@ -73,16 +72,11 @@ const FeeAnalysis = () => {
   }, [trades]);
 
   if (isLoading) {
-    return (
-      <AppLayout>
-        <DashboardSkeleton />
-      </AppLayout>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
-    <AppLayout>
-      <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{t('feeAnalysis.title')}</h1>
@@ -112,7 +106,6 @@ const FeeAnalysis = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </AppLayout>
   );
 };
 

@@ -131,7 +131,7 @@ ${JSON.stringify(report.report_data, null, 2)}
   };
 
   return (
-    <AppLayout>
+    <>
       <SkipToContent />
       <main id="main-content" className={layout.container}>
         <div className={spacing.section}>
@@ -250,6 +250,6 @@ ${JSON.stringify(report.report_data, null, 2)}
       </Card>
         </div>
       </main>
-    </AppLayout>
+    </>
   );
 }

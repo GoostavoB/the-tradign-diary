@@ -72,17 +72,15 @@ const FriendLeaderboard = () => {
 
   if (loadingFriends) {
     return (
-      <AppLayout>
-        <div className="container mx-auto py-6 space-y-6">
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-96 w-full" />
-        </div>
-      </AppLayout>
+      <div className="container mx-auto py-6 space-y-6">
+        <Skeleton className="h-48 w-full" />
+        <Skeleton className="h-96 w-full" />
+      </div>
     );
   }
 
   return (
-    <AppLayout>
+    <>
       <InviteFriendsModal open={inviteModalOpen} onOpenChange={setInviteModalOpen} />
 
       <div className="container mx-auto py-6 space-y-6 max-w-7xl">
@@ -226,7 +224,7 @@ const FriendLeaderboard = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </AppLayout>
+    </>
   );
 };
 

@@ -205,8 +205,7 @@ const Withdrawals = () => {
   };
 
   return (
-    <AppLayout>
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-2">Withdrawals</h1>
@@ -399,7 +398,6 @@ const Withdrawals = () => {
           )}
         </Card>
       </div>
-    </AppLayout>
   );
 };
 

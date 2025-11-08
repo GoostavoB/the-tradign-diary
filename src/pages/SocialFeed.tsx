@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import AppLayout from '@/components/layout/AppLayout';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { Heart, MessageCircle, Share2, TrendingUp, TrendingDown } from 'lucide-react';
@@ -72,8 +71,7 @@ export default function SocialFeed() {
   };
 
   return (
-    <AppLayout>
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Trading Community</h1>
           <Button variant="outline">Filter</Button>
@@ -183,6 +181,5 @@ export default function SocialFeed() {
           ))}
         </div>
       </div>
-    </AppLayout>
   );
 }

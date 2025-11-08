@@ -37,11 +37,9 @@ const Leaderboard = () => {
   
   if (subscriptionLoading) {
     return (
-      <AppLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-pulse text-muted-foreground">Loading...</div>
-        </div>
-      </AppLayout>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
     );
   }
   
@@ -120,7 +118,7 @@ const Leaderboard = () => {
   };
 
   return (
-    <AppLayout>
+    <>
       <SkipToContent />
       <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
         <main id="main-content" className="container mx-auto p-6 max-w-7xl space-y-6">
@@ -283,7 +281,7 @@ const Leaderboard = () => {
         </Tabs>
       </main>
       </PremiumFeatureLock>
-    </AppLayout>
+    </>
   );
 };
 

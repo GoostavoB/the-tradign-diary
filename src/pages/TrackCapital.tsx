@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import AppLayout from '@/components/layout/AppLayout';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingUp, TrendingDown, DollarSign, Activity } from 'lucide-react';
@@ -28,8 +27,7 @@ export default function TrackCapital() {
     : 0;
 
   return (
-    <AppLayout>
-      <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">Track Capital</h1>
@@ -124,6 +122,5 @@ export default function TrackCapital() {
           </Tabs>
         </Card>
       </div>
-    </AppLayout>
   );
 }

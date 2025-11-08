@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet';
-import AppLayout from '@/components/layout/AppLayout';
 import { AdvancedMetricsCard } from '@/components/analytics/AdvancedMetricsCard';
 import { ABTestingPanel } from '@/components/analytics/ABTestingPanel';
 import { Card } from '@/components/ui/card';
@@ -28,11 +27,9 @@ export default function AdvancedAnalytics() {
   
   if (isLoading) {
     return (
-      <AppLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-pulse text-muted-foreground">Loading...</div>
-        </div>
-      </AppLayout>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
     );
   }
   
@@ -45,8 +42,7 @@ export default function AdvancedAnalytics() {
         <meta name="description" content="Deep dive into your trading performance with advanced analytics and A/B testing." />
       </Helmet>
 
-      <AppLayout>
-        <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
+      <PremiumFeatureLock requiredPlan="pro" isLocked={isPremiumLocked}>
           <div className="space-y-6">
             <div>
               <h1 className="text-3xl font-bold mb-2">Advanced Analytics</h1>
@@ -160,7 +156,6 @@ export default function AdvancedAnalytics() {
           </Tabs>
         </div>
         </PremiumFeatureLock>
-      </AppLayout>
     </>
   );
 }
