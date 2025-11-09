@@ -14,7 +14,7 @@ export { QuickSimulation } from './QuickSimulation';
  */
 export function initLeverageStopWidget(
   targetElement: HTMLElement,
-  props: any = {}
+  props: Record<string, unknown> = {}
 ): void {
   if (typeof window === 'undefined') return;
   

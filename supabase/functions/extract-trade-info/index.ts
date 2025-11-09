@@ -166,8 +166,11 @@ serve(async (req) => {
         if (!shouldBypassCache) {
           console.log('✅ Cache hit for image:', imageHash, `(trades: ${cachedCount})`);
           const latency = Date.now() - startTime;
-          await logCost(supabaseClient, user.id, 'extract-trade-info', 'cached', 
-            'cached', 0, 0, 0, latency, { cacheHit: true });
+          await logCost(supabaseClient, user.id, 'extract-trade-info', 'cached',
+            'cached', 0, 0, 0, latency, {
+              cacheHit: true,
+              imageHash: imageHash || undefined
+            });
           return new Response(
             JSON.stringify({ trades: cached.parsed_json, cached: true }),
             { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -507,10 +510,11 @@ serve(async (req) => {
     // Log cost (estimate: lite = 1 cent, deep = 8 cents)
     const costCents = route === 'lite' ? 1 : 8;
     const latency = Date.now() - startTime;
-    await logCost(supabaseClient, user.id, 'extract-trade-info', route, modelUsed, 
-      tokensIn, tokensOut, costCents, latency, { 
-        ocrQualityScore, 
-        complexity: 'complex' 
+    await logCost(supabaseClient, user.id, 'extract-trade-info', route, modelUsed,
+      tokensIn, tokensOut, costCents, latency, {
+        ocrQualityScore,
+        complexity: 'complex',
+        imageHash: imageHash || undefined
       });
 
     console.log(`✅ Extracted ${normalizedTrades.length} trades via ${route} route in ${latency}ms`);

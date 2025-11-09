@@ -197,7 +197,21 @@ function logCostDeduction(params: {
 }
 
 /**
- * Log AI cost and update monthly spend atomically
+ * Generate idempotency key for cost logging
+ */
+function generateIdempotencyKey(
+  userId: string,
+  endpoint: string,
+  imageHash?: string,
+  requestId?: string
+): string {
+  const timestamp = new Date().toISOString();
+  const uniquePart = imageHash || requestId || Math.random().toString(36).substring(7);
+  return `${userId}:${endpoint}:${timestamp}:${uniquePart}`;
+}
+
+/**
+ * Log AI cost and update monthly spend atomically with idempotency
  */
 export async function logCost(
   supabase: SupabaseClient,
@@ -215,13 +229,45 @@ export async function logCost(
     ocrQualityScore?: number;
     complexity?: 'simple' | 'complex';
     errorMessage?: string;
+    idempotencyKey?: string;
+    requestId?: string;
+    imageHash?: string;
   }
-): Promise<void> {
+): Promise<{ logged: boolean; alreadyExists: boolean }> {
   const cacheHit = options?.cacheHit || false;
+  const idempotencyKey = options?.idempotencyKey ||
+    generateIdempotencyKey(userId, endpoint, options?.imageHash, options?.requestId);
 
   try {
-    // Insert into ai_cost_log
+    // Check if entry already exists (idempotent retry)
+    const { data: existing } = await supabase
+      .from('ai_cost_log')
+      .select('id')
+      .eq('idempotency_key', idempotencyKey)
+      .single();
+
+    if (existing) {
+      console.log('Idempotent retry detected - skipping duplicate cost log:', idempotencyKey);
+      logCostDeduction({
+        userId,
+        endpoint,
+        route,
+        modelId,
+        debitAmount: 0,
+        tokensIn: 0,
+        tokensOut: 0,
+        latencyMs: 0,
+        cacheHit: true,
+        success: true,
+        errorMessage: 'Idempotent retry - already logged'
+      });
+      return { logged: false, alreadyExists: true };
+    }
+
+    // Insert into ai_cost_log with idempotency key
     await supabase.from('ai_cost_log').insert({
+      idempotency_key: idempotencyKey,
+      request_id: options?.requestId,
       user_id: userId,
       endpoint,
       route,
@@ -259,6 +305,8 @@ export async function logCost(
       cacheHit,
       success: true
     });
+
+    return { logged: true, alreadyExists: false };
   } catch (error) {
     logCostDeduction({
       userId,
@@ -276,6 +324,7 @@ export async function logCost(
 
     console.error('Failed to log cost:', error);
     // Don't throw - logging should not block the main operation
+    return { logged: false, alreadyExists: false };
   }
 }
 

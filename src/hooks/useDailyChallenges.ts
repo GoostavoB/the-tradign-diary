@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Target, TrendingUp, Zap, Trophy, Flame } from 'lucide-react';
+import { Target, TrendingUp, Zap, Trophy, Flame, type LucideIcon } from 'lucide-react';
 import { useXPSystem } from './useXPSystem';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -14,7 +14,7 @@ interface Challenge {
   target: number;
   xpReward: number;
   isCompleted: boolean;
-  icon: any;
+  icon: LucideIcon;
 }
 
 const CHALLENGE_TEMPLATES = [

@@ -1,8 +1,17 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+interface CustomWidget {
+  id: string;
+  user_id: string;
+  menu_item_id?: string;
+  widget_type: string;
+  widget_config: Record<string, unknown>;
+  created_at: string;
+}
+
 export const useCustomWidgets = (menuItemId?: string) => {
-  const [widgets, setWidgets] = useState<any[]>([]);
+  const [widgets, setWidgets] = useState<CustomWidget[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

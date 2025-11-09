@@ -3,18 +3,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Trade } from '@/types/trade';
 import { toast } from 'sonner';
-import { Trophy, Star, Target, Flame, Award, Zap, Crown } from 'lucide-react';
+import { Trophy, Star, Target, Flame, Award, Zap, Crown, type LucideIcon } from 'lucide-react';
 
 interface Achievement {
   id: string;
   title: string;
   description: string;
-  icon: any;
+  icon: LucideIcon;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
 }
 
-const getAchievementIcon = (achievementId: string) => {
-  const iconMap: Record<string, any> = {
+const getAchievementIcon = (achievementId: string): LucideIcon => {
+  const iconMap: Record<string, LucideIcon> = {
     first_trade: Star,
     consistent_trader: Target,
     veteran_trader: Award,

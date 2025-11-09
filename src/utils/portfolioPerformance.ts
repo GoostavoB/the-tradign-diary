@@ -81,7 +81,7 @@ export function calculatePortfolioReturns(
 
   // Calculate starting portfolio value
   // (This would need historical price data - simplified here)
-  let startValue = currentValue; // Placeholder - would need actual calculation
+  const startValue = currentValue; // Placeholder - would need actual calculation
 
   // Identify cash flows (deposits and withdrawals)
   const cashFlows: CashFlow[] = [];
