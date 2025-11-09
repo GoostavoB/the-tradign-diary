@@ -10,7 +10,9 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { BrokerSelect } from './BrokerSelect';
 import { DebugDataModal } from './DebugDataModal';
+import { UploadCreditsGate } from './UploadCreditsGate';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
+import { useUploadCredits } from '@/hooks/useUploadCredits';
 import type { ExtractedTrade } from '@/types/trade';
 import { cn } from '@/lib/utils';
 interface SmartUploadProps {
@@ -56,7 +58,10 @@ export function SmartUpload({
   const [debugMode, setDebugMode] = useState(false);
   const [showDebugModal, setShowDebugModal] = useState(false);
   const [selectedDebugData, setSelectedDebugData] = useState<DebugData | null>(null);
+  const [showCreditsGate, setShowCreditsGate] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const { canUpload, balance, refetch: refetchCredits } = useUploadCredits();
 
   // Client-side blur detection
   const detectBlur = async (file: File): Promise<boolean> => {
@@ -189,6 +194,15 @@ export function SmartUpload({
   };
   const processImages = async () => {
     if (imageQueue.length === 0) return;
+    
+    // Check credits BEFORE any processing
+    await refetchCredits();
+    if (!canUpload || balance <= 0) {
+      console.log('❌ No credits available, showing gate');
+      setShowCreditsGate(true);
+      return;
+    }
+    
     setProcessing(true);
     setProgress(0);
     setCurrentImageIndex(0);
@@ -677,6 +691,29 @@ export function SmartUpload({
         onOpenChange={setShowDebugModal}
         debugData={selectedDebugData}
       />
+
+      {/* Credits Gate Modal */}
+      <AnimatePresence>
+        {showCreditsGate && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowCreditsGate(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-lg w-full"
+            >
+              <UploadCreditsGate />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   </TooltipProvider>;
 }
