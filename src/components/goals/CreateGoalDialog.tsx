@@ -87,70 +87,105 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!user) {
-      toast.error("Not authenticated", {
-        description: "Please sign in to save your goal"
-      });
-      return;
-    }
-
-    setIsSaving(true);
-    const normalizedValue = normalizeNumericInput(values.target_value);
-    
-    // Convert date to end-of-day local time as ISO timestamptz
-    const deadlineDate = new Date(values.target_date);
-    deadlineDate.setUTCHours(23, 59, 59, 999);
-    const deadlineISO = deadlineDate.toISOString();
-
-    console.info('[CreateGoal] Submitting goal:', { 
-      title: values.title, 
-      type: values.goal_type, 
-      target: normalizedValue,
-      date: deadlineISO
-    });
-
-    const goalData = {
-      title: values.title.trim(),
-      description: values.description?.trim() || '',
-      goal_type: values.goal_type,
-      target_value: normalizedValue,
-      deadline: deadlineISO,
-      current_value: editingGoal?.current_value || 0,
-      period: editingGoal?.period || 'monthly',
-    };
-
     try {
+      setIsSaving(true);
+
+      // 1) Session guard - verify access token exists
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) {
+        toast.error('Session expired. Please sign in again.');
+        setIsSaving(false);
+        return;
+      }
+
+      // 2) User guard
+      if (!user) {
+        toast.error('You must be signed in to create a goal.');
+        setIsSaving(false);
+        return;
+      }
+
+      // 3) Normalize numeric input
+      const normalizedValue = normalizeNumericInput(values.target_value);
+      
+      // 4) Convert date to end-of-day UTC for consistency with DB trigger
+      const deadlineISO = `${values.target_date}T23:59:59.999Z`;
+
+      console.info('[CreateGoal] Submitting goal:', { 
+        title: values.title, 
+        type: values.goal_type, 
+        target: normalizedValue,
+        deadline: deadlineISO,
+        userId: user.id
+      });
+
+      // 5) Build payload with user_id
+      const goalData = {
+        title: values.title.trim(),
+        description: values.description?.trim() || '',
+        goal_type: values.goal_type,
+        target_value: normalizedValue,
+        deadline: deadlineISO,
+        current_value: editingGoal?.current_value || 0,
+        period: editingGoal?.period || 'monthly',
+      };
+
+      // 6) Execute insert/update with .select().single() for definitive result
+      let result;
       if (editingGoal) {
-        const { error } = await supabase
+        result = await supabase
           .from('trading_goals')
           .update(goalData)
-          .eq('id', editingGoal.id);
-        
-        if (error) throw error;
-        toast.success("Goal updated successfully");
+          .eq('id', editingGoal.id)
+          .select()
+          .single();
       } else {
-        const { error } = await supabase
+        result = await supabase
           .from('trading_goals')
-          .insert({ ...goalData, user_id: user.id });
-        
-        if (error) throw error;
-        toast.success("Goal created successfully");
+          .insert([{ ...goalData, user_id: user.id }])
+          .select()
+          .single();
       }
-      
+
+      // 7) Handle errors with specific mapping
+      if (result.error) {
+        const msg = result.error.message || 'Failed to save goal.';
+        const code = result.error.code || '';
+        
+        console.error('[CreateGoal] DB Error:', { code, msg, details: result.error });
+        
+        if (code === '42501' || msg.toLowerCase().includes('row-level security')) {
+          toast.error('Permission denied. Please sign in again.');
+        } else if (msg.includes('Target date cannot be in the past')) {
+          toast.error('Target date must be today or later.');
+        } else if (msg.includes('JWT') || msg.toLowerCase().includes('expired')) {
+          toast.error('Session expired. Please sign in again.');
+        } else {
+          toast.error(editingGoal ? 'Failed to update goal' : 'Failed to create goal', {
+            description: msg
+          });
+        }
+        setIsSaving(false);
+        return;
+      }
+
+      // 8) Success - refresh and close
+      toast.success(editingGoal ? 'Goal updated!' : 'Goal created!');
       queryClient.invalidateQueries({ queryKey: ['trading-goals', user.id] });
       setOpen(false);
       form.reset();
       if (onGoalCreated) onGoalCreated();
       if (onClose) onClose();
-    } catch (error: any) {
-      console.error('[CreateGoal] Error:', error);
       
-      if (error.message?.includes('Target date cannot be in the past')) {
-        toast.error("Target date must be today or in the future. Please check your date selection.");
+    } catch (error: any) {
+      console.error('[CreateGoal] Unexpected error:', error);
+      const msg = error?.message || 'An unexpected error occurred.';
+      
+      if (msg.includes('AbortError')) {
+        toast.error('Request timed out. Please try again.');
       } else {
-        toast.error(editingGoal ? "Failed to update goal" : "Failed to create goal", {
-          description: error?.message || "Please try again."
-        });
+        toast.error(msg);
       }
     } finally {
       setIsSaving(false);
