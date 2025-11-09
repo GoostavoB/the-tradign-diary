@@ -43,26 +43,18 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       console.log('[Accounts] Fetching accounts...');
       
-      const response = await fetch(
-        `https://qziawervfvptoretkjrn.supabase.co/functions/v1/accounts`,
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const { data, error } = await supabase.functions.invoke('accounts', {
+        method: 'GET',
+      });
 
-      if (!response.ok) {
-        throw new Error(`Accounts fetch failed: ${response.status}`);
+      if (error) {
+        throw new Error(`Accounts fetch failed: ${error.message}`);
       }
 
-      const data = await response.json();
-      console.log('[Accounts] Fetched:', { accounts: data.accounts?.length, activeAccountId: data.activeAccountId });
+      console.log('[Accounts] Fetched:', { accounts: data?.accounts?.length, activeAccountId: data?.activeAccountId });
 
-      setAccounts(data.accounts || []);
-      setActiveAccountId(data.activeAccountId);
+      setAccounts(data?.accounts || []);
+      setActiveAccountId(data?.activeAccountId);
     } catch (error) {
       console.error('[Accounts] Error fetching accounts:', error);
       toast.error('Failed to load accounts. Using default view.');
@@ -77,19 +69,16 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log('[Accounts] Activating account:', accountId);
       
-      const response = await fetch(
-        `https://qziawervfvptoretkjrn.supabase.co/functions/v1/accounts/${accountId}/activate`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      // Use supabase.functions.invoke with body parameters since it doesn't support sub-paths
+      const { error } = await supabase.functions.invoke('accounts', {
+        body: {
+          action: 'activate',
+          accountId: accountId,
+        },
+      });
 
-      if (!response.ok) {
-        throw new Error(`Account activation failed: ${response.status}`);
+      if (error) {
+        throw new Error(`Account activation failed: ${error.message}`);
       }
 
       setActiveAccountId(accountId);

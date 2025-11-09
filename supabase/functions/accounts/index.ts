@@ -85,9 +85,43 @@ Deno.serve(async (req) => {
       );
     }
 
-    // POST /accounts - Create new account
+    // POST /accounts - Handle body-based actions (activate) or create new account
     if (method === 'POST' && routeParts.length === 1 && routeParts[0] === 'accounts') {
-      const body: CreateAccountRequest = await req.json();
+      const body = await req.json();
+      
+      // Handle activation via body parameter
+      if (body.action === 'activate' && body.accountId) {
+        const accountId = body.accountId;
+        
+        // Verify ownership
+        const { data: account } = await supabase
+          .from('trading_accounts')
+          .select('id')
+          .eq('id', accountId)
+          .eq('user_id', user.id)
+          .single();
+
+        if (!account) {
+          return new Response(JSON.stringify({ error: 'Account not found' }), {
+            status: 404,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+
+        const { error } = await supabase
+          .from('profiles')
+          .update({ active_account_id: accountId })
+          .eq('id', user.id);
+
+        if (error) throw error;
+
+        return new Response(JSON.stringify({ success: true, activeAccountId: accountId }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      
+      // Otherwise, handle as create account request
+      const createBody: CreateAccountRequest = body;
 
       // Check plan limits
       const { data: profile } = await supabase
@@ -120,7 +154,7 @@ Deno.serve(async (req) => {
       }
 
       // Validate name
-      if (!body.name || body.name.length < 2 || body.name.length > 40) {
+      if (!createBody.name || createBody.name.length < 2 || createBody.name.length > 40) {
         return new Response(
           JSON.stringify({ error: 'Name must be between 2 and 40 characters' }),
           {
@@ -131,7 +165,7 @@ Deno.serve(async (req) => {
       }
 
       // Generate slug
-      const slug = body.name
+      const slug = createBody.name
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
@@ -140,10 +174,10 @@ Deno.serve(async (req) => {
         .from('trading_accounts')
         .insert({
           user_id: user.id,
-          name: body.name,
+          name: createBody.name,
           slug,
-          type: body.type,
-          color: body.color,
+          type: createBody.type,
+          color: createBody.color,
         })
         .select()
         .single();
