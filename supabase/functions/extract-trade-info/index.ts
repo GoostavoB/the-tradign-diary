@@ -115,8 +115,8 @@ serve(async (req) => {
       );
     }
 
-    // Check budget
-    const budget = await checkBudget(supabaseClient, user.id);
+    // Check budget (with email for logging)
+    const budget = await checkBudget(supabaseClient, user.id, user.email);
     if (budget.blocked) {
       return new Response(
         JSON.stringify({ error: budget.message }),

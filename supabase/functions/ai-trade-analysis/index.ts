@@ -29,7 +29,7 @@ serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    const budget = await checkBudget(supabaseClient, user.id);
+    const budget = await checkBudget(supabaseClient, user.id, user.email);
     if (budget.blocked) {
       return new Response(
         JSON.stringify({ error: budget.message }),
