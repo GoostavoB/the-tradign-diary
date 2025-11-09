@@ -69,7 +69,6 @@ export function AppSidebar() {
       dataTour: 'portfolio-group',
       items: [
         { title: t('navigation.spotWallet'), url: '/spot-wallet', icon: Wallet, iconName: 'Wallet', keywords: ['wallet', 'balance', 'tokens', 'holdings', 'assets', 'portfolio', 'allocation', 'distribution', 'coins', 'cryptocurrencies', 'btc', 'eth', 'total', 'value', 'net worth', 'funds', 'money', 'cash', 'crypto'] },
-        { title: t('navigation.exchanges'), url: '/exchanges', icon: RefreshCw, iconName: 'RefreshCw', keywords: ['binance', 'bybit', 'okx', 'api', 'connect', 'sync', 'integration', 'platform', 'broker', 'exchange', 'connection', 'link', 'import', 'automated', 'real-time', 'live'] },
         // Phase 2: Trading Accounts - temporarily disabled for backlog #18
         // { title: t('navigation.tradingAccounts'), url: '/accounts', icon: PieChart, iconName: 'PieChart', keywords: ['accounts', 'bank', 'capital', 'balance', 'funds', 'money', 'deposits', 'withdrawals', 'transactions', 'history', 'management', 'initial', 'current', 'wallets', 'manage', 'profiles', 'multiple', 'organize'] },
       ],
