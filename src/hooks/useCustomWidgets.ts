@@ -4,10 +4,18 @@ import { supabase } from '@/integrations/supabase/client';
 interface CustomWidget {
   id: string;
   user_id: string;
-  menu_item_id?: string;
+  menu_item_id: string | null;
   widget_type: string;
-  widget_config: Record<string, unknown>;
+  title: string;
+  description: string | null;
+  query_config: any;
+  display_config: any;
+  position_x: number;
+  position_y: number;
+  width: number;
+  height: number;
   created_at: string;
+  updated_at: string;
 }
 
 export const useCustomWidgets = (menuItemId?: string) => {
