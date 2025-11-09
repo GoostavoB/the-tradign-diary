@@ -38,6 +38,7 @@ import { DailyRewardIndicator } from "@/components/rewards/DailyRewardIndicator"
 import { useDailyRewards } from "@/hooks/useDailyRewards";
 import { AppShell } from "@/layouts/AppShell";
 import { ModuleLoadErrorBanner } from "@/components/upload/ModuleLoadErrorBanner";
+import { CacheBootstrap } from "@/components/infra/CacheBootstrap";
 
 // Eagerly load critical pages (landing, auth, and checkout)
 import Index from "./pages/Index";
@@ -177,10 +178,12 @@ const AppRoutes = () => {
   
   return (
     <>
+      <CacheBootstrap />
       <ModuleLoadErrorBanner />
       <LanguageSync />
       {user && !isPublicPage && <WelcomeBackToast />}
       {user && !isPublicPage && <OnboardingWrapper />}
+
       {user && dailyRewards && !isPublicPage && (
         <DailyRewardIndicator 
           reward={dailyRewards.reward}

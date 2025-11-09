@@ -688,14 +688,14 @@ export function SmartUpload({
               PNG, JPG, WEBP • Max 10 MB
             </p>
             
-            {/* Non-JS fallback - always visible */}
+            {/* Non-JS fallback - always visible for when JavaScript fails */}
             <noscript>
               <div className="mt-3 pt-3 border-t border-border/50">
                 <a 
-                  href="/credits/purchase" 
-                  className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                  href="/upload?clear-cache=1" 
+                  className="inline-block px-4 py-2 rounded-lg"
                 >
-                  Buy Credits to Upload
+                  Reset Cache and Reload
                 </a>
               </div>
             </noscript>

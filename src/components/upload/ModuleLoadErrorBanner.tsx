@@ -20,9 +20,9 @@ export const ModuleLoadErrorBanner = () => {
   }, []);
 
   const handleReload = () => {
-    // Add cache-bypass parameter and reload
+    // Add cache-bypass parameter and reload (triggers deep cleanup)
     const url = new URL(window.location.href);
-    url.searchParams.set('no-cache', Date.now().toString());
+    url.searchParams.set('clear-cache', '1');
     window.location.href = url.toString();
   };
 
