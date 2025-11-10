@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
@@ -841,23 +842,35 @@ const Upload = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-4xl font-bold mb-2">{editId ? 'Edit Trade' : 'Upload Trade'}</h1>
-          <p className="text-muted-foreground">Record your trading activity manually or extract from image</p>
-        </div>
-
+      <div className="max-w-[1200px] mx-auto space-y-6">
         <Tabs defaultValue="ai-extract" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="ai-extract">
-              <Sparkles className="w-4 h-4 mr-2" />
-              AI Extract
-            </TabsTrigger>
-            <TabsTrigger value="manual">
-              <Plus className="w-4 h-4 mr-2" />
-              Manual Entry
-            </TabsTrigger>
-          </TabsList>
+          <div className="sticky top-0 z-20 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+            <div className="max-w-[1200px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-semibold">Upload Trades</h1>
+              </div>
+              <div className="flex items-center gap-3">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="secondary" className="cursor-default">Credits: —</Badge>
+                    </TooltipTrigger>
+                    <TooltipContent>2 credits per trade. Add more in Billing.</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TabsList className="grid grid-cols-2">
+                  <TabsTrigger value="ai-extract">
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    AI Extract
+                  </TabsTrigger>
+                  <TabsTrigger value="manual">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Manual Entry
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </div>
+          </div>
 
           <TabsContent value="ai-extract" className="space-y-6">
             <Card className="p-8 glass">

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -31,13 +31,51 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
   const [creditsRequired, setCreditsRequired] = useState(0);
   const [extractedTrades, setExtractedTrades] = useState<any[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const dragCounter = useRef(0);
 
+  // Global drag listeners for reliable drag feedback
+  useEffect(() => {
+    const onDragEnter = (e: DragEvent) => {
+      const hasFiles = Array.from(e.dataTransfer?.types || []).includes('Files');
+      if (!hasFiles) return;
+      dragCounter.current += 1;
+      setIsDragging(true);
+    };
+    const onDragOver = (e: DragEvent) => {
+      const hasFiles = Array.from(e.dataTransfer?.types || []).includes('Files');
+      if (!hasFiles) return;
+      e.preventDefault();
+      setIsDragging(true);
+    };
+    const onDragLeave = (e: DragEvent) => {
+      const hasFiles = Array.from(e.dataTransfer?.types || []).includes('Files');
+      if (!hasFiles) return;
+      dragCounter.current = Math.max(0, dragCounter.current - 1);
+      if (dragCounter.current === 0) setIsDragging(false);
+    };
+    const onDrop = () => {
+      dragCounter.current = 0;
+      setIsDragging(false);
+    };
+
+    window.addEventListener('dragenter', onDragEnter);
+    window.addEventListener('dragover', onDragOver);
+    window.addEventListener('dragleave', onDragLeave);
+    window.addEventListener('drop', onDrop);
+    return () => {
+      window.removeEventListener('dragenter', onDragEnter);
+      window.removeEventListener('dragover', onDragOver);
+      window.removeEventListener('dragleave', onDragLeave);
+      window.removeEventListener('drop', onDrop);
+    };
+  }, []);
   const handleFileSelect = useCallback((files: FileList | null) => {
     if (!files) return;
 
     const newImages: UploadedImage[] = [];
-    const remainingSlots = 10 - images.length;
+    const remainingSlots = Math.max(0, maxImages - images.length);
+    let invalidCount = 0;
 
     Array.from(files).slice(0, remainingSlots).forEach((file) => {
       if (file.type.startsWith('image/')) {
@@ -46,6 +84,8 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           preview: URL.createObjectURL(file),
           status: 'pending',
         });
+      } else {
+        invalidCount++;
       }
     });
 
@@ -53,10 +93,14 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
       setImages([...images, ...newImages]);
     }
 
+    if (invalidCount > 0) {
+      toast.error(`${invalidCount} unsupported file${invalidCount > 1 ? 's' : ''} skipped`);
+    }
+
     if (files.length > remainingSlots) {
       toast.warning(`Only ${remainingSlots} slots available. First ${remainingSlots} images added.`);
     }
-  }, [images]);
+  }, [images, maxImages]);
 
   const handleRemoveImage = (index: number) => {
     const newImages = [...images];
@@ -277,9 +321,9 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           <Card 
             className={cn(
               "relative aspect-square flex flex-col items-center justify-center cursor-pointer border-dashed border-2 transition-all overflow-hidden",
-              images.length === 0 && "h-[192px]",
+              images.length === 0 && "h-[220px]",
               isDragging 
-                ? "border-primary ring-2 ring-primary/20" 
+                ? "border-primary ring-2 ring-primary/60" 
                 : "border-muted-foreground/10 hover:border-muted-foreground/30"
             )}
             onDragEnter={handleDragEnter}
@@ -344,23 +388,32 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
       </div>
 
       {images.length > 0 && (
-        <Button
-          onClick={analyzeImages}
-          disabled={isAnalyzing || images.some(img => img.status === 'analyzing')}
-          className="w-full"
-        >
-          {isAnalyzing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Analyzing Images...
-            </>
-          ) : (
-            <>
-              <ImageIcon className="mr-2 h-4 w-4" />
-              Analyze & Detect Trades
-            </>
-          )}
-        </Button>
+        <div className="flex items-center justify-between gap-3">
+          <Button
+            variant="outline"
+            onClick={() => setShowClearConfirm(true)}
+            disabled={isAnalyzing}
+          >
+            Clear all
+          </Button>
+          <Button
+            onClick={analyzeImages}
+            disabled={isAnalyzing || images.some(img => img.status === 'analyzing')}
+            className="flex-1"
+          >
+            {isAnalyzing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Extracting...
+              </>
+            ) : (
+              <>
+                <ImageIcon className="mr-2 h-4 w-4" />
+                Extract Trades
+              </>
+            )}
+          </Button>
+        </div>
       )}
 
       {/* Confirmation Dialog */}
@@ -404,6 +457,31 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+
+      {/* Clear All Confirmation */}
+      <Dialog open={showClearConfirm} onOpenChange={setShowClearConfirm}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Clear all files?</DialogTitle>
+            <DialogDescription>
+              This will remove {images.length} file{images.length === 1 ? '' : 's'} from the list.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowClearConfirm(false)}>Cancel</Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                images.forEach(img => URL.revokeObjectURL(img.preview));
+                setImages([]);
+                setShowClearConfirm(false);
+              }}
+            >
+              Clear all
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div
   );
 }
