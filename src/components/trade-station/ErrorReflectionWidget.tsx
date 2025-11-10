@@ -214,29 +214,52 @@ export const ErrorReflectionWidget = () => {
 
       {/* Daily Reminder Modal */}
       <Dialog open={showDailyReminder} onOpenChange={setShowDailyReminder}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Daily Error Review</DialogTitle>
-            <DialogDescription>
-              Reflecting daily may improve your performance by about 23 percent.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-2">
-            <p className="font-semibold text-sm">Active Errors:</p>
-            <ul className="list-disc list-inside space-y-1">
-              {randomErrors.map((error) => (
-                <li key={error.id} className="text-sm">{error.text}</li>
-              ))}
-            </ul>
+        <DialogContent className="max-w-md">
+          <div className="flex items-start gap-4 mb-6">
+            <div className="rounded-full bg-amber-500/10 p-3">
+              <AlertTriangle className="h-6 w-6 text-amber-500" />
+            </div>
+            <div className="flex-1">
+              <DialogHeader className="space-y-1.5 pb-0">
+                <DialogTitle className="text-xl">Daily Error Review</DialogTitle>
+                <DialogDescription className="text-base">
+                  Take a moment to review your active errors
+                </DialogDescription>
+              </DialogHeader>
+            </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => {
-              updateSetting('error_reminder_paused_until', new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString());
-              handleDismissDailyReminder();
-            }}>
+          
+          <div className="space-y-3 my-6">
+            <p className="text-sm font-medium text-muted-foreground">Active Errors:</p>
+            <div className="space-y-2">
+              {randomErrors.map((error) => (
+                <div key={error.id} className="rounded-lg bg-accent/50 p-3 border border-border/50">
+                  <p className="text-sm leading-relaxed">{error.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-md bg-muted/50 p-3 mb-6 border border-border/50">
+            <p className="text-xs text-muted-foreground text-center">
+              Reflecting daily may improve your performance by about 23 percent
+            </p>
+          </div>
+
+          <DialogFooter className="gap-2">
+            <Button 
+              variant="outline" 
+              className="flex-1"
+              onClick={() => {
+                updateSetting('error_reminder_paused_until', new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString());
+                handleDismissDailyReminder();
+              }}
+            >
               Pause 7 days
             </Button>
-            <Button onClick={handleDismissDailyReminder}>Dismiss</Button>
+            <Button className="flex-1" onClick={handleDismissDailyReminder}>
+              Dismiss
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
