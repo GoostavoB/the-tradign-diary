@@ -320,11 +320,10 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
         {images.length < maxImages && (
           <Card 
             className={cn(
-              "relative aspect-square flex flex-col items-center justify-center cursor-pointer border-dashed border-2 transition-all overflow-hidden group",
-              images.length === 0 && "h-[220px]",
+              "relative w-full min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] rounded-[14px] flex flex-col items-center justify-center cursor-pointer border-dashed border-2 transition-all overflow-hidden group bg-[#12161C]",
               isDragging 
-                ? "border-primary bg-primary/5 ring-2 ring-primary/40 shadow-lg" 
-                : "border-border/40 hover:border-primary/60 hover:bg-accent/30 hover:shadow-md"
+                ? "border-[#3B82F6] bg-[#3B82F6]/10 ring-2 ring-[#3B82F6]/40 shadow-lg" 
+                : "border-[#1E242C] hover:border-[#3B82F6]/70 hover:shadow-md"
             )}
             onDragEnter={handleDragEnter}
             onDragOver={handleDragOver}
@@ -334,17 +333,16 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
             {/* Drag overlay */}
             {isDragging && (
               <div
-                className="absolute inset-0 z-10 rounded-xl bg-primary/5 backdrop-blur-sm border-2 border-primary flex items-center justify-center transition-all"
+                className="absolute inset-0 z-10 pointer-events-none rounded-[14px] bg-[#3B82F6]/10 backdrop-blur-sm border-2 border-[#3B82F6] ring-2 ring-[#3B82F6]/40 flex items-center justify-center transition-all"
                 role="region"
                 aria-label="Drop files to upload"
                 aria-busy="true"
               >
                 <div className="flex flex-col items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Upload className="h-8 w-8 text-primary animate-bounce" />
+                  <div className="w-16 h-16 rounded-full bg-[#3B82F6]/20 flex items-center justify-center">
+                    <Upload className="h-8 w-8 text-[#3B82F6] animate-bounce" />
                   </div>
                   <p className="text-base font-semibold text-foreground">Drop to upload</p>
-                  <p className="text-xs text-muted-foreground">Up to {maxImages - images.length} more images</p>
                 </div>
               </div>
             )}
@@ -358,30 +356,30 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
               id="image-upload"
               disabled={isAnalyzing}
             />
-            <label htmlFor="image-upload" className="cursor-pointer relative w-full h-full flex items-center justify-center px-6 py-8">
+            <label htmlFor="image-upload" className="cursor-pointer relative w-full h-full flex items-center justify-center px-6 py-8 text-center">
               {/* Counter - top right */}
-              <div className="absolute top-4 right-4 text-xs font-medium text-muted-foreground">
+              <div className="absolute top-4 right-4 text-xs font-medium text-muted-foreground" aria-live="polite">
                 {images.length}/{maxImages}
               </div>
               
               {/* Main content - centered */}
-              <div className="flex flex-col items-center gap-6">
+              <div className="flex flex-col items-center gap-6 w-full">
                 <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground/30 group-hover:border-primary/50 flex items-center justify-center transition-colors">
                   <Upload className="h-7 w-7 text-muted-foreground/60 group-hover:text-primary transition-colors" />
                 </div>
                 
                 <div className="flex flex-col items-center gap-2">
-                  <p className="text-base font-medium text-foreground">
+                  <p className="text-base font-medium text-foreground leading-snug">
                     Drag files here or click to upload
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground leading-snug">
                     Up to {maxImages} images • Up to 10 trades each
                   </p>
                 </div>
               </div>
               
               {/* Technical specs - bottom left */}
-              <div className="absolute bottom-3 left-3 text-xs text-muted-foreground/70 leading-relaxed">
+              <div className="absolute bottom-3 left-3 text-xs text-muted-foreground/70 leading-relaxed hidden sm:block">
                 <div>JPG, PNG, PDF</div>
                 <div>Max 10MB per file</div>
               </div>
