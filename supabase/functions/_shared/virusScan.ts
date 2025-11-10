@@ -1,5 +1,5 @@
 import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { createHash } from "https://deno.land/std@0.224.0/crypto/mod.ts";
+
 
 export interface VirusScanResult {
   clean: boolean;
@@ -19,7 +19,8 @@ export interface VirusScanResult {
  * Calculate SHA-256 hash of file data
  */
 async function calculateFileHash(fileData: Uint8Array): Promise<string> {
-  const hashBuffer = await crypto.subtle.digest('SHA-256', fileData);
+  const data = new Uint8Array(fileData).buffer as ArrayBuffer;
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
@@ -66,8 +67,8 @@ async function scanWithVirusTotal(
         provider: 'virustotal',
         status: stats.malicious > 0 || stats.suspicious > 0 ? 'infected' : 'clean',
         details: {
-          positives: stats.malicious + stats.suspicious,
-          total: Object.values(stats).reduce((a: number, b: number) => a + b, 0),
+positives: stats.malicious + stats.suspicious,
+          total: Object.values(stats as Record<string, number>).reduce((a, b) => a + Number(b), 0),
           scanDate: reportData.data.attributes.last_analysis_date,
           permalink: `https://www.virustotal.com/gui/file/${fileHash}`,
           vendors: reportData.data.attributes.last_analysis_results
@@ -76,8 +77,9 @@ async function scanWithVirusTotal(
     }
 
     // If no existing report, upload file for scanning
-    const formData = new FormData();
-    const blob = new Blob([fileData], { type: 'application/octet-stream' });
+const formData = new FormData();
+    const buffer = new Uint8Array(fileData).buffer as ArrayBuffer;
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
     formData.append('file', blob, fileName);
 
     const uploadUrl = 'https://www.virustotal.com/api/v3/files';
@@ -121,9 +123,9 @@ async function scanWithVirusTotal(
       provider: 'virustotal',
       status: stats.malicious > 0 || stats.suspicious > 0 ? 'infected' : 'clean',
       details: {
-        positives: stats.malicious + stats.suspicious,
-        total: Object.values(stats).reduce((a: number, b: number) => a + b, 0),
-        scanDate: new Date().toISOString(),
+positives: stats.malicious + stats.suspicious,
+         total: Object.values(stats as Record<string, number>).reduce((a, b) => a + Number(b), 0),
+         scanDate: new Date().toISOString(),
         permalink: `https://www.virustotal.com/gui/file/${fileHash}`
       }
     };

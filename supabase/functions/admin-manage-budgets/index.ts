@@ -140,15 +140,18 @@ serve(async (req) => {
       if (plan) updateData.plan = plan;
 
       // Set session variable for audit log
-      await supabaseClient.rpc('exec_sql', {
-        sql: `SET LOCAL app.modified_by_user_id = '${user.id}';`
-      }).catch(() => {
-        // Fallback: session variables might not work, audit trigger will use user_id
-      });
+const { error: setUserErr } = await supabaseClient.rpc('exec_sql', {
+         sql: `SET LOCAL app.modified_by_user_id = '${user.id}';`
+       });
+       // Fallback: session variables might not work, audit trigger will use user_id
+       if (setUserErr) {
+         // ignore
+       }
 
-      await supabaseClient.rpc('exec_sql', {
-        sql: `SET LOCAL app.audit_reason = '${reason.replace(/'/g, "''")}';`
-      }).catch(() => {});
+       const { error: setReasonErr } = await supabaseClient.rpc('exec_sql', {
+         sql: `SET LOCAL app.audit_reason = '${reason.replace(/'/g, "''")}';`
+       });
+       // ignore setReasonErr
 
       let result;
       if (existing) {

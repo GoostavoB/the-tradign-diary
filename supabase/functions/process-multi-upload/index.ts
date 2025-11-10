@@ -48,14 +48,17 @@ serve(async (req) => {
     // Credit deduction will be added after database migration
 
     // Insert all trades with proper field mapping
-    const { data: insertedTrades, error } = await supabaseClient
+const { data: insertedTrades, error } = await supabaseClient
       .from('trades')
       .insert(
-        trades.map(t => ({
-          ...t,
-          user_id: user.id,
-          symbol_temp: t.symbol || t.symbol_temp, // Map symbol to symbol_temp for database
-        }))
+        trades.map((t: any) => {
+          const symbolCandidate = t.symbol ?? t.symbol_temp ?? t.ticker ?? t.symbolPair ?? t.pair ?? t.market ?? t.symbol_name ?? t.asset ?? null;
+          return {
+            ...t,
+            user_id: user.id,
+            symbol_temp: symbolCandidate ?? 'UNKNOWN',
+          };
+        })
       )
       .select();
 
@@ -74,8 +77,10 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Multi-upload processing error:', error);
+    const e = error as any;
+    const message = e?.message || e?.error?.message || e?.details || e?.hint || JSON.stringify(e);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: message }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
