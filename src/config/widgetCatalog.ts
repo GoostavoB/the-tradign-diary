@@ -14,6 +14,7 @@ import {
   Percent,
   Calendar,
   Grid3x3,
+  TrendingDown,
 } from 'lucide-react';
 import { WidgetConfig, WIDGET_SIZES } from '@/types/widget';
 import { TotalBalanceWidget } from '@/components/widgets/TotalBalanceWidget';
@@ -36,6 +37,7 @@ import { PerformanceHighlights } from '@/components/insights/PerformanceHighligh
 import { TradingQualityMetrics } from '@/components/insights/TradingQualityMetrics';
 import { TradingHeatmap } from '@/components/TradingHeatmap';
 import { GoalWidget } from '@/components/goals/GoalWidget';
+import { RollingTargetWidget } from '@/components/widgets/RollingTargetWidget';
 
 /**
  * Widget Catalog - Registry of all available dashboard widgets
@@ -259,6 +261,17 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'large',
     component: GoalWidget as any,
     requiresData: [],
+  },
+
+  rollingTarget: {
+    id: 'rollingTarget',
+    title: 'Rolling Target Tracker',
+    description: 'Daily compounding target with carry-over and adaptive suggestions',
+    category: 'performance',
+    icon: TrendingDown,
+    defaultSize: 'xlarge',
+    component: RollingTargetWidget,
+    requiresData: ['trades', 'stats'],
   },
 };
 
