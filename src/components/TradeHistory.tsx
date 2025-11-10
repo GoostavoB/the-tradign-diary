@@ -842,26 +842,30 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                     </TableCell>
                   )}
                   {isColumnVisible('entry') && (
-                    <TableCell>${trade.entry_price.toFixed(2)}</TableCell>
+                    <TableCell>{trade.entry_price != null ? `$${trade.entry_price.toFixed(2)}` : '-'}</TableCell>
                   )}
                   {isColumnVisible('exit') && (
-                    <TableCell>${trade.exit_price.toFixed(2)}</TableCell>
+                    <TableCell>{trade.exit_price != null ? `$${trade.exit_price.toFixed(2)}` : '-'}</TableCell>
                   )}
                   {isColumnVisible('size') && (
                     <TableCell>{trade.position_size}</TableCell>
                   )}
                   {isColumnVisible('pnl') && (
                     <TableCell>
-                      <span className={trade.pnl === 0 ? 'text-foreground' : trade.pnl > 0 ? 'text-neon-green' : 'text-neon-red'}>
-                        ${trade.pnl.toFixed(2)}
-                      </span>
+                      {trade.pnl != null ? (
+                        <span className={(trade.pnl ?? 0) === 0 ? 'text-foreground' : (trade.pnl ?? 0) > 0 ? 'text-neon-green' : 'text-neon-red'}>
+                          ${trade.pnl.toFixed(2)}
+                        </span>
+                      ) : '-'}
                     </TableCell>
                   )}
                   {isColumnVisible('roi') && (
                     <TableCell>
-                      <span className={trade.roi === 0 ? 'text-foreground' : trade.roi > 0 ? 'text-neon-green' : 'text-neon-red'}>
-                        {trade.roi.toFixed(2)}%
-                      </span>
+                      {trade.roi != null ? (
+                        <span className={(trade.roi ?? 0) === 0 ? 'text-foreground' : (trade.roi ?? 0) > 0 ? 'text-neon-green' : 'text-neon-red'}>
+                          {trade.roi.toFixed(2)}%
+                        </span>
+                      ) : '-'}
                     </TableCell>
                   )}
                   {isColumnVisible('fundingFee') && (
@@ -1081,11 +1085,11 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Entry Price</p>
-                  <p className="font-medium">${selectedTrade.entry_price.toFixed(2)}</p>
+                  <p className="font-medium">{selectedTrade.entry_price != null ? `$${selectedTrade.entry_price.toFixed(2)}` : '-'}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Exit Price</p>
-                  <p className="font-medium">${selectedTrade.exit_price.toFixed(2)}</p>
+                  <p className="font-medium">{selectedTrade.exit_price != null ? `$${selectedTrade.exit_price.toFixed(2)}` : '-'}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Position Size</p>
@@ -1101,15 +1105,19 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">P&L</p>
-                  <p className={`font-medium ${selectedTrade.pnl === 0 ? 'text-foreground' : selectedTrade.pnl > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-                    ${selectedTrade.pnl.toFixed(2)}
-                  </p>
+                  {selectedTrade.pnl != null ? (
+                    <p className={`font-medium ${(selectedTrade.pnl ?? 0) === 0 ? 'text-foreground' : (selectedTrade.pnl ?? 0) > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
+                      ${selectedTrade.pnl.toFixed(2)}
+                    </p>
+                  ) : <p className="font-medium">-</p>}
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">ROI</p>
-                  <p className={`font-medium ${selectedTrade.roi === 0 ? 'text-foreground' : selectedTrade.roi > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
-                    {selectedTrade.roi.toFixed(2)}%
-                  </p>
+                  {selectedTrade.roi != null ? (
+                    <p className={`font-medium ${(selectedTrade.roi ?? 0) === 0 ? 'text-foreground' : (selectedTrade.roi ?? 0) > 0 ? 'text-neon-green' : 'text-neon-red'}`}>
+                      {selectedTrade.roi.toFixed(2)}%
+                    </p>
+                  ) : <p className="font-medium">-</p>}
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Funding Fee</p>
@@ -1200,8 +1208,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                   <Input
                     type="number"
                     step="0.00000001"
-                    value={editingTrade.entry_price}
-                    onChange={(e) => setEditingTrade({ ...editingTrade, entry_price: parseFloat(e.target.value) })}
+                    value={editingTrade.entry_price ?? ''}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, entry_price: e.target.value ? parseFloat(e.target.value) : null })}
                     className="mt-1"
                   />
                 </div>
@@ -1211,8 +1219,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                   <Input
                     type="number"
                     step="0.00000001"
-                    value={editingTrade.exit_price}
-                    onChange={(e) => setEditingTrade({ ...editingTrade, exit_price: parseFloat(e.target.value) })}
+                    value={editingTrade.exit_price ?? ''}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, exit_price: e.target.value ? parseFloat(e.target.value) : null })}
                     className="mt-1"
                   />
                 </div>
@@ -1222,8 +1230,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                   <Input
                     type="number"
                     step="0.00000001"
-                    value={editingTrade.position_size}
-                    onChange={(e) => setEditingTrade({ ...editingTrade, position_size: parseFloat(e.target.value) })}
+                    value={editingTrade.position_size ?? ''}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, position_size: e.target.value ? parseFloat(e.target.value) : null })}
                     className="mt-1"
                   />
                 </div>
@@ -1233,8 +1241,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                   <Input
                     type="number"
                     step="1"
-                    value={editingTrade.leverage || 1}
-                    onChange={(e) => setEditingTrade({ ...editingTrade, leverage: parseFloat(e.target.value) })}
+                    value={editingTrade.leverage ?? 1}
+                    onChange={(e) => setEditingTrade({ ...editingTrade, leverage: e.target.value ? parseFloat(e.target.value) : 1 })}
                     className="mt-1"
                   />
                 </div>
