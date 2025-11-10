@@ -146,47 +146,6 @@ export function TradeReviewEditor({
 
   return (
     <div className="w-full max-w-[1200px] mx-auto space-y-6 py-6">
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm pb-6 -mt-6 pt-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onCancel}
-              className="rounded-xl"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-2xl font-bold text-[#EAEFF4]">Review and edit your trades</h1>
-              <p className="text-sm text-[#A6B1BB] mt-1">
-                {imagesProcessed} images processed • {editedTrades.length} trades found • {creditsRequired} credits required
-              </p>
-            </div>
-          </div>
-
-          <Button
-            onClick={handleSave}
-            disabled={approvedTrades.size === 0}
-            className="rounded-xl bg-primary hover:bg-primary/90"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            Save {approvedTrades.size} approved {approvedTrades.size === 1 ? 'trade' : 'trades'}
-          </Button>
-        </div>
-
-        <TradeFilters
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          brokerFilter={brokerFilter}
-          onBrokerFilterChange={setBrokerFilter}
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
-          availableBrokers={availableBrokers}
-        />
-      </div>
-
       {/* Summary Bar */}
       <TradeSummaryBar
         totalTrades={editedTrades.length}
