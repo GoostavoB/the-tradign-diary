@@ -97,7 +97,7 @@ export const RollingTargetWidget = memo(({
 }: RollingTargetWidgetProps) => {
   const [settings, setSettings] = useState<WidgetSettings>({
     targetPercent: 5,
-    mode: 'rolling',
+    mode: 'per-day',
     carryOverCap: 10, // 2 * targetPercent by default
     suggestionMethod: 'median',
     suggestionsEnabled: true,
@@ -363,7 +363,22 @@ export const RollingTargetWidget = memo(({
             
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>Tracking Mode</Label>
+                <div className="flex items-center gap-2">
+                  <Label>Tracking Mode</Label>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p className="font-semibold mb-1">Rolling with Carry-Over:</p>
+                        <p className="mb-2">Missed targets carry forward to the next day. If you fall short, tomorrow's target includes making up today's shortfall (with a cap to prevent wild swings).</p>
+                        <p className="font-semibold mb-1">Per-Day Fixed Percent:</p>
+                        <p>Fresh start every day. Each day has a simple target of X% of your current capital, regardless of yesterday's performance.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <Select
                   value={settings.mode}
                   onValueChange={(value: TrackingMode) => 
@@ -381,7 +396,19 @@ export const RollingTargetWidget = memo(({
               </div>
 
               <div className="space-y-2">
-                <Label>Daily Target Percent (%)</Label>
+                <div className="flex items-center gap-2">
+                  <Label>Growth Daily Target Percent (%)</Label>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>The daily percentage growth you aim to achieve. For example, 5% means you want your capital to grow by 5% each day through compounding.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <Input
                   type="number"
                   step="0.1"
@@ -399,7 +426,19 @@ export const RollingTargetWidget = memo(({
 
               {settings.mode === 'rolling' && (
                 <div className="space-y-2">
-                  <Label>Carry-Over Cap (%)</Label>
+                  <div className="flex items-center gap-2">
+                    <Label>Carry-Over Cap (%)</Label>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Maximum catch-up requirement as % of current capital. Prevents unrealistic targets if you fall far behind. Default is 2× your daily target percent.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <Input
                     type="number"
                     step="0.5"
@@ -420,7 +459,19 @@ export const RollingTargetWidget = memo(({
               )}
 
               <div className="flex items-center justify-between">
-                <Label>Enable Suggestions</Label>
+                <div className="flex items-center gap-2">
+                  <Label>Enable Suggestions</Label>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>Let the system analyze your last 20 trading days and suggest a more realistic target percent based on your actual performance.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <Switch
                   checked={settings.suggestionsEnabled}
                   onCheckedChange={(checked) =>
@@ -431,7 +482,22 @@ export const RollingTargetWidget = memo(({
 
               {settings.suggestionsEnabled && (
                 <div className="space-y-2">
-                  <Label>Suggestion Method</Label>
+                  <div className="flex items-center gap-2">
+                    <Label>Suggestion Method</Label>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p className="font-semibold mb-1">Median (60th percentile):</p>
+                          <p className="mb-2">Conservative approach. Suggests a target you can hit 60% of the time. Best for steady traders who want consistent, achievable goals.</p>
+                          <p className="font-semibold mb-1">Risk Aware (Mean - 0.5σ):</p>
+                          <p>Safety-first approach. Accounts for volatility and suggests a lower target with a buffer. Best for traders who want high confidence in hitting targets even on bad days.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <Select
                     value={settings.suggestionMethod}
                     onValueChange={(value: SuggestionMethod) =>
@@ -442,15 +508,41 @@ export const RollingTargetWidget = memo(({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="median">Median (60th percentile)</SelectItem>
-                      <SelectItem value="risk-aware">Risk Aware (Mean - 0.5σ)</SelectItem>
+                      <SelectItem value="median">
+                        <div className="space-y-1">
+                          <div className="font-medium">Median (60th percentile)</div>
+                          <div className="text-xs text-muted-foreground">
+                            For steady traders wanting consistent goals
+                          </div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="risk-aware">
+                        <div className="space-y-1">
+                          <div className="font-medium">Risk Aware (Mean - 0.5σ)</div>
+                          <div className="text-xs text-muted-foreground">
+                            For traders wanting high confidence targets
+                          </div>
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               )}
 
               <div className="flex items-center justify-between">
-                <Label>Rollover Weekends</Label>
+                <div className="flex items-center gap-2">
+                  <Label>Rollover Weekends</Label>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>If enabled, unmet weekend targets roll forward to Monday. If disabled, the plan skips weekends entirely.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <Switch
                   checked={settings.rolloverWeekends}
                   onCheckedChange={(checked) =>
