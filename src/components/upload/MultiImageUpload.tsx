@@ -2,7 +2,8 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Upload, X, Image as ImageIcon, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Upload, X, Image as ImageIcon, Loader2, CheckCircle2, AlertCircle, Info } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -318,6 +319,16 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
                     <span className="text-xs text-foreground font-medium">Ready to extract</span>
                     <div className="h-3 w-px bg-border/60" />
                     <span className="text-xs text-primary font-semibold">1 credit</span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="h-3 w-3 text-muted-foreground cursor-help ml-0.5" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="text-xs">Each trade extraction costs 1 credit</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 )}
                 {image.tradesDetected !== undefined && image.status === 'success' && (
