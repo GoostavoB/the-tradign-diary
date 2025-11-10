@@ -272,8 +272,8 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
     <div className="space-y-6">
     <div className="flex flex-wrap gap-4">
         {images.map((image, index) => (
-          <Card key={index} className="relative group overflow-hidden border-[#1E242C] bg-[#12161C]">
-            <div className="aspect-square relative">
+          <Card key={index} className="relative group overflow-hidden border-[#1E242C] bg-[#12161C] w-[280px]">
+            <div className="aspect-video relative">
               <img
                 src={image.preview}
                 alt={`Upload ${index + 1}`}
@@ -336,7 +336,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
         {images.length < maxImages && (
           <Card 
             className={cn(
-              "relative w-full min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] rounded-[14px] flex flex-col items-center justify-center cursor-pointer border-dashed border-2 transition-all overflow-hidden group bg-[#12161C]",
+              "relative w-[280px] h-[157px] rounded-[14px] flex flex-col items-center justify-center cursor-pointer border-dashed border-2 transition-all overflow-hidden group bg-[#12161C]",
               isDragging 
                 ? "border-[#3B82F6] bg-[#3B82F6]/10 ring-2 ring-[#3B82F6]/40 shadow-lg" 
                 : "border-[#1E242C] hover:border-[#3B82F6]/70 hover:shadow-md"
@@ -372,26 +372,25 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
               id="image-upload"
               disabled={isAnalyzing}
             />
-            <label htmlFor="image-upload" className="cursor-pointer w-full h-full flex flex-col items-center justify-center p-8 gap-8">
+            <label htmlFor="image-upload" className="cursor-pointer w-full h-full flex items-center justify-center gap-4 px-6">
               {/* Counter - top right */}
-              <div className="absolute top-4 right-4 text-xs font-medium text-muted-foreground" aria-live="polite">
+              <div className="absolute top-2 right-2 text-xs font-medium text-muted-foreground" aria-live="polite">
                 {images.length}/{maxImages}
               </div>
               
               {/* Icon */}
-              <div className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground/30 group-hover:border-primary/50 flex items-center justify-center transition-colors">
-                <Upload className="h-7 w-7 text-muted-foreground/60 group-hover:text-primary transition-colors" />
+              <div className="w-10 h-10 rounded-full border-2 border-dashed border-muted-foreground/30 group-hover:border-primary/50 flex items-center justify-center transition-colors flex-shrink-0">
+                <Upload className="h-5 w-5 text-muted-foreground/60 group-hover:text-primary transition-colors" />
               </div>
               
               {/* Text content */}
-              <div className="flex flex-col items-center gap-3 text-center">
-                <p className="text-base font-medium text-foreground">
-                  Drag files here or click to upload
+              <div className="flex flex-col gap-1 text-left">
+                <p className="text-sm font-medium text-foreground">
+                  Drag files or click to upload
                 </p>
-                <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-                  <p>Up to {maxImages} images • Up to 10 trades each</p>
-                  <p className="text-xs text-muted-foreground/70">JPG, PNG, PDF • Max 10MB per file</p>
-                </div>
+                <p className="text-xs text-muted-foreground">
+                  Up to {maxImages} images • JPG, PNG, PDF
+                </p>
               </div>
             </label>
           </Card>
