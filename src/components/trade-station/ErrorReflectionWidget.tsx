@@ -4,7 +4,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { AlertCircle, Plus, MoreHorizontal, Clock, Archive, Trash2, Edit } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { AlertCircle, Plus, Clock, Archive, Trash2, Edit, AlertTriangle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useErrorReflection } from '@/hooks/useErrorReflection';
 import { useUserSettings } from '@/hooks/useUserSettings';
@@ -78,85 +79,132 @@ export const ErrorReflectionWidget = () => {
   const randomErrors = displayErrors.sort(() => Math.random() - 0.5).slice(0, 3);
 
   return (
-    <>
+    <TooltipProvider>
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Error Reflection</CardTitle>
             <div className="flex items-center gap-2">
-              <Switch
-                checked={settings.error_daily_reminder}
-                onCheckedChange={(checked) => updateSetting('error_daily_reminder', checked)}
-              />
+              <AlertTriangle className="h-5 w-5 text-amber-500" />
+              <CardTitle>Error Reflection</CardTitle>
             </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="daily-reminder" className="text-xs text-muted-foreground cursor-pointer">
+                    Daily
+                  </Label>
+                  <Switch
+                    id="daily-reminder"
+                    checked={settings.error_daily_reminder}
+                    onCheckedChange={(checked) => updateSetting('error_daily_reminder', checked)}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Show daily reminder with active errors</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           {loading ? (
             <p className="text-muted-foreground text-sm">Loading...</p>
           ) : errors.length === 0 ? (
-            <div className="text-center py-8">
-              <AlertCircle className="h-12 w-12 mx-auto mb-3 text-muted-foreground/50" />
-              <p className="text-sm text-muted-foreground mb-4">No active errors. Add one to start tracking.</p>
-              <Button onClick={() => setShowAddDialog(true)} size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Add error
+            <div className="text-center py-8 px-4">
+              <div className="rounded-full bg-muted w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <AlertCircle className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="font-semibold mb-2">No Active Errors</h3>
+              <p className="text-sm text-muted-foreground mb-4">Start tracking mistakes to improve your trading.</p>
+              <Button onClick={() => setShowAddDialog(true)} size="sm" className="gap-2">
+                <Plus className="h-4 w-4" />
+                Add Your First Error
               </Button>
             </div>
           ) : (
             <>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {displayErrors.map((error) => (
-                  <div key={error.id} className="rounded-md border p-3 space-y-2">
-                    <p className="text-sm line-clamp-2">{error.text}</p>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => extendError(error.id)}
-                      >
-                        <Clock className="h-3 w-3 mr-1" />
-                        +7d
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => archiveError(error.id)}
-                      >
-                        <Archive className="h-3 w-3 mr-1" />
-                        Archive
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => deleteError(error.id)}
-                      >
-                        <Trash2 className="h-3 w-3 mr-1" />
-                        Delete
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          setEditingError(error.id);
-                          setEditText(error.text);
-                        }}
-                      >
-                        <Edit className="h-3 w-3 mr-1" />
-                        Edit
-                      </Button>
+                  <div key={error.id} className="group rounded-lg border bg-card hover:bg-accent/5 transition-colors">
+                    <div className="p-4">
+                      <p className="text-sm leading-relaxed mb-3">{error.text}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">
+                          Expires in {Math.ceil((new Date(error.expires_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                onClick={() => extendError(error.id)}
+                              >
+                                <Clock className="h-3.5 w-3.5" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Extend 7 days</TooltipContent>
+                          </Tooltip>
+                          
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                onClick={() => {
+                                  setEditingError(error.id);
+                                  setEditText(error.text);
+                                }}
+                              >
+                                <Edit className="h-3.5 w-3.5" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Edit error</TooltipContent>
+                          </Tooltip>
+                          
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                onClick={() => archiveError(error.id)}
+                              >
+                                <Archive className="h-3.5 w-3.5" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Archive</TooltipContent>
+                          </Tooltip>
+                          
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                                onClick={() => deleteError(error.id)}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Delete</TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 pt-2">
                 <Button variant="outline" size="sm" className="flex-1">
-                  View all
+                  View all ({errors.length})
                 </Button>
-                <Button size="sm" className="flex-1" onClick={() => setShowAddDialog(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add error
+                <Button size="sm" className="flex-1 gap-2" onClick={() => setShowAddDialog(true)}>
+                  <Plus className="h-4 w-4" />
+                  Add Error
                 </Button>
               </div>
             </>
@@ -244,6 +292,6 @@ export const ErrorReflectionWidget = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </TooltipProvider>
   );
 };
