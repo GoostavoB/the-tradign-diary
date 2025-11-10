@@ -860,33 +860,52 @@ const Upload = () => {
           </TabsList>
 
           <TabsContent value="ai-extract" className="space-y-6">
-            <Card className="p-6 glass">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="extraction-image">Upload Trade Screenshots (Up to 10 images)</Label>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Upload up to 10 screenshots containing your trade information. The AI will automatically extract all trades from all images.
-                  </p>
-                  
-                  {/* Pre-select broker - Always visible until trades are extracted */}
+            <Card className="p-8 glass">
+              {/* Page header */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold mb-2">Extract Trades from Screenshots</h2>
+                <p className="text-sm text-muted-foreground">
+                  Upload up to 10 screenshots. AI will automatically detect and extract all trades.
+                </p>
+              </div>
+
+              {/* Main content grid */}
+              <div className="grid lg:grid-cols-12 gap-8">
+                {/* Left column - Primary upload area */}
+                <div className="lg:col-span-8 space-y-6">
                   {extractedTrades.length === 0 && (
+                    <MultiImageUpload 
+                      onTradesExtracted={(trades) => {
+                        setExtractedTrades(trades.map(t => ({ ...t, broker: preSelectedBroker })));
+                        toast.success(`Extracted ${trades.length} trades from ${trades.length > 1 ? 'multiple images' : 'image'}`);
+                      }}
+                      maxImages={10}
+                      preSelectedBroker={preSelectedBroker}
+                    />
+                  )}
+                </div>
+
+                {/* Right column - Supporting information */}
+                {extractedTrades.length === 0 && (
+                  <div className="lg:col-span-4 space-y-6">
+                    {/* Broker selection */}
                     <div 
                       ref={brokerFieldRef}
                       className={cn(
-                        "mb-4 p-4 border-2 rounded-lg bg-muted/30 transition-all duration-300",
+                        "p-4 border rounded-lg transition-all duration-300",
                         brokerError 
-                          ? "border-destructive bg-destructive/5 animate-shake animate-pulse-error" 
-                          : "border-border"
+                          ? "border-destructive bg-destructive/5" 
+                          : "border-border bg-muted/30"
                       )}
                     >
                       <Label className={cn(
                         "text-sm font-medium mb-2 block",
                         brokerError && "text-destructive"
                       )}>
-                        Broker (Required) *
+                        Broker <span className="text-destructive">*</span>
                       </Label>
                       <p className="text-xs text-muted-foreground mb-3">
-                        Select your broker to pre-fill this field in extracted trades
+                        Pre-fills broker field for all extracted trades
                       </p>
                       <BrokerSelect 
                         value={preSelectedBroker}
@@ -901,24 +920,31 @@ const Upload = () => {
                           <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                           </svg>
-                          Please select a broker to continue
+                          Broker is required
                         </p>
                       )}
                     </div>
-                  )}
-                  <div className="mt-2">
-                    <MultiImageUpload 
-                      onTradesExtracted={(trades) => {
-                        setExtractedTrades(trades.map(t => ({ ...t, broker: preSelectedBroker })));
-                        toast.success(`Extracted ${trades.length} trades from ${trades.length > 1 ? 'multiple images' : 'image'}`);
-                      }}
-                      maxImages={10}
-                      preSelectedBroker={preSelectedBroker}
-                    />
-                  </div>
-                </div>
 
-                {extractedTrades.length > 0 && !extracting && !showSuccess && (
+                    {/* How it works */}
+                    <div className="p-4 border border-border rounded-lg bg-muted/20">
+                      <h3 className="text-sm font-medium mb-3">How it works</h3>
+                      <div className="space-y-2 text-xs text-muted-foreground leading-relaxed">
+                        <p>AI analyzes screenshots and extracts trade data automatically</p>
+                        <p>Review and edit extracted trades before saving</p>
+                        <p>Each trade costs 2 credits to process</p>
+                      </div>
+                    </div>
+
+                    {/* Privacy note */}
+                    <div className="text-xs text-muted-foreground/70 leading-relaxed">
+                      <p>Your screenshots are processed securely and not stored permanently</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Extracted trades section */}
+              {extractedTrades.length > 0 && !extracting && !showSuccess && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">Extracted Trades ({extractedTrades.length})</h3>
@@ -1237,25 +1263,24 @@ const Upload = () => {
                   </div>
                 )}
 
-                {/* Success Feedback */}
-                {showSuccess && (
-                  <SuccessFeedback
-                    tradesCount={savedTradesCount}
-                    onViewDashboard={() => navigate('/dashboard')}
-                    onViewHistory={() => {
-                      setShowSuccess(false);
-                      navigate('/dashboard?tab=history');
-                    }}
-                    onStayHere={() => {
-                      setShowSuccess(false);
-                      setExtractedTrades([]);
-                      setExtractionImage(null);
-                      setExtractionPreview(null);
-                      setSavedTradesCount(0);
-                    }}
-                  />
-                )}
-              </div>
+              {/* Success Feedback */}
+              {showSuccess && (
+                <SuccessFeedback
+                  tradesCount={savedTradesCount}
+                  onViewDashboard={() => navigate('/dashboard')}
+                  onViewHistory={() => {
+                    setShowSuccess(false);
+                    navigate('/dashboard?tab=history');
+                  }}
+                  onStayHere={() => {
+                    setShowSuccess(false);
+                    setExtractedTrades([]);
+                    setExtractionImage(null);
+                    setExtractionPreview(null);
+                    setSavedTradesCount(0);
+                  }}
+                />
+              )}
             </Card>
           </TabsContent>
 

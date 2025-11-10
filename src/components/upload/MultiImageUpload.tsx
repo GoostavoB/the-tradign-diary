@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -31,6 +31,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
   const [creditsRequired, setCreditsRequired] = useState(0);
   const [extractedTrades, setExtractedTrades] = useState<any[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const dragCounter = useRef(0);
 
   const handleFileSelect = useCallback((files: FileList | null) => {
     if (!files) return;
@@ -67,13 +68,23 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Only respond to file drags
+    const hasFiles = Array.from(e.dataTransfer?.types || []).includes('Files');
+    if (!hasFiles) return;
+    
+    dragCounter.current += 1;
     setIsDragging(true);
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragging(false);
+    
+    dragCounter.current = Math.max(0, dragCounter.current - 1);
+    if (dragCounter.current === 0) {
+      setIsDragging(false);
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -84,6 +95,8 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    dragCounter.current = 0;
     setIsDragging(false);
     
     const files = e.dataTransfer.files;
@@ -212,7 +225,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className={cn(
         "grid gap-4",
         images.length === 0 ? "grid-cols-1" : "grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
@@ -227,21 +240,22 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
               />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Button
-                  variant="destructive"
+                  variant="ghost"
                   size="icon"
                   onClick={() => handleRemoveImage(index)}
                   disabled={isAnalyzing}
+                  className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
               {image.status === 'analyzing' && (
                 <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-primary-foreground" aria-label="Analyzing image" />
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" aria-label="Analyzing image" />
                 </div>
               )}
               {image.status === 'success' && (
-                <div className="absolute top-2 right-2 bg-green-500 rounded-full p-1">
+                <div className="absolute top-2 right-2 bg-primary/90 rounded-full p-1">
                   <CheckCircle2 className="h-4 w-4 text-primary-foreground" aria-label="Analysis successful" />
                 </div>
               )}
@@ -253,7 +267,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
             </div>
             {image.tradesDetected !== undefined && (
               <div className="absolute bottom-0 left-0 right-0 bg-black/80 text-foreground text-xs p-2 text-center">
-                {image.tradesDetected} {image.tradesDetected === 1 ? 'trade' : 'trades'} detected
+                {image.tradesDetected} {image.tradesDetected === 1 ? 'trade' : 'trades'}
               </div>
             )}
           </Card>
@@ -262,17 +276,33 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
         {images.length < maxImages && (
           <Card 
             className={cn(
-              "aspect-square flex flex-col items-center justify-center cursor-pointer border-dashed border-2 transition-all",
+              "relative aspect-square flex flex-col items-center justify-center cursor-pointer border-dashed border-2 transition-all overflow-hidden",
               images.length === 0 && "h-[192px]",
               isDragging 
-                ? "border-primary" 
-                : "border-muted-foreground/20 hover:border-muted-foreground/40"
+                ? "border-primary ring-2 ring-primary/20" 
+                : "border-muted-foreground/10 hover:border-muted-foreground/30"
             )}
             onDragEnter={handleDragEnter}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
+            {/* Drag overlay */}
+            {isDragging && (
+              <div
+                className="absolute inset-0 z-10 rounded-lg bg-background/80 backdrop-blur-sm ring-2 ring-primary/80 flex items-center justify-center transition-all"
+                role="region"
+                aria-label="Drop files to upload"
+                aria-busy="true"
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <Upload className="h-16 w-16 text-primary/80" />
+                  <p className="text-base font-medium">Drop to upload</p>
+                  <p className="text-xs text-muted-foreground">Up to {maxImages - images.length} more images</p>
+                </div>
+              </div>
+            )}
+
             <input
               type="file"
               accept="image/*"
@@ -282,17 +312,32 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
               id="image-upload"
               disabled={isAnalyzing}
             />
-            <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-4 px-6 py-8 w-full h-full justify-center">
-              <Upload className="h-12 w-12 text-muted-foreground/60" />
-              <p className="text-base font-medium text-foreground text-center">
-                Drop files or click to browse
-              </p>
-              <p className="text-xs text-muted-foreground text-center">
-                JPEG, PNG, WEBP • Max 10MB • ({images.length}/{maxImages} images)
-              </p>
-              <p className="text-xs text-muted-foreground/80 text-center">
-                Up to 10 images (10 trades per image)
-              </p>
+            <label htmlFor="image-upload" className="cursor-pointer relative w-full h-full flex items-center justify-center px-6 py-8">
+              {/* Counter - top right */}
+              <div className="absolute top-4 right-4 text-xs font-medium text-muted-foreground">
+                {images.length}/{maxImages}
+              </div>
+              
+              {/* Main content - centered */}
+              <div className="flex flex-col items-center gap-6">
+                <Upload className="h-16 w-16 text-muted-foreground/40" />
+                
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-lg font-medium text-foreground">
+                    Upload trade screenshots
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Click or drag files here
+                  </p>
+                </div>
+              </div>
+              
+              {/* Technical specs - bottom left */}
+              <div className="absolute bottom-4 left-4 text-xs text-muted-foreground/80 leading-relaxed">
+                <div>PNG, JPEG, WEBP</div>
+                <div>Max 10MB per file</div>
+                <div>Up to {maxImages} images • 10 trades each</div>
+              </div>
             </label>
           </Card>
         )}
