@@ -30,6 +30,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
   const [totalTradesDetected, setTotalTradesDetected] = useState(0);
   const [creditsRequired, setCreditsRequired] = useState(0);
   const [extractedTrades, setExtractedTrades] = useState<any[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleFileSelect = useCallback((files: FileList | null) => {
     if (!files) return;
@@ -61,6 +62,32 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
     URL.revokeObjectURL(newImages[index].preview);
     newImages.splice(index, 1);
     setImages(newImages);
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    
+    const files = e.dataTransfer.files;
+    handleFileSelect(files);
   };
 
   const analyzeImages = async () => {
@@ -188,7 +215,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
     <div className="space-y-4">
       <div className={cn(
         "grid gap-4",
-        images.length === 0 ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        images.length === 0 ? "grid-cols-1" : "grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
       )}>
         {images.map((image, index) => (
           <Card key={index} className="relative group overflow-hidden">
@@ -233,10 +260,17 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
         ))}
 
         {images.length < maxImages && (
-          <Card className={cn(
-            "aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-accent/50 transition-colors",
-            images.length === 0 && "min-h-[300px]"
-          )}>
+          <Card 
+            className={cn(
+              "aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-accent/50 transition-all",
+              images.length === 0 && "h-[180px]",
+              isDragging && "border-primary border-2 bg-accent"
+            )}
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
             <input
               type="file"
               accept="image/*"
@@ -246,15 +280,21 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
               id="image-upload"
               disabled={isAnalyzing}
             />
-            <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-2 p-8 w-full h-full justify-center">
-              <Upload className="h-12 w-12 text-muted-foreground" />
+            <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-2 p-6 w-full h-full justify-center">
+              <Upload className={cn(
+                "h-10 w-10 transition-colors",
+                isDragging ? "text-primary" : "text-muted-foreground"
+              )} />
               <p className="text-sm font-medium text-center">
-                Click to upload or drag and drop
+                {isDragging ? "Drop images here" : "Drag & drop or click to browse"}
               </p>
               <p className="text-xs text-muted-foreground text-center">
                 JPEG, PNG, WEBP up to 10MB<br />
                 ({images.length}/{maxImages} images)
               </p>
+              <div className="mt-2 px-3 py-1 rounded-full bg-muted text-xs text-muted-foreground">
+                Max 10 images • 10 trades per image
+              </div>
             </label>
           </Card>
         )}
