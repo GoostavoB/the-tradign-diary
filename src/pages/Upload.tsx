@@ -848,45 +848,24 @@ const Upload = () => {
         </div>
 
         <Tabs defaultValue="ai-extract" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="ai-extract">
               <Sparkles className="w-4 h-4 mr-2" />
               AI Extract
             </TabsTrigger>
-            <TabsTrigger value="batch-upload">
-              <Images className="w-4 h-4 mr-2" />
-              Batch Upload
+            <TabsTrigger value="manual">
+              <Plus className="w-4 h-4 mr-2" />
+              Manual Entry
             </TabsTrigger>
-            <TabsTrigger value="manual">Manual Entry</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="batch-upload" className="space-y-6">
-            <Card className="p-6 glass">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold">Multi-Image Batch Upload</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Upload up to 3 trade screenshots at once. AI will detect and extract all trades from each image.
-                  </p>
-                </div>
-                
-                <MultiImageUpload 
-                  onTradesExtracted={(trades) => {
-                    setExtractedTrades(trades);
-                    toast.success(`Extracted ${trades.length} trades from batch upload`);
-                  }} 
-                />
-              </div>
-            </Card>
-          </TabsContent>
 
           <TabsContent value="ai-extract" className="space-y-6">
             <Card className="p-6 glass">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="extraction-image">Upload Trade Screenshot</Label>
+                  <Label htmlFor="extraction-image">Upload Trade Screenshots (Up to 10 images)</Label>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Upload a screenshot containing your trade information. The AI will automatically extract all trades.
+                    Upload up to 10 screenshots containing your trade information. The AI will automatically extract all trades from all images.
                   </p>
                   
                   {/* Pre-select broker - Always visible until trades are extracted */}
@@ -928,95 +907,16 @@ const Upload = () => {
                     </div>
                   )}
                   <div className="mt-2">
-                    <EnhancedFileUpload
-                      onFileSelected={(file) => {
-                        setExtractionImage(file);
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setExtractionPreview(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
+                    <MultiImageUpload 
+                      onTradesExtracted={(trades) => {
+                        setExtractedTrades(trades.map(t => ({ ...t, broker: preSelectedBroker })));
+                        toast.success(`Extracted ${trades.length} trades from ${trades.length > 1 ? 'multiple images' : 'image'}`);
                       }}
-                      existingPreview={extractionPreview}
-                      onRemove={removeExtractionImage}
-                      uploading={extracting}
-                      uploadProgress={uploadStep * 25}
-                      maxSize={10}
-                      acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}
+                      maxImages={10}
+                      preSelectedBroker={preSelectedBroker}
                     />
-                    
-                    {extractionPreview && (
-                      <div className="space-y-3 mt-4">
-                        {extractedTrades.length === 0 && (
-                          <>
-                            {/* Image annotation system */}
-                            {showAnnotator && (
-                              <div className="mb-4">
-                                <ImageAnnotator
-                                  imageUrl={extractionPreview}
-                                  onAnnotationsChange={setAnnotations}
-                                  initialAnnotations={annotations}
-                                />
-                              </div>
-                            )}
-
-                            <div className="flex gap-2">
-                              <Button
-                                onClick={() => setShowAnnotator(!showAnnotator)}
-                                variant="outline"
-                                size="lg"
-                                className="flex-1"
-                              >
-                                <MapPin className="w-5 h-5 mr-2" />
-                                {showAnnotator ? 'Hide' : 'Mark Fields'} {annotations.length > 0 && `(${annotations.length})`}
-                              </Button>
-                            </div>
-
-                            <Button
-                              onClick={handleConfirmExtraction}
-                              className={cn(
-                                "w-full transition-all duration-200",
-                                extracting
-                                  ? "bg-muted text-muted-foreground cursor-not-allowed border border-border hover:scale-100 active:scale-100"
-                                  : "bg-primary text-primary-foreground active:scale-95 hover:scale-[1.02]"
-                              )}
-                              disabled={extracting}
-                              size="lg"
-                              aria-disabled={extracting}
-                              aria-busy={extracting}
-                            >
-                              {extracting ? (
-                                <>
-                                  <svg className="animate-spin -ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                  </svg>
-                                  <span className="font-medium">Loading...</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Sparkles className="w-5 h-5 mr-2" />
-                                  <span className="font-medium">Confirm & Extract Trade Information</span>
-                                </>
-                              )}
-                            </Button>
-
-                            {extracting && (
-                              <div className="mt-6 space-y-6">
-                                <UploadProgress step={uploadStep} processingMessage={processingMessage} />
-                                <div className="text-center max-w-2xl mx-auto">
-                                  <p className="text-sm md:text-base font-medium">"{quotes[quoteIndex].text}"</p>
-                                  <p className="text-xs md:text-sm text-muted-foreground mt-1">— {quotes[quoteIndex].author}</p>
-                                </div>
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </div>
-
 
                 {extractedTrades.length > 0 && !extracting && !showSuccess && (
                   <div className="space-y-4">

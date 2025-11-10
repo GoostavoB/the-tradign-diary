@@ -18,9 +18,11 @@ interface UploadedImage {
 
 interface MultiImageUploadProps {
   onTradesExtracted: (trades: any[]) => void;
+  maxImages?: number;
+  preSelectedBroker?: string;
 }
 
-export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
+export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelectedBroker = '' }: MultiImageUploadProps) {
   const { user } = useAuth();
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -33,7 +35,7 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
     if (!files) return;
 
     const newImages: UploadedImage[] = [];
-    const remainingSlots = 3 - images.length;
+    const remainingSlots = 10 - images.length;
 
     Array.from(files).slice(0, remainingSlots).forEach((file) => {
       if (file.type.startsWith('image/')) {
@@ -62,6 +64,11 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
   };
 
   const analyzeImages = async () => {
+    if (!preSelectedBroker || preSelectedBroker.trim() === '') {
+      toast.error('Please select a broker first');
+      return;
+    }
+
     setIsAnalyzing(true);
     let totalTrades = 0;
     const allTrades: any[] = [];
@@ -99,7 +106,8 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
               },
               body: JSON.stringify({ 
                 imagePath: uploadData.path,
-                dryRun: true  // Don't deduct credits yet
+                dryRun: true,  // Don't deduct credits yet
+                broker: preSelectedBroker  // Pass pre-selected broker
               }),
             }
           );
@@ -178,7 +186,10 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-4">
+      <div className={cn(
+        "grid gap-4",
+        images.length === 0 ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      )}>
         {images.map((image, index) => (
           <Card key={index} className="relative group overflow-hidden">
             <div className="aspect-square relative">
@@ -221,10 +232,10 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
           </Card>
         ))}
 
-        {images.length < 3 && (
+        {images.length < maxImages && (
           <Card className={cn(
             "aspect-square flex flex-col items-center justify-center cursor-pointer hover:bg-accent/50 transition-colors",
-            images.length === 0 && "col-span-3"
+            images.length === 0 && "min-h-[300px]"
           )}>
             <input
               type="file"
@@ -235,11 +246,14 @@ export function MultiImageUpload({ onTradesExtracted }: MultiImageUploadProps) {
               id="image-upload"
               disabled={isAnalyzing}
             />
-            <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-2 p-4">
-              <Upload className="h-8 w-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground text-center">
-                Click to upload<br />
-                ({images.length}/3 slots used)
+            <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-2 p-8 w-full h-full justify-center">
+              <Upload className="h-12 w-12 text-muted-foreground" />
+              <p className="text-sm font-medium text-center">
+                Click to upload or drag and drop
+              </p>
+              <p className="text-xs text-muted-foreground text-center">
+                JPEG, PNG, WEBP up to 10MB<br />
+                ({images.length}/{maxImages} images)
               </p>
             </label>
           </Card>
