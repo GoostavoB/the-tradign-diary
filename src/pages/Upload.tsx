@@ -804,8 +804,8 @@ const Upload = () => {
   return <AppLayout>
       <div className="max-w-[1200px] mx-auto space-y-6">
         <Tabs defaultValue="ai-extract" className="w-full">
-          <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75 border-b border-border/60 shadow-sm">
-            <div className="max-w-[1200px] flex items-center justify-between gap-4 my-0 bg-[#2c94ef]/[0.14] rounded-full py-0 px-[29px] mx-[20px]">
+          <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75 border-b border-border/60 shadow-sm my-0 py-0 px-0 mx-0">
+            <div className="max-w-[1200px] flex items-center justify-between gap-4 bg-[#2c94ef]/[0.14] rounded-full px-[24px] mx-[11px] my-0 py-[2px]">
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-semibold">Upload Trades</h1>
               </div>

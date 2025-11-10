@@ -19,19 +19,22 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-
 interface AppLayoutProps {
   children: ReactNode;
   isGamificationOpen?: boolean;
   onGamificationToggle?: () => void;
 }
-
-const AppLayout = ({ children, isGamificationOpen, onGamificationToggle }: AppLayoutProps) => {
+const AppLayout = ({
+  children,
+  isGamificationOpen,
+  onGamificationToggle
+}: AppLayoutProps) => {
   useReminderNotifications();
-  const { isCollapsed, setIsCollapsed } = useSidebarState();
-
-  return (
-    <SidebarProvider open={!isCollapsed} onOpenChange={(open) => setIsCollapsed(!open)}>
+  const {
+    isCollapsed,
+    setIsCollapsed
+  } = useSidebarState();
+  return <SidebarProvider open={!isCollapsed} onOpenChange={open => setIsCollapsed(!open)}>
       <ThemeUnlockNotification />
       <UpdatesModal />
       <GuidedTour />
@@ -41,7 +44,7 @@ const AppLayout = ({ children, isGamificationOpen, onGamificationToggle }: AppLa
         </div>
         <div className="flex-1 flex flex-col mobile-safe overflow-hidden h-screen relative">
           {/* Desktop Header */}
-          <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6 sticky top-0 z-30">
+          <header className="hidden md:flex h-16 border-b border-border/50 backdrop-blur-xl glass-subtle items-center justify-between gap-4 px-6 sticky top-0 z-30 py-0 my-0">
             {/* Left: Sidebar trigger */}
             <div className="flex items-center gap-2">
               <SidebarTrigger className="hover:bg-muted/50 rounded-lg p-2 transition-colors" />
@@ -89,8 +92,6 @@ const AppLayout = ({ children, isGamificationOpen, onGamificationToggle }: AppLa
           <InstallPrompt />
         </div>
       </div>
-    </SidebarProvider>
-  );
+    </SidebarProvider>;
 };
-
 export default AppLayout;
