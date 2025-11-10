@@ -482,6 +482,6 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div
+    </div>
   );
 }
