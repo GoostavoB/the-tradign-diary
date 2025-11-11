@@ -243,21 +243,21 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
   
   return (
     <div className="space-y-4 relative">
-      {/* Floating Upload Trade Button */}
+      {/* Floating Add Trade Button */}
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               onClick={() => navigate('/upload')}
               size="icon"
-              className="fixed top-24 right-6 z-50 h-12 w-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all"
-              aria-label="Upload a trade"
+              className="fixed top-20 right-6 z-50 h-12 w-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all"
+              aria-label="Add a trade"
             >
               <Plus className="h-6 w-6" />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="left">
-            <p>Upload a trade</p>
+            <p>Add a trade</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
