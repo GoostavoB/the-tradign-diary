@@ -39,7 +39,7 @@ export const ThemeInitializer = () => {
     }
     
     // Load and apply theme synchronously on mount for authenticated routes
-    const savedMode = localStorage.getItem('theme:mode') || 'ocean';
+    const savedMode = localStorage.getItem('theme:mode') || 'default';
     const savedCustomModes = localStorage.getItem('theme:custom-modes');
     
     let customModes: ColorMode[] = [];
@@ -69,7 +69,11 @@ export const ThemeInitializer = () => {
       root.style.setProperty('--neon-green', mode.profit);
       root.style.setProperty('--neon-red', mode.loss);
       
-      console.log('✅ Theme initialized:', savedMode);
+      console.log('✅ Theme initialized:', savedMode, 'Colors:', {
+        primary: mode.primary,
+        profit: mode.profit,
+        loss: mode.loss
+      });
     } else {
       console.warn('⚠️ Theme not found, using default:', savedMode);
     }

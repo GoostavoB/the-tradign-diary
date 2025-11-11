@@ -3,16 +3,29 @@ import { ThemePreviewCard } from './ThemePreviewCard';
 import { PRESET_THEMES } from '@/utils/themePresets';
 import { ALL_ADVANCED_THEMES } from '@/utils/advancedThemePresets';
 import { useThemeUnlocks } from '@/hooks/useThemeUnlocks';
+import { toast } from 'sonner';
 
 export const QuickThemesGrid = () => {
   const { themeMode, setThemeMode } = useThemeMode();
-  const { themes } = useThemeUnlocks();
+  const { themes, activateTheme } = useThemeUnlocks();
 
-  const handleThemeClick = (themeId: string) => {
+  const handleThemeClick = async (themeId: string) => {
     const theme = themes.find(t => t.id === themeId);
-    if (theme?.isUnlocked) {
-      setThemeMode(themeId);
+    
+    if (!theme?.isUnlocked) {
+      toast.error('This theme is locked', {
+        description: `Unlock requirement: ${theme?.unlockRequirement.type} ${theme?.unlockRequirement.value}`
+      });
+      return;
     }
+    
+    // Apply colors immediately using useThemeMode
+    setThemeMode(themeId);
+    
+    // Save to database using useThemeUnlocks
+    await activateTheme(themeId);
+    
+    console.log('✅ Theme activated:', themeId);
   };
 
   const allThemes = [...PRESET_THEMES, ...ALL_ADVANCED_THEMES];

@@ -12,56 +12,51 @@ export interface UnlockableTheme {
     accent: string;
   };
   unlockRequirement: {
-    type: 'level' | 'rank' | 'achievement';
+    type: 'level' | 'rank' | 'achievement' | 'default';
     value: string | number;
   };
   isUnlocked: boolean;
 }
 
-const THEME_CATALOG: Omit<UnlockableTheme, 'isUnlocked'>[] = [
-  {
-    id: 'default',
-    name: 'Default Theme',
-    description: 'Clean and professional',
-    previewColors: { primary: '#3B82F6', secondary: '#6B7280', accent: '#3B82F6' },
-    unlockRequirement: { type: 'level', value: 1 }
+// Helper to convert HSL to hex for preview colors
+const hslToHex = (hsl: string): string => {
+  const [h, s, l] = hsl.split(' ').map(v => parseFloat(v));
+  const lightness = l / 100;
+  const saturation = s / 100;
+  const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
+  const x = chroma * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = lightness - chroma / 2;
+  
+  let r = 0, g = 0, b = 0;
+  if (h >= 0 && h < 60) { r = chroma; g = x; b = 0; }
+  else if (h >= 60 && h < 120) { r = x; g = chroma; b = 0; }
+  else if (h >= 120 && h < 180) { r = 0; g = chroma; b = x; }
+  else if (h >= 180 && h < 240) { r = 0; g = x; b = chroma; }
+  else if (h >= 240 && h < 300) { r = x; g = 0; b = chroma; }
+  else if (h >= 300 && h < 360) { r = chroma; g = 0; b = x; }
+  
+  const toHex = (n: number) => {
+    const hex = Math.round((n + m) * 255).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  };
+  
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
+// Import unified themes
+import { UNIFIED_THEMES, isThemeUnlocked as checkUnlock } from '@/utils/unifiedThemes';
+
+const THEME_CATALOG: Omit<UnlockableTheme, 'isUnlocked'>[] = UNIFIED_THEMES.map(theme => ({
+  id: theme.id,
+  name: theme.name,
+  description: theme.description,
+  previewColors: {
+    primary: hslToHex(theme.primary),
+    secondary: hslToHex(theme.secondary),
+    accent: hslToHex(theme.accent),
   },
-  {
-    id: 'neon-nights',
-    name: 'Neon Nights',
-    description: 'Vibrant cyberpunk aesthetics',
-    previewColors: { primary: '#FF00FF', secondary: '#00FFFF', accent: '#FFFF00' },
-    unlockRequirement: { type: 'level', value: 5 }
-  },
-  {
-    id: 'ocean-breeze',
-    name: 'Ocean Breeze',
-    description: 'Calm blue tones',
-    previewColors: { primary: '#0EA5E9', secondary: '#06B6D4', accent: '#22D3EE' },
-    unlockRequirement: { type: 'level', value: 10 }
-  },
-  {
-    id: 'sunset-glow',
-    name: 'Sunset Glow',
-    description: 'Warm orange and pink hues',
-    previewColors: { primary: '#F97316', secondary: '#EC4899', accent: '#FBBF24' },
-    unlockRequirement: { type: 'level', value: 15 }
-  },
-  {
-    id: 'cyber-punk',
-    name: 'Cyber Punk',
-    description: 'Futuristic dark theme',
-    previewColors: { primary: '#A855F7', secondary: '#06B6D4', accent: '#F43F5E' },
-    unlockRequirement: { type: 'rank', value: 'elite_trader' }
-  },
-  {
-    id: 'gold-rush',
-    name: 'Gold Rush',
-    description: 'Luxurious gold accents',
-    previewColors: { primary: '#EAB308', secondary: '#F59E0B', accent: '#FBBF24' },
-    unlockRequirement: { type: 'rank', value: 'legend_trader' }
-  }
-];
+  unlockRequirement: theme.unlockRequirement,
+}));
 
 export const useThemeUnlocks = () => {
   const { user } = useAuth();
@@ -111,7 +106,9 @@ export const useThemeUnlocks = () => {
         let isUnlocked = unlockedThemes.includes(theme.id);
         
         if (!isUnlocked) {
-          if (theme.unlockRequirement.type === 'level') {
+          if (theme.unlockRequirement.type === 'default') {
+            isUnlocked = true; // Default themes are always unlocked
+          } else if (theme.unlockRequirement.type === 'level') {
             isUnlocked = currentLevel >= (theme.unlockRequirement.value as number);
           } else if (theme.unlockRequirement.type === 'rank') {
             const rankOrder = ['rookie_trader', 'active_trader', 'consistent_trader', 'pro_trader', 'elite_trader', 'legend_trader'];

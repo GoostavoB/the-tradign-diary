@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSeasonalThemes } from './useSeasonalThemes';
-import { ALL_ADVANCED_THEMES } from '@/utils/advancedThemePresets';
-import { PRESET_THEMES } from '@/utils/themePresets';
+import { ADVANCED_THEME_COLORS, PRESET_THEME_COLORS } from '@/utils/unifiedThemes';
 
 export type ThemeMode = 'default' | 'classic' | string;
 
@@ -15,8 +14,11 @@ export interface ColorMode {
   loss: string;
 }
 
+const PRESET_THEMES = PRESET_THEME_COLORS;
+const ALL_ADVANCED_THEMES = ADVANCED_THEME_COLORS;
+
 export function useThemeMode() {
-  const [currentMode, setCurrentMode] = useState<string>('ocean');
+  const [currentMode, setCurrentMode] = useState<string>('default');
   const [customModes, setCustomModes] = useState<ColorMode[]>([]);
   const { activeSeasonalTheme } = useSeasonalThemes();
 
@@ -35,8 +37,8 @@ export function useThemeMode() {
       }
     }
     
-    // Apply the saved theme immediately
-    const modeToApply = savedMode || 'ocean';
+    // Apply the saved theme immediately, default to 'default' instead of 'ocean'
+    const modeToApply = savedMode || 'default';
     setCurrentMode(modeToApply);
     applyMode(modeToApply, parsedModes);
   }, []); // Empty deps - runs once on mount
@@ -118,7 +120,7 @@ export function useThemeMode() {
     localStorage.setItem('theme:custom-modes', JSON.stringify(updatedModes));
 
     if (currentMode === modeId) {
-      setThemeMode('ocean');
+      setThemeMode('default');
     }
   };
 
