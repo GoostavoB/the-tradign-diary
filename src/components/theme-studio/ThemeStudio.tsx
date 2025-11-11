@@ -10,9 +10,19 @@ import { QuickThemesGrid } from './QuickThemesGrid';
 import { CustomThemeManager } from './CustomThemeManager';
 import { SeasonalThemeBanner } from './SeasonalThemeBanner';
 import { AIThemeSuggestion } from './AIThemeSuggestion';
+import { BackgroundColorPicker } from './BackgroundColorPicker';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useState } from 'react';
 
 export const ThemeStudio = () => {
+  const [backgroundColor, setBackgroundColor] = useState('0 0% 100%');
+
+  const handleBackgroundColorChange = (color: string) => {
+    setBackgroundColor(color);
+    // Apply the background color to CSS variables
+    document.documentElement.style.setProperty('--background', color);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -41,6 +51,14 @@ export const ThemeStudio = () => {
 
               {/* AI Suggestion */}
               <AIThemeSuggestion />
+
+              {/* Background Color Picker */}
+              <div className="px-4">
+                <BackgroundColorPicker
+                  currentColor={backgroundColor}
+                  onColorChange={handleBackgroundColorChange}
+                />
+              </div>
 
               {/* Quick Themes Section */}
               <QuickThemesGrid />
