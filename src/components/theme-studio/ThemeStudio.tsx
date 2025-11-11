@@ -11,6 +11,7 @@ import { CustomThemeManager } from './CustomThemeManager';
 import { SeasonalThemeBanner } from './SeasonalThemeBanner';
 import { AIThemeSuggestion } from './AIThemeSuggestion';
 import { BackgroundColorPicker } from './BackgroundColorPicker';
+import { TextColorPicker } from './TextColorPicker';
 import { ThemePreviewBanner } from './ThemePreviewBanner';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState } from 'react';
@@ -18,12 +19,19 @@ import { useThemeMode } from '@/hooks/useThemeMode';
 
 export const ThemeStudio = () => {
   const [backgroundColor, setBackgroundColor] = useState('0 0% 100%');
+  const [textColor, setTextColor] = useState('0 0% 9%');
   const { previewMode, applyPreview, cancelPreview } = useThemeMode();
 
   const handleBackgroundColorChange = (color: string) => {
     setBackgroundColor(color);
     // Apply the background color to CSS variables
     document.documentElement.style.setProperty('--background', color);
+  };
+
+  const handleTextColorChange = (color: string) => {
+    setTextColor(color);
+    // Apply the text color to CSS variables
+    document.documentElement.style.setProperty('--foreground', color);
   };
 
   return (
@@ -70,6 +78,14 @@ export const ThemeStudio = () => {
                   <BackgroundColorPicker
                     currentColor={backgroundColor}
                     onColorChange={handleBackgroundColorChange}
+                  />
+                </div>
+
+                {/* Text Color Picker */}
+                <div className="px-4">
+                  <TextColorPicker
+                    textColor={textColor}
+                    onChange={handleTextColorChange}
                   />
                 </div>
 
