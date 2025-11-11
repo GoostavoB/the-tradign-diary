@@ -138,6 +138,7 @@ export function useThemeMode() {
       
       // If accessibility preset is active, override with accessibility colors
       if (activePresetTheme) {
+        console.info('🎨 Applying accessibility preset:', activePresetTheme.id);
         mode = mergeWithDefault({ ...mode, ...activePresetTheme });
       }
 
@@ -165,6 +166,14 @@ export function useThemeMode() {
         if (isManualSwitch) {
           root.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
         }
+        
+        console.info('🎨 Setting CSS variables:', {
+          primary: mode.primary,
+          profit: mode.profit,
+          loss: mode.loss,
+          success: mode.success,
+          error: mode.error,
+        });
         
         root.style.setProperty('--primary', mode.primary);
         root.style.setProperty('--secondary', mode.secondary);
