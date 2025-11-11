@@ -3,8 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, Lock, Unlock } from 'lucide-react';
+import { Lock, Unlock } from 'lucide-react';
 import { useState } from 'react';
 import { useRiskCalculator } from '@/hooks/useRiskCalculator';
 import { useDailyLossLock } from '@/hooks/useDailyLossLock';
@@ -40,7 +39,6 @@ export const RiskCalculatorV2Widget = ({
 
   const { isLocked, overrideUntil, override } = useDailyLossLock(calculation.dailyLossLimit);
 
-  const [advancedOpen, setAdvancedOpen] = useState(false);
   const [strategy, setStrategy] = useState<'scalp' | 'day' | 'swing' | 'position'>('day');
 
   const handleStrategyChange = (value: 'scalp' | 'day' | 'swing' | 'position') => {
@@ -159,13 +157,31 @@ export const RiskCalculatorV2Widget = ({
         </div>
 
         {/* Daily Loss Limit */}
-        <div className="space-y-2">
+        <div className="space-y-4">
           <Label>Daily Loss Limit</Label>
-          <div className="flex items-center justify-between rounded-md bg-muted p-3">
-            <span className="text-sm text-muted-foreground">
-              {dailyLossPercent.toFixed(1)}% of equity
-            </span>
-            <span className="text-lg font-semibold">{formatAmount(calculation.dailyLossLimit)}</span>
+          <div className="space-y-2">
+            <Slider
+              value={[dailyLossPercent]}
+              onValueChange={([v]) => setDailyLossPercent(v)}
+              min={0}
+              max={10}
+              step={0.1}
+              disabled={isLocked && !overrideUntil}
+              className="w-full"
+            />
+            <div className="flex items-center justify-between">
+              <Input
+                type="number"
+                value={dailyLossPercent}
+                onChange={(e) => setDailyLossPercent(parseFloat(e.target.value) || 0)}
+                min={0}
+                max={10}
+                step={0.1}
+                disabled={isLocked && !overrideUntil}
+                className="w-24 text-center"
+              />
+              <span className="text-2xl font-bold">{formatAmount(calculation.dailyLossLimit)}</span>
+            </div>
           </div>
         </div>
 
@@ -195,55 +211,6 @@ export const RiskCalculatorV2Widget = ({
             </div>
           </div>
         )}
-
-        {/* Advanced Section */}
-        <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="sm" className="w-full justify-between">
-              <span>Advanced (Position Sizing)</span>
-              <ChevronDown className={`h-4 w-4 transition-transform ${advancedOpen ? 'rotate-180' : ''}`} />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-4 pt-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Entry Price</Label>
-                <Input
-                  type="number"
-                  value={entryPrice || ''}
-                  onChange={(e) => setEntryPrice(parseFloat(e.target.value) || null)}
-                  placeholder="0.00"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Stop Price</Label>
-                <Input
-                  type="number"
-                  value={stopPrice || ''}
-                  onChange={(e) => setStopPrice(parseFloat(e.target.value) || null)}
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
-
-            {calculation.positionSize && calculation.exposure && (
-              <div className="rounded-md bg-muted p-3 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Position Size:</span>
-                  <span className="font-semibold">{calculation.positionSize.toFixed(4)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Exposure:</span>
-                  <span className="font-semibold">{formatAmount(calculation.exposure)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Est. Leverage:</span>
-                  <span className="font-semibold">{calculation.estimatedLeverage?.toFixed(2)}x</span>
-                </div>
-              </div>
-            )}
-          </CollapsibleContent>
-        </Collapsible>
       </div>
     </WidgetWrapper>
   );
