@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, Trash2, Copy, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useDebounce } from '@/hooks/useDebounce';
+import { StrategyTagSelector } from './StrategyTagSelector';
+import { MistakeTagSelector } from './MistakeTagSelector';
 
 interface Trade {
   symbol?: string;
@@ -22,6 +24,8 @@ interface Trade {
   opened_at?: string;
   closed_at?: string;
   strategy?: string;
+  setup_tags?: string[];
+  error_tags?: string[];
   notes?: string;
   broker?: string;
   leverage?: number;
@@ -385,20 +389,17 @@ export function TradeCard({
           </div>
         </div>
 
-        {/* Full Width - Strategy & Notes */}
+        {/* Full Width - Strategy, Mistakes & Notes */}
         <div className="col-span-2 space-y-4">
-          <div>
-            <Label htmlFor={`strategy-${index}`} className="text-xs text-[#A6B1BB] mb-1.5 block">
-              Strategy
-            </Label>
-            <Input
-              id={`strategy-${index}`}
-              value={localTrade.strategy || ''}
-              onChange={(e) => handleLocalChange('strategy', e.target.value)}
-              placeholder="e.g., Breakout, Scalping, Swing..."
-              className="bg-[#1A1F28] border-[#2A3038] text-[#EAEFF4] rounded-xl h-11"
-            />
-          </div>
+          <StrategyTagSelector
+            selectedStrategies={localTrade.setup_tags || []}
+            onChange={(strategies) => handleLocalChange('setup_tags', strategies)}
+          />
+
+          <MistakeTagSelector
+            selectedMistakes={localTrade.error_tags || []}
+            onChange={(mistakes) => handleLocalChange('error_tags', mistakes)}
+          />
 
           <div>
             <Label htmlFor={`notes-${index}`} className="text-xs text-[#A6B1BB] mb-1.5 block">
