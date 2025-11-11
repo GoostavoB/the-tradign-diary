@@ -91,7 +91,7 @@ export function AppSidebar() {
       defaultOpen: false,
       dataTour: 'analytics-group',
       items: [
-        { title: t('navigation.analytics'), url: '/analytics', icon: BarChart3, iconName: 'BarChart3', keywords: ['analytics', 'stats', 'performance', 'reports', 'metrics', 'data', 'insights', 'charts', 'graphs', 'analysis', 'trends', 'overview'] },
+        { title: 'Advanced Analytics', url: '/analytics', icon: BarChart3, iconName: 'BarChart3', keywords: ['analytics', 'stats', 'performance', 'reports', 'metrics', 'data', 'insights', 'charts', 'graphs', 'analysis', 'trends', 'overview'] },
         { title: t('navigation.marketData'), url: '/market-data', icon: LineChart, iconName: 'LineChart', keywords: ['market', 'prices', 'crypto', 'live', 'real-time', 'ticker', 'movers', 'gainers', 'losers', 'volume', '24h', 'change', 'top', 'coins', 'charts', 'data', 'volatility', 'btc', 'eth', 'trends'] },
         { title: t('navigation.forecast'), url: '/forecast', icon: Target, iconName: 'Target', keywords: ['forecast', 'prediction', 'future', 'projection', 'goals', 'targets', 'scenarios', 'simulation', 'planning', 'estimates', 'ai', 'predictions', 'what-if', 'models', 'signals', 'estimate', 'predict'] },
         // Phase 2: Economic Calendar and Performance Alerts - temporarily disabled for backlog #30
