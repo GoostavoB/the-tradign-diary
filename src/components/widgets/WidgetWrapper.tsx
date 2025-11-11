@@ -31,11 +31,14 @@ export const WidgetWrapper = memo(({
     <GlassCard 
       className={cn(
         "relative flex flex-col overflow-hidden",
-        "transition-all duration-300",
-        isEditMode && "animate-border-pulse",
+        "transition-all duration-300 ease-out",
+        isEditMode && "animate-border-pulse scale-[1.01]",
         isCompact && "widget-compact",
         className
       )}
+      style={{
+        transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+      }}
     >
       {/* Elegant Shimmer Effect for Edit Mode */}
       {isEditMode && (
@@ -51,15 +54,15 @@ export const WidgetWrapper = memo(({
       
       {/* Edit Mode Controls */}
       {isEditMode && (
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 flex gap-1">
-          <div className="drag-handle cursor-move p-1.5 rounded bg-background/95 hover:bg-background shadow-md border border-primary/40">
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 flex gap-1 edit-controls-enter">
+          <div className="drag-handle cursor-move p-1.5 rounded bg-background/95 hover:bg-background shadow-md border border-primary/40 transition-all duration-200 hover:scale-110 hover:shadow-lg">
             <GripVertical className="h-4 w-4 text-primary" />
           </div>
           {onRemove && (
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 bg-background/95 hover:bg-destructive hover:text-destructive-foreground shadow-md border border-primary/40"
+              className="h-7 w-7 bg-background/95 hover:bg-destructive hover:text-destructive-foreground shadow-md border border-primary/40 transition-all duration-200 hover:scale-110 hover:shadow-lg"
               onClick={onRemove}
             >
               <Trash2 className="h-3.5 w-3.5" />

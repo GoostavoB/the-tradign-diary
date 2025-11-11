@@ -920,11 +920,21 @@ textarea:focus-visible {
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease-out,
+              opacity 0.2s ease-out;
 }
 
 .widget-item.dragging {
-  will-change: transform, opacity;
+  will-change: transform, opacity, box-shadow;
   cursor: grabbing !important;
+  animation: drag-lift 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  z-index: 999;
+  opacity: 0.9;
+}
+
+.widget-item.dropping {
+  animation: drag-drop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 /* Prevent text selection and touch callouts during drag */
@@ -938,6 +948,26 @@ textarea:focus-visible {
 .dashboard-grid {
   touch-action: none;
   position: relative;
+}
+
+/* Edit mode animations */
+.widget-edit-mode {
+  animation: edit-mode-enter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.widget-edit-mode-exit {
+  animation: edit-mode-exit 0.2s ease-out;
+}
+
+/* Edit mode controls entrance */
+.edit-controls-enter {
+  animation: bounce-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Hover state for draggable widgets */
+.widget-item:not(.dragging):hover {
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.15);
 }
 
 /* Sticky popover for color picker */
@@ -990,12 +1020,20 @@ textarea:focus-visible {
   box-sizing: border-box;
 }
 
-/* Dragging placeholder - subtle indicator */
+/* Dragging placeholder - subtle indicator with animation */
 .react-grid-item.react-grid-placeholder {
   background: hsl(var(--primary) / 0.08);
   opacity: 0.5;
-  transition-duration: 100ms;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 2;
   border-radius: 1rem;
   border: 2px dashed hsl(var(--primary) / 0.3);
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Drop zone highlight */
+.drop-zone-active {
+  background: hsl(var(--primary) / 0.05);
+  border: 2px solid hsl(var(--primary) / 0.2);
+  transition: all 0.2s ease-out;
 }

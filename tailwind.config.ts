@@ -195,6 +195,59 @@ export default {
             boxShadow: "0 0 0 8px hsl(var(--destructive) / 0), 0 0 20px hsl(var(--destructive) / 0.3)",
           },
         },
+        "edit-mode-enter": {
+          "0%": {
+            transform: "scale(0.98)",
+            opacity: "0.8",
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1",
+          },
+        },
+        "edit-mode-exit": {
+          "0%": {
+            transform: "scale(1)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1",
+          },
+        },
+        "drag-lift": {
+          "0%": {
+            transform: "scale(1) translateZ(0)",
+            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+          },
+          "100%": {
+            transform: "scale(1.03) translateZ(20px)",
+            boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.3), 0 0 20px hsl(var(--primary) / 0.2)",
+          },
+        },
+        "drag-drop": {
+          "0%": {
+            transform: "scale(1.03) translateZ(20px)",
+            boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.3)",
+          },
+          "100%": {
+            transform: "scale(1) translateZ(0)",
+            boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+          },
+        },
+        "bounce-in": {
+          "0%": {
+            transform: "scale(0.95)",
+            opacity: "0",
+          },
+          "50%": {
+            transform: "scale(1.02)",
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -209,6 +262,11 @@ export default {
         "shimmer": "shimmer 8s ease-in-out infinite",
         "shake": "shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97)",
         "pulse-error": "pulse-error 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "edit-mode-enter": "edit-mode-enter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "edit-mode-exit": "edit-mode-exit 0.2s ease-out",
+        "drag-lift": "drag-lift 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+        "drag-drop": "drag-drop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+        "bounce-in": "bounce-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
       },
     },
   },
