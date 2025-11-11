@@ -14,18 +14,15 @@ export interface LayoutData {
 }
 
 const DEFAULT_POSITIONS: WidgetPosition[] = [
-  { id: 'totalBalance', column: 0, row: 0 },
+  // Row 1
+  { id: 'currentROI', column: 0, row: 0 },
   { id: 'winRate', column: 1, row: 0 },
-  { id: 'totalTrades', column: 2, row: 0 },
-  { id: 'portfolioOverview', column: 0, row: 1 },
-  { id: 'spotWallet', column: 1, row: 1 },
-  { id: 'topMovers', column: 2, row: 1 },
-  { id: 'recentTransactions', column: 0, row: 2 },
-  { id: 'capitalGrowth', column: 0, row: 3 },
-  { id: 'avgPnLPerTrade', column: 1, row: 3 },
-  { id: 'avgPnLPerDay', column: 2, row: 3 },
-  { id: 'currentROI', column: 0, row: 4 },
-  { id: 'avgROIPerTrade', column: 1, row: 4 },
+  { id: 'avgPnLPerDay', column: 2, row: 0 },
+  
+  // Row 2
+  { id: 'capitalGrowth', column: 0, row: 1 },
+  { id: 'topMovers', column: 1, row: 1 },
+  { id: 'combinedPnLROI', column: 2, row: 1 },
 ];
 
 export const useGridLayout = (userId: string | undefined, availableWidgets: string[]) => {
@@ -181,7 +178,8 @@ export const useGridLayout = (userId: string | undefined, availableWidgets: stri
 
   const resetLayout = useCallback(() => {
     setPositions(DEFAULT_POSITIONS);
-    saveLayout(DEFAULT_POSITIONS);
+    setColumnCount(3);
+    saveLayout(DEFAULT_POSITIONS, 3);
     toast.success('Layout reset');
   }, [saveLayout]);
 
