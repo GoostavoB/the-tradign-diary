@@ -58,16 +58,6 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     useSensor(KeyboardSensor)
   );
   
-  // Grid organization
-  const grid = useMemo(() => {
-    const result: { [col: number]: { [row: number]: string } } = {};
-    positions.forEach(pos => {
-      if (!result[pos.column]) result[pos.column] = {};
-      result[pos.column][pos.row] = pos.id;
-    });
-    return result;
-  }, [positions]);
-  
   // Active widgets for library
   const activeWidgets = useMemo(() => positions.map(p => p.id), [positions]);
   
@@ -156,15 +146,14 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     setActiveId(null);
   }, []);
   
-  // Widget renderer - Rolling target always spans all columns
+  // Widget renderer for regular widgets
   const renderWidget = useCallback((widgetId: string) => {
     const widgetConfig = TRADE_STATION_WIDGET_CATALOG[widgetId];
     if (!widgetConfig) return null;
     
     const WidgetComponent = widgetConfig.component;
-    const isRollingTarget = widgetId === 'rollingTarget';
     
-    const widget = (
+    return (
       <SortableWidget
         id={widgetId}
         isEditMode={isCustomizing}
@@ -177,13 +166,28 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
         />
       </SortableWidget>
     );
+  }, [isCustomizing, removeWidget]);
+  
+  // Render spanning widget (full width) - no extra wrapper
+  const renderSpanningWidget = useCallback((widgetId: string) => {
+    const widgetConfig = TRADE_STATION_WIDGET_CATALOG[widgetId];
+    if (!widgetConfig) return null;
     
-    // Wrap rolling target to span all columns
-    if (isRollingTarget) {
-      return <div className="col-span-full">{widget}</div>;
-    }
+    const WidgetComponent = widgetConfig.component;
     
-    return widget;
+    return (
+      <SortableWidget
+        id={widgetId}
+        isEditMode={isCustomizing}
+        onRemove={() => removeWidget(widgetId)}
+      >
+        <WidgetComponent 
+          id={widgetId}
+          isEditMode={isCustomizing} 
+          onRemove={() => removeWidget(widgetId)} 
+        />
+      </SortableWidget>
+    );
   }, [isCustomizing, removeWidget]);
 
   // Handle customize actions
@@ -270,30 +274,59 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
           items={positions.map(p => p.id)}
           strategy={rectSortingStrategy}
         >
+          {/* Single grid container - spanning widgets will use col-span-full */}
           <div 
-            className="dashboard-grid-free"
-            style={{ '--column-count': columnCount } as React.CSSProperties}
+            className="grid gap-4"
+            style={{ 
+              gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+            }}
           >
-            {Array.from({ length: columnCount }, (_, colIdx) => (
-              <div key={`col-${colIdx}`} className="dashboard-column-free">
-                {Object.entries(grid[colIdx] || {})
-                  .sort(([rowA], [rowB]) => parseInt(rowA) - parseInt(rowB))
-                  .map(([row, widgetId]) => {
-                    // Rolling target should only appear in column 0 but span all columns
-                    if (widgetId === 'rollingTarget' && colIdx !== 0) {
-                      return null;
+            {/* Sort all positions by row, then column */}
+            {[...positions]
+              .sort((a, b) => {
+                if (a.row !== b.row) return a.row - b.row;
+                return a.column - b.column;
+              })
+              .map((pos) => {
+                const isSpanning = pos.id === 'rollingTarget';
+                
+                return (
+                  <div
+                    key={pos.id}
+                    className={isSpanning ? 'col-span-full' : ''}
+                    style={
+                      isSpanning
+                        ? undefined
+                        : {
+                            gridColumn: pos.column + 1,
+                            gridRow: pos.row + 1,
+                          }
                     }
-                    return (
-                      <div key={widgetId}>
-                        {renderWidget(widgetId)}
-                      </div>
-                    );
-                  })}
-                {isCustomizing && (
-                  <DropZone id={`dropzone-${colIdx}-${Object.keys(grid[colIdx] || {}).length}`} />
-                )}
-              </div>
-            ))}
+                  >
+                    {isSpanning ? renderSpanningWidget(pos.id) : renderWidget(pos.id)}
+                  </div>
+                );
+              })}
+            
+            {/* Drop zones for customization */}
+            {isCustomizing &&
+              Array.from({ length: columnCount }, (_, colIdx) => {
+                const maxRow = Math.max(
+                  0,
+                  ...positions.filter(p => p.column === colIdx).map(p => p.row)
+                );
+                return (
+                  <div
+                    key={`dropzone-${colIdx}`}
+                    style={{
+                      gridColumn: colIdx + 1,
+                      gridRow: maxRow + 2,
+                    }}
+                  >
+                    <DropZone id={`dropzone-${colIdx}-${maxRow + 1}`} />
+                  </div>
+                );
+              })}
           </div>
         </SortableContext>
       </DndContext>
