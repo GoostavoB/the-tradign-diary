@@ -93,7 +93,7 @@ export const TradeRowCard = memo(({
           <div>
             <div className={cn(
               "font-semibold text-foreground",
-              density === 'compact' ? 'text-sm' : 'text-base'
+              density === 'compact' ? 'text-[10px]' : 'text-[11px]'
             )}>
               {trade.symbol}
             </div>
