@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { DndContext, DragEndEvent, DragStartEvent, rectIntersection, DragOverlay, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragStartEvent, rectIntersection, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTradeStationLayout, TradeStationWidgetPosition } from '@/hooks/useTradeStationLayout';
@@ -159,19 +159,17 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     const WidgetComponent = widgetConfig.component;
     
     return (
-      <div key={widgetId} className={isCustomizing ? 'widget-edit-mode' : ''}>
-        <SortableWidget
+      <SortableWidget
+        id={widgetId}
+        isEditMode={isCustomizing}
+        onRemove={() => removeWidget(widgetId)}
+      >
+        <WidgetComponent 
           id={widgetId}
-          isEditMode={isCustomizing}
-          onRemove={() => removeWidget(widgetId)}
-        >
-          <WidgetComponent 
-            id={widgetId}
-            isEditMode={isCustomizing} 
-            onRemove={() => removeWidget(widgetId)} 
-          />
-        </SortableWidget>
-      </div>
+          isEditMode={isCustomizing} 
+          onRemove={() => removeWidget(widgetId)} 
+        />
+      </SortableWidget>
     );
   }, [isCustomizing, removeWidget]);
 
@@ -260,14 +258,6 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
             ))}
           </div>
         </SortableContext>
-
-        <DragOverlay>
-          {activeId ? (
-            <div className="opacity-50">
-              {renderWidget(activeId)}
-            </div>
-          ) : null}
-        </DragOverlay>
       </DndContext>
       
       {/* Widget Library */}
