@@ -30,7 +30,7 @@ export function BulkDeleteDialog({
   trades,
   onBulkDelete,
 }: BulkDeleteDialogProps) {
-  const [pnlRange, setPnlRange] = useState<[number, number]>([-10, 10]);
+  const [pnlRange, setPnlRange] = useState<[number, number]>([0, 0]);
 
   // Calculate which trades fall within the selected range
   const { affectedIndices, affectedCount } = useMemo(() => {
