@@ -174,6 +174,14 @@ export function calculateLeverageMetrics(
     warnings.push("High risk: Stop is close to liquidation");
   }
 
+  // Results are valid as long as stop is on correct side of entry
+  // Risk warnings don't make the calculation invalid
+  const hasBlockingError = warnings.some(w => 
+    w.includes("Stop should be") || 
+    w.includes("Stop cannot equal entry") ||
+    w.includes("Stop too wide")
+  );
+
   return {
     deltaPct,
     Lstar,
@@ -184,7 +192,7 @@ export function calculateLeverageMetrics(
     riskLevel,
     riskValue,
     stop,
-    isValid: warnings.length === 0 || warnings.every(w => w.includes("exceeds safe max")),
+    isValid: !hasBlockingError,
     warnings,
   };
 }

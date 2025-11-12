@@ -149,38 +149,48 @@ export const SimpleLeverageWidget = ({
 
       {/* Results */}
       {result && result.isValid && (
-        <div className="border-t border-border/40 pt-4 space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Max Safe Leverage</span>
-            <span className="text-lg font-bold text-foreground">{result.Lmax}x</span>
+        <>
+          <div className="border-t border-border/40 pt-4 space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Max Safe Leverage</span>
+              <span className="text-lg font-bold text-foreground">{result.Lmax}x</span>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Liquidation Price</span>
+              <span className="text-sm font-medium text-foreground">
+                ${result.pliq.toFixed(2)}
+              </span>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Risk Level</span>
+              <Badge variant="outline" className={getRiskLevelColor(result.riskLevel)}>
+                {result.riskLevel}
+              </Badge>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Safety Margin</span>
+              <span className="text-sm font-medium text-foreground">
+                {result.marginPct.toFixed(2)}%
+              </span>
+            </div>
           </div>
-          
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Liquidation Price</span>
-            <span className="text-sm font-medium text-foreground">
-              ${result.pliq.toFixed(2)}
-            </span>
-          </div>
-          
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Risk Level</span>
-            <Badge variant="outline" className={getRiskLevelColor(result.riskLevel)}>
-              {result.riskLevel}
-            </Badge>
-          </div>
-          
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Safety Margin</span>
-            <span className="text-sm font-medium text-foreground">
-              {result.marginPct.toFixed(2)}%
-            </span>
-          </div>
-        </div>
+
+          {/* Risk warnings even when valid */}
+          {result.warnings.length > 0 && (
+            <div className="mt-3 p-2 rounded-md bg-state-warning/10 border border-state-warning/20">
+              <p className="text-xs text-state-warning">{result.warnings[0]}</p>
+            </div>
+          )}
+        </>
       )}
 
-      {result && !result.isValid && result.warnings.length > 0 && (
-        <div className="mt-4 p-2 rounded-md bg-state-warning/10 border border-state-warning/20">
-          <p className="text-xs text-state-warning">{result.warnings[0]}</p>
+      {result && !result.isValid && (
+        <div className="mt-4 p-2 rounded-md bg-state-error/10 border border-state-error/20">
+          <p className="text-xs text-state-error font-medium">Error</p>
+          <p className="text-xs text-state-error mt-1">{result.warnings[0]}</p>
         </div>
       )}
     </WidgetWrapper>
