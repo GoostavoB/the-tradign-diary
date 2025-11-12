@@ -7,7 +7,7 @@ import { useAIAssistant } from '@/contexts/AIAssistantContext';
 
 interface Trade {
   trade_date: string;
-  pnl: number;
+  profit_loss: number;
   roi: number;
 }
 
@@ -36,9 +36,9 @@ const TradingHeatmapComponent = ({ trades }: TradingHeatmapProps) => {
       }
 
       data[key].total += 1;
-      data[key].pnl += trade.pnl || 0;
+      data[key].pnl += trade.profit_loss || 0;
       data[key].roi += trade.roi || 0;
-      if ((trade.pnl || 0) > 0) {
+      if ((trade.profit_loss || 0) > 0) {
         data[key].wins += 1;
       }
     });

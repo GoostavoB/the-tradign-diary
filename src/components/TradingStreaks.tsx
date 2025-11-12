@@ -25,7 +25,7 @@ export const TradingStreaks = memo(({ trades }: TradingStreaksProps) => {
   
   for (let i = sortedTrades.length - 1; i >= 0; i--) {
     const trade = sortedTrades[i];
-    const isWin = (trade.pnl || 0) > 0;
+    const isWin = (trade.profit_loss || 0) > 0;
     
     if (currentStreakType === null) {
       currentStreakType = isWin ? 'win' : 'loss';
@@ -44,7 +44,7 @@ export const TradingStreaks = memo(({ trades }: TradingStreaksProps) => {
   let currentLossStreak = 0;
 
   sortedTrades.forEach(trade => {
-    const isWin = (trade.pnl || 0) > 0;
+    const isWin = (trade.profit_loss || 0) > 0;
     
     if (isWin) {
       currentWinStreak++;

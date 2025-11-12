@@ -36,8 +36,8 @@ export const StatisticsComparison = ({ trades }: StatisticsComparisonProps) => {
   const calculateMetrics = (tradesToAnalyze: Trade[]) => {
     if (tradesToAnalyze.length === 0) return null;
     
-    const totalPnl = tradesToAnalyze.reduce((sum, t) => sum + (t.pnl || 0), 0);
-    const wins = tradesToAnalyze.filter(t => (t.pnl || 0) > 0).length;
+    const totalPnl = tradesToAnalyze.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+    const wins = tradesToAnalyze.filter(t => (t.profit_loss || 0) > 0).length;
     const winRate = (wins / tradesToAnalyze.length) * 100;
     const avgRoi = tradesToAnalyze.reduce((sum, t) => sum + (t.roi || 0), 0) / tradesToAnalyze.length;
     

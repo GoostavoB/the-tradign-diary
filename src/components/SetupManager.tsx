@@ -81,12 +81,12 @@ export const SetupManager = ({ trades }: SetupManagerProps) => {
         };
       }
 
-      const totalPnl = setupTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
-      const winningTrades = setupTrades.filter(t => (t.pnl || 0) > 0);
+      const totalPnl = setupTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+      const winningTrades = setupTrades.filter(t => (t.profit_loss || 0) > 0);
       const winRate = (winningTrades.length / setupTrades.length) * 100;
       const avgPnl = totalPnl / setupTrades.length;
-      const bestTrade = Math.max(...setupTrades.map(t => t.pnl || 0));
-      const worstTrade = Math.min(...setupTrades.map(t => t.pnl || 0));
+      const bestTrade = Math.max(...setupTrades.map(t => t.profit_loss || 0));
+      const worstTrade = Math.min(...setupTrades.map(t => t.profit_loss || 0));
 
       return {
         name: setup.name,

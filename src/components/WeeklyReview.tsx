@@ -52,24 +52,24 @@ const WeeklyReviewComponent = ({ trades }: WeeklyReviewProps) => {
       };
     }
 
-    const totalPnl = weekTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
-    const winningTrades = weekTrades.filter(t => (t.pnl || 0) > 0);
-    const losingTrades = weekTrades.filter(t => (t.pnl || 0) < 0);
+    const totalPnl = weekTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+    const winningTrades = weekTrades.filter(t => (t.profit_loss || 0) > 0);
+    const losingTrades = weekTrades.filter(t => (t.profit_loss || 0) < 0);
     const winRate = (winningTrades.length / weekTrades.length) * 100;
 
     const avgWin = winningTrades.length > 0
-      ? winningTrades.reduce((sum, t) => sum + (t.pnl || 0), 0) / winningTrades.length
+      ? winningTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / winningTrades.length
       : 0;
-
+    
     const avgLoss = losingTrades.length > 0
-      ? Math.abs(losingTrades.reduce((sum, t) => sum + (t.pnl || 0), 0) / losingTrades.length)
+      ? Math.abs(losingTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / losingTrades.length)
       : 0;
 
     // Daily performance
     const dailyPnl: Record<string, number> = {};
     weekTrades.forEach(trade => {
       const day = new Date(trade.trade_date).toDateString();
-      dailyPnl[day] = (dailyPnl[day] || 0) + (trade.pnl || 0);
+      dailyPnl[day] = (dailyPnl[day] || 0) + (trade.profit_loss || 0);
     });
 
     const days = Object.entries(dailyPnl);
@@ -84,7 +84,7 @@ const WeeklyReviewComponent = ({ trades }: WeeklyReviewProps) => {
     // Asset performance
     const assetPnl: Record<string, number> = {};
     weekTrades.forEach(trade => {
-      assetPnl[trade.symbol] = (assetPnl[trade.symbol] || 0) + (trade.pnl || 0);
+      assetPnl[trade.symbol] = (assetPnl[trade.symbol] || 0) + (trade.profit_loss || 0);
     });
 
     const topAsset = Object.entries(assetPnl).reduce((top, [symbol, pnl]) => 

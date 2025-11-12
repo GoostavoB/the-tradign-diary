@@ -67,9 +67,9 @@ const WinsByHourChartComponent = ({ trades }: WinsByHourChartProps) => {
         return date.getHours() === hour;
       });
 
-      const wins = tradesAtHour.filter(t => (t.pnl || 0) > 0);
-      const losses = tradesAtHour.filter(t => (t.pnl || 0) <= 0);
-      const totalPnL = tradesAtHour.reduce((sum, t) => sum + (t.pnl || 0), 0);
+      const wins = tradesAtHour.filter(t => (t.profit_loss || 0) > 0);
+      const losses = tradesAtHour.filter(t => (t.profit_loss || 0) <= 0);
+      const totalPnL = tradesAtHour.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
       const avgROI = tradesAtHour.length > 0
         ? tradesAtHour.reduce((sum, t) => sum + (t.roi || 0), 0) / tradesAtHour.length
         : 0;

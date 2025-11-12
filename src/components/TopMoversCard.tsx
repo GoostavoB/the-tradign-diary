@@ -34,7 +34,7 @@ const TopMoversCardComponent = ({ trades, className }: TopMoversCardProps) => {
       if (!assetData[symbol]) {
         assetData[symbol] = { symbol, pnl: 0, change: 0, trades: 0 };
       }
-      assetData[symbol].pnl += trade.pnl || 0;
+      assetData[symbol].pnl += trade.profit_loss || 0;
       assetData[symbol].trades += 1;
     });
 

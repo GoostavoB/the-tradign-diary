@@ -87,9 +87,9 @@ function calculateCurrentStreak(trades: Trade[]): number {
   if (!trades || trades.length === 0) return 0;
   const sorted = [...trades].sort((a, b) => new Date(b.trade_date).getTime() - new Date(a.trade_date).getTime());
   let count = 0;
-  const isWinning = (sorted[0].pnl || 0) > 0;
+  const isWinning = (sorted[0].profit_loss || 0) > 0;
   for (const trade of sorted) {
-    const pnl = trade.pnl || 0;
+    const pnl = trade.profit_loss || 0;
     if ((isWinning && pnl > 0) || (!isWinning && pnl <= 0)) {
       count++;
     } else {
@@ -381,7 +381,7 @@ const Dashboard = () => {
       );
       let winStreak = 0;
       for (const trade of sortedTodayTrades) {
-        if ((trade.pnl || 0) > 0) {
+        if ((trade.profit_loss || 0) > 0) {
           winStreak++;
         } else {
           break;
@@ -389,7 +389,7 @@ const Dashboard = () => {
       }
       updateChallengeProgress('win_rate', winStreak);
 
-      const todayProfit = todayTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+      const todayProfit = todayTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
       updateChallengeProgress('profit_target', Math.floor(todayProfit));
     }
   }, [trades, updateChallengeProgress]);
@@ -410,17 +410,17 @@ const Dashboard = () => {
       })));
       
       // Calculate P&L without fees
-      const totalPnlWithoutFees = trades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+      const totalPnlWithoutFees = trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
       
       // Calculate P&L with fees (subtract fees from profit)
       const totalPnlWithFees = trades.reduce((sum, t) => {
-        const pnl = t.pnl || 0;
+        const pnl = t.profit_loss || 0;
         const fundingFee = t.funding_fee || 0;
         const tradingFee = t.trading_fee || 0;
         return sum + (pnl - Math.abs(fundingFee) - Math.abs(tradingFee));
       }, 0);
       
-      const winningTrades = trades.filter(t => (t.pnl || 0) > 0).length;
+      const winningTrades = trades.filter(t => (t.profit_loss || 0) > 0).length;
       const avgDuration = trades.reduce((sum, t) => sum + (t.duration_minutes || 0), 0) / (trades.length || 1);
 
       // Calculate unique trading days
@@ -499,7 +499,7 @@ const Dashboard = () => {
     const assetPnL: Record<string, number> = {};
     trades.forEach(t => {
       const symbol = t.symbol || 'Unknown';
-      assetPnL[symbol] = (assetPnL[symbol] || 0) + (t.pnl || 0);
+      assetPnL[symbol] = (assetPnL[symbol] || 0) + (t.profit_loss || 0);
     });
     const best = Object.entries(assetPnL).sort((a, b) => b[1] - a[1])[0];
     return best ? best[0] : 'N/A';
@@ -719,8 +719,8 @@ const Dashboard = () => {
           : 0;
         break;
       case 'winRate':
-        const winningTrades = processedTrades.filter(t => t.pnl > 0).length;
-        const losingTrades = processedTrades.filter(t => t.pnl <= 0).length;
+        const winningTrades = processedTrades.filter(t => (t.profit_loss || 0) > 0).length;
+        const losingTrades = processedTrades.filter(t => (t.profit_loss || 0) <= 0).length;
         widgetProps.winRate = stats?.win_rate || 0;
         widgetProps.wins = winningTrades;
         widgetProps.losses = losingTrades;
@@ -759,7 +759,7 @@ const Dashboard = () => {
         break;
       case 'tradingQuality':
         const minPnl = processedTrades.length > 0 
-          ? Math.min(...processedTrades.map(t => t.pnl || 0)) 
+          ? Math.min(...processedTrades.map(t => t.profit_loss || 0))
           : 0;
         widgetProps.avgWin = dashboardStats.avgWin;
         widgetProps.avgLoss = dashboardStats.avgLoss;

@@ -18,7 +18,7 @@ interface Trade {
   side: 'long' | 'short';
   leverage?: number;
   roi?: number;
-  pnl?: number;
+  profit_loss?: number;
   entry_price?: number;
   exit_price?: number;
   trade_date?: string;
@@ -44,7 +44,7 @@ export function ShareTradeCard({ open, onOpenChange, trade }: ShareTradeCardProp
     ? [bullNeon, bullNeon, bullNeon] // You can add more bull images here
     : [bearNeon, bearNeon, bearNeon]; // You can add more bear images here
 
-  const value = mode === 'roi' ? trade.roi : trade.pnl;
+  const value = mode === 'roi' ? trade.roi : trade.profit_loss;
   const isProfit = (value || 0) > 0;
 
   const handleDownload = async () => {

@@ -34,7 +34,7 @@ export const TotalBalanceCard = memo(({
     .reduce((acc, trade, index) => {
       const prevValue = index > 0 ? acc[index - 1].value : 0;
       acc.push({
-        value: prevValue + (trade.pnl || 0),
+        value: prevValue + (trade.profit_loss || 0),
         date: trade.trade_date
       });
       return acc;

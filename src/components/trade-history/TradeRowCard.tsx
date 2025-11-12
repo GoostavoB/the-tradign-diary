@@ -180,10 +180,10 @@ export const TradeRowCard = memo(({
             <div className="text-[10px] text-muted-foreground mb-0.5">P&L</div>
             <div className={cn(
               "font-semibold text-right",
-              getFinancialColor(trade.pnl || 0),
+              getFinancialColor(trade.profit_loss || 0),
               density === 'compact' ? 'text-sm' : 'text-base'
             )}>
-              <BlurredCurrency amount={trade.pnl || 0} />
+              <BlurredCurrency amount={trade.profit_loss || 0} />
             </div>
           </div>
         </div>

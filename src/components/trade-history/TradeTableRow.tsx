@@ -91,8 +91,8 @@ export const TradeTableRow = memo(({
         </TableCell>
       )}
       {columns.find(c => c.key === 'pnl')?.visible && (
-        <TableCell className={getFinancialColor(trade.pnl || 0)}>
-          <BlurredCurrency amount={trade.pnl || 0} />
+        <TableCell className={getFinancialColor(trade.profit_loss || 0)}>
+          <BlurredCurrency amount={trade.profit_loss || 0} />
         </TableCell>
       )}
       {columns.find(c => c.key === 'roi')?.visible && (

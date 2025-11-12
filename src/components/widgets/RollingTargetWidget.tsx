@@ -144,7 +144,7 @@ export const RollingTargetWidget = memo(({
         });
       }
       const day = dailyMap.get(dateStr)!;
-      day.pnl += trade.pnl || 0;
+      day.pnl += trade.profit_loss || 0;
     });
 
     // Calculate cumulative values and planned path

@@ -27,9 +27,9 @@ export const useTradeXP = (trades: Trade[]) => {
         addXP(10, 'trade_completed', `Trade on ${trade.symbol}`);
 
         // Bonus XP for winning trades
-        if ((trade.pnl || 0) > 0) {
-          const winXP = Math.min(Math.floor((trade.pnl || 0) / 10), 50); // Max 50 XP per win
-          addXP(winXP, 'winning_trade', `Profit: $${trade.pnl?.toFixed(2)}`);
+        if ((trade.profit_loss || 0) > 0) {
+          const winXP = Math.min(Math.floor((trade.profit_loss || 0) / 10), 50); // Max 50 XP per win
+          addXP(winXP, 'winning_trade', `Profit: $${trade.profit_loss?.toFixed(2)}`);
         }
 
         // Bonus XP for good risk management (ROI > 3%)
@@ -59,7 +59,7 @@ export const useTradeXP = (trades: Trade[]) => {
     );
     let winStreak = 0;
     for (const trade of sortedTodayTrades) {
-      if ((trade.pnl || 0) > 0) {
+      if ((trade.profit_loss || 0) > 0) {
         winStreak++;
       } else {
         break;
@@ -68,7 +68,7 @@ export const useTradeXP = (trades: Trade[]) => {
     updateChallengeProgress('win_rate', winStreak);
 
     // Profit target challenge
-    const todayProfit = todayTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+    const todayProfit = todayTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
     updateChallengeProgress('profit_target', Math.floor(todayProfit));
 
   }, [trades, addXP, updateChallengeProgress]);

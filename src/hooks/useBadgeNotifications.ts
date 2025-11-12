@@ -56,9 +56,9 @@ export function useBadgeNotifications(trades: Trade[]) {
     const checkAndNotifyBadges = async () => {
       // Calculate current achievements
       const totalTrades = trades.length;
-      const winningTrades = trades.filter(t => (t.pnl || 0) > 0);
+      const winningTrades = trades.filter(t => (t.profit_loss || 0) > 0);
       const winRate = totalTrades > 0 ? (winningTrades.length / totalTrades) * 100 : 0;
-      const totalPnl = trades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+      const totalPnl = trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
       
       const sortedTrades = [...trades].sort((a, b) => 
         new Date(a.trade_date).getTime() - new Date(b.trade_date).getTime()
@@ -68,7 +68,7 @@ export function useBadgeNotifications(trades: Trade[]) {
       let currentWinStreak = 0;
       
       sortedTrades.forEach(trade => {
-        if ((trade.pnl || 0) > 0) {
+        if ((trade.profit_loss || 0) > 0) {
           currentWinStreak++;
           maxWinStreak = Math.max(maxWinStreak, currentWinStreak);
         } else {
@@ -84,7 +84,7 @@ export function useBadgeNotifications(trades: Trade[]) {
       }, {} as Record<string, Trade[]>);
 
       const beastModeDays = Object.values(tradesByDate).filter(dayTrades => {
-        const wins = dayTrades.filter(t => (t.pnl || 0) > 0).length;
+        const wins = dayTrades.filter(t => (t.profit_loss || 0) > 0).length;
         const dayWinRate = (wins / dayTrades.length) * 100;
         return dayWinRate > 70;
       }).length;

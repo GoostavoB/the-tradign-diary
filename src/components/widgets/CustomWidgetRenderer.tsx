@@ -90,9 +90,9 @@ export const CustomWidgetRenderer = ({ widget, onDelete, showAddToDashboard = fa
         const avgROI = trades.reduce((sum, t) => sum + (t.roi || 0), 0) / trades.length;
         return aggregation === 'avg' ? avgROI : avgROI;
       case 'pnl':
-        return trades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+        return trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
       case 'win_rate':
-        const wins = trades.filter(t => (t.pnl || 0) > 0).length;
+        const wins = trades.filter(t => (t.profit_loss || 0) > 0).length;
         return (wins / trades.length) * 100;
       case 'count':
         return trades.length;

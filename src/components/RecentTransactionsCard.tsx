@@ -44,7 +44,7 @@ export const RecentTransactionsCard = memo(({ trades, className }: RecentTransac
         <ul className="space-y-2" role="list" aria-label="Recent trading activity">
           {recentTrades.length > 0 ? (
             recentTrades.map((trade) => {
-              const isWin = (trade.pnl || 0) > 0;
+              const isWin = (trade.profit_loss || 0) > 0;
               return (
                 <li 
                   key={trade.id} 
@@ -72,7 +72,7 @@ export const RecentTransactionsCard = memo(({ trades, className }: RecentTransac
                     <p className={`font-semibold text-sm whitespace-nowrap ${
                       isWin ? 'text-primary' : 'text-secondary'
                     }`}>
-                      <BlurredCurrency amount={trade.pnl || 0} />
+                      <BlurredCurrency amount={trade.profit_loss || 0} />
                     </p>
                     <Badge 
                       variant={trade.side === 'long' ? 'default' : 'secondary'}
