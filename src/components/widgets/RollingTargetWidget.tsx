@@ -288,23 +288,26 @@ export const RollingTargetWidget = memo(({
     
     const daysAhead = dailyData.filter(d => d.deviation >= 0).length;
     const daysBehind = dailyData.filter(d => d.deviation < 0).length;
+    const successRate = (daysAhead / dailyData.length) * 100;
+    
     const avgRequiredWhenBehind = dailyData
       .filter(d => d.requiredToday > 0 && d.deviation < 0)
       .reduce((sum, d) => sum + d.requiredToday, 0) / Math.max(1, daysBehind);
-    const daysAtZeroRequired = dailyData.filter(d => d.requiredToday === 0).length;
-    const percentDaysAtZero = (daysAtZeroRequired / dailyData.length) * 100;
     
     const lastDay = dailyData[dailyData.length - 1];
+    const currentStatus = lastDay.deviation >= 0 ? 'ahead' : 'behind';
     const driftPercent = lastDay.plannedCapital > 0 
       ? (lastDay.deviation / lastDay.plannedCapital) * 100 
       : 0;
+    const driftAmount = Math.abs(lastDay.deviation);
     
     return {
-      daysAhead,
-      daysBehind,
-      avgRequiredWhenBehind,
-      percentDaysAtZero,
+      currentStatus,
       driftPercent,
+      driftAmount,
+      successRate,
+      avgRequiredWhenBehind,
+      totalDays: dailyData.length,
     };
   }, [dailyData]);
 
@@ -691,22 +694,36 @@ export const RollingTargetWidget = memo(({
         {summaryMetrics && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Days Ahead</p>
-              <p className="text-lg font-bold text-profit">{summaryMetrics.daysAhead}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Days Behind</p>
-              <p className="text-lg font-bold text-loss">{summaryMetrics.daysBehind}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Avg When Behind</p>
-              <p className="text-lg font-bold">{formatCurrency(summaryMetrics.avgRequiredWhenBehind)}</p>
+              <p className="text-xs text-muted-foreground">Current Status</p>
+              <div className="flex items-center gap-2">
+                {summaryMetrics.currentStatus === 'ahead' ? (
+                  <>
+                    <ArrowUpCircle className="h-4 w-4 text-profit" />
+                    <p className="text-lg font-bold text-profit">Ahead</p>
+                  </>
+                ) : (
+                  <>
+                    <ArrowDownCircle className="h-4 w-4 text-loss" />
+                    <p className="text-lg font-bold text-loss">Behind</p>
+                  </>
+                )}
+              </div>
             </div>
             <div className="space-y-1">
               <p className="text-xs text-muted-foreground">Drift from Plan</p>
               <p className={`text-lg font-bold ${summaryMetrics.driftPercent >= 0 ? 'text-profit' : 'text-loss'}`}>
                 {summaryMetrics.driftPercent >= 0 ? '+' : ''}{summaryMetrics.driftPercent.toFixed(1)}%
               </p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground">Success Rate</p>
+              <p className={`text-lg font-bold ${summaryMetrics.successRate >= 50 ? 'text-profit' : 'text-loss'}`}>
+                {summaryMetrics.successRate.toFixed(0)}%
+              </p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground">Avg Catch-Up</p>
+              <p className="text-lg font-bold">{formatCurrency(summaryMetrics.avgRequiredWhenBehind)}</p>
             </div>
           </div>
         )}
