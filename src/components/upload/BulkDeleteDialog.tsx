@@ -83,43 +83,35 @@ export function BulkDeleteDialog({
               </div>
             </div>
 
-            {/* Negative Range Slider (Red) */}
+            {/* Bidirectional Range Slider */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs text-red-400">Negative Threshold</Label>
-                <span className="text-xs font-medium text-red-400">${negativePnl.toFixed(2)}</span>
+              <div className="relative">
+                <Slider
+                  min={-100}
+                  max={100}
+                  step={0.5}
+                  value={[negativePnl, positivePnl]}
+                  onValueChange={(values) => {
+                    const [neg, pos] = values;
+                    setNegativePnl(Math.min(0, neg));
+                    setPositivePnl(Math.max(0, pos));
+                  }}
+                  className="w-full [&_[role=slider]:first-of-type]:border-red-500 [&_[role=slider]:first-of-type]:bg-red-500 [&_[role=slider]:last-of-type]:border-green-500 [&_[role=slider]:last-of-type]:bg-green-500"
+                  style={{
+                    // @ts-ignore - Custom CSS variable for gradient track
+                    '--slider-track-bg': 'linear-gradient(to right, #ef4444 0%, #fca5a5 50%, #86efac 50%, #22c55e 100%)'
+                  }}
+                />
+                <style>{`
+                  [data-radix-slider-track] {
+                    background: linear-gradient(to right, #ef4444 0%, #fca5a5 50%, #86efac 50%, #22c55e 100%) !important;
+                  }
+                `}</style>
               </div>
-              <Slider
-                min={-100}
-                max={0}
-                step={0.5}
-                value={[negativePnl]}
-                onValueChange={(value) => setNegativePnl(value[0])}
-                className="w-full [&_[role=slider]]:border-red-500 [&_[role=slider]]:bg-red-500"
-              />
               <div className="flex items-center justify-between text-xs text-[#A6B1BB]">
-                <span>-$100</span>
+                <span className="text-red-400">-$100</span>
                 <span>$0</span>
-              </div>
-            </div>
-
-            {/* Positive Range Slider (Green) */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs text-green-400">Positive Threshold</Label>
-                <span className="text-xs font-medium text-green-400">${positivePnl.toFixed(2)}</span>
-              </div>
-              <Slider
-                min={0}
-                max={100}
-                step={0.5}
-                value={[positivePnl]}
-                onValueChange={(value) => setPositivePnl(value[0])}
-                className="w-full [&_[role=slider]]:border-green-500 [&_[role=slider]]:bg-green-500"
-              />
-              <div className="flex items-center justify-between text-xs text-[#A6B1BB]">
-                <span>$0</span>
-                <span>+$100</span>
+                <span className="text-green-400">+$100</span>
               </div>
             </div>
           </div>
