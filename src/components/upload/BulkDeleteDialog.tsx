@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import {
   Dialog,
@@ -64,11 +65,32 @@ export function BulkDeleteDialog({
 
         <div className="space-y-6 py-4">
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm text-[#EAEFF4]">P&L Range</Label>
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-medium text-[#EAEFF4]">
-                  ${negativePnl.toFixed(2)} to ${positivePnl.toFixed(2)}
+            <div className="flex items-center justify-between gap-3">
+              <Label className="text-sm text-[#EAEFF4] shrink-0">P&L Range</Label>
+              <div className="flex items-center gap-2 flex-1 justify-end">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-[#A6B1BB]">$</span>
+                  <Input
+                    type="number"
+                    value={negativePnl}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value) || 0;
+                      setNegativePnl(Math.min(0, value));
+                    }}
+                    className="w-20 h-7 text-sm text-center bg-[#12161C] border-[#2A3038] text-red-400"
+                    step="0.5"
+                  />
+                  <span className="text-sm text-[#A6B1BB]">to $</span>
+                  <Input
+                    type="number"
+                    value={positivePnl}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value) || 0;
+                      setPositivePnl(Math.max(0, value));
+                    }}
+                    className="w-20 h-7 text-sm text-center bg-[#12161C] border-[#2A3038] text-green-400"
+                    step="0.5"
+                  />
                 </div>
                 <Button
                   variant="ghost"
@@ -91,7 +113,10 @@ export function BulkDeleteDialog({
                   min={-100}
                   max={100}
                   step={0.5}
-                  value={[negativePnl, positivePnl]}
+                  value={[
+                    Math.max(-100, negativePnl),
+                    Math.min(100, positivePnl)
+                  ]}
                   onValueChange={(values) => {
                     const [neg, pos] = values;
                     setNegativePnl(Math.min(0, neg));
