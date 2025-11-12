@@ -17,6 +17,7 @@ interface UploadedImage {
   status: 'pending' | 'analyzing' | 'success' | 'error';
   tradesDetected?: number;
   error?: string;
+  retryCount?: number; // Track how many times this image has been retried
 }
 
 interface MultiImageUploadProps {
@@ -159,7 +160,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
     handleFileSelect(files);
   };
 
-  const analyzeImages = async () => {
+  const analyzeImages = async (retryMode = false) => {
     if (!skipBrokerSelection && (!preSelectedBroker || preSelectedBroker.trim() === '')) {
       toast.error('Please select a broker or enable "Extract without broker selection"');
       onBrokerError?.();
@@ -172,20 +173,35 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
     let totalTrades = 0;
     const allTrades: any[] = [];
 
+    // In retry mode, only process failed images
+    const imagesToProcess = retryMode 
+      ? images.map((img, idx) => ({ img, idx })).filter(({ img }) => img.status === 'error')
+      : images.map((img, idx) => ({ img, idx }));
+
+    if (retryMode && imagesToProcess.length === 0) {
+      toast.info('No failed images to retry');
+      setIsAnalyzing(false);
+      return;
+    }
+
+    if (retryMode) {
+      toast.info(`Retrying ${imagesToProcess.length} failed image${imagesToProcess.length > 1 ? 's' : ''} with alternative extraction method...`);
+    }
+
     try {
       // Analyze each image with OCR preprocessing
-      for (let i = 0; i < images.length; i++) {
-        setCurrentImageIndex(i + 1);
+      for (let processIdx = 0; processIdx < imagesToProcess.length; processIdx++) {
+        const { img: image, idx: i } = imagesToProcess[processIdx];
+        setCurrentImageIndex(processIdx + 1);
         imageProcessStartTime.current = Date.now();
         
         // Calculate estimated time remaining based on average processing time
         if (imageProcessTimes.current.length > 0) {
           const avgTime = imageProcessTimes.current.reduce((a, b) => a + b, 0) / imageProcessTimes.current.length;
-          const remainingImages = images.length - i;
+          const remainingImages = imagesToProcess.length - processIdx;
           setEstimatedTimeRemaining(Math.ceil((avgTime * remainingImages) / 1000));
         }
         
-        const image = images[i];
         setImages(prev => prev.map((img, idx) => 
           idx === i ? { ...img, status: 'analyzing' } : img
         ));
@@ -195,13 +211,18 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           const { data: { session } } = await supabase.auth.getSession();
           if (!session) throw new Error('Not authenticated');
 
-          // Run OCR on image
-          let ocrResult;
-          try {
-            ocrResult = await runOCR(image.file);
-          } catch (ocrError) {
-            console.warn('OCR failed, will use vision-only:', ocrError);
-            ocrResult = null;
+          // RETRY STRATEGY: Skip OCR and force deep vision model for failed images
+          let ocrResult = null;
+          if (!retryMode) {
+            // First attempt: Try OCR
+            try {
+              ocrResult = await runOCR(image.file);
+            } catch (ocrError) {
+              console.warn('OCR failed, will use vision-only:', ocrError);
+              ocrResult = null;
+            }
+          } else {
+            console.log('🔄 Retry mode: Skipping OCR, forcing deep vision model');
           }
 
           // Convert image to base64
@@ -211,7 +232,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
             reader.readAsDataURL(image.file);
           });
 
-          // Extract trades from image
+          // Extract trades from image with retry flag
           const response = await fetch(
             `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/extract-trade-info`,
             {
@@ -226,7 +247,8 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
                 ocrConfidence: ocrResult?.confidence,
                 imageHash: ocrResult?.imageHash,
                 perceptualHash: ocrResult?.perceptualHash,
-                broker: skipBrokerSelection ? null : preSelectedBroker
+                broker: skipBrokerSelection ? null : preSelectedBroker,
+                forceDeepModel: retryMode // Tell backend to use deep model regardless of OCR quality
               }),
             }
           );
@@ -249,7 +271,12 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           }
 
           setImages(prev => prev.map((img, idx) => 
-            idx === i ? { ...img, status: 'success', tradesDetected: tradesFound } : img
+            idx === i ? { 
+              ...img, 
+              status: 'success', 
+              tradesDetected: tradesFound,
+              retryCount: (img.retryCount || 0) + (retryMode ? 1 : 0)
+            } : img
           ));
         } catch (error) {
           console.error(`Error analyzing image ${i}:`, error);
@@ -280,7 +307,8 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
             idx === i ? { 
               ...img, 
               status: 'error', 
-              error: friendlyError
+              error: friendlyError,
+              retryCount: (img.retryCount || 0) + (retryMode ? 1 : 0)
             } : img
           ));
         }
@@ -297,16 +325,28 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
       setExtractedTrades(allTrades);
 
       // Show helpful message about failed extractions
-      if (errorCount > 0 && successCount > 0) {
-        toast.info(`${successCount} image${successCount > 1 ? 's' : ''} extracted successfully`, {
-          description: `${errorCount} failed extraction${errorCount > 1 ? 's' : ''} (no credits charged)`
-        });
-      } else if (errorCount > 0 && successCount === 0) {
-        toast.error('All extractions failed', {
-          description: 'No credits were charged. Please try with clearer screenshots.'
-        });
-        setIsAnalyzing(false);
-        return;
+      if (retryMode) {
+        const retriedSuccess = imagesToProcess.filter(({ idx }) => images[idx].status === 'success').length;
+        if (retriedSuccess > 0) {
+          toast.success(`${retriedSuccess} image${retriedSuccess > 1 ? 's' : ''} successfully extracted on retry!`);
+        }
+        if (errorCount > 0) {
+          toast.warning(`${errorCount} image${errorCount > 1 ? 's' : ''} still failed`, {
+            description: 'These images may have quality issues. Try a different screenshot.'
+          });
+        }
+      } else {
+        if (errorCount > 0 && successCount > 0) {
+          toast.info(`${successCount} image${successCount > 1 ? 's' : ''} extracted successfully`, {
+            description: `${errorCount} failed extraction${errorCount > 1 ? 's' : ''} (no credits charged)`
+          });
+        } else if (errorCount > 0 && successCount === 0) {
+          toast.error('All extractions failed', {
+            description: 'No credits were charged. Please try with clearer screenshots.'
+          });
+          setIsAnalyzing(false);
+          return;
+        }
       }
 
       setShowConfirmation(true);
@@ -548,6 +588,34 @@ setExtractedTrades([]);
         </Card>
       )}
 
+      {/* Retry strategy explanation - show when there are failed images */}
+      {images.some(img => img.status === 'error') && !isAnalyzing && (
+        <Card className="p-4 bg-amber-500/5 border-amber-500/20">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5">
+              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div className="flex-1 space-y-2">
+              <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100">Smart Retry Available</h4>
+              <p className="text-xs text-amber-800/80 dark:text-amber-200/80">
+                {images.filter(img => img.status === 'error').length} image{images.filter(img => img.status === 'error').length > 1 ? 's' : ''} failed extraction. Our AI will use a different, more thorough extraction method on retry:
+              </p>
+              <ul className="text-xs text-amber-800/70 dark:text-amber-200/70 space-y-1 ml-4 list-disc">
+                <li><span className="font-medium">Alternative AI model</span> - Switches to advanced vision model</li>
+                <li><span className="font-medium">Different approach</span> - Bypasses quick scan, does deep analysis</li>
+                <li><span className="font-medium">No extra charge</span> - Failed retries don't cost credits</li>
+              </ul>
+              <div className="flex items-center gap-2 mt-3 pt-2 border-t border-amber-500/20">
+                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <p className="text-xs text-muted-foreground">
+                  Click <span className="font-medium text-foreground">"Retry Failed"</span> to try again with our backup extraction system
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
       {images.length > 0 && (
         <>
           {/* Progress Indicator */}
@@ -578,15 +646,29 @@ setExtractedTrades([]);
           )}
           
           <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setShowClearConfirm(true)}
+                disabled={isAnalyzing}
+              >
+                Clear all
+              </Button>
+              {/* Retry Failed button - only show if there are failed images */}
+              {images.some(img => img.status === 'error') && (
+                <Button
+                  variant="outline"
+                  onClick={() => analyzeImages(true)}
+                  disabled={isAnalyzing}
+                  className="border-amber-500/50 hover:border-amber-500 hover:bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                >
+                  <AlertCircle className="mr-2 h-4 w-4" />
+                  Retry Failed ({images.filter(img => img.status === 'error').length})
+                </Button>
+              )}
+            </div>
             <Button
-              variant="outline"
-              onClick={() => setShowClearConfirm(true)}
-              disabled={isAnalyzing}
-            >
-              Clear all
-            </Button>
-            <Button
-              onClick={analyzeImages}
+              onClick={() => analyzeImages(false)}
               disabled={isAnalyzing || images.some(img => img.status === 'analyzing')}
               className="flex-1"
             >

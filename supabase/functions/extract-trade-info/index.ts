@@ -131,7 +131,8 @@ serve(async (req) => {
       imageHash, 
       perceptualHash,
       broker, 
-      annotations 
+      annotations,
+      forceDeepModel // New parameter to force using deep vision model (for retries)
     } = await req.json();
 
     if (!imageBase64) {
@@ -210,8 +211,85 @@ serve(async (req) => {
       brokerContext = `\n\nBroker: ${broker}. Use "${broker}" for all trades.`;
     }
 
-    // Route decision: OCR-first if quality >= 0.80 and not forced to lite
-    if (ocrText && ocrQualityScore >= 0.80 && !budget.forceLite) {
+    // Route decision: Force deep model if requested (retry mode), 
+    // otherwise use OCR-first if quality >= 0.80 and not forced to lite
+    if (forceDeepModel) {
+      console.log('🔄 RETRY MODE: Forcing deep vision model (skipping OCR route)');
+      route = 'deep';
+      modelUsed = 'google/gemini-2.5-flash';
+      
+      const maxTokens = calculateMaxTokens(estimatedTradeCount, 'deep');
+      console.log(`🎯 Allocating ${maxTokens} tokens for ${estimatedTradeCount} estimated trade(s)`);
+
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: modelUsed,
+          messages: [
+            {
+              role: "system",
+              content: `You are a specialized trade data extraction AI. Extract ALL trades from the trading screenshot with maximum accuracy.
+              
+CRITICAL INSTRUCTIONS:
+- Return ONLY a valid JSON array
+- Each trade must match schema: ${JSON.stringify(TRADE_SCHEMA)}
+- For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG
+- Extract leverage (e.g., "10x" = 10) and position_size accurately
+- Calculate duration and period_of_day
+- IMPORTANT: If screenshot contains multiple trades, return array with ALL trades
+- Expected approximately ${estimatedTradeCount} trade(s)
+- End response with "\\n\\nEND"${brokerContext}${annotationContext}
+
+RETRY MODE: This image failed extraction before. Be extra careful and thorough.`
+            },
+            {
+              role: "user",
+              content: [
+                { type: "text", text: "Extract ALL trades from this screenshot. This is a retry attempt - please be extra thorough." },
+                { type: "image_url", image_url: { url: imageBase64 } }
+              ]
+            }
+          ],
+          max_tokens: maxTokens,
+          stop: ["\\n\\nEND"]
+        }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          return new Response(
+            JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        if (response.status === 402) {
+          return new Response(
+            JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
+            { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        const errorText = await response.text();
+        console.error('Deep model failed on retry:', response.status, errorText);
+        throw new Error(`Vision model failed on retry: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const aiResponse = result.choices?.[0]?.message?.content || '';
+      tokensIn = result.usage?.prompt_tokens || 0;
+      tokensOut = result.usage?.completion_tokens || 0;
+
+      try {
+        trades = extractJSON(aiResponse);
+      } catch (parseError) {
+        console.error('JSON parse error on retry:', parseError, 'Raw response:', aiResponse);
+        throw new Error('Failed to parse AI response on retry. The model returned invalid JSON.');
+      }
+      
+    } else if (ocrText && ocrQualityScore >= 0.80 && !budget.forceLite) {
       console.log('🔤 Using OCR + lite route (quality:', ocrQualityScore.toFixed(2), ')');
       route = 'lite';
       modelUsed = 'google/gemini-2.5-flash-lite';
