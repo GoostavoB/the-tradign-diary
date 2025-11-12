@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -34,6 +34,22 @@ export function BulkDeleteDialog({
 }: BulkDeleteDialogProps) {
   const [negativePnl, setNegativePnl] = useState<number>(0);
   const [positivePnl, setPositivePnl] = useState<number>(0);
+  const [negInput, setNegInput] = useState<string>("");
+  const [posInput, setPosInput] = useState<string>("");
+  const [negEditing, setNegEditing] = useState<boolean>(false);
+  const [posEditing, setPosEditing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!negEditing) {
+      setNegInput(negativePnl === 0 ? "" : negativePnl.toFixed(2));
+    }
+  }, [negativePnl, negEditing]);
+
+  useEffect(() => {
+    if (!posEditing) {
+      setPosInput(positivePnl === 0 ? "" : positivePnl.toFixed(2));
+    }
+  }, [positivePnl, posEditing]);
 
   // Calculate which trades fall within the selected range
   const { affectedIndices, affectedCount } = useMemo(() => {
@@ -72,22 +88,26 @@ export function BulkDeleteDialog({
                   <span className="text-sm text-[#A6B1BB]">$</span>
                   <Input
                     type="text"
-                    value={negativePnl === 0 ? '' : negativePnl.toFixed(2)}
+                    value={negInput}
+                    onFocus={() => setNegEditing(true)}
                     onChange={(e) => {
-                      const inputValue = e.target.value.replace(/[^0-9.-]/g, '');
-                      if (inputValue === '' || inputValue === '-') {
-                        setNegativePnl(0);
-                      } else {
-                        const value = parseFloat(inputValue);
-                        if (!isNaN(value)) {
-                          setNegativePnl(-Math.abs(value));
-                        }
+                      const inputValue = e.target.value;
+                      setNegInput(inputValue);
+                      const value = parseFloat(inputValue.replace(/[^0-9.-]/g, ''));
+                      if (!isNaN(value)) {
+                        setNegativePnl(-Math.abs(value));
                       }
                     }}
                     onBlur={(e) => {
+                      setNegEditing(false);
                       const value = parseFloat(e.target.value.replace(/[^0-9.-]/g, ''));
                       if (!isNaN(value)) {
-                        setNegativePnl(-Math.abs(value));
+                        const normalized = -Math.abs(value);
+                        setNegativePnl(normalized);
+                        setNegInput(normalized.toFixed(2));
+                      } else {
+                        setNegativePnl(0);
+                        setNegInput("");
                       }
                     }}
                     placeholder="-0.00"
@@ -96,22 +116,26 @@ export function BulkDeleteDialog({
                   <span className="text-sm text-[#A6B1BB]">to $</span>
                   <Input
                     type="text"
-                    value={positivePnl === 0 ? '' : positivePnl.toFixed(2)}
+                    value={posInput}
+                    onFocus={() => setPosEditing(true)}
                     onChange={(e) => {
-                      const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-                      if (inputValue === '') {
-                        setPositivePnl(0);
-                      } else {
-                        const value = parseFloat(inputValue);
-                        if (!isNaN(value)) {
-                          setPositivePnl(Math.abs(value));
-                        }
+                      const inputValue = e.target.value;
+                      setPosInput(inputValue);
+                      const value = parseFloat(inputValue.replace(/[^0-9.]/g, ''));
+                      if (!isNaN(value)) {
+                        setPositivePnl(Math.abs(value));
                       }
                     }}
                     onBlur={(e) => {
+                      setPosEditing(false);
                       const value = parseFloat(e.target.value.replace(/[^0-9.]/g, ''));
                       if (!isNaN(value)) {
-                        setPositivePnl(Math.abs(value));
+                        const normalized = Math.abs(value);
+                        setPositivePnl(normalized);
+                        setPosInput(normalized.toFixed(2));
+                      } else {
+                        setPositivePnl(0);
+                        setPosInput("");
                       }
                     }}
                     placeholder="0.00"
@@ -124,6 +148,8 @@ export function BulkDeleteDialog({
                   onClick={() => {
                     setNegativePnl(0);
                     setPositivePnl(0);
+                    setNegInput("");
+                    setPosInput("");
                   }}
                   className="h-7 px-2 text-[#A6B1BB] hover:text-[#EAEFF4]"
                 >
@@ -145,8 +171,12 @@ export function BulkDeleteDialog({
                   ]}
                   onValueChange={(values) => {
                     const [neg, pos] = values;
-                    setNegativePnl(Math.min(0, neg));
-                    setPositivePnl(Math.max(0, pos));
+                    const newNeg = Math.min(0, neg);
+                    const newPos = Math.max(0, pos);
+                    setNegativePnl(newNeg);
+                    setPositivePnl(newPos);
+                    if (!negEditing) setNegInput(newNeg === 0 ? "" : newNeg.toFixed(2));
+                    if (!posEditing) setPosInput(newPos === 0 ? "" : newPos.toFixed(2));
                   }}
                   className="w-full"
                 >
