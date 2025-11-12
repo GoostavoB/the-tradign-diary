@@ -715,10 +715,9 @@ const Upload = () => {
           console.error('Batch creation error:', batchError);
         }
 
-        // Show success feedback
-        setSavedTradesCount(extractedTrades.length);
-        setShowSuccess(true);
+        // Navigate directly to dashboard
         toast.success(`Successfully saved ${extractedTrades.length} trade(s)!`);
+        navigate('/dashboard');
 
         // Mark onboarding as completed (for guided tour)
         await supabase.from('user_settings').update({
@@ -843,9 +842,8 @@ const Upload = () => {
                 {/* Left column - Primary upload area */}
                 <div className="lg:col-span-8 space-y-6">
                   {extractedTrades.length === 0 && <MultiImageUpload onTradesExtracted={trades => {
-                setSavedTradesCount(trades.length);
-                setShowSuccess(true);
-                toast.success(`Imported ${trades.length} trade${trades.length !== 1 ? 's' : ''}!`);
+                toast.success(`Successfully saved ${trades.length} trade${trades.length !== 1 ? 's' : ''}!`);
+                navigate('/dashboard');
               }} maxImages={10} preSelectedBroker={preSelectedBroker} skipBrokerSelection={skipBrokerSelection} onBrokerError={() => {
                 setBrokerError(true);
                 brokerFieldRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1121,17 +1119,6 @@ const Upload = () => {
                     {extractedTrades.length > 0 && extractionPreview && <AIFeedback extractedData={extractedTrades} imagePath={extractionPreview} />}
                   </div>}
 
-              {/* Success Feedback */}
-              {showSuccess && <SuccessFeedback tradesCount={savedTradesCount} onViewDashboard={() => navigate('/dashboard')} onViewHistory={() => {
-              setShowSuccess(false);
-              navigate('/dashboard?tab=history');
-            }} onStayHere={() => {
-              setShowSuccess(false);
-              setExtractedTrades([]);
-              setExtractionImage(null);
-              setExtractionPreview(null);
-              setSavedTradesCount(0);
-            }} />}
             </div>
           </TabsContent>
 
@@ -1454,8 +1441,8 @@ const Upload = () => {
             most_recent_trade_asset: mostRecentTrade?.symbol,
             most_recent_trade_value: mostRecentTrade?.profit_loss
           });
-          setSavedTradesCount(extractedTrades.length);
-          setShowSuccess(true);
+          toast.success(`Successfully saved ${extractedTrades.length} trade(s)!`);
+          navigate('/dashboard');
           setExtractedTrades([]);
           setTradeEdits({});
           removeExtractionImage();
