@@ -30,19 +30,20 @@ export function BulkDeleteDialog({
   trades,
   onBulkDelete,
 }: BulkDeleteDialogProps) {
-  const [pnlRange, setPnlRange] = useState<[number, number]>([0, 0]);
+  const [negativePnl, setNegativePnl] = useState<number>(0);
+  const [positivePnl, setPositivePnl] = useState<number>(0);
 
   // Calculate which trades fall within the selected range
   const { affectedIndices, affectedCount } = useMemo(() => {
     const indices: number[] = [];
     trades.forEach((trade, index) => {
       const pnl = trade.profit_loss || 0;
-      if (pnl >= pnlRange[0] && pnl <= pnlRange[1]) {
+      if (pnl >= negativePnl && pnl <= positivePnl) {
         indices.push(index);
       }
     });
     return { affectedIndices: indices, affectedCount: indices.length };
-  }, [trades, pnlRange]);
+  }, [trades, negativePnl, positivePnl]);
 
   const handleConfirm = () => {
     onBulkDelete(affectedIndices);
@@ -61,37 +62,65 @@ export function BulkDeleteDialog({
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
               <Label className="text-sm text-[#EAEFF4]">P&L Range</Label>
               <div className="flex items-center gap-2">
                 <div className="text-sm font-medium text-[#EAEFF4]">
-                  ${pnlRange[0].toFixed(2)} to ${pnlRange[1].toFixed(2)}
+                  ${negativePnl.toFixed(2)} to ${positivePnl.toFixed(2)}
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setPnlRange([0, 0])}
+                  onClick={() => {
+                    setNegativePnl(0);
+                    setPositivePnl(0);
+                  }}
                   className="h-7 px-2 text-[#A6B1BB] hover:text-[#EAEFF4]"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
-            
-            <Slider
-              min={-100}
-              max={100}
-              step={0.5}
-              value={pnlRange}
-              onValueChange={(value) => setPnlRange(value as [number, number])}
-              className="w-full"
-            />
 
-            <div className="flex items-center justify-between text-xs text-[#A6B1BB]">
-              <span>-$100</span>
-              <span>$0</span>
-              <span>+$100</span>
+            {/* Negative Range Slider (Red) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs text-red-400">Negative Threshold</Label>
+                <span className="text-xs font-medium text-red-400">${negativePnl.toFixed(2)}</span>
+              </div>
+              <Slider
+                min={-100}
+                max={0}
+                step={0.5}
+                value={[negativePnl]}
+                onValueChange={(value) => setNegativePnl(value[0])}
+                className="w-full [&_[role=slider]]:border-red-500 [&_[role=slider]]:bg-red-500"
+              />
+              <div className="flex items-center justify-between text-xs text-[#A6B1BB]">
+                <span>-$100</span>
+                <span>$0</span>
+              </div>
+            </div>
+
+            {/* Positive Range Slider (Green) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs text-green-400">Positive Threshold</Label>
+                <span className="text-xs font-medium text-green-400">${positivePnl.toFixed(2)}</span>
+              </div>
+              <Slider
+                min={0}
+                max={100}
+                step={0.5}
+                value={[positivePnl]}
+                onValueChange={(value) => setPositivePnl(value[0])}
+                className="w-full [&_[role=slider]]:border-green-500 [&_[role=slider]]:bg-green-500"
+              />
+              <div className="flex items-center justify-between text-xs text-[#A6B1BB]">
+                <span>$0</span>
+                <span>+$100</span>
+              </div>
             </div>
           </div>
 
@@ -103,7 +132,7 @@ export function BulkDeleteDialog({
                   {affectedCount} trade{affectedCount !== 1 ? 's' : ''} will be deleted
                 </p>
                 <p className="text-xs text-amber-400/80 mt-1">
-                  Trades with P&L between ${pnlRange[0].toFixed(2)} and ${pnlRange[1].toFixed(2)} will be marked as deleted. You can restore them before saving if needed.
+                  Trades with P&L between ${negativePnl.toFixed(2)} and ${positivePnl.toFixed(2)} will be marked as deleted. You can restore them before saving if needed.
                 </p>
               </div>
             </div>
