@@ -917,6 +917,8 @@ const Dashboard = () => {
                 columnCount={tradeStationControls.columnCount}
                 onColumnCountChange={tradeStationControls.handleColumnCountChange}
                 widgetCount={tradeStationControls.widgetCount}
+                canUndo={tradeStationControls.canUndo}
+                onUndoReset={tradeStationControls.handleUndoReset}
               />
             ) : null}
           </div>

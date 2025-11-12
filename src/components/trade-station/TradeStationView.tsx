@@ -10,9 +10,9 @@ import { DropZone } from '@/components/widgets/DropZone';
 import { CustomizeDashboardControls } from '@/components/CustomizeDashboardControls';
 import { WidgetLibrary } from '@/components/widgets/WidgetLibrary';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { Plus, Undo2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface TradeStationViewProps {
@@ -27,6 +27,8 @@ interface TradeStationViewProps {
     columnCount: number;
     handleColumnCountChange: (count: number) => void;
     widgetCount: number;
+    canUndo: boolean;
+    handleUndoReset: () => void;
   }) => void;
 }
 
@@ -226,7 +228,9 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     columnCount,
     handleColumnCountChange: updateColumnCount,
     widgetCount: positions.length,
-  }), [isCustomizing, hasChanges, handleStartCustomize, handleSaveLayout, handleCancelCustomize, resetLayout, columnCount, updateColumnCount, positions.length]);
+    canUndo,
+    handleUndoReset: undoReset,
+  }), [isCustomizing, hasChanges, handleStartCustomize, handleSaveLayout, handleCancelCustomize, resetLayout, columnCount, updateColumnCount, positions.length, canUndo, undoReset]);
 
   // Notify parent when controls are ready
   useEffect(() => {
@@ -247,58 +251,6 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
   
   return (
     <div className="space-y-4 relative">
-      {/* Floating Quick Actions */}
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => navigate('/upload')}
-              size="icon"
-              className="fixed top-20 right-6 z-50 h-12 w-12 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all"
-              aria-label="Add a trade"
-            >
-              <Plus className="h-6 w-6" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="left">
-            <p>Add a trade</p>
-          </TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => setShowResetDialog(true)}
-              size="sm"
-              variant="outline"
-              className="fixed top-36 right-6 z-50"
-            >
-              Reset layout
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="left">
-            <p>Reset Trade Station to defaults</p>
-          </TooltipContent>
-        </Tooltip>
-        {canUndo && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={undoReset}
-                size="sm"
-                variant="outline"
-                className="fixed top-52 right-6 z-50"
-              >
-                <Undo2 className="h-4 w-4 mr-2" />
-                Undo reset
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p>Restore previous layout</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
-      </TooltipProvider>
-
       {/* Reset Confirmation Dialog */}
       <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
         <AlertDialogContent>

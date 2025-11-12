@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Settings2, Save, X, RotateCcw, Eye, EyeOff, LayoutDashboard, Columns, Plus, Crown } from 'lucide-react';
+import { Settings2, Save, X, RotateCcw, Eye, EyeOff, LayoutDashboard, Columns, Plus, Crown, Undo2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { WidgetConfig } from '@/hooks/useDashboardLayout';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +24,8 @@ interface CustomizeDashboardControlsProps {
   columnCount?: number;
   onColumnCountChange?: (count: number) => void;
   widgetCount?: number;
+  canUndo?: boolean;
+  onUndoReset?: () => void;
 }
 
 export function CustomizeDashboardControls({
@@ -38,9 +41,12 @@ export function CustomizeDashboardControls({
   columnCount = 3,
   onColumnCountChange,
   widgetCount = 0,
+  canUndo = false,
+  onUndoReset,
 }: CustomizeDashboardControlsProps) {
   const { t } = useTranslation();
   const { canCustomizeDashboard } = useUserTier();
+  const navigate = useNavigate();
   const visibleCount = widgetCount || widgets.filter(w => w.visible).length;
   const hiddenCount = widgets.filter(w => !w.visible).length;
 
@@ -78,6 +84,15 @@ export function CustomizeDashboardControls({
             {!canCustomizeDashboard && (
               <Crown className="w-3 h-3 text-amber-500 ml-1" />
             )}
+          </Button>
+
+          <Button
+            onClick={() => navigate('/upload')}
+            variant="outline"
+            className="gap-2 glass hover:glass-strong"
+          >
+            <Plus className="w-4 h-4" />
+            Add Trade
           </Button>
           
           {/* Column Count Selector */}
@@ -151,6 +166,17 @@ export function CustomizeDashboardControls({
                   <RotateCcw className="w-4 h-4" />
                   {t('dashboard.resetLayout')}
                 </Button>
+                {canUndo && onUndoReset && (
+                  <Button
+                    onClick={onUndoReset}
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2 hover:bg-primary/10 hover:text-primary"
+                  >
+                    <Undo2 className="w-4 h-4" />
+                    Undo Reset
+                  </Button>
+                )}
                 <Button
                   onClick={onCancel}
                   variant="outline"
