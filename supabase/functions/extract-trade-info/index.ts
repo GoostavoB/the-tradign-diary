@@ -233,18 +233,35 @@ serve(async (req) => {
             {
               role: "system",
               content: `You are a specialized trade data extraction AI. Extract ALL trades from the trading screenshot with maximum accuracy.
-              
-CRITICAL INSTRUCTIONS:
-- Return ONLY a valid JSON array
-- Each trade must match schema: ${JSON.stringify(TRADE_SCHEMA)}
-- For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG
-- Extract leverage (e.g., "10x" = 10) and position_size accurately
-- Calculate duration and period_of_day
-- IMPORTANT: If screenshot contains multiple trades, return array with ALL trades
-- Expected approximately ${estimatedTradeCount} trade(s)
-- End response with "\\n\\nEND"${brokerContext}${annotationContext}
 
-RETRY MODE: This image failed extraction before. Be extra careful and thorough.`
+**CRITICAL: Extract EVERY SINGLE trade visible in the image!**
+- If you see a TABLE or LIST of trades, extract EVERY ROW as a separate trade
+- Do NOT just extract one trade - extract ALL of them
+- Even if some data is missing, still extract the trade with available information
+
+**IGNORE irrelevant columns completely:**
+- TP/SL, Trailing Stop, Close Type, Open Type, Order Type - skip these entirely
+- Focus ONLY on the fields we need (see schema below)
+
+**FIELD MAPPING - BE FLEXIBLE WITH NAMES:**
+Map from whatever column names you see to our schema:
+- symbol: "Futures", "Symbol", "Pair", "Asset" → extract just symbol (e.g., BTCUSDT)
+- side: "Side", "Type", "Direction" → must be "long" or "short"
+- entry_price: "Open Price", "Avg. Open Price", "Entry Price" → numeric
+- exit_price: "Close Price", "Exit Price" → numeric
+- opened_at: "Open Time", "Entry Time" → ISO timestamp
+- closed_at: "Close Time", "Exit Time" → ISO timestamp
+- leverage: "Margin(Leverage)", "Leverage" → extract number (50x → 50)
+- profit_loss: "PnL", "P&L", "Profit/Loss" → numeric (can be negative)
+- trading_fee: "Trading Fee", "Fee"
+- funding_fee: "Funding Fee"
+- position_size: "Position Size", "Amount", "Qty"
+
+Schema: ${JSON.stringify(TRADE_SCHEMA)}
+Expected approximately ${estimatedTradeCount} trade(s)
+Return ONLY a valid JSON array. End with "\\n\\nEND"${brokerContext}${annotationContext}
+
+RETRY MODE: This image failed extraction before. Be extra thorough - extract ALL trades visible.`
             },
             {
               role: "user",
@@ -310,7 +327,7 @@ RETRY MODE: This image failed extraction before. Be extra careful and thorough.`
           messages: [
             {
               role: "system",
-              content: `Extract ALL trades from OCR text. Output ONLY valid JSON array. Each trade must match schema: ${JSON.stringify(TRADE_SCHEMA)}. Calculate position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage (e.g., "10x" = 10) and position_size. Calculate duration and period_of_day. IMPORTANT: If screenshot contains multiple trades, return array with ALL trades. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".`
+              content: `Extract ALL trades from OCR text. **Extract EVERY trade visible** - if there's a table, extract EVERY ROW. **IGNORE columns** like TP/SL, Trailing Stop, Close Type, Open Type. Map flexibly: "Futures"→symbol, "PnL"→profit_loss, "Open Time"→opened_at, "Margin(Leverage)"→leverage (50x→50). Schema: ${JSON.stringify(TRADE_SCHEMA)}. Expected ~${estimatedTradeCount} trade(s). Return ONLY JSON array. End with "\\n\\nEND".`
             },
             {
               role: "user",
@@ -370,7 +387,7 @@ RETRY MODE: This image failed extraction before. Be extra careful and thorough.`
             messages: [
               {
                 role: "system",
-                content: `Extract ALL trades from trading screenshot. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}. For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage and position_size. Calculate duration and period_of_day. IMPORTANT: If screenshot contains multiple trades, return array with ALL trades. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
+                content: `Extract ALL trades from screenshot. **Extract EVERY trade in table/list** - EVERY ROW is a trade. **IGNORE irrelevant columns**: TP/SL, Trailing Stop, Close Type, Open Type. Map flexibly to schema. Schema: ${JSON.stringify(TRADE_SCHEMA)}. Expected ~${estimatedTradeCount} trade(s). Return ONLY JSON array. End with "\\n\\nEND".${brokerContext}${annotationContext}`
               },
               {
                 role: "user",
@@ -436,7 +453,7 @@ RETRY MODE: This image failed extraction before. Be extra careful and thorough.`
           messages: [
             {
               role: "system",
-              content: `Extract ALL trades from trading screenshot. Return ONLY valid JSON array. Schema: ${JSON.stringify(TRADE_SCHEMA)}. For position_type: if entry > exit AND profit > 0 = SHORT, if entry < exit AND profit > 0 = LONG. Extract leverage and position_size. Calculate duration and period_of_day. IMPORTANT: If screenshot contains multiple trades, return array with ALL trades. Expected approximately ${estimatedTradeCount} trade(s). End with "\\n\\nEND".${brokerContext}${annotationContext}`
+              content: `Extract ALL trades from screenshot. **Extract EVERY trade in table/list** - EVERY ROW is a trade. **IGNORE irrelevant columns**: TP/SL, Trailing Stop, Close Type, Open Type. Map flexibly to schema. Schema: ${JSON.stringify(TRADE_SCHEMA)}. Expected ~${estimatedTradeCount} trade(s). Return ONLY JSON array. End with "\\n\\nEND".${brokerContext}${annotationContext}`
             },
             {
               role: "user",
