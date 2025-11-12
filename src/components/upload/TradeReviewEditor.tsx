@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Filter } from 'lucide-react';
 import { TradeCard } from './TradeCard';
 import { TradeSummaryBar } from './TradeSummaryBar';
 import { TradeFilters } from './TradeFilters';
 import { SaveConfirmationDialog } from './SaveConfirmationDialog';
+import { BulkDeleteDialog } from './BulkDeleteDialog';
 import { useVirtualScroll } from '@/hooks/useVirtualScroll';
 import { useDebounce } from '@/hooks/useDebounce';
 
@@ -47,9 +48,14 @@ export function TradeReviewEditor({
   const [approvedTrades, setApprovedTrades] = useState<Set<number>>(new Set());
   const [deletedTrades, setDeletedTrades] = useState<Set<number>>(new Set());
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [brokerFilter, setBrokerFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  
+  // Session-level tag tracking
+  const [sessionStrategies, setSessionStrategies] = useState<Set<string>>(new Set());
+  const [sessionMistakes, setSessionMistakes] = useState<Set<string>>(new Set());
 
   const debouncedSearch = useDebounce(searchQuery, 200);
 
@@ -178,6 +184,28 @@ export function TradeReviewEditor({
     }
   };
 
+  const handleBulkDelete = (indices: number[]) => {
+    setDeletedTrades(prev => {
+      const newSet = new Set(prev);
+      indices.forEach(i => newSet.add(i));
+      return newSet;
+    });
+    // Remove from approved if any were approved
+    setApprovedTrades(prev => {
+      const newSet = new Set(prev);
+      indices.forEach(i => newSet.delete(i));
+      return newSet;
+    });
+  };
+
+  const handleNewStrategyCreated = (strategy: string) => {
+    setSessionStrategies(prev => new Set(prev).add(strategy));
+  };
+
+  const handleNewMistakeCreated = (mistake: string) => {
+    setSessionMistakes(prev => new Set(prev).add(mistake));
+  };
+
   // Count non-deleted trades for display
   const activeTradesCount = editedTrades.filter((_, index) => !deletedTrades.has(index)).length;
   const approvedNonDeletedCount = Array.from(approvedTrades).filter(index => !deletedTrades.has(index)).length;
@@ -198,6 +226,14 @@ export function TradeReviewEditor({
         approvedCount={approvedNonDeletedCount}
         deletedCount={deletedTrades.size}
         onConfirm={handleConfirmSave}
+      />
+
+      {/* Bulk Delete Dialog */}
+      <BulkDeleteDialog
+        open={showBulkDeleteDialog}
+        onOpenChange={setShowBulkDeleteDialog}
+        trades={editedTrades}
+        onBulkDelete={handleBulkDelete}
       />
 
       {/* Select All Control */}
@@ -223,10 +259,21 @@ export function TradeReviewEditor({
               }
             </span>
           </div>
-          <span className="text-sm text-muted-foreground">
-            {approvedNonDeletedCount} of {activeTradesCount} approved
-            {deletedTrades.size > 0 && ` • ${deletedTrades.size} deleted`}
-          </span>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowBulkDeleteDialog(true)}
+              className="gap-2 border-[#2A3038] text-[#EAEFF4] hover:bg-[#1A1F28]"
+            >
+              <Filter className="h-3.5 w-3.5" />
+              Remove Insignificant
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              {approvedNonDeletedCount} of {activeTradesCount} approved
+              {deletedTrades.size > 0 && ` • ${deletedTrades.size} deleted`}
+            </span>
+          </div>
         </div>
       )}
 
@@ -245,6 +292,10 @@ export function TradeReviewEditor({
               onDelete={() => handleDelete(originalIndex)}
               onDuplicate={() => handleDuplicate(originalIndex)}
               onRestore={() => handleRestore(originalIndex)}
+              sessionStrategies={sessionStrategies}
+              sessionMistakes={sessionMistakes}
+              onNewStrategyCreated={handleNewStrategyCreated}
+              onNewMistakeCreated={handleNewMistakeCreated}
             />
           ))}
         </div>

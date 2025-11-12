@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -12,9 +13,16 @@ import { supabase } from "@/integrations/supabase/client";
 interface StrategyTagSelectorProps {
   selectedStrategies: string[];
   onChange: (strategies: string[]) => void;
+  sessionStrategies?: Set<string>;
+  onNewStrategyCreated?: (strategy: string) => void;
 }
 
-export function StrategyTagSelector({ selectedStrategies, onChange }: StrategyTagSelectorProps) {
+export function StrategyTagSelector({ 
+  selectedStrategies, 
+  onChange, 
+  sessionStrategies,
+  onNewStrategyCreated 
+}: StrategyTagSelectorProps) {
   const { user } = useAuth();
   const [newStrategy, setNewStrategy] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -37,10 +45,17 @@ export function StrategyTagSelector({ selectedStrategies, onChange }: StrategyTa
     enabled: !!user?.id,
   });
 
+  // Merge database strategies with session strategies
+  const allStrategies = [
+    ...(userStrategies || []),
+    ...(sessionStrategies ? Array.from(sessionStrategies) : [])
+  ].filter((v, i, a) => a.indexOf(v) === i); // Remove duplicates
+
   const handleAddStrategy = () => {
     const trimmed = newStrategy.trim();
     if (trimmed) {
       onChange([trimmed]);
+      onNewStrategyCreated?.(trimmed);
       setNewStrategy("");
       setIsOpen(false);
     }
@@ -81,12 +96,12 @@ export function StrategyTagSelector({ selectedStrategies, onChange }: StrategyTa
                 </div>
               </div>
 
-              {userStrategies && userStrategies.length > 0 && (
+              {allStrategies && allStrategies.length > 0 && (
                 <div>
                   <Label className="text-xs text-[#A6B1BB] mb-2 block">Previous Strategies (Select One)</Label>
                   <ScrollArea className="h-[120px] rounded border border-[#2A3038] p-2">
                     <div className="flex flex-wrap gap-1.5">
-                      {userStrategies.map((strategy) => (
+                      {allStrategies.map((strategy) => (
                         <Badge
                           key={strategy}
                           variant={selectedStrategies.includes(strategy) ? "default" : "outline"}
@@ -100,6 +115,14 @@ export function StrategyTagSelector({ selectedStrategies, onChange }: StrategyTa
                   </ScrollArea>
                 </div>
               )}
+
+              <Button 
+                onClick={() => setIsOpen(false)} 
+                variant="outline" 
+                className="w-full mt-2"
+              >
+                Done
+              </Button>
             </div>
           </PopoverContent>
         </Popover>
@@ -108,7 +131,7 @@ export function StrategyTagSelector({ selectedStrategies, onChange }: StrategyTa
       {/* Selected Strategy Display */}
       {selectedStrategies.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
-          <Badge className="bg-primary/20 text-primary-foreground border-primary/30 text-xs">
+          <Badge className="bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20 text-xs">
             {selectedStrategies[0]}
             <X
               className="h-3 w-3 ml-1 cursor-pointer"

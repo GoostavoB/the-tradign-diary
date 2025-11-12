@@ -45,6 +45,10 @@ interface TradeCardProps {
   onDelete: () => void;
   onDuplicate: () => void;
   onRestore?: () => void;
+  sessionStrategies?: Set<string>;
+  sessionMistakes?: Set<string>;
+  onNewStrategyCreated?: (strategy: string) => void;
+  onNewMistakeCreated?: (mistake: string) => void;
 }
 
 export function TradeCard({
@@ -57,6 +61,10 @@ export function TradeCard({
   onDelete,
   onDuplicate,
   onRestore,
+  sessionStrategies,
+  sessionMistakes,
+  onNewStrategyCreated,
+  onNewMistakeCreated,
 }: TradeCardProps) {
   const [localTrade, setLocalTrade] = useState(trade);
   const debouncedTrade = useDebounce(localTrade, 300);
@@ -395,11 +403,15 @@ export function TradeCard({
           <StrategyTagSelector
             selectedStrategies={localTrade.setup ? [localTrade.setup] : []}
             onChange={(strategies) => handleLocalChange('setup', strategies[0] || null)}
+            sessionStrategies={sessionStrategies}
+            onNewStrategyCreated={onNewStrategyCreated}
           />
 
           <MistakeTagSelector
             selectedMistakes={localTrade.error_tags || []}
             onChange={(mistakes) => handleLocalChange('error_tags', mistakes)}
+            sessionMistakes={sessionMistakes}
+            onNewMistakeCreated={onNewMistakeCreated}
           />
 
           <EmotionTagSelector

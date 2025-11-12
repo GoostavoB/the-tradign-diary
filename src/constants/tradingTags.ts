@@ -41,6 +41,7 @@ export const ERROR_TAGS = [
 export type EmotionTag = typeof EMOTION_TAGS[number];
 export type ErrorTag = typeof ERROR_TAGS[number];
 
+// Accept any string for custom tags, not just predefined ones
 export const getTagColor = (tag: string, type: 'emotion' | 'error'): string => {
   if (type === 'emotion') {
     // Positive emotions - green/blue
@@ -58,6 +59,6 @@ export const getTagColor = (tag: string, type: 'emotion' | 'error'): string => {
     return 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20';
   }
   
-  // All errors are red/critical
+  // All errors (including custom ones) are red/critical
   return 'bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20';
 };
