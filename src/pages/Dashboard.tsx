@@ -804,7 +804,8 @@ const Dashboard = () => {
         widgetProps.chartData = portfolioChartData;
         const baseCapitalForGrowth = totalCapitalAdditions > 0 ? totalCapitalAdditions : initialInvestment;
         widgetProps.initialInvestment = baseCapitalForGrowth;
-        widgetProps.totalCapitalAdditions = totalCapitalAdditions;
+        // Don't pass totalCapitalAdditions separately when it's already in initialInvestment
+        widgetProps.totalCapitalAdditions = 0;
         widgetProps.currentBalance = baseCapitalForGrowth + (stats?.total_pnl || 0);
         break;
       case 'heatmap':
