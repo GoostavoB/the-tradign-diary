@@ -152,14 +152,45 @@ if (data?.layout_json) {
     });
   }, []);
 
+  // Add widget to layout - place in first free position (bottom row, left to right)
   const addWidget = useCallback((widgetId: string, shouldSave: boolean = true) => {
     if (positions.find(p => p.id === widgetId)) {
       toast.info('Widget already added');
       return;
     }
 
-    const maxRow = Math.max(0, ...positions.map(p => p.row));
-    const newPositions = [...positions, { id: widgetId, column: 0, row: maxRow + 1 }];
+    // Build grid to find occupied positions
+    const grid: { [row: number]: { [col: number]: boolean } } = {};
+    positions.forEach(pos => {
+      if (!grid[pos.row]) grid[pos.row] = {};
+      grid[pos.row][pos.column] = true;
+    });
+
+    // Find max row
+    const maxRow = Math.max(-1, ...positions.map(p => p.row));
+    
+    // Start from bottom row, move left to right
+    let targetCol = 0;
+    let targetRow = maxRow + 1;
+    
+    // Check if there's space in the bottom row
+    if (maxRow >= 0 && grid[maxRow]) {
+      // Count occupied positions in bottom row
+      const occupiedInBottomRow = Object.keys(grid[maxRow]).length;
+      if (occupiedInBottomRow < columnCount) {
+        // Find first free column in bottom row
+        for (let col = 0; col < columnCount; col++) {
+          if (!grid[maxRow][col]) {
+            targetCol = col;
+            targetRow = maxRow;
+            break;
+          }
+        }
+      }
+    }
+
+    const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
+    console.log('[Overview] Adding widget:', widgetId, 'at position:', { column: targetCol, row: targetRow });
     setPositions(newPositions);
     
     // Only save if explicitly requested (not during customize mode)
@@ -168,7 +199,7 @@ if (data?.layout_json) {
     }
     
     toast.success('Widget added');
-  }, [positions, saveLayout]);
+  }, [positions, columnCount, saveLayout]);
 
   const removeWidget = useCallback(async (widgetId: string, shouldSave: boolean = true) => {
     console.log('Removing widget:', widgetId);

@@ -15,6 +15,9 @@ import {
   Calendar,
   Grid3x3,
   TrendingDown,
+  AlertCircle,
+  Calculator,
+  Lock,
 } from 'lucide-react';
 import { WidgetConfig, WIDGET_SIZES } from '@/types/widget';
 import { TotalBalanceWidget } from '@/components/widgets/TotalBalanceWidget';
@@ -40,6 +43,12 @@ import { TradingHeatmap } from '@/components/TradingHeatmap';
 import { GoalWidget } from '@/components/goals/GoalWidget';
 import { RollingTargetWidget } from '@/components/widgets/RollingTargetWidget';
 import { EmotionMistakeCorrelationWidget } from '@/components/widgets/EmotionMistakeCorrelationWidget';
+// Import Trade Station widgets to make them available in Overview too
+import { ErrorReflectionWidget } from '@/components/trade-station/ErrorReflectionWidget';
+import { RiskCalculatorV2Widget } from '@/components/trade-station/RiskCalculatorV2Widget';
+import { TradeStationRollingTarget } from '@/components/trade-station/TradeStationRollingTarget';
+import { DailyLossLockStatus } from '@/components/trade-station/DailyLossLockStatus';
+import { SimpleLeverageWidget } from '@/components/trade-station/SimpleLeverageWidget';
 
 /**
  * Widget Catalog - Registry of all available dashboard widgets
@@ -296,6 +305,44 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'large',
     component: EmotionMistakeCorrelationWidget,
     requiresData: ['trades'],
+  },
+  
+  // Trade Station widgets - also available in Overview
+  errorReflection: {
+    id: 'errorReflection',
+    title: 'Error Reflection',
+    description: 'Track and reflect on trading mistakes',
+    category: 'trading',
+    icon: AlertCircle,
+    defaultSize: 'medium',
+    component: ErrorReflectionWidget,
+  },
+  riskCalculator: {
+    id: 'riskCalculator',
+    title: 'Risk Calculator',
+    description: 'Calculate position size and risk',
+    category: 'trading',
+    icon: Calculator,
+    defaultSize: 'medium',
+    component: RiskCalculatorV2Widget,
+  },
+  dailyLossLock: {
+    id: 'dailyLossLock',
+    title: 'Daily Loss Lock',
+    description: 'Monitor daily loss limits',
+    category: 'trading',
+    icon: Lock,
+    defaultSize: 'small',
+    component: DailyLossLockStatus,
+  },
+  simpleLeverage: {
+    id: 'simpleLeverage',
+    title: 'Leverage Calculator',
+    description: 'Simple leverage calculation',
+    category: 'trading',
+    icon: TrendingUp,
+    defaultSize: 'small',
+    component: SimpleLeverageWidget,
   },
 };
 

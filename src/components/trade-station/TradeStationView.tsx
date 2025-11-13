@@ -4,11 +4,11 @@ import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useTradeStationLayout, TradeStationWidgetPosition } from '@/hooks/useTradeStationLayout';
+// Use unified widget catalog that includes all widgets
 import { TRADE_STATION_WIDGET_CATALOG } from '@/config/tradeStationWidgetCatalog';
 import { SortableWidget } from '@/components/widgets/SortableWidget';
 import { DropZone } from '@/components/widgets/DropZone';
 import { CustomizeDashboardControls } from '@/components/CustomizeDashboardControls';
-import { WidgetLibrary } from '@/components/widgets/WidgetLibrary';
 import { Button } from '@/components/ui/button';
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
@@ -24,11 +24,14 @@ interface TradeStationViewProps {
     handleCancel: () => void;
     handleReset: () => void;
     handleAddWidget: () => void;
+    handleAddWidgetDirect: (widgetId: string) => void;  // Direct add for parent WidgetLibrary
+    handleRemoveWidgetDirect: (widgetId: string) => void;  // Direct remove for parent WidgetLibrary
     columnCount: number;
     handleColumnCountChange: (count: number) => void;
     widgetCount: number;
     canUndo: boolean;
     handleUndoReset: () => void;
+    activeWidgets: string[];  // Expose active widgets for parent
   }) => void;
 }
 
@@ -36,7 +39,7 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isCustomizing, setIsCustomizing] = useState(false);
-  const [showWidgetLibrary, setShowWidgetLibrary] = useState(false);
+  // Widget library is now handled by parent Dashboard component
   const [activeId, setActiveId] = useState<string | null>(null);
   const [originalPositions, setOriginalPositions] = useState<TradeStationWidgetPosition[]>([]);
   const [showResetDialog, setShowResetDialog] = useState(false);
@@ -216,7 +219,7 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     setOriginalPositions([]);
   }, [originalPositions, saveLayout]);
 
-  // Expose controls to parent via callback
+  // Expose controls to parent via callback - parent Dashboard will handle widget library
   const controls = useMemo(() => ({
     isCustomizing,
     hasChanges,
@@ -224,13 +227,19 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     handleSave: handleSaveLayout,
     handleCancel: handleCancelCustomize,
     handleReset: resetLayout,
-    handleAddWidget: () => setShowWidgetLibrary(true),
+    handleAddWidget: () => {
+      // This will be intercepted by parent to open its global widget library
+      console.log('[TradeStation] Add widget requested');
+    },
+    handleAddWidgetDirect: addWidget,  // Direct add function for parent WidgetLibrary
+    handleRemoveWidgetDirect: removeWidget,  // Direct remove function for parent WidgetLibrary
     columnCount,
     handleColumnCountChange: updateColumnCount,
     widgetCount: positions.length,
     canUndo,
     handleUndoReset: undoReset,
-  }), [isCustomizing, hasChanges, handleStartCustomize, handleSaveLayout, handleCancelCustomize, resetLayout, columnCount, updateColumnCount, positions.length, canUndo, undoReset]);
+    activeWidgets,  // Expose active widgets for parent WidgetLibrary
+  }), [isCustomizing, hasChanges, handleStartCustomize, handleSaveLayout, handleCancelCustomize, resetLayout, columnCount, updateColumnCount, positions.length, canUndo, undoReset, addWidget, removeWidget, activeWidgets]);
 
   // Notify parent when controls are ready
   useEffect(() => {
@@ -345,14 +354,7 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
         </SortableContext>
       </DndContext>
       
-      {/* Widget Library */}
-      <WidgetLibrary
-        open={showWidgetLibrary}
-        onClose={() => setShowWidgetLibrary(false)}
-        onAddWidget={addWidget}
-        onRemoveWidget={removeWidget}
-        activeWidgets={activeWidgets}
-      />
+      {/* Widget Library - Removed from here, handled by parent Dashboard */}
     </div>
   );
 };

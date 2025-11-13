@@ -5,8 +5,11 @@ import { RiskCalculatorV2Widget } from '@/components/trade-station/RiskCalculato
 import { TradeStationRollingTarget } from '@/components/trade-station/TradeStationRollingTarget';
 import { DailyLossLockStatus } from '@/components/trade-station/DailyLossLockStatus';
 import { SimpleLeverageWidget } from '@/components/trade-station/SimpleLeverageWidget';
+// Import ALL widgets from main catalog to make them available in Trade Station
+import { WIDGET_CATALOG } from './widgetCatalog';
 
-export const TRADE_STATION_WIDGET_CATALOG: Record<string, WidgetConfig> = {
+// Trade Station specific widgets
+const TRADE_STATION_SPECIFIC_WIDGETS: Record<string, WidgetConfig> = {
   errorReflection: {
     id: 'errorReflection',
     title: 'Error Reflection',
@@ -52,6 +55,13 @@ export const TRADE_STATION_WIDGET_CATALOG: Record<string, WidgetConfig> = {
     defaultSize: 'small',
     component: SimpleLeverageWidget,
   },
+};
+
+// Merge Trade Station specific widgets with ALL main catalog widgets
+// This allows users to add ANY widget to Trade Station
+export const TRADE_STATION_WIDGET_CATALOG: Record<string, WidgetConfig> = {
+  ...TRADE_STATION_SPECIFIC_WIDGETS,
+  ...WIDGET_CATALOG,
 };
 
 export const DEFAULT_TRADE_STATION_LAYOUT = [

@@ -132,37 +132,47 @@ const layoutData: TradeStationLayoutData = {
     });
   }, []);
 
-  // Add widget to layout
+  // Add widget to layout - place in first free position (bottom row, left to right)
   const addWidget = useCallback((widgetId: string) => {
     if (positions.find(p => p.id === widgetId)) {
       toast.info('Widget already added');
       return;
     }
 
-    // Find the first available spot
-    const grid: { [col: number]: { [row: number]: boolean } } = {};
+    // Build grid to find occupied positions
+    const grid: { [row: number]: { [col: number]: boolean } } = {};
     positions.forEach(pos => {
-      if (!grid[pos.column]) grid[pos.column] = {};
-      grid[pos.column][pos.row] = true;
+      if (!grid[pos.row]) grid[pos.row] = {};
+      grid[pos.row][pos.column] = true;
     });
 
-    // Find first empty slot
+    // Find max row
+    const maxRow = Math.max(-1, ...positions.map(p => p.row));
+    
+    // Start from bottom row, move left to right
     let targetCol = 0;
-    let targetRow = 0;
-    for (let col = 0; col < columnCount; col++) {
-      let row = 0;
-      while (grid[col]?.[row]) {
-        row++;
-      }
-      if (row < 10) { // Max 10 rows
-        targetCol = col;
-        targetRow = row;
-        break;
+    let targetRow = maxRow + 1;
+    
+    // Check if there's space in the bottom row
+    if (maxRow >= 0 && grid[maxRow]) {
+      // Count occupied positions in bottom row
+      const occupiedInBottomRow = Object.keys(grid[maxRow]).length;
+      if (occupiedInBottomRow < columnCount) {
+        // Find first free column in bottom row
+        for (let col = 0; col < columnCount; col++) {
+          if (!grid[maxRow][col]) {
+            targetCol = col;
+            targetRow = maxRow;
+            break;
+          }
+        }
       }
     }
 
     const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
+    console.log('[TradeStation] Adding widget:', widgetId, 'at position:', { column: targetCol, row: targetRow });
     saveLayout(newPositions);
+    toast.success('Widget added');
   }, [positions, columnCount, saveLayout]);
 
   // Remove widget from layout

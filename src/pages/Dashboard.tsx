@@ -818,6 +818,13 @@ const Dashboard = () => {
         widgetProps.avgPnLPerTrade = stats?.avg_pnl_per_trade || 0;
         widgetProps.avgROIPerTrade = stats?.avg_roi_per_trade || 0;
         break;
+      // Trade Station widgets - pass required props
+      case 'errorReflection':
+      case 'riskCalculator':
+      case 'dailyLossLock':
+      case 'simpleLeverage':
+        // These widgets manage their own data
+        break;
     }
 
     return (
@@ -913,7 +920,13 @@ const Dashboard = () => {
                 onSave={tradeStationControls.handleSave}
                 onCancel={tradeStationControls.handleCancel}
                 onReset={tradeStationControls.handleReset}
-                onAddWidget={tradeStationControls.handleAddWidget}
+                onAddWidget={() => {
+                  if (!canCustomizeDashboard) {
+                    setShowUpgradePrompt(true);
+                    return;
+                  }
+                  setShowWidgetLibrary(true);
+                }}
                 columnCount={tradeStationControls.columnCount}
                 onColumnCountChange={tradeStationControls.handleColumnCountChange}
                 widgetCount={tradeStationControls.widgetCount}
@@ -1051,13 +1064,25 @@ const Dashboard = () => {
           <AIAssistant />
         </Suspense>
 
-        {/* Widget Library Modal */}
+        {/* Widget Library Modal - Context-aware for Overview vs Trade Station */}
         <WidgetLibrary
           open={showWidgetLibrary}
           onClose={() => setShowWidgetLibrary(false)}
-          onAddWidget={(widgetId) => addWidget(widgetId, !isCustomizing)}
-          onRemoveWidget={(widgetId) => removeWidget(widgetId, !isCustomizing)}
-          activeWidgets={activeWidgets}
+          onAddWidget={(widgetId) => {
+            if (activeTab === 'tradestation' && tradeStationControls) {
+              tradeStationControls.handleAddWidgetDirect(widgetId);
+            } else {
+              addWidget(widgetId, !isCustomizing);
+            }
+          }}
+          onRemoveWidget={(widgetId) => {
+            if (activeTab === 'tradestation' && tradeStationControls) {
+              tradeStationControls.handleRemoveWidgetDirect(widgetId);
+            } else {
+              removeWidget(widgetId, !isCustomizing);
+            }
+          }}
+          activeWidgets={activeTab === 'tradestation' && tradeStationControls ? tradeStationControls.activeWidgets : activeWidgets}
         />
         
         {/* Tour CTA Button */}
