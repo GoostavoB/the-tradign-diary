@@ -340,11 +340,12 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
 
 /**
  * Default Command Center layout for new users - comprehensive performance overview
- * Includes: ROI, Capital Growth, Avg P&L/Day, Win Rate, Top Movers, Combined P&L/ROI,
+ * Includes: Total Balance, ROI, Capital Growth, Avg P&L/Day, Win Rate, Top Movers, Combined P&L/ROI,
  * Active Goals, AI Insights, Emotion/Mistake Patterns, Behavior, Cost Efficiency,
  * Performance Highlights, and Trading Quality
  */
 export const DEFAULT_DASHBOARD_LAYOUT = [
+  'totalBalance',
   'currentROI',
   'avgPnLPerDay',
   'winRate',
