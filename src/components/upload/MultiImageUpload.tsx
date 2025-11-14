@@ -289,8 +289,18 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
               initialDelay: 1000,
               maxDelay: 10000,
               onRetry: (attempt, error, nextDelay) => {
+                const errorObj = error as any;
+                const is503 = errorObj.status === 503;
                 console.log(`🔄 Retry attempt ${attempt} for image ${i + 1}:`, error.message);
                 console.log(`⏳ Waiting ${Math.round(nextDelay / 1000)}s before retry...`);
+                
+                // Show specific message for service unavailability
+                if (is503 && attempt === 1) {
+                  toast.info(
+                    `AI service temporarily busy. Retrying in ${Math.round(nextDelay / 1000)}s...`,
+                    { duration: nextDelay }
+                  );
+                }
                 
                 // Update image status to show retry in progress
                 setImages(prev => prev.map((img, idx) => 

@@ -474,6 +474,16 @@ RETRY MODE: This image failed extraction before. Be extra thorough - extract ALL
               { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
           }
+          if (deepResponse.status === 503) {
+            return new Response(
+              JSON.stringify({ 
+                error: "AI service temporarily unavailable", 
+                details: "The AI service is recovering. Automatic retry in progress...",
+                retryable: true
+              }),
+              { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
           const errorText = await deepResponse.text();
           console.error('Deep model failed:', deepResponse.status, errorText);
           throw new Error(`Vision model failed: ${deepResponse.status}`);
@@ -542,6 +552,16 @@ RETRY MODE: This image failed extraction before. Be extra thorough - extract ALL
           return new Response(
             JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
             { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        if (response.status === 503) {
+          return new Response(
+            JSON.stringify({ 
+              error: "AI service temporarily unavailable", 
+              details: "The AI service is recovering. Automatic retry in progress...",
+              retryable: true
+            }),
+            { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
           );
         }
         const errorText = await response.text();
@@ -706,8 +726,22 @@ RETRY MODE: This image failed extraction before. Be extra thorough - extract ALL
         errorMessage = "Authentication failed";
         errorDetails = "Please sign in again.";
       } else if (error.message.includes('model failed')) {
-        errorMessage = "AI service temporarily unavailable";
-        errorDetails = "Please try again in a moment.";
+        const statusMatch = error.message.match(/failed: (\d+)/);
+        const status = statusMatch ? parseInt(statusMatch[1]) : 500;
+        
+        if (status === 503) {
+          return new Response(
+            JSON.stringify({ 
+              error: "AI service temporarily unavailable",
+              details: "The AI service is recovering. Automatic retry in progress...",
+              retryable: true
+            }),
+            { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        
+        errorMessage = "AI service error";
+        errorDetails = `Status ${status}. Please try again.`;
       } else {
         errorMessage = error.message;
       }

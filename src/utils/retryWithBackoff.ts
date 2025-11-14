@@ -38,8 +38,12 @@ export async function retryWithBackoff<T>(
         throw lastError;
       }
       
-      // Calculate delay with exponential backoff: delay = initialDelay * 2^attempt
-      const delay = Math.min(initialDelay * Math.pow(2, attempt), maxDelay);
+      // For 503 service unavailable, use longer delays (5s, 10s, 20s)
+      const is503Error = (lastError as any).status === 503;
+      const baseDelay = is503Error ? 5000 : initialDelay;
+      
+      // Calculate delay with exponential backoff: delay = baseDelay * 2^attempt
+      const delay = Math.min(baseDelay * Math.pow(2, attempt), is503Error ? 30000 : maxDelay);
       
       // Add jitter to prevent thundering herd (±25% randomness)
       const jitter = delay * (0.75 + Math.random() * 0.5);
