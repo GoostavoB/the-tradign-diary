@@ -9,11 +9,15 @@ interface TradeSummaryBarProps {
   totalTrades: number;
   approvedIndices: Set<number>;
   trades: Trade[];
+  duplicateCount?: number;
+  overriddenDuplicateCount?: number;
 }
 export function TradeSummaryBar({
   totalTrades,
   approvedIndices,
-  trades
+  trades,
+  duplicateCount = 0,
+  overriddenDuplicateCount = 0
 }: TradeSummaryBarProps) {
   const approvedTrades = trades.filter((_, index) => approvedIndices.has(index));
   const grossPnL = approvedTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
@@ -21,6 +25,8 @@ export function TradeSummaryBar({
   const losingTrades = approvedTrades.filter(t => (t.profit_loss || 0) < 0).length;
   const winRate = approvedTrades.length > 0 ? winningTrades / approvedTrades.length * 100 : 0;
   const approvedCount = approvedIndices.size;
+  const finalTradeCount = totalTrades - duplicateCount + overriddenDuplicateCount;
+  
   return <Card style={{
     backgroundColor: '#12161C'
   }} className="border-[#1E242C] bg-[#12161C] p-6 sticky top-[72px] z-10 py-[8px] my-0">
@@ -31,7 +37,12 @@ export function TradeSummaryBar({
             <span className="text-xs text-[#A6B1BB] font-medium">Approved</span>
           </div>
           <div className="text-2xl font-bold text-[#EAEFF4]">
-            {approvedCount} <span className="text-sm text-[#A6B1BB] font-normal">/ {totalTrades}</span>
+            {approvedCount} <span className="text-sm text-[#A6B1BB] font-normal">/ {finalTradeCount}</span>
+            {overriddenDuplicateCount > 0 && (
+              <span className="text-xs text-amber-400 font-normal ml-1">
+                (+{overriddenDuplicateCount} kept)
+              </span>
+            )}
           </div>
         </div>
 

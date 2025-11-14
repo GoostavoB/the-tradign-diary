@@ -47,6 +47,7 @@ interface TradeCardProps {
   isApproved: boolean;
   isDeleted?: boolean;
   isDuplicate?: boolean;
+  isOverriddenDuplicate?: boolean;
   duplicateInfo?: DuplicateInfo;
   onTradeChange: (field: string, value: any) => void;
   onApprove: () => void;
@@ -65,6 +66,7 @@ export function TradeCard({
   isApproved,
   isDeleted = false,
   isDuplicate = false,
+  isOverriddenDuplicate = false,
   duplicateInfo,
   onTradeChange,
   onApprove,
@@ -215,14 +217,16 @@ export function TradeCard({
             <Badge 
               className={cn(
                 "rounded-full px-2.5 py-0.5 text-xs font-medium",
-                status === 'approved' && "bg-green-500/20 text-green-400",
-                status === 'ready' && "bg-gray-500/20 text-gray-400",
-                status === 'needs_fields' && "bg-amber-500/20 text-amber-400"
+                isOverriddenDuplicate && "bg-amber-500/20 text-amber-400",
+                status === 'approved' && !isOverriddenDuplicate && "bg-green-500/20 text-green-400",
+                status === 'ready' && !isOverriddenDuplicate && "bg-gray-500/20 text-gray-400",
+                status === 'needs_fields' && !isOverriddenDuplicate && "bg-amber-500/20 text-amber-400"
               )}
             >
-              {status === 'approved' && 'Approved'}
-              {status === 'ready' && 'Ready'}
-              {status === 'needs_fields' && 'Needs fields'}
+              {isOverriddenDuplicate && '⚠️ Kept Manually'}
+              {!isOverriddenDuplicate && status === 'approved' && 'Approved'}
+              {!isOverriddenDuplicate && status === 'ready' && 'Ready'}
+              {!isOverriddenDuplicate && status === 'needs_fields' && 'Needs fields'}
             </Badge>
           </div>
         </div>

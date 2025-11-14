@@ -8,6 +8,16 @@ import { TradeFilters } from './TradeFilters';
 import { SaveConfirmationDialog } from './SaveConfirmationDialog';
 import { BulkDeleteDialog } from './BulkDeleteDialog';
 import { PendingTradesDialog } from './PendingTradesDialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { useVirtualScroll } from '@/hooks/useVirtualScroll';
 import { useDebounce } from '@/hooks/useDebounce';
 
@@ -56,9 +66,12 @@ export function TradeReviewEditor({
   const [editedTrades, setEditedTrades] = useState<Trade[]>(trades.slice(0, maxSelectableTrades));
   const [approvedTrades, setApprovedTrades] = useState<Set<number>>(new Set());
   const [deletedTrades, setDeletedTrades] = useState<Set<number>>(new Set());
+  const [overriddenDuplicates, setOverriddenDuplicates] = useState<Set<number>>(new Set());
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showPendingDialog, setShowPendingDialog] = useState(false);
   const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
+  const [showOverrideDialog, setShowOverrideDialog] = useState(false);
+  const [duplicateToOverride, setDuplicateToOverride] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [brokerFilter, setBrokerFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -158,11 +171,31 @@ export function TradeReviewEditor({
   };
 
   const handleRestore = (index: number) => {
-    setDeletedTrades(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(index);
-      return newSet;
-    });
+    if (duplicateMap?.has(index)) {
+      // Show confirmation dialog for keeping duplicate
+      setDuplicateToOverride(index);
+      setShowOverrideDialog(true);
+    } else {
+      // Regular restore from deleted
+      setDeletedTrades(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(index);
+        return newSet;
+      });
+    }
+  };
+
+  const handleConfirmOverride = () => {
+    if (duplicateToOverride !== null) {
+      setOverriddenDuplicates(prev => new Set(prev).add(duplicateToOverride));
+      setDeletedTrades(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(duplicateToOverride);
+        return newSet;
+      });
+    }
+    setShowOverrideDialog(false);
+    setDuplicateToOverride(null);
   };
 
   const handleDuplicate = (index: number) => {
@@ -286,6 +319,8 @@ export function TradeReviewEditor({
         totalTrades={activeTradesCount}
         approvedIndices={approvedTrades}
         trades={editedTrades}
+        duplicateCount={Array.from(duplicateMap?.keys() || []).filter(index => !deletedTrades.has(index) && !overriddenDuplicates.has(index)).length}
+        overriddenDuplicateCount={overriddenDuplicates.size}
       />
 
       {/* Pending Trades Dialog */}
@@ -314,6 +349,33 @@ export function TradeReviewEditor({
         trades={editedTrades}
         onBulkDelete={handleBulkDelete}
       />
+
+      {/* Duplicate Override Confirmation Dialog */}
+      <AlertDialog open={showOverrideDialog} onOpenChange={setShowOverrideDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Keep Duplicate Trade?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This trade appears to match one already in your journal{' '}
+              {duplicateToOverride !== null && duplicateMap?.has(duplicateToOverride) && duplicateMap.get(duplicateToOverride)?.matchedTrade?.closed_at && (
+                <>
+                  from{' '}
+                  <strong>
+                    {new Date(duplicateMap.get(duplicateToOverride)?.matchedTrade?.closed_at).toLocaleDateString()}
+                  </strong>
+                </>
+              )}
+              . Are you sure you want to import it again? This will charge 1 credit for this duplicate trade.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmOverride}>
+              Yes, Keep This Trade
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Select All Control */}
       {editedTrades.length > 0 && (
@@ -366,7 +428,8 @@ export function TradeReviewEditor({
               index={originalIndex}
               isApproved={approvedTrades.has(originalIndex)}
               isDeleted={deletedTrades.has(originalIndex)}
-              isDuplicate={duplicateMap?.has(originalIndex)}
+              isDuplicate={duplicateMap?.has(originalIndex) && !overriddenDuplicates.has(originalIndex)}
+              isOverriddenDuplicate={overriddenDuplicates.has(originalIndex)}
               duplicateInfo={duplicateMap?.get(originalIndex)}
               onTradeChange={(field, value) => handleTradeChange(originalIndex, field, value)}
               onApprove={() => handleApprove(originalIndex)}
