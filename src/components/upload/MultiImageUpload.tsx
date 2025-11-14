@@ -175,6 +175,8 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
     setCurrentImageIndex(0);
     imageProcessTimes.current = [];
     let totalTrades = 0;
+    let successfulImagesCount = 0; // Track successful processing count
+    let errorImagesCount = 0; // Track failed processing count
     const allTrades: any[] = [];
 
     // In retry mode, only process failed images
@@ -328,6 +330,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           imageProcessTimes.current.push(processingTime);
           
           totalTrades += tradesFound;
+          successfulImagesCount++; // Increment success counter
           if (Array.isArray(result.trades)) {
             allTrades.push(...result.trades);
           }
@@ -342,6 +345,7 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
           ));
         } catch (error) {
           console.error(`Error analyzing image ${i}:`, error);
+          errorImagesCount++; // Increment error counter
           
           // Create user-friendly error message
           let friendlyError = 'Analysis failed';
@@ -382,10 +386,13 @@ export function MultiImageUpload({ onTradesExtracted, maxImages = 10, preSelecte
         }
       }
 
-      const successCount = images.filter(img => img.status === 'success').length;
-      const errorCount = images.filter(img => img.status === 'error').length;
+      // Use tracked counts instead of reading from potentially stale state
+      const successCount = successfulImagesCount;
+      const errorCount = errorImagesCount;
       const creditsNeeded = successCount;
       const maxTrades = creditsNeeded * 10;
+      
+      console.log('📊 Processing complete:', { successCount, errorCount, totalTrades, maxTrades });
 
       // Check for duplicates
       const duplicates = await checkForDuplicates(allTrades, user?.id || '');
