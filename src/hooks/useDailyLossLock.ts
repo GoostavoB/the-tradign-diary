@@ -37,14 +37,14 @@ export const useDailyLossLock = (dailyLossLimit: number) => {
     try {
       const { data } = await supabase
         .from('trades')
-        .select('pnl, funding_fee, trading_fee')
+        .select('profit_loss, funding_fee, trading_fee')
         .eq('user_id', user.id)
         .gte('trade_date', today)
         .is('deleted_at', null);
 
       if (data) {
         const totalPnL = data.reduce((sum, t) => {
-          const pnl = t.pnl || 0;
+          const pnl = t.profit_loss || 0;
           const fundingFee = t.funding_fee || 0;
           const tradingFee = t.trading_fee || 0;
           return sum + (pnl - Math.abs(fundingFee) - Math.abs(tradingFee));
