@@ -149,7 +149,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
       let comparison = 0;
       
       if (sortBy === 'date') {
-        comparison = new Date(b.trade_date || 0).getTime() - new Date(a.trade_date || 0).getTime();
+        // Changed to ascending (oldest first) for chronological order
+        comparison = new Date(a.trade_date || 0).getTime() - new Date(b.trade_date || 0).getTime();
       } else if (sortBy === 'pnl') {
         comparison = (b.profit_loss || 0) - (a.profit_loss || 0);
       } else if (sortBy === 'roi') {
