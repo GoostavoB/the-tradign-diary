@@ -32,3 +32,14 @@ export const formatPercent = (value: number | null | undefined): string => {
 export const formatCurrency = (value: number | null | undefined, currency: string = '$'): string => {
   return `${currency}${formatNumber(value)}`;
 };
+
+export const formatCurrencyFull = (value: number | null | undefined): string => {
+  if (value === null || value === undefined || isNaN(value)) return '$0.00';
+  
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+};

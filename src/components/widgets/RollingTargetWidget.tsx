@@ -1,7 +1,7 @@
 import { memo, useState, useMemo } from 'react';
 import { WidgetWrapper } from './WidgetWrapper';
 import { Trade } from '@/types/trade';
-import { formatCurrency, formatPercent } from '@/utils/formatNumber';
+import { formatCurrency, formatPercent, formatCurrencyFull } from '@/utils/formatNumber';
 import { useRollingTargetSettings, type SuggestionMethod } from '@/hooks/useRollingTargetSettings';
 import { 
   TrendingUp, 
@@ -213,8 +213,6 @@ export const RollingTargetWidget = memo(({
     
     // Calculate forecasts based on current progress
     const forecast30Days = actualCapital * Math.pow(1 + p, 30);
-    const forecast6Months = actualCapital * Math.pow(1 + p, 180);
-    const forecast1Year = actualCapital * Math.pow(1 + p, 365);
     
     return {
       requiredToday,
@@ -224,10 +222,25 @@ export const RollingTargetWidget = memo(({
       plannedCapital: plannedCapital,
       deviation: actualCapital - plannedCapital,
       forecast30Days,
-      forecast6Months,
-      forecast1Year,
     };
   }, [dailyData, settings?.mode, settings?.targetPercent, settings?.carryOverCap, initialInvestment]);
+
+  // Calculate average daily capital growth (geometric mean)
+  const avgDailyGrowth = useMemo(() => {
+    if (dailyData.length === 0 || initialInvestment === 0) return 0;
+    
+    const firstDay = dailyData[0];
+    const lastDay = dailyData[dailyData.length - 1];
+    const C_initial = firstDay.startCapital;
+    const C_final = lastDay.endCapital;
+    const N = dailyData.length;
+    
+    if (C_initial === 0 || N === 0) return 0;
+    
+    // Formula: (C_final / C_initial)^(1 / N) - 1
+    const growthRate = Math.pow(C_final / C_initial, 1 / N) - 1;
+    return growthRate * 100; // Convert to percentage
+  }, [dailyData, initialInvestment]);
 
   // Adaptive suggestion logic
   const suggestedPercent = useMemo(() => {
@@ -562,7 +575,7 @@ export const RollingTargetWidget = memo(({
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Headroom</span>
                     <span className="text-lg font-bold text-profit">
-                      {formatCurrency(todayData.headroom)}
+                      {formatCurrencyFull(todayData.headroom)}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -571,13 +584,7 @@ export const RollingTargetWidget = memo(({
                   <div className="flex items-center gap-2 mt-3 flex-wrap">
                     <span className="text-xs text-muted-foreground">Forecasts:</span>
                     <Badge variant="secondary" className="text-xs">
-                      30d: {formatCurrency(todayData.forecast30Days)}
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      6m: {formatCurrency(todayData.forecast6Months)}
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      1y: {formatCurrency(todayData.forecast1Year)}
+                      30d: {formatCurrencyFull(todayData.forecast30Days)}
                     </Badge>
                   </div>
                 </div>
@@ -590,7 +597,7 @@ export const RollingTargetWidget = memo(({
                    <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Required PnL</span>
                     <span className="text-2xl font-bold text-primary">
-                      {formatCurrency(todayData.requiredToday)}
+                      {formatCurrencyFull(todayData.requiredToday)}
                     </span>
                   </div>
                   {settings.mode === 'rolling' && (
@@ -611,13 +618,7 @@ export const RollingTargetWidget = memo(({
                   <div className="flex items-center gap-2 mt-3 flex-wrap">
                     <span className="text-xs text-muted-foreground">Forecasts:</span>
                     <Badge variant="secondary" className="text-xs">
-                      30d: {formatCurrency(todayData.forecast30Days)}
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      6m: {formatCurrency(todayData.forecast6Months)}
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      1y: {formatCurrency(todayData.forecast1Year)}
+                      30d: {formatCurrencyFull(todayData.forecast30Days)}
                     </Badge>
                   </div>
                 </div>
@@ -779,6 +780,22 @@ export const RollingTargetWidget = memo(({
                 </Tooltip>
                 <p className="text-lg font-bold">{formatCurrency(summaryMetrics.avgRequiredWhenBehind)}</p>
               </div>
+              <div className="space-y-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-1 cursor-help">
+                      <p className="text-xs text-muted-foreground">Avg Daily Capital Growth</p>
+                      <Info className="h-3 w-3 text-muted-foreground" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">Since you started trading, on average, how much you grew your portfolio per day (geometric mean)</p>
+                  </TooltipContent>
+                </Tooltip>
+                <p className="text-lg font-bold text-primary">
+                  {avgDailyGrowth.toFixed(2)}%
+                </p>
+              </div>
             </div>
           </TooltipProvider>
         )}
@@ -822,7 +839,7 @@ export const RollingTargetWidget = memo(({
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="max-w-xs">Your actual total capital at end of this day</p>
+                            <p className="max-w-xs">Exact total trading capital at the end of that day</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -837,7 +854,7 @@ export const RollingTargetWidget = memo(({
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="max-w-xs">Target capital based on {settings?.targetPercent || 1}% daily compound growth from initial investment</p>
+                            <p className="max-w-xs">Capital you should have at the end of that day to stay on track (start_capital × (1 + target_percent))</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -852,7 +869,7 @@ export const RollingTargetWidget = memo(({
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="max-w-xs">Minimum PnL needed this day ({settings?.targetPercent || 1}% of day's starting capital)</p>
+                            <p className="max-w-xs">PnL you need to make on that day to stay on track (start_capital × target_percent)</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -869,10 +886,10 @@ export const RollingTargetWidget = memo(({
                       <td className={`text-right p-2 font-medium ${day.returnPercent >= 0 ? 'text-profit' : 'text-loss'}`}>
                         {day.returnPercent >= 0 ? '+' : ''}{formatPercent(day.returnPercent)}
                       </td>
-                      <td className="text-right p-2">{formatCurrency(day.startCapital)}</td>
-                      <td className="text-right p-2 text-muted-foreground">{formatCurrency(day.plannedCapital)}</td>
+                      <td className="text-right p-2">{formatCurrencyFull(day.endCapital)}</td>
+                      <td className="text-right p-2 text-muted-foreground">{formatCurrencyFull(day.plannedCapital)}</td>
                       <td className="text-right p-2 font-medium">
-                        {day.requiredToday > 0 ? formatCurrency(day.requiredToday) : '-'}
+                        {day.requiredToday > 0 ? formatCurrencyFull(day.requiredToday) : '-'}
                       </td>
                     </tr>
                   ))}
@@ -913,7 +930,7 @@ export const RollingTargetWidget = memo(({
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="max-w-xs">Your starting capital at beginning of this day</p>
+                            <p className="max-w-xs">Exact total trading capital at the end of that day</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -928,7 +945,7 @@ export const RollingTargetWidget = memo(({
                             </div>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="max-w-xs">Target ending capital for this day (Actual + {settings?.targetPercent || 1}% growth)</p>
+                            <p className="max-w-xs">Capital you should have at the end of that day to stay on track (start_capital × (1 + target_percent))</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -960,10 +977,10 @@ export const RollingTargetWidget = memo(({
                       <td className={`text-right p-2 font-medium ${day.returnPercent >= 0 ? 'text-profit' : 'text-loss'}`}>
                         {day.returnPercent >= 0 ? '+' : ''}{formatPercent(day.returnPercent)}
                       </td>
-                      <td className="text-right p-2">{formatCurrency(day.startCapital)}</td>
-                      <td className="text-right p-2 text-muted-foreground">{formatCurrency(day.plannedCapital)}</td>
+                      <td className="text-right p-2">{formatCurrencyFull(day.endCapital)}</td>
+                      <td className="text-right p-2 text-muted-foreground">{formatCurrencyFull(day.plannedCapital)}</td>
                       <td className={`text-right p-2 font-medium ${day.deviation >= 0 ? 'text-profit' : 'text-loss'}`}>
-                        {day.deviation >= 0 ? '+' : ''}{formatCurrency(day.deviation)}
+                        {day.deviation >= 0 ? '+' : ''}{formatCurrencyFull(day.deviation)}
                       </td>
                     </tr>
                   ))}
