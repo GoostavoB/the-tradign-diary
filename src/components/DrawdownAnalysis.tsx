@@ -5,6 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import { TrendingDown, AlertTriangle, TrendingUp, Activity } from 'lucide-react';
 import type { Trade } from '@/types/trade';
 import { BlurredCurrency, BlurredPercent } from '@/components/ui/BlurredValue';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface DrawdownPeriod {
   startDate: string;
@@ -39,7 +40,7 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
 
   // Memoize current balance and return
   const { currentBalance, totalReturn } = useMemo(() => {
-    const balance = initialInvestment + trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+    const balance = initialInvestment + calculateTotalPnL(trades, { includeFees: true });
     const returns = ((balance - initialInvestment) / initialInvestment) * 100;
     return { currentBalance: balance, totalReturn: returns };
   }, [initialInvestment, trades]);
@@ -60,7 +61,7 @@ const DrawdownAnalysisComponent = ({ trades, initialInvestment }: DrawdownAnalys
     let currentDD: Partial<DrawdownPeriod> | null = null;
 
     sortedTrades.forEach((trade, index) => {
-      const tradePnl = trade.profit_loss || 0;
+      const tradePnl = calculateTradePnL(trade, { includeFees: true });
       runningBalance += tradePnl;
 
       // Check if we hit a new peak

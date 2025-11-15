@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, TrendingUp, TrendingDown, BarChart3, Grid3x3 } from "lucide-react";
 import { Trade } from "@/types/trade";
 import { formatNumber, formatPercent } from "@/utils/formatNumber";
+import { calculateTradePnL } from '@/utils/pnl';
 
 interface WinsByHourChartProps {
   trades: Trade[];
@@ -67,9 +68,9 @@ const WinsByHourChartComponent = ({ trades }: WinsByHourChartProps) => {
         return date.getHours() === hour;
       });
 
-      const wins = tradesAtHour.filter(t => (t.profit_loss || 0) > 0);
-      const losses = tradesAtHour.filter(t => (t.profit_loss || 0) <= 0);
-      const totalPnL = tradesAtHour.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+      const wins = tradesAtHour.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
+      const losses = tradesAtHour.filter(t => calculateTradePnL(t, { includeFees: true }) <= 0);
+      const totalPnL = tradesAtHour.reduce((sum, t) => sum + calculateTradePnL(t, { includeFees: true }), 0);
       const avgROI = tradesAtHour.length > 0
         ? tradesAtHour.reduce((sum, t) => sum + (t.roi || 0), 0) / tradesAtHour.length
         : 0;

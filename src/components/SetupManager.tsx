@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Layers, Plus, Edit2, Trash2, TrendingUp, Target, DollarSign, BarChart3, Trophy } from 'lucide-react';
 import type { Trade } from '@/types/trade';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface SetupPerformance {
   name: string;
@@ -81,12 +82,12 @@ export const SetupManager = ({ trades }: SetupManagerProps) => {
         };
       }
 
-      const totalPnl = setupTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-      const winningTrades = setupTrades.filter(t => (t.profit_loss || 0) > 0);
+      const totalPnl = calculateTotalPnL(setupTrades, { includeFees: true });
+      const winningTrades = setupTrades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
       const winRate = (winningTrades.length / setupTrades.length) * 100;
       const avgPnl = totalPnl / setupTrades.length;
-      const bestTrade = Math.max(...setupTrades.map(t => t.profit_loss || 0));
-      const worstTrade = Math.min(...setupTrades.map(t => t.profit_loss || 0));
+      const bestTrade = Math.max(...setupTrades.map(t => calculateTradePnL(t, { includeFees: true })));
+      const worstTrade = Math.min(...setupTrades.map(t => calculateTradePnL(t, { includeFees: true })));
 
       return {
         name: setup.name,

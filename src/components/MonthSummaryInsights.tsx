@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import type { Trade } from '@/types/trade';
 import { startOfMonth, endOfMonth } from 'date-fns';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface MonthSummaryInsightsProps {
   trades: Trade[];
@@ -15,23 +16,23 @@ export const MonthSummaryInsights = ({ trades }: MonthSummaryInsightsProps) => {
   const monthEnd = endOfMonth(now);
 
   const monthTrades = trades.filter(t => {
-    const tradeDate = new Date(t.trade_date);
+    const tradeDate = new Date(t.closed_at || t.trade_date);
     return tradeDate >= monthStart && tradeDate <= monthEnd;
   });
 
   if (monthTrades.length === 0) return null;
 
-  const totalPnl = monthTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-  const winningTrades = monthTrades.filter(t => (t.profit_loss || 0) > 0);
-  const losingTrades = monthTrades.filter(t => (t.profit_loss || 0) < 0);
+  const totalPnl = calculateTotalPnL(monthTrades, { includeFees: true });
+  const winningTrades = monthTrades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
+  const losingTrades = monthTrades.filter(t => calculateTradePnL(t, { includeFees: true }) < 0);
   const winRate = monthTrades.length > 0 ? (winningTrades.length / monthTrades.length) * 100 : 0;
 
   const avgWin = winningTrades.length > 0
-    ? winningTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / winningTrades.length
+    ? calculateTotalPnL(winningTrades, { includeFees: true }) / winningTrades.length
     : 0;
   
   const avgLoss = losingTrades.length > 0
-    ? Math.abs(losingTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / losingTrades.length)
+    ? Math.abs(calculateTotalPnL(losingTrades, { includeFees: true }) / losingTrades.length)
     : 0;
 
   const profitFactor = avgLoss > 0 ? avgWin / avgLoss : 0;

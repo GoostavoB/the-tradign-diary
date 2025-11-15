@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { calculateTotalPnL } from '@/utils/pnl';
+import type { Trade } from '@/types/trade';
 
 interface UploadBatch {
   id: string;
@@ -124,7 +126,7 @@ export const UploadHistory = () => {
         const brokers = trades ? [...new Set(trades.map(t => t.broker).filter(Boolean))] : [];
         
         // Calculate total P&L
-        const totalPnl = trades ? trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) : 0;
+        const totalPnl = trades ? calculateTotalPnL(trades as Trade[], { includeFees: true }) : 0;
         
         // Get most recent trade date
         const mostRecentTradeDate = trades && trades.length > 0 ? trades[0].trade_date : batch.created_at;

@@ -1,10 +1,13 @@
-import { useState, useEffect, memo, useMemo, useCallback } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, TrendingUp, TrendingDown, Target, DollarSign, BarChart3, ThumbsUp, Zap, Scale } from 'lucide-react';
-import { format, startOfWeek, endOfWeek, subWeeks, addWeeks } from 'date-fns';
+import { format, startOfWeek, endOfWeek, addWeeks } from 'date-fns';
 import type { Trade } from '@/types/trade';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
+import { calculateTradingDays } from '@/utils/tradingDays';
+import { useUserSettings } from '@/hooks/useUserSettings';
 
 interface WeeklyReviewProps {
   trades: Trade[];
@@ -25,6 +28,8 @@ interface WeeklyStats {
 
 const WeeklyReviewComponent = ({ trades }: WeeklyReviewProps) => {
   const [currentWeekOffset, setCurrentWeekOffset] = useState(0);
+  const { settings } = useUserSettings();
+  const tradingDaysMode = settings.trading_days_calculation_mode || 'calendar';
 
   const weeklyStats = useMemo(() => {
     const today = new Date();
@@ -33,7 +38,7 @@ const WeeklyReviewComponent = ({ trades }: WeeklyReviewProps) => {
     const weekEnd = endOfWeek(targetDate, { weekStartsOn: 1 }); // Sunday
 
     const weekTrades = trades.filter(trade => {
-      const tradeDate = new Date(trade.trade_date);
+      const tradeDate = new Date(trade.closed_at || trade.trade_date);
       return tradeDate >= weekStart && tradeDate <= weekEnd;
     });
 
@@ -52,24 +57,24 @@ const WeeklyReviewComponent = ({ trades }: WeeklyReviewProps) => {
       };
     }
 
-    const totalPnl = weekTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-    const winningTrades = weekTrades.filter(t => (t.profit_loss || 0) > 0);
-    const losingTrades = weekTrades.filter(t => (t.profit_loss || 0) < 0);
+    const totalPnl = calculateTotalPnL(weekTrades, { includeFees: true });
+    const winningTrades = weekTrades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
+    const losingTrades = weekTrades.filter(t => calculateTradePnL(t, { includeFees: true }) < 0);
     const winRate = (winningTrades.length / weekTrades.length) * 100;
 
     const avgWin = winningTrades.length > 0
-      ? winningTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / winningTrades.length
+      ? calculateTotalPnL(winningTrades, { includeFees: true }) / winningTrades.length
       : 0;
     
     const avgLoss = losingTrades.length > 0
-      ? Math.abs(losingTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / losingTrades.length)
+      ? Math.abs(calculateTotalPnL(losingTrades, { includeFees: true }) / losingTrades.length)
       : 0;
 
     // Daily performance
     const dailyPnl: Record<string, number> = {};
     weekTrades.forEach(trade => {
-      const day = new Date(trade.trade_date).toDateString();
-      dailyPnl[day] = (dailyPnl[day] || 0) + (trade.profit_loss || 0);
+      const day = new Date(trade.closed_at || trade.trade_date).toDateString();
+      dailyPnl[day] = (dailyPnl[day] || 0) + calculateTradePnL(trade, { includeFees: true });
     });
 
     const days = Object.entries(dailyPnl);
@@ -84,7 +89,7 @@ const WeeklyReviewComponent = ({ trades }: WeeklyReviewProps) => {
     // Asset performance
     const assetPnl: Record<string, number> = {};
     weekTrades.forEach(trade => {
-      assetPnl[trade.symbol] = (assetPnl[trade.symbol] || 0) + (trade.profit_loss || 0);
+      assetPnl[trade.symbol] = (assetPnl[trade.symbol] || 0) + calculateTradePnL(trade, { includeFees: true });
     });
 
     const topAsset = Object.entries(assetPnl).reduce((top, [symbol, pnl]) => 

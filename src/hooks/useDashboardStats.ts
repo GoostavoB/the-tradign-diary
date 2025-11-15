@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { Trade } from '@/types/trade';
 import type { CapitalLogEntry } from '@/utils/capitalCalculations';
 import { calculatePeriodBasedROI, getCurrentCapital } from '@/utils/capitalCalculations';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 /**
  * Optimized hook to calculate dashboard statistics with memoization
@@ -25,17 +26,17 @@ export const useDashboardStats = (trades: Trade[], capitalLog?: CapitalLogEntry[
       };
     }
 
-    const winningTrades = trades.filter(t => (t.profit_loss || 0) > 0);
-    const losingTrades = trades.filter(t => (t.profit_loss || 0) <= 0);
+    const winningTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
+    const losingTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) <= 0);
     
-    const totalPnL = trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+    const totalPnL = calculateTotalPnL(trades, { includeFees: true });
     
     const avgWin = winningTrades.length > 0
-      ? winningTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / winningTrades.length
+      ? calculateTotalPnL(winningTrades, { includeFees: true }) / winningTrades.length
       : 0;
     
     const avgLoss = losingTrades.length > 0
-      ? Math.abs(losingTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / losingTrades.length)
+      ? Math.abs(calculateTotalPnL(losingTrades, { includeFees: true }) / losingTrades.length)
       : 0;
     
     const profitFactor = avgLoss > 0 ? avgWin / avgLoss : 0;
@@ -57,11 +58,11 @@ export const useDashboardStats = (trades: Trade[], capitalLog?: CapitalLogEntry[
     }
     
     const bestTrade = trades.reduce((best, t) => 
-      (t.profit_loss || 0) > (best.profit_loss || 0) ? t : best
+      calculateTradePnL(t, { includeFees: true }) > calculateTradePnL(best, { includeFees: true }) ? t : best
     , trades[0]);
     
     const worstTrade = trades.reduce((worst, t) => 
-      (t.profit_loss || 0) < (worst.profit_loss || 0) ? t : worst
+      calculateTradePnL(t, { includeFees: true }) < calculateTradePnL(worst, { includeFees: true }) ? t : worst
     , trades[0]);
 
     return {

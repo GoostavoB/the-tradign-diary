@@ -5,6 +5,7 @@ import type { Trade } from '@/types/trade';
 import { formatPercent } from '@/utils/formatNumber';
 import { BlurredValue, BlurredCurrency } from '@/components/ui/BlurredValue';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface AIInsightCardProps {
   trades: Trade[];
@@ -26,8 +27,8 @@ export const AIInsightCard = memo(({ trades, capitalLog, stats }: AIInsightCardP
       };
     }
 
-    const totalPnl = trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-    const winningTrades = trades.filter(t => (t.profit_loss || 0) > 0);
+    const totalPnl = calculateTotalPnL(trades, { includeFees: true });
+    const winningTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
     const winRate = (winningTrades.length / trades.length) * 100;
     
     // Use stats if available for more accurate calculations
@@ -35,18 +36,18 @@ export const AIInsightCard = memo(({ trades, capitalLog, stats }: AIInsightCardP
     const hasCapitalTracking = capitalLog && capitalLog.length > 0;
     
     const avgWin = winningTrades.length > 0
-      ? winningTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / winningTrades.length
+      ? calculateTotalPnL(winningTrades, { includeFees: true }) / winningTrades.length
       : 0;
     
-    const losingTrades = trades.filter(t => (t.profit_loss || 0) <= 0);
+    const losingTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) <= 0);
     const avgLoss = losingTrades.length > 0
-      ? Math.abs(losingTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / losingTrades.length)
+      ? Math.abs(calculateTotalPnL(losingTrades, { includeFees: true }) / losingTrades.length)
       : 0;
 
     // Recent trades (last 10)
     const recentTrades = trades.slice(-10);
-    const recentPnl = recentTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-    const recentWins = recentTrades.filter(t => (t.profit_loss || 0) > 0).length;
+    const recentPnl = calculateTotalPnL(recentTrades, { includeFees: true });
+    const recentWins = recentTrades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0).length;
 
     // Generate dynamic insight
     if (hasCapitalTracking && effectiveROI > 20) {

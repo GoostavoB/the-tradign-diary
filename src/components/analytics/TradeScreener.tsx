@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Trade } from '@/types/trade';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Filter, X, Download } from 'lucide-react';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface TradeScreenerProps {
   trades: Trade[];
@@ -91,8 +92,8 @@ export const TradeScreener = ({ trades }: TradeScreenerProps) => {
   }, [trades, filters]);
 
   const summary = useMemo(() => {
-    const winningTrades = filteredTrades.filter(t => (t.profit_loss || 0) > 0);
-    const totalPnL = filteredTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+    const winningTrades = filteredTrades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
+    const totalPnL = calculateTotalPnL(filteredTrades, { includeFees: true });
     return {
       total: filteredTrades.length,
       winning: winningTrades.length,

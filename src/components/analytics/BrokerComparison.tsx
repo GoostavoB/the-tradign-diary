@@ -4,6 +4,7 @@ import { Trade } from '@/types/trade';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, DollarSign, Clock, Zap } from 'lucide-react';
+import { calculateTradePnL } from '@/utils/pnl';
 
 interface BrokerComparisonProps {
   trades: Trade[];
@@ -36,11 +37,11 @@ export const BrokerComparison = ({ trades }: BrokerComparisonProps) => {
       const stats = brokerMap[broker];
       stats.trades.push(trade);
       stats.totalFees += (trade.trading_fee || 0) + (trade.funding_fee || 0);
-      stats.totalPnL += trade.profit_loss || 0;
+      stats.totalPnL += calculateTradePnL(trade, { includeFees: true });
     });
 
     return Object.entries(brokerMap).map(([broker, stats]) => {
-      const winningTrades = stats.trades.filter(t => (t.profit_loss || 0) > 0);
+      const winningTrades = stats.trades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
       return {
         broker,
         tradeCount: stats.trades.length,

@@ -12,6 +12,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Target, TrendingUp, DollarSign, Percent, Plus, Trash2, Edit2, Check, X } from 'lucide-react';
 import type { Trade } from '@/types/trade';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
+import { calculateTradingDays } from '@/utils/tradingDays';
+import { useUserSettings } from '@/hooks/useUserSettings';
 
 interface Goal {
   id: string;
@@ -31,6 +34,7 @@ interface GoalsTrackerProps {
 
 export const GoalsTracker = ({ trades }: GoalsTrackerProps) => {
   const { user } = useAuth();
+  const { settings } = useUserSettings();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
@@ -41,6 +45,8 @@ export const GoalsTracker = ({ trades }: GoalsTrackerProps) => {
     period: 'monthly' as Goal['period'],
     deadline: '',
   });
+  
+  const tradingDaysMode = settings.trading_days_calculation_mode || 'calendar';
 
   useEffect(() => {
     if (user) {
@@ -101,7 +107,7 @@ export const GoalsTracker = ({ trades }: GoalsTrackerProps) => {
       case 'capital':
         // For capital goals, we need account equity
         // For now, use cumulative PnL as a proxy (would need actual account data in production)
-        const totalPnl = relevantTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+        const totalPnl = calculateTotalPnL(relevantTrades, { includeFees: true });
         if (goal.capital_target_type === 'relative') {
           // For relative, calculate percentage growth from baseline
           const baseline = goal.baseline_value || 0;
@@ -111,17 +117,17 @@ export const GoalsTracker = ({ trades }: GoalsTrackerProps) => {
       
       case 'profit':
       case 'pnl':
-        return relevantTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+        return calculateTotalPnL(relevantTrades, { includeFees: true });
       
       case 'win_rate':
-        const wins = relevantTrades.filter(t => (t.profit_loss || 0) > 0).length;
+        const wins = relevantTrades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0).length;
         return relevantTrades.length > 0 ? (wins / relevantTrades.length) * 100 : 0;
       
       case 'trades':
         return relevantTrades.length;
       
       case 'roi':
-        const totalRoiPnl = relevantTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+        const totalRoiPnl = calculateTotalPnL(relevantTrades, { includeFees: true });
         const totalMargin = relevantTrades.reduce((sum, t) => sum + (t.margin || 0), 0);
         return totalMargin > 0 ? (totalRoiPnl / totalMargin) * 100 : 0;
       

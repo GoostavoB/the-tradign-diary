@@ -8,6 +8,7 @@ import { ExplainMetricButton } from '@/components/ExplainMetricButton';
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import { BlurredCurrency } from '@/components/ui/BlurredValue';
 import { useCurrency } from '@/contexts/CurrencyContext';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface PerformanceInsightsProps {
   trades: Trade[];
@@ -19,28 +20,28 @@ export const PerformanceInsights = memo(({ trades }: PerformanceInsightsProps) =
   if (!trades.length) return null;
 
   // Calculate insights
-  const totalPnl = trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-  const winningTrades = trades.filter(t => (t.profit_loss || 0) > 0);
-  const losingTrades = trades.filter(t => (t.profit_loss || 0) < 0);
+  const totalPnl = calculateTotalPnL(trades, { includeFees: true });
+  const winningTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
+  const losingTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) < 0);
   const winRate = (winningTrades.length / trades.length) * 100;
   
   const avgWin = winningTrades.length > 0
-    ? winningTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / winningTrades.length
+    ? calculateTotalPnL(winningTrades, { includeFees: true }) / winningTrades.length
     : 0;
   
   const avgLoss = losingTrades.length > 0
-    ? Math.abs(losingTrades.reduce((sum, t) => sum + (t.profit_loss || 0), 0) / losingTrades.length)
+    ? Math.abs(calculateTotalPnL(losingTrades, { includeFees: true }) / losingTrades.length)
     : 0;
   
   const profitFactor = avgLoss > 0 ? avgWin / avgLoss : 0;
   
   // Best and worst trades
   const bestTrade = trades.reduce((best, t) => 
-    (t.profit_loss || 0) > (best.profit_loss || 0) ? t : best
+    calculateTradePnL(t, { includeFees: true }) > calculateTradePnL(best, { includeFees: true }) ? t : best
   , trades[0]);
   
   const worstTrade = trades.reduce((worst, t) => 
-    (t.profit_loss || 0) < (worst.profit_loss || 0) ? t : worst
+    calculateTradePnL(t, { includeFees: true }) < calculateTradePnL(worst, { includeFees: true }) ? t : worst
   , trades[0]);
 
   // Generate insights

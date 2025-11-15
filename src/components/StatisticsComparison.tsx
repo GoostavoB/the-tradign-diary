@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import type { Trade } from '@/types/trade';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface StatisticsComparisonProps {
   trades: Trade[];
@@ -36,8 +37,8 @@ export const StatisticsComparison = ({ trades }: StatisticsComparisonProps) => {
   const calculateMetrics = (tradesToAnalyze: Trade[]) => {
     if (tradesToAnalyze.length === 0) return null;
     
-    const totalPnl = tradesToAnalyze.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-    const wins = tradesToAnalyze.filter(t => (t.profit_loss || 0) > 0).length;
+    const totalPnl = calculateTotalPnL(tradesToAnalyze, { includeFees: true });
+    const wins = tradesToAnalyze.filter(t => calculateTradePnL(t, { includeFees: true }) > 0).length;
     const winRate = (wins / tradesToAnalyze.length) * 100;
     const avgRoi = tradesToAnalyze.reduce((sum, t) => sum + (t.roi || 0), 0) / tradesToAnalyze.length;
     

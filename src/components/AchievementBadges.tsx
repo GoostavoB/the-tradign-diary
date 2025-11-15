@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Trophy, Target, TrendingUp, Flame, Award, Star, Zap, Crown } from 'lucide-react';
 import type { Trade } from '@/types/trade';
+import { calculateTradePnL, calculateTotalPnL } from '@/utils/pnl';
 
 interface AchievementBadgesProps {
   trades: Trade[];
@@ -22,9 +23,9 @@ interface Achievement {
 const AchievementBadgesComponent = ({ trades }: AchievementBadgesProps) => {
   const stats = useMemo(() => {
     const totalTrades = trades.length;
-    const winningTrades = trades.filter(t => (t.profit_loss || 0) > 0);
+    const winningTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0);
     const winRate = totalTrades > 0 ? (winningTrades.length / totalTrades) * 100 : 0;
-    const totalPnl = trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+    const totalPnl = calculateTotalPnL(trades, { includeFees: true });
     
     // Calculate streaks
     const sortedTrades = [...trades].sort((a, b) => 
@@ -35,7 +36,7 @@ const AchievementBadgesComponent = ({ trades }: AchievementBadgesProps) => {
     let currentWinStreak = 0;
     
     sortedTrades.forEach(trade => {
-      if ((trade.profit_loss || 0) > 0) {
+      if (calculateTradePnL(trade, { includeFees: true }) > 0) {
         currentWinStreak++;
         maxWinStreak = Math.max(maxWinStreak, currentWinStreak);
       } else {
@@ -45,14 +46,14 @@ const AchievementBadgesComponent = ({ trades }: AchievementBadgesProps) => {
 
     // Beast mode days (days with >70% win rate)
     const tradesByDate = trades.reduce((acc, trade) => {
-      const date = new Date(trade.trade_date).toDateString();
+      const date = new Date(trade.closed_at || trade.trade_date).toDateString();
       if (!acc[date]) acc[date] = [];
       acc[date].push(trade);
       return acc;
     }, {} as Record<string, Trade[]>);
 
     const beastModeDays = Object.values(tradesByDate).filter(dayTrades => {
-      const wins = dayTrades.filter(t => (t.profit_loss || 0) > 0).length;
+      const wins = dayTrades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0).length;
       const dayWinRate = (wins / dayTrades.length) * 100;
       return dayWinRate > 70;
     }).length;

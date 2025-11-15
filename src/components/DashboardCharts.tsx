@@ -7,6 +7,7 @@ import { ExplainMetricButton } from '@/components/ExplainMetricButton';
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
 import { Button } from '@/components/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
+import { calculateTradePnL } from '@/utils/pnl';
 
 interface Trade {
   id: string;
@@ -32,7 +33,7 @@ export const DashboardCharts = memo(({ trades, chartType }: DashboardChartsProps
     trades
       .sort((a, b) => new Date(a.opened_at || a.trade_date).getTime() - new Date(b.opened_at || b.trade_date).getTime())
       .map((trade, index, arr) => {
-        const cumulative = arr.slice(0, index + 1).reduce((sum, t) => sum + (t.profit_loss || 0), 0);
+        const cumulative = arr.slice(0, index + 1).reduce((sum, t) => sum + calculateTradePnL(t as Trade, { includeFees: true }), 0);
         return {
           date: format(new Date(trade.opened_at || trade.trade_date), 'MMM dd'),
           pnl: cumulative,
@@ -54,7 +55,7 @@ export const DashboardCharts = memo(({ trades, chartType }: DashboardChartsProps
       if (!acc[date]) {
         acc[date] = { date, wins: 0, losses: 0 };
       }
-      if (trade.profit_loss > 0) {
+      if (calculateTradePnL(trade as Trade, { includeFees: true }) > 0) {
         acc[date].wins += 1;
       } else {
         acc[date].losses += 1;
