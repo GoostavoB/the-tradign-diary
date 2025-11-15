@@ -58,8 +58,21 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
     const lastTradeDate = new Date(sortedTrades[sortedTrades.length - 1]?.trade_date);
     const daysPassed = differenceInDays(lastTradeDate, firstTradeDate) || 1;
     
+    console.log('🎯 Goal Projection Debug:', {
+      goalTitle: goal.title,
+      totalTrades: trades.length,
+      firstTradeDate: firstTradeDate.toISOString().split('T')[0],
+      lastTradeDate: lastTradeDate.toISOString().split('T')[0],
+      daysPassed,
+    });
+    
     // Calculate total PnL for growth-based goals
     const totalPnL = trades.reduce((sum, t) => sum + ((t.pnl ?? t.profit_loss) || 0), 0);
+    
+    console.log('💰 PnL Calculation:', {
+      totalPnL,
+      avgPnLPerDay: totalPnL / daysPassed
+    });
     
     let dailyRate = 0;
     switch (goal.goal_type) {
