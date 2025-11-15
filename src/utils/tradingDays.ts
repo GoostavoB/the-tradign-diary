@@ -27,40 +27,53 @@ export function calculateTradingDays(
     return { tradingDays: 0, firstTradeDate: null, lastTradeDate: null };
   }
 
-  // Filter trades that have the required dates
-  const validTrades = trades.filter(t => 
-    (t.opened_at || t.trade_date) && (t.closed_at || t.trade_date)
-  );
-
-  if (validTrades.length === 0) {
+  // Filter trades that have opened_at (required for first date anchor)
+  const tradesWithOpen = trades.filter(t => t.opened_at || t.trade_date);
+  if (tradesWithOpen.length === 0) {
     return { tradingDays: 0, firstTradeDate: null, lastTradeDate: null };
   }
 
   // Sort by opened date to find first opened trade
-  const sortedByOpen = [...validTrades].sort((a, b) => {
+  const sortedByOpen = [...tradesWithOpen].sort((a, b) => {
     const dateA = new Date(a.opened_at || a.trade_date!);
     const dateB = new Date(b.opened_at || b.trade_date!);
     return dateA.getTime() - dateB.getTime();
   });
+  const firstTradeDate = new Date(sortedByOpen[0].opened_at || sortedByOpen[0].trade_date!);
 
-  // Sort by closed date to find last closed trade
-  const sortedByClose = [...validTrades].sort((a, b) => {
-    const dateA = new Date(a.closed_at || a.trade_date!);
-    const dateB = new Date(b.closed_at || b.trade_date!);
+  // For lastTradeDate, prefer closed_at if available, fallback to opened_at, then trade_date
+  const tradesWithClose = trades.filter(t => t.closed_at || t.opened_at || t.trade_date);
+  if (tradesWithClose.length === 0) {
+    return { tradingDays: 1, firstTradeDate, lastTradeDate: firstTradeDate };
+  }
+
+  const sortedByClose = [...tradesWithClose].sort((a, b) => {
+    const dateA = new Date(a.closed_at || a.opened_at || a.trade_date!);
+    const dateB = new Date(b.closed_at || b.opened_at || b.trade_date!);
     return dateA.getTime() - dateB.getTime();
   });
-
-  const firstTradeDate = new Date(sortedByOpen[0].opened_at || sortedByOpen[0].trade_date!);
-  const lastTradeDate = new Date(sortedByClose[sortedByClose.length - 1].closed_at || sortedByClose[sortedByClose.length - 1].trade_date!);
+  const lastTradeDate = new Date(
+    sortedByClose[sortedByClose.length - 1].closed_at || 
+    sortedByClose[sortedByClose.length - 1].opened_at || 
+    sortedByClose[sortedByClose.length - 1].trade_date!
+  );
 
   let tradingDays: number;
   
   if (mode === 'unique') {
-    // Count only unique days where trades were opened
+    // Count only unique days where trades were CLOSED (end-of-day attribution)
+    // Use closed_at if available, fallback to trade_date
     const uniqueDays = new Set<string>();
-    validTrades.forEach(t => {
-      const dateStr = (t.opened_at || t.trade_date!).split('T')[0];
-      uniqueDays.add(dateStr);
+    tradesWithClose.forEach(t => {
+      const dateToUse = t.closed_at || t.trade_date;
+      if (dateToUse) {
+        const dateStr = dateToUse.split('T')[0];
+        const tradeDate = new Date(dateStr);
+        // Only count days up to and including lastTradeDate
+        if (tradeDate <= lastTradeDate) {
+          uniqueDays.add(dateStr);
+        }
+      }
     });
     tradingDays = uniqueDays.size;
   } else {

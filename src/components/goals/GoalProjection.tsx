@@ -5,6 +5,7 @@ import { TrendingUp, TrendingDown, AlertTriangle, Target, Trash2 } from "lucide-
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { format, addDays, addWeeks, addMonths, differenceInDays } from 'date-fns';
 import { calculateTradingDays } from '@/utils/tradingDays';
+import { calculateTotalPnL, calculateTradePnL } from '@/utils/pnl';
 import { useUserSettings } from '@/hooks/useUserSettings';
 
 interface Goal {
@@ -71,27 +72,28 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
       method: 'first opened_at to last closed_at'
     });
     
-    // Calculate total PnL for growth-based goals
-    const totalPnL = trades.reduce((sum, t) => sum + ((t.pnl ?? t.profit_loss) || 0), 0);
+    // Calculate total PnL with consistent fee handling
+    const totalPnLNet = calculateTotalPnL(trades, { includeFees: true });
     
     console.log('💰 PnL Calculation:', {
-      totalPnL,
-      avgPnLPerDay: totalPnL / daysPassed
+      totalPnLNet,
+      avgPnLPerDay: totalPnLNet / daysPassed,
+      tradingDaysMode
     });
     
     let dailyRate = 0;
     switch (goal.goal_type) {
       case 'profit':
-        dailyRate = totalPnL / daysPassed;
+        dailyRate = totalPnLNet / daysPassed;
         break;
       case 'capital':
-        dailyRate = totalPnL / daysPassed; // Growth rate, not total value
+        dailyRate = totalPnLNet / daysPassed; // Growth rate, not total value
         break;
       case 'trades':
         dailyRate = trades.length / daysPassed;
         break;
       case 'win_rate':
-        const winningTrades = trades.filter(t => ((t.pnl ?? t.profit_loss) || 0) > 0).length;
+        const winningTrades = trades.filter(t => calculateTradePnL(t, { includeFees: true }) > 0).length;
         dailyRate = ((winningTrades / trades.length) * 100) / daysPassed;
         break;
       case 'roi':
@@ -100,11 +102,34 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
         break;
     }
 
-    // Project future values
+    // Calculate days remaining and required daily rate
     const today = new Date();
+    const deadline = goal.deadline ? new Date(goal.deadline) : null;
+    
+    let daysRemaining = 0;
+    let requiredDailyRate = 0;
+    
+    if (deadline) {
+      if (tradingDaysMode === 'calendar') {
+        // Calendar mode: use calendar days remaining
+        daysRemaining = Math.max(1, differenceInDays(deadline, today));
+      } else {
+        // Unique mode: estimate unique trading days remaining
+        // Based on historical ratio of unique days per calendar day
+        const calendarDaysRemaining = Math.max(1, differenceInDays(deadline, today));
+        const calendarDaysPassed = differenceInDays(lastTradeDate, firstTradeDate) + 1;
+        const tradingDaysPerCalendarDay = calendarDaysPassed > 0 ? daysPassed / calendarDaysPassed : 1;
+        daysRemaining = Math.max(1, Math.round(calendarDaysRemaining * tradingDaysPerCalendarDay));
+      }
+      
+      const valueRemaining = goal.target_value - goal.current_value;
+      requiredDailyRate = daysRemaining > 0 ? valueRemaining / daysRemaining : 0;
+    }
+
+    // Project future values
     const projectionData = [];
-    const daysToProject = goal.deadline 
-      ? differenceInDays(new Date(goal.deadline), today)
+    const daysToProject = deadline 
+      ? differenceInDays(deadline, today)
       : 30;
     
     for (let i = 0; i <= Math.min(daysToProject, 90); i += Math.max(1, Math.floor(daysToProject / 10))) {
@@ -118,12 +143,7 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
     }
 
     // Calculate if on track
-    const valueNeeded = goal.target_value - goal.current_value;
-    const daysRemaining = goal.deadline 
-      ? differenceInDays(new Date(goal.deadline), today)
-      : 30;
-    const requiredDailyRate = valueNeeded / daysRemaining;
-    const isOnTrack = dailyRate >= requiredDailyRate * 0.8; // 80% threshold
+    const isOnTrack = requiredDailyRate > 0 && dailyRate >= requiredDailyRate * 0.8; // 80% threshold
     const projectedFinalValue = goal.current_value + (dailyRate * daysRemaining);
     const projectedProgress = (projectedFinalValue / goal.target_value) * 100;
 

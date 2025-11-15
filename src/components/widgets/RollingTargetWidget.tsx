@@ -57,6 +57,7 @@ import {
 import { format, parseISO, differenceInDays } from 'date-fns';
 import { toast } from 'sonner';
 import { calculateTradingDays } from '@/utils/tradingDays';
+import { calculateTradePnL } from '@/utils/pnl';
 import { useUserSettings } from '@/hooks/useUserSettings';
 
 interface RollingTargetWidgetProps {
@@ -122,7 +123,7 @@ export const RollingTargetWidget = memo(({
     
     const p = (settings?.targetPercent || 1) / 100;
 
-    // Group trades by day (just accumulate PnL first)
+    // Group trades by day (accumulate net PnL)
     sortedTrades.forEach(trade => {
       const dateStr = format(parseISO(trade.closed_at!), 'yyyy-MM-dd');
       if (!dailyMap.has(dateStr)) {
@@ -139,7 +140,8 @@ export const RollingTargetWidget = memo(({
         });
       }
       const day = dailyMap.get(dateStr)!;
-      day.pnl += trade.profit_loss || 0;
+      // Use net PnL (after fees)
+      day.pnl += calculateTradePnL(trade, { includeFees: true });
     });
 
     // Calculate cumulative values and planned path
@@ -184,7 +186,7 @@ export const RollingTargetWidget = memo(({
     });
 
     return daysArray;
-  }, [trades, initialInvestment, settings?.targetPercent, settings?.mode, settings?.carryOverCap]);
+  }, [trades, initialInvestment, settings?.targetPercent, settings?.mode, settings?.carryOverCap, tradingDaysMode]);
 
   // Calculate today's required PnL
   const todayData = useMemo(() => {
@@ -234,21 +236,24 @@ export const RollingTargetWidget = memo(({
   }, [dailyData, settings?.mode, settings?.targetPercent, settings?.carryOverCap, initialInvestment]);
 
   // Calculate average daily capital growth (geometric mean)
+  // Use the consistent tradingDays value based on user mode
   const avgDailyGrowth = useMemo(() => {
     if (dailyData.length === 0 || initialInvestment === 0) return 0;
+    
+    // Get the trading days count using user's selected mode
+    const { tradingDays: N } = calculateTradingDays(trades, tradingDaysMode);
     
     const firstDay = dailyData[0];
     const lastDay = dailyData[dailyData.length - 1];
     const C_initial = firstDay.startCapital;
     const C_final = lastDay.endCapital;
-    const N = dailyData.length;
     
     if (C_initial === 0 || N === 0) return 0;
     
     // Formula: (C_final / C_initial)^(1 / N) - 1
     const growthRate = Math.pow(C_final / C_initial, 1 / N) - 1;
     return growthRate * 100; // Convert to percentage
-  }, [dailyData, initialInvestment]);
+  }, [dailyData, initialInvestment, trades, tradingDaysMode]);
 
   // Adaptive suggestion logic
   const suggestedPercent = useMemo(() => {

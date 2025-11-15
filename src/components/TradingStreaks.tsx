@@ -3,6 +3,7 @@ import { CheckCircle2, AlertCircle, Trophy, Target, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import type { Trade } from '@/types/trade';
+import { calculateTradePnL } from '@/utils/pnl';
 import { ExplainMetricButton } from '@/components/ExplainMetricButton';
 import { useAIAssistant } from '@/contexts/AIAssistantContext';
 
@@ -14,18 +15,20 @@ export const TradingStreaks = memo(({ trades }: TradingStreaksProps) => {
   const { openWithPrompt } = useAIAssistant();
   if (trades.length === 0) return null;
 
-  // Sort trades by date
-  const sortedTrades = [...trades].sort((a, b) => 
-    new Date(a.trade_date).getTime() - new Date(b.trade_date).getTime()
-  );
+  // Sort trades by closed_at date (fallback to trade_date)
+  const sortedTrades = [...trades].sort((a, b) => {
+    const dateA = new Date(a.closed_at || a.trade_date);
+    const dateB = new Date(b.closed_at || b.trade_date);
+    return dateA.getTime() - dateB.getTime();
+  });
 
-  // Calculate current streak
+  // Calculate current streak (using net PnL)
   let currentStreak = 0;
   let currentStreakType: 'win' | 'loss' | null = null;
   
   for (let i = sortedTrades.length - 1; i >= 0; i--) {
     const trade = sortedTrades[i];
-    const isWin = (trade.profit_loss || 0) > 0;
+    const isWin = calculateTradePnL(trade, { includeFees: true }) > 0;
     
     if (currentStreakType === null) {
       currentStreakType = isWin ? 'win' : 'loss';
@@ -37,14 +40,14 @@ export const TradingStreaks = memo(({ trades }: TradingStreaksProps) => {
     }
   }
 
-  // Calculate longest streaks
+  // Calculate longest streaks (using net PnL)
   let longestWinStreak = 0;
   let currentWinStreak = 0;
   let longestLossStreak = 0;
   let currentLossStreak = 0;
 
   sortedTrades.forEach(trade => {
-    const isWin = (trade.profit_loss || 0) > 0;
+    const isWin = calculateTradePnL(trade, { includeFees: true }) > 0;
     
     if (isWin) {
       currentWinStreak++;
@@ -57,9 +60,10 @@ export const TradingStreaks = memo(({ trades }: TradingStreaksProps) => {
     }
   });
 
-  // Find consecutive trading days
+  // Find consecutive trading days (use closed_at for day keys, fallback to trade_date)
+  // This intentionally uses unique day logic for streaks
   const tradingDays = new Set(sortedTrades.map(t => 
-    new Date(t.trade_date).toDateString()
+    new Date(t.closed_at || t.trade_date).toDateString()
   ));
   
   const sortedDays = Array.from(tradingDays).sort((a, b) => 
