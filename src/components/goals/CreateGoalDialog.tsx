@@ -127,7 +127,7 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
       });
     } catch (error) {
       console.error('Error saving goal:', error);
-      toast.error("Failed to save goal");
+      toast.error(error?.message || "Failed to save goal");
     } finally {
       setLoading(false);
     }
