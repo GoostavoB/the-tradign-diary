@@ -770,20 +770,6 @@ export const RollingTargetWidget = memo(({
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center gap-1 cursor-help">
-                      <p className="text-xs text-muted-foreground">Avg Catch-Up</p>
-                      <Info className="h-3 w-3 text-muted-foreground" />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">Average amount needed per day to get back on track when you're behind your plan</p>
-                  </TooltipContent>
-                </Tooltip>
-                <p className="text-lg font-bold">{formatCurrency(summaryMetrics.avgRequiredWhenBehind)}</p>
-              </div>
-              <div className="space-y-1">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex items-center gap-1 cursor-help">
                       <p className="text-xs text-muted-foreground">Avg Daily Capital Growth</p>
                       <Info className="h-3 w-3 text-muted-foreground" />
                     </div>
