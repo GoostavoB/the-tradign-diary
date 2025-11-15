@@ -56,6 +56,12 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
     
     const firstTradeDate = new Date(sortedTrades[0]?.trade_date);
     const lastTradeDate = new Date(sortedTrades[sortedTrades.length - 1]?.trade_date);
+    
+    // Calculate unique trading days
+    const uniqueTradingDays = new Set(
+      trades.map(t => new Date(t.trade_date).toISOString().split('T')[0])
+    ).size;
+    
     // Add 1 to include both first and last day (inclusive count)
     const daysPassed = differenceInDays(lastTradeDate, firstTradeDate) + 1;
     
@@ -65,6 +71,9 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
       firstTradeDate: firstTradeDate.toISOString().split('T')[0],
       lastTradeDate: lastTradeDate.toISOString().split('T')[0],
       daysPassed,
+      uniqueTradingDays,
+      tradingDaysWithTrades: uniqueTradingDays,
+      daysInPeriod: daysPassed,
     });
     
     // Calculate total PnL for growth-based goals
