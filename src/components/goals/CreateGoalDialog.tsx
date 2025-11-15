@@ -58,6 +58,12 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
     e.preventDefault();
     if (!user) return;
 
+    // Validate baseline_value for capital and ROI goals
+    if ((formData.goal_type === 'capital' || formData.goal_type === 'roi') && !formData.baseline_value) {
+      toast.error('Starting capital is required for capital and ROI goals');
+      return;
+    }
+
     setLoading(true);
     try {
       const goalData: any = {
@@ -215,8 +221,30 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
               </p>
             </div>
 
+            <div>
+              <Label htmlFor="baseline_value">Starting capital *</Label>
+              <div className="relative mt-1.5">
+                <Input
+                  id="baseline_value"
+                  type="number"
+                  step="any"
+                  value={formData.baseline_value}
+                  onChange={(e) => setFormData({ ...formData, baseline_value: e.target.value })}
+                  placeholder="5,000"
+                  required
+                  className="pr-16"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                  USDT
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5">
+                💡 Your current account balance/equity. Progress will be calculated from this starting point.
+              </p>
+            </div>
+
             <p className="text-xs text-muted-foreground pt-2 border-t">
-              We use your account equity to calculate capital and progress toward this goal.
+              Progress is calculated from your starting capital (set above) plus/minus your trading PnL within the goal's timeframe.
             </p>
           </div>
         );
@@ -334,8 +362,31 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
                 Return on investment percentage you want to reach in this goal.
               </p>
             </div>
+
+            <div>
+              <Label htmlFor="baseline_value">Starting capital *</Label>
+              <div className="relative mt-1.5">
+                <Input
+                  id="baseline_value"
+                  type="number"
+                  step="any"
+                  value={formData.baseline_value}
+                  onChange={(e) => setFormData({ ...formData, baseline_value: e.target.value })}
+                  placeholder="5,000"
+                  required
+                  className="pr-16"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                  USDT
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5">
+                💡 Your account balance at the start. ROI will be calculated as PnL / starting capital × 100.
+              </p>
+            </div>
+
             <p className="text-xs text-muted-foreground pt-2 border-t">
-              We calculate ROI using your realized PnL and margin inside the timeframe.
+              ROI is calculated using your realized PnL divided by your starting capital within the goal's timeframe.
             </p>
           </div>
         );
