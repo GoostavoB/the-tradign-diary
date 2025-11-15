@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
 interface CreateGoalDialogProps {
   onGoalCreated: () => void;
@@ -33,6 +34,38 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
     period_end: editingGoal?.period_end || '',
     calculation_mode: editingGoal?.calculation_mode || 'current_performance',
     target_date: editingGoal?.deadline ? format(new Date(editingGoal.deadline), 'yyyy-MM-dd') : '',
+  });
+
+  // Fetch capital data for quick-fill buttons
+  const { data: capitalData, isLoading: capitalLoading } = useQuery({
+    queryKey: ['capital-quick-fill', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      
+      // Get first capital log entry (initial capital)
+      const { data: firstEntry } = await supabase
+        .from('capital_log')
+        .select('amount_added, total_after')
+        .eq('user_id', user.id)
+        .order('log_date', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      
+      // Get last capital log entry (current capital)
+      const { data: lastEntry } = await supabase
+        .from('capital_log')
+        .select('total_after')
+        .eq('user_id', user.id)
+        .order('log_date', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      
+      return {
+        initialCapital: firstEntry?.amount_added || firstEntry?.total_after || null,
+        currentCapital: lastEntry?.total_after || null,
+      };
+    },
+    enabled: !!user && open && (formData.goal_type === 'capital' || formData.goal_type === 'roi')
   });
 
   useEffect(() => {
@@ -238,6 +271,56 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
                   USDT
                 </span>
               </div>
+              
+              {/* Quick-fill buttons */}
+              <div className="flex gap-2 mt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (capitalData?.initialCapital) {
+                      setFormData({ ...formData, baseline_value: capitalData.initialCapital.toString() });
+                    }
+                  }}
+                  disabled={!capitalData?.initialCapital || capitalLoading}
+                  className="flex-1 h-auto py-2"
+                >
+                  <div className="flex flex-col items-start w-full">
+                    <span className="text-xs font-normal">📊 My Initial Capital</span>
+                    {capitalData?.initialCapital && (
+                      <span className="text-sm font-semibold">${capitalData.initialCapital.toLocaleString()}</span>
+                    )}
+                    {!capitalData?.initialCapital && !capitalLoading && (
+                      <span className="text-xs text-muted-foreground">Not set</span>
+                    )}
+                  </div>
+                </Button>
+                
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (capitalData?.currentCapital) {
+                      setFormData({ ...formData, baseline_value: capitalData.currentCapital.toString() });
+                    }
+                  }}
+                  disabled={!capitalData?.currentCapital || capitalLoading}
+                  className="flex-1 h-auto py-2"
+                >
+                  <div className="flex flex-col items-start w-full">
+                    <span className="text-xs font-normal">💰 My Current Capital</span>
+                    {capitalData?.currentCapital && (
+                      <span className="text-sm font-semibold">${capitalData.currentCapital.toLocaleString()}</span>
+                    )}
+                    {!capitalData?.currentCapital && !capitalLoading && (
+                      <span className="text-xs text-muted-foreground">Not set</span>
+                    )}
+                  </div>
+                </Button>
+              </div>
+              
               <p className="text-xs text-muted-foreground mt-1.5">
                 💡 Your current account balance/equity. Progress will be calculated from this starting point.
               </p>
@@ -380,6 +463,56 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
                   USDT
                 </span>
               </div>
+              
+              {/* Quick-fill buttons */}
+              <div className="flex gap-2 mt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (capitalData?.initialCapital) {
+                      setFormData({ ...formData, baseline_value: capitalData.initialCapital.toString() });
+                    }
+                  }}
+                  disabled={!capitalData?.initialCapital || capitalLoading}
+                  className="flex-1 h-auto py-2"
+                >
+                  <div className="flex flex-col items-start w-full">
+                    <span className="text-xs font-normal">📊 My Initial Capital</span>
+                    {capitalData?.initialCapital && (
+                      <span className="text-sm font-semibold">${capitalData.initialCapital.toLocaleString()}</span>
+                    )}
+                    {!capitalData?.initialCapital && !capitalLoading && (
+                      <span className="text-xs text-muted-foreground">Not set</span>
+                    )}
+                  </div>
+                </Button>
+                
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (capitalData?.currentCapital) {
+                      setFormData({ ...formData, baseline_value: capitalData.currentCapital.toString() });
+                    }
+                  }}
+                  disabled={!capitalData?.currentCapital || capitalLoading}
+                  className="flex-1 h-auto py-2"
+                >
+                  <div className="flex flex-col items-start w-full">
+                    <span className="text-xs font-normal">💰 My Current Capital</span>
+                    {capitalData?.currentCapital && (
+                      <span className="text-sm font-semibold">${capitalData.currentCapital.toLocaleString()}</span>
+                    )}
+                    {!capitalData?.currentCapital && !capitalLoading && (
+                      <span className="text-xs text-muted-foreground">Not set</span>
+                    )}
+                  </div>
+                </Button>
+              </div>
+              
               <p className="text-xs text-muted-foreground mt-1.5">
                 💡 Your account balance at the start. ROI will be calculated as PnL / starting capital × 100.
               </p>
