@@ -58,7 +58,7 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
 
     setLoading(true);
     try {
-      const goalData = {
+      const goalData: any = {
         user_id: user.id,
         title: formData.title,
         description: formData.description || '',
@@ -67,7 +67,29 @@ export function CreateGoalDialog({ onGoalCreated, editingGoal, onClose }: Create
         deadline: formData.target_date,
         current_value: editingGoal?.current_value || 0,
         period: editingGoal?.period || 'monthly',
+        calculation_mode: formData.calculation_mode,
+        period_type: formData.period_type,
       };
+
+      // Add capital_target_type only for capital goals
+      if (formData.goal_type === 'capital') {
+        goalData.capital_target_type = formData.capital_target_type;
+      }
+
+      // Add period dates only if custom range is selected
+      if (formData.period_type === 'custom_range') {
+        goalData.period_start = formData.period_start || null;
+        goalData.period_end = formData.period_end || null;
+      } else {
+        goalData.period_start = null;
+        goalData.period_end = null;
+      }
+
+      // Set baseline_date for start_from_scratch mode
+      if (formData.calculation_mode === 'start_from_scratch' && !editingGoal) {
+        goalData.baseline_date = new Date().toISOString();
+        goalData.baseline_value = 0;
+      }
 
       if (editingGoal) {
         const { error } = await supabase
