@@ -49,7 +49,7 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
   }
 
   const calculateProjection = (goal: Goal) => {
-    // Calculate average daily performance
+    // Calculate historical period from uploaded trades only
     const sortedTrades = [...trades].sort((a, b) => 
       new Date(a.trade_date).getTime() - new Date(b.trade_date).getTime()
     );
@@ -58,13 +58,16 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
     const lastTradeDate = new Date(sortedTrades[sortedTrades.length - 1]?.trade_date);
     const daysPassed = differenceInDays(lastTradeDate, firstTradeDate) || 1;
     
+    // Calculate total PnL for growth-based goals
+    const totalPnL = trades.reduce((sum, t) => sum + ((t.pnl ?? t.profit_loss) || 0), 0);
+    
     let dailyRate = 0;
     switch (goal.goal_type) {
       case 'profit':
-        dailyRate = goal.current_value / daysPassed;
+        dailyRate = totalPnL / daysPassed;
         break;
       case 'capital':
-        dailyRate = goal.current_value / daysPassed;
+        dailyRate = totalPnL / daysPassed; // Growth rate, not total value
         break;
       case 'trades':
         dailyRate = trades.length / daysPassed;
@@ -74,7 +77,8 @@ export const GoalProjection = ({ goals, trades, onDelete, onEdit }: GoalProjecti
         dailyRate = ((winningTrades / trades.length) * 100) / daysPassed;
         break;
       case 'roi':
-        dailyRate = goal.current_value / daysPassed;
+        const avgRoi = trades.reduce((sum, t) => sum + ((t.roi || 0)), 0) / trades.length;
+        dailyRate = avgRoi / daysPassed;
         break;
     }
 
