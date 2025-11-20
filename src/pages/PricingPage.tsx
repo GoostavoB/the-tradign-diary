@@ -57,7 +57,7 @@ const PricingPage = () => {
           "name": "How much does The Trading Diary cost?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The Trading Diary offers three plans: Starter (Free) with 5 free uploads and $5 per 10 additional uploads, Pro ($15/month or $144/year) with 30 uploads per month and rollover, and Elite ($32/month or $336/year) with unlimited uploads and priority support."
+            "text": "The Trading Diary offers three plans: Starter (Free) with 5 free AI Extracts and $5 per 10 additional extracts, Pro ($18/month or $172.80/year) with 30 extracts per month and rollover, and Elite ($30/month or $288/year) with unlimited extracts and priority support."
           }
         },
         {
@@ -65,15 +65,15 @@ const PricingPage = () => {
           "name": "What's included in the free Starter plan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The Starter plan includes 5 free uploads, manual trade entry, widgets and metrics, emotional tracking, goals, market data (long/short ratio and open interest), forecast tool, FII analysis, risk analysis, trading journal, spot wallet, tax reports, achievements board, and default themes (blue and Gold Rush)."
+            "text": "The Starter plan includes 5 free AI Extracts (up to 10 trades each), unlimited manual uploads, screenshot uploads, anti-duplicate detection, full trade history, advanced charts and analytics, journal with emotional tracking, market sentiment with combined LSR, exchange fee comparison, trade leverage calculator, wealth forecast, risk calculator, smart performance insights, and tax report export."
           }
         },
         {
           "@type": "Question",
-          "name": "What happens to unused uploads in the Pro plan?",
+          "name": "What happens to unused extracts in the Pro plan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "In the Pro plan, unused uploads roll over to the next month. For example, if you only use 20 out of your 30 monthly uploads, the remaining 10 carry forward to next month, giving you 40 uploads available."
+            "text": "In the Pro plan, unused extracts roll over to the next month with a maximum rollover of 300 trades. For example, if you only use 20 out of your 30 monthly extracts, the remaining 10 carry forward to next month."
           }
         },
         {
@@ -89,7 +89,7 @@ const PricingPage = () => {
           "name": "Is there a discount for annual billing?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes! Annual billing saves you 20% compared to monthly billing. Pro is $144/year (vs $180 monthly) and Elite is $336/year (vs $384 monthly), saving you $36 and $48 per year respectively."
+            "text": "Yes! Annual billing saves you 20% compared to monthly billing. Pro is $172.80/year (vs $216 monthly) and Elite is $288/year (vs $360 monthly), saving you $43.20 and $72 per year respectively."
           }
         },
         {
@@ -113,7 +113,7 @@ const PricingPage = () => {
           "name": "What's the difference between Pro and Elite?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Pro includes 30 uploads/month with rollover, full color customization, and email support for $15/month. Elite includes unlimited uploads, priority customer support, early access to new features, and full color customization for $32/month. Elite is best for professional traders with high trading volume."
+            "text": "Pro includes 30 AI Extracts/month with rollover up to 300 trades, unlimited sub accounts, custom dashboard with 6 themes, full widget control, and email support for $18/month. Elite includes unlimited AI Extracts, priority customer support, exclusive metrics and widgets, early access to new features, and fully customizable dashboard with custom colors for $30/month. Elite is best for professional traders with high trading volume."
           }
         }
       ]
@@ -129,21 +129,21 @@ const PricingPage = () => {
       annualPrice: 0,
       annualTotal: 0,
       featuresKeys: [
-        "Onboarding gift: 5 free uploads",
-        "Extra uploads: $5 per 10 uploads",
-        "Add trades manually",
-        "Widgets and metrics",
-        "Emotional, plans, and personal goals",
-        "Market data: long short ratio and open interest",
-        "Forecast tool",
-        "FII analysis to compare exchanges",
-        "Risk analysis",
-        "Trading journal",
-        "Spot wallet",
-        "Tax report",
-        "Achievements board",
-        "Themes: Default blue and Gold Rush only",
-        "No color customization",
+        "5 AI Extracts as a limited offer",
+        "Track up to 10 trades per Extract",
+        "Unlimited manual uploads",
+        "Screenshot uploads",
+        "Anti duplicate detection",
+        "Full trade history",
+        "Advanced charts and analytics",
+        "Journal with emotional tracking",
+        "Market sentiment with combined LSR",
+        "Exchange fee comparison",
+        "Trade leverage calculator",
+        "Wealth forecast",
+        "Risk calculator",
+        "Smart performance insights",
+        "Tax report export",
       ],
       ctaKey: "Start free",
       popular: false,
@@ -152,16 +152,19 @@ const PricingPage = () => {
       id: 'pro',
       nameKey: "Pro",
       descriptionKey: "Most popular for serious traders",
-      monthlyPrice: 15,
-      annualPrice: 12,
-      annualTotal: 144,
+      monthlyPrice: 18,
+      annualPrice: 14.4,
+      annualTotal: 172.8,
       featuresKeys: [
         "Everything in Starter, plus:",
-        "30 uploads per month",
-        "Unused uploads roll over to next month",
-        "Extra uploads: $2 per 10 uploads (60% discount)",
-        "Full color customization: primary, secondary, and accent",
-        "Email support",
+        "Unlimited sub accounts",
+        "Custom dashboard with 6 themes",
+        "Move, add, remove widgets",
+        "Full layout control",
+        "30 AI Extracts per month",
+        "Rollover up to 300 trades",
+        "Extra Extract packs at $2 for 10",
+        "Discount on Extract packs",
       ],
       ctaKey: "Go Pro",
       popular: true,
@@ -170,15 +173,16 @@ const PricingPage = () => {
       id: 'elite',
       nameKey: "Elite",
       descriptionKey: "For professional traders",
-      monthlyPrice: 32,
-      annualPrice: 28,
-      annualTotal: 336,
+      monthlyPrice: 30,
+      annualPrice: 24,
+      annualTotal: 288,
       featuresKeys: [
         "Everything in Pro, plus:",
-        "Unlimited uploads and trades",
+        "Unlimited AI Extracts per month with unlimited trades",
         "Priority customer support",
-        "First access to new widgets and new metrics",
-        "Full color customization",
+        "Exclusive metrics and widgets",
+        "Early access to new features",
+        "Fully customizable dashboard with custom colors",
       ],
       ctaKey: "Get Elite",
       popular: false,

@@ -14,48 +14,55 @@ const PricingComparison = () => {
 
   const features = [
     {
-      category: "Uploads & Trades",
+      category: "Trade Uploads",
       items: [
-        { name: "Onboarding gift", basic: "5 free uploads", pro: "5 free uploads", elite: "5 free uploads" },
-        { name: "Monthly uploads", basic: "0/month", pro: "30/month", elite: "Unlimited" },
-        { name: "Upload rollover", basic: false, pro: true, elite: true },
-        { name: "Extra uploads cost", basic: "$5 per 10", pro: "$2 per 10 (60% off)", elite: "N/A" },
-        { name: "Manual trade entry", basic: true, pro: true, elite: true },
+        { name: "Manual uploads", basic: true, pro: true, elite: true },
+        { name: "Screenshot uploads", basic: true, pro: true, elite: true },
+        { name: "Anti duplicate detection", basic: true, pro: true, elite: true },
+        { name: "AI Extracts per month", basic: "5 (limited offer)", pro: "30", elite: "Unlimited" },
+        { name: "Rollover", basic: false, pro: "Up to 300 trades", elite: true },
+        { name: "Extra Extract pricing", basic: "$5 per 10", pro: "$2 per 10", elite: "N/A" },
+        { name: "Unlimited Extracts", basic: false, pro: false, elite: true },
       ]
     },
     {
-      category: "Trading Tools & Analytics",
+      category: "Accounts and Dashboard",
       items: [
-        { name: "Widgets and metrics", basic: true, pro: true, elite: true },
-        { name: "Emotional, plans, and goals", basic: true, pro: true, elite: true },
-        { name: "Market data (LSR & OI)", basic: true, pro: true, elite: true },
-        { name: "Forecast tool", basic: true, pro: true, elite: true },
-        { name: "FII analysis to compare exchanges", basic: true, pro: true, elite: true },
-        { name: "Risk analysis", basic: true, pro: true, elite: true },
+        { name: "Multiple accounts", basic: false, pro: true, elite: true },
+        { name: "Custom dashboard", basic: false, pro: true, elite: true },
+        { name: "Themes", basic: "Default only", pro: "6 themes", elite: "6 themes" },
+        { name: "Widget control", basic: false, pro: "Move, add, remove", elite: "Move, add, remove" },
+        { name: "Full color customization", basic: false, pro: true, elite: true },
       ]
     },
     {
-      category: "Journaling & Reports",
+      category: "Analytics",
       items: [
-        { name: "Trading journal", basic: true, pro: true, elite: true },
-        { name: "Spot wallet", basic: true, pro: true, elite: true },
+        { name: "Advanced charts", basic: true, pro: true, elite: true },
+        { name: "Pattern insights", basic: true, pro: true, elite: true },
+        { name: "Performance insights", basic: true, pro: true, elite: true },
+        { name: "Wealth forecast", basic: true, pro: true, elite: true },
+        { name: "Risk calculator", basic: true, pro: true, elite: true },
+        { name: "Market sentiment", basic: true, pro: true, elite: true },
+        { name: "Fee comparison", basic: true, pro: true, elite: true },
+      ]
+    },
+    {
+      category: "Journal",
+      items: [
+        { name: "Emotional tracking", basic: true, pro: true, elite: true },
+        { name: "Notes", basic: true, pro: true, elite: true },
+        { name: "Session reviews", basic: true, pro: true, elite: true },
+        { name: "Full trade history", basic: true, pro: true, elite: true },
         { name: "Tax report", basic: true, pro: true, elite: true },
-        { name: "Achievements board", basic: true, pro: true, elite: true },
       ]
     },
     {
-      category: "Customization",
-      items: [
-        { name: "Themes", basic: "Blue & Gold Rush", pro: "All themes", elite: "All themes" },
-        { name: "Color customization", basic: false, pro: "Full (primary, secondary, accent)", elite: "Full (primary, secondary, accent)" },
-      ]
-    },
-    {
-      category: "Support & Access",
+      category: "Support",
       items: [
         { name: "Email support", basic: false, pro: true, elite: true },
-        { name: "Priority customer support", basic: false, pro: false, elite: true },
-        { name: "First access to new features", basic: false, pro: false, elite: true },
+        { name: "Priority support", basic: false, pro: false, elite: true },
+        { name: "Early access to features", basic: false, pro: false, elite: true },
       ]
     },
   ];

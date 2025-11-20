@@ -35,9 +35,10 @@
   },
   "landing": {
     "hero": {
-      "title": "Trade with clarity.",
-      "subtitle": "An AI-powered trading diary for crypto investors. Capture every trade, find patterns, and track your edge.",
-      "cta": "Start Free Trial"
+      "mainTitle": "Trade With Clarity and Control",
+      "subtitle": "AI helps you upload trades faster, see patterns, and improve decisions. No APIs. No exchange connections. Full privacy.",
+      "ctaPrimary": "Start Free",
+      "ctaSubtext": "No hidden fees. Cancel anytime."
     },
     "stats": {
       "fasterUploads": {
@@ -77,46 +78,46 @@
       "subtitle": "Connect your favorite exchanges and import trades automatically"
     },
     "features": {
-      "title": "Trade Better with Data",
-      "subtitle": "Everything you need to improve your trading performance",
+      "title": "Tools That Give You Better Insight",
+      "subtitle": "Everything you need to track and improve your trading",
       "smartLogging": {
-        "title": "Smart Logging",
-        "description": "Capture screenshots, add emotional tags, track errors—all in one place.",
+        "title": "AI Extracts for Fast Trade Logging",
+        "description": "Upload screenshots and process trades in seconds. Batch upload from images.",
         "blogLinkText": "Learn More"
       },
       "autoImports": {
-        "title": "Auto Imports",
-        "description": "Connect Binance, Bybit, and more. Sync trades automatically.",
+        "title": "Unlimited Manual Uploads",
+        "description": "Add trades manually with full control. No limits on manual entries.",
         "blogLinkText": "View Exchanges"
       },
       "advancedAnalytics": {
-        "title": "Advanced Analytics",
-        "description": "Win rate, expectancy, streaks—see what's actually profitable.",
+        "title": "Advanced Charts and Analytics",
+        "description": "Win rate, expectancy, streaks. See what actually makes money.",
         "blogLinkText": "Explore Analytics"
       },
       "tagFilter": {
-        "title": "Tag & Filter",
-        "description": "Organize by setup, timeframe, emotion. Find patterns instantly.",
+        "title": "Anti Duplicate Detection",
+        "description": "Blocks repeated trades and keeps your history clean.",
         "blogLinkText": "How It Works"
       },
       "mobileFriendly": {
-        "title": "Mobile Friendly",
-        "description": "Log trades on the go. Full experience on any device.",
+        "title": "Journal with Emotional Tracking",
+        "description": "Track emotional trades and improve control. Write notes for each session.",
         "blogLinkText": "Get Started"
       },
       "learnMore": "Learn More",
       "readMoreInsights": "Read More Trading Insights"
     },
     "testimonials": {
-      "sectionTitle": "Trusted by Traders",
+      "sectionTitle": "Trusted by Traders Worldwide",
       "testimonial1": {
-        "quote": "This journal completely changed how I analyze my trades. The AI insights are incredible.",
+        "quote": "Clear analytics helped me correct my mistakes faster.",
         "author": "Marcus Chen",
         "role": "Day Trader",
         "exchange": "Binance"
       },
       "testimonial2": {
-        "quote": "Finally, a tool that understands crypto trading. The fee tracking alone saved me thousands.",
+        "quote": "I stopped emotional trades and improved my results.",
         "author": "Sarah Rodriguez",
         "role": "Swing Trader",
         "exchange": "Coinbase"
@@ -137,26 +138,31 @@
       "ctaPrimary": "Get started free"
     },
     "cta": {
-      "title": "Ready to Level Up Your Trading?",
+      "title": "Start Tracking Your Trades With Confidence",
       "subtitle": "Join thousands of traders improving their discipline and profitability.",
-      "button": "Start Free Trial",
-      "note": "No credit card required"
+      "button": "Start Free",
+      "note": "No hidden fees. Cancel anytime."
     },
     "footer": {
-      "tagline": "Track smarter. Trade better.",
+      "tagline": "Your AI assisted trading journal. Track your trades with clarity and privacy.",
       "product": "Product",
       "features": "Features",
       "pricing": "Pricing",
+      "blog": "Blog",
+      "login": "Login",
+      "startFree": "Start Free",
       "support": "Support",
       "help": "Help Center",
       "documentation": "Documentation",
       "contact": "Contact",
+      "faq": "FAQ",
       "legal": "Legal",
-      "terms": "Terms",
-      "privacy": "Privacy",
-      "securityBadge": "Data encrypted at rest and in transit",
+      "terms": "Terms of Use",
+      "privacy": "Privacy Policy",
+      "security": "Security",
+      "securityBadge": "No APIs. Full privacy.",
       "allRightsReserved": "All rights reserved.",
-      "madeWith": "Made with ❤️ for traders"
+      "madeWith": "No APIs. Full privacy."
     }
   },
   "contact": {
@@ -253,17 +259,17 @@
     "snapshotNote": "Snapshots help track your portfolio growth over time"
   },
   "pricing": {
-    "title": "Simple, Transparent Pricing",
-    "subtitle": "Choose the plan that fits your trading journey",
+    "title": "Simple Plans for Every Trader",
+    "subtitle": "Choose the plan that fits your trading style",
     "mostPopular": "Most Popular",
     "perMonth": "month",
     "perMonthBilledAnnually": "month, billed annually",
     "savingsAmount": "Save ${{amount}}/year",
-    "guaranteeNote": "7-day money-back guarantee • Cancel anytime • No hidden fees",
+    "guaranteeNote": "No hidden fees. Cancel anytime. Monthly plans only.",
     "hero": {
-      "title": "Trade with clarity.",
-      "subtitle": "An AI-powered trading diary for crypto investors. Capture every trade, find patterns, and track your edge.",
-      "primaryCta": "Start Free Trial",
+      "title": "Simple Plans. Full Privacy. Clear Insights.",
+      "subtitle": "Choose the plan that fits your trading style.",
+      "primaryCta": "Start Free",
       "secondaryCta": "Watch 2-minute demo"
     },
     "solutions": {

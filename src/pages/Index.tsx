@@ -12,15 +12,16 @@ import { ProofBar } from "@/components/ProofBar";
 import { SkipToContent } from "@/components/SkipToContent";
 import { HomepageSEOContent } from "@/components/HomepageSEOContent";
 import { addStructuredData } from "@/utils/seoHelpers";
+import PerformanceMetrics from "@/components/PerformanceMetrics";
 
 const Index = () => {
   useEffect(() => {
     // Set page title and meta description
-    document.title = "The #1 Crypto Trading Journal | Track & Analyze Every Trade";
+    document.title = "Trade With Clarity and Control | AI-Powered Crypto Trading Journal";
 
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'The best crypto trading journal for serious traders. Automatically track trades from 20+ exchanges, analyze performance, and improve your trading strategy with data-driven insights.');
+      metaDescription.setAttribute('content', 'AI helps you upload trades faster, see patterns, and improve decisions. No APIs. No exchange connections. Full privacy. Track trades with clarity and control.');
     }
 
     // Add FAQ schema for rich snippets
@@ -57,7 +58,7 @@ const Index = () => {
           "name": "Is The Trading Diary free?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes! The Trading Diary offers a free plan with 100 trades per month, basic analytics, and manual CSV import. Paid plans (Pro at $9.99/mo and Premium at $19.99/mo) include unlimited trades, AI-powered insights, multi-exchange support, and advanced analytics."
+            "text": "Yes! The Trading Diary offers a free Starter plan with 5 AI Extracts (up to 10 trades each), unlimited manual uploads, screenshot uploads, and advanced analytics. Paid plans (Pro at $18/month and Elite at $30/month) include more AI Extracts, custom dashboards, unlimited sub accounts, and priority support."
           }
         },
         {
@@ -104,6 +105,7 @@ const Index = () => {
       <main id="main-content" className="pt-14">
         <Hero />
         <ProofBar />
+        <PerformanceMetrics />
         <DashboardShowcase />
         <Features />
         <HomepageSEOContent />

@@ -14,7 +14,7 @@ const Footer = () => {
           <NewsletterSignup />
         </div>
         
-        <div className="grid md:grid-cols-4 gap-8 mb-10">
+        <div className="grid md:grid-cols-3 gap-8 mb-10">
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="mb-3">
@@ -49,77 +49,40 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/how-it-works" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  How It Works
-                </a>
-              </li>
-              <li>
                 <a href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.pricing')}
                 </a>
               </li>
               <li>
-                <a href="/faq" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  {t('navigation.faq')}
+                <a href="/blog" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  {t('landing.footer.blog')}
+                </a>
+              </li>
+              <li>
+                <a href="/auth" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  {t('landing.footer.login')}
+                </a>
+              </li>
+              <li>
+                <a href="/auth" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-semibold text-primary">
+                  {t('landing.footer.startFree')}
                 </a>
               </li>
             </ul>
           </nav>
 
-          {/* Resources */}
+          {/* Support */}
           <nav aria-labelledby="footer-support">
             <h3 id="footer-support" className="font-semibold mb-3 text-sm">{t('landing.footer.support')}</h3>
             <ul className="space-y-2.5">
-              <li>
-                <a href="/blog" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="/crypto-trading-faq" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  Crypto Trading FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  {t('landing.footer.help')}
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  {t('landing.footer.documentation')}
-                </a>
-              </li>
               <li>
                 <a href="/contact" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
                   {t('landing.footer.contact')}
                 </a>
               </li>
               <li>
-                <a href="/testimonials" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  Testimonials
-                </a>
-              </li>
-            </ul>
-          </nav>
-
-          {/* Company */}
-          <nav aria-labelledby="footer-legal">
-            <h3 id="footer-legal" className="font-semibold mb-3 text-sm">{t('landing.footer.legal')}</h3>
-            <ul className="space-y-2.5">
-              <li>
-                <a href="/about" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="/sitemap" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  Sitemap
-                </a>
-              </li>
-              <li>
-                <a href="/terms" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  {t('landing.footer.terms')}
+                <a href="/faq" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  {t('landing.footer.faq')}
                 </a>
               </li>
               <li>
@@ -128,13 +91,13 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/cookie-policy" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  Cookie Policy
+                <a href="/terms" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  {t('landing.footer.terms')}
                 </a>
               </li>
               <li>
-                <a href="/changelog" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                  Changelog
+                <a href="/security" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
+                  {t('landing.footer.security')}
                 </a>
               </li>
             </ul>
