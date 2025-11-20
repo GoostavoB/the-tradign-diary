@@ -6,6 +6,8 @@ import { useHreflang } from "@/hooks/useHreflang";
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from "@/utils/languageRouting";
 import { motion } from "framer-motion";
 import PricingComparison from "@/components/PricingComparison";
+import PricingFAQ from "@/components/PricingFAQ";
+import PricingPrivacy from "@/components/PricingPrivacy";
 import { WideOutcomeCard } from "@/components/premium/WideOutcomeCard";
 import { ParallaxTradingElements } from "@/components/premium/ParallaxTradingElements";
 import { PremiumPricingCard } from "@/components/PremiumPricingCard";
@@ -51,18 +53,25 @@ const PricingPage = () => {
       id: 'basic',
       nameKey: "pricing.plans.basic.name",
       descriptionKey: "pricing.plans.basic.description",
-      monthlyPrice: 15,
-      annualPrice: 12,
-      annualTotal: 144,
+      monthlyPrice: 0,
+      annualPrice: 0,
+      annualTotal: 0,
       featuresKeys: [
-        "pricing.plans.basic.features.uploads",
+        "pricing.plans.basic.features.aiExtracts",
+        "pricing.plans.basic.features.tradesPerExtract",
         "pricing.plans.basic.features.manualUploads",
-        "pricing.plans.basic.features.dashboard",
+        "pricing.plans.basic.features.screenshots",
+        "pricing.plans.basic.features.antiDuplicate",
+        "pricing.plans.basic.features.tradeHistory",
         "pricing.plans.basic.features.charts",
-        "pricing.plans.basic.features.basicJournal",
-        "pricing.plans.basic.features.feeAnalytics",
-        "pricing.plans.basic.features.csv",
-        "pricing.plans.basic.features.social",
+        "pricing.plans.basic.features.journal",
+        "pricing.plans.basic.features.marketSentiment",
+        "pricing.plans.basic.features.feeComparison",
+        "pricing.plans.basic.features.leverageCalculator",
+        "pricing.plans.basic.features.wealthForecast",
+        "pricing.plans.basic.features.riskCalculator",
+        "pricing.plans.basic.features.insights",
+        "pricing.plans.basic.features.taxReport",
       ],
       ctaKey: "pricing.plans.cta",
       popular: false,
@@ -71,39 +80,39 @@ const PricingPage = () => {
       id: 'pro',
       nameKey: "pricing.plans.pro.name",
       descriptionKey: "pricing.plans.pro.description",
-      monthlyPrice: 35,
-      annualPrice: 28,
-      annualTotal: 336,
+      monthlyPrice: 18,
+      annualPrice: 14.4,
+      annualTotal: 172.8,
       featuresKeys: [
-        "pricing.plans.pro.features.uploads",
-        "pricing.plans.pro.features.aiAnalysis",
-        "pricing.plans.pro.features.tradingPlan",
-        "pricing.plans.pro.features.goals",
-        "pricing.plans.pro.features.richJournal",
-        "pricing.plans.pro.features.customWidgets",
-        "pricing.plans.pro.features.fullSocial",
-        "pricing.plans.pro.features.everythingBasic",
+        "pricing.plans.pro.features.everythingStarter",
+        "pricing.plans.pro.features.unlimitedAccounts",
+        "pricing.plans.pro.features.customDashboard",
+        "pricing.plans.pro.features.widgetControl",
+        "pricing.plans.pro.features.layoutControl",
+        "pricing.plans.pro.features.aiExtracts",
+        "pricing.plans.pro.features.rollover",
+        "pricing.plans.pro.features.extractPacks",
+        "pricing.plans.pro.features.discount",
       ],
-      ctaKey: "pricing.plans.cta",
+      ctaKey: "pricing.plans.ctaUpgradePro",
       popular: true,
     },
     {
       id: 'elite',
       nameKey: "pricing.plans.elite.name",
       descriptionKey: "pricing.plans.elite.description",
-      monthlyPrice: 79,
-      annualPrice: 63,
-      annualTotal: 756,
+      monthlyPrice: 30,
+      annualPrice: 24,
+      annualTotal: 288,
       featuresKeys: [
-        "pricing.plans.elite.features.uploads",
-        "pricing.plans.elite.features.aiAnalysis",
-        "pricing.plans.elite.features.tradeReplay",
-        "pricing.plans.elite.features.positionCalculator",
-        "pricing.plans.elite.features.riskDashboard",
-        "pricing.plans.elite.features.advancedAlerts",
         "pricing.plans.elite.features.everythingPro",
+        "pricing.plans.elite.features.unlimitedExtracts",
+        "pricing.plans.elite.features.prioritySupport",
+        "pricing.plans.elite.features.exclusiveMetrics",
+        "pricing.plans.elite.features.earlyAccess",
+        "pricing.plans.elite.features.customColors",
       ],
-      ctaKey: "pricing.plans.cta",
+      ctaKey: "pricing.plans.ctaUpgradeElite",
       popular: false,
     },
   ];
@@ -320,6 +329,12 @@ const PricingPage = () => {
       {/* Comparison Table */}
       <PricingComparison />
 
+      {/* Privacy Block */}
+      <PricingPrivacy />
+
+      {/* FAQ Section */}
+      <PricingFAQ />
+
       {/* Final CTA Button */}
       <section className="py-16 px-6">
         <div className="container mx-auto max-w-4xl text-center">
@@ -327,7 +342,7 @@ const PricingPage = () => {
             onClick={() => navigate('/auth')}
             className="text-xl px-16 py-8"
           >
-            {t('pricing.hero.primaryCta')}
+            {t('pricing.finalCta.cta', 'Start Free')}
           </MagneticButton>
         </div>
       </section>

@@ -16,12 +16,12 @@ export interface LandingMeta {
 
 export const landingMeta: Record<string, LandingMeta> = {
   en: {
-    title: 'The #1 Crypto Trading Journal | Track & Analyze Every Trade',
-    description: 'Track, analyze, and review every crypto trade with AI. Advanced analytics, automated insights, and performance tracking for serious traders.',
-    keywords: 'crypto trading journal, cryptocurrency trading, crypto trade tracker, bitcoin trading journal, crypto analytics, trading performance',
+    title: 'Trade With Clarity and Control | AI Crypto Trading Journal',
+    description: 'AI helps you upload trades faster, see patterns, and improve decisions. No APIs. No exchange connections. Full privacy. Track trades with clarity.',
+    keywords: 'crypto trading journal, crypto trading log, crypto trade tracker, crypto trade history, trading performance, trade review tools, cryptocurrency trade analysis, trading diary, manual trade entry, screenshot trade uploads, trade error tracking, trading psychology',
     canonical: 'https://www.thetradingdiary.com/',
-    ogTitle: 'The #1 Crypto Trading Journal',
-    ogDescription: 'Track, analyze, and review every crypto trade with AI. Built for serious traders.',
+    ogTitle: 'Trade With Clarity and Control',
+    ogDescription: 'AI helps you upload trades faster, see patterns, and improve decisions. No APIs. Full privacy.',
     ogImage: 'https://www.thetradingdiary.com/og-image-en.png',
     lang: 'en',
     alternates: [
@@ -200,33 +200,69 @@ export const addStructuredData = (langCode: string) => {
   const meta = landingMeta[langCode];
   if (!meta) return;
 
-  const structuredData = {
+  // Organization Schema
+  const organizationData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "The Trading Diary",
+    "url": "https://www.thetradingdiary.com",
+    "logo": "https://www.thetradingdiary.com/logo.png",
+    "description": "AI-powered crypto trading journal for tracking, analyzing, and improving trading performance"
+  };
+
+  // Software Application Schema
+  const softwareData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "The Trading Diary",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": langCode === 'pt' ? 'BRL' : langCode === 'ar' ? 'AED' : langCode === 'vi' ? 'VND' : 'USD'
-    },
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Starter Plan",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free plan with 5 AI Extracts and unlimited manual uploads"
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro Plan",
+        "price": "18",
+        "priceCurrency": "USD",
+        "description": "Professional plan with 30 AI Extracts per month and custom dashboard"
+      },
+      {
+        "@type": "Offer",
+        "name": "Elite Plan",
+        "price": "30",
+        "priceCurrency": "USD",
+        "description": "Elite plan with unlimited AI Extracts and priority support"
+      }
+    ],
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
       "ratingCount": "2500"
     },
+    "featureList": "AI trade extraction, Screenshot uploads, Anti-duplicate detection, Advanced charts, Journal with emotional tracking, Market sentiment analysis, Exchange fee comparison, Wealth forecast, Risk calculator, Tax report export",
     "inLanguage": meta.lang
   };
 
   // Remove existing structured data
   document.querySelectorAll('script[type="application/ld+json"]').forEach(el => el.remove());
 
-  // Add new structured data
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.textContent = JSON.stringify(structuredData);
-  document.head.appendChild(script);
+  // Add organization schema
+  const orgScript = document.createElement('script');
+  orgScript.type = 'application/ld+json';
+  orgScript.textContent = JSON.stringify(organizationData);
+  document.head.appendChild(orgScript);
+
+  // Add software application schema
+  const appScript = document.createElement('script');
+  appScript.type = 'application/ld+json';
+  appScript.textContent = JSON.stringify(softwareData);
+  document.head.appendChild(appScript);
 };
 
 export const trackLandingView = (langCode: string) => {

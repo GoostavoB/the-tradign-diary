@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import Hero from "@/components/Hero";
-import DashboardShowcase from "@/components/DashboardShowcase";
-import Features from "@/components/Features";
-import ExchangeLogos from "@/components/ExchangeLogos";
+import WhyImprove from "@/components/WhyImprove";
+import CoreFeatures from "@/components/CoreFeatures";
+import PrivacySection from "@/components/PrivacySection";
 import Testimonials from "@/components/Testimonials";
 import Pricing from "@/components/Pricing";
 import CTA from "@/components/CTA";
@@ -48,9 +48,9 @@ const Index = () => {
       <main id="main-content" className="pt-14">
         <Hero />
         <ProofBar />
-        <DashboardShowcase />
-        <Features />
-        <ExchangeLogos />
+        <WhyImprove />
+        <CoreFeatures />
+        <PrivacySection />
         <Testimonials />
         <Pricing />
         <CTA />

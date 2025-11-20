@@ -30,14 +30,21 @@
     "view": "View",
     "customize": "Customize",
     "settings": "Settings",
-    "inDevelopment": "In Development",
-    "comingSoon": "Coming Soon"
+    "startFree": "Start Free",
+    "viewPricing": "View Pricing",
+    "learnMore": "Learn More",
+    "continue": "Continue",
+    "addTrade": "Add Trade",
+    "upgradeToPro": "Upgrade to Pro",
+    "upgradeToElite": "Upgrade to Elite"
   },
   "landing": {
     "hero": {
-      "title": "Trade with clarity.",
-      "subtitle": "An AI-powered trading diary for crypto investors. Capture every trade, find patterns, and track your edge.",
-      "cta": "Start Free Trial"
+      "mainTitle": "Trade With Clarity and Control",
+      "subtitle": "AI helps you upload trades faster, see patterns, and improve decisions. No APIs. No exchange connections. Full privacy.",
+      "cta": "Start Free",
+      "ctaPrimary": "Start Free",
+      "ctaSubtext": "No hidden fees. Cancel anytime."
     },
     "stats": {
       "fasterUploads": {
@@ -108,15 +115,15 @@
       "readMoreInsights": "Read More Trading Insights"
     },
     "testimonials": {
-      "sectionTitle": "Trusted by Traders",
+      "sectionTitle": "Trusted by Traders Worldwide",
       "testimonial1": {
-        "quote": "This journal completely changed how I analyze my trades. The AI insights are incredible.",
+        "quote": "Clear analytics helped me correct my mistakes faster.",
         "author": "Marcus Chen",
         "role": "Day Trader",
         "exchange": "Binance"
       },
       "testimonial2": {
-        "quote": "Finally, a tool that understands crypto trading. The fee tracking alone saved me thousands.",
+        "quote": "I stopped emotional trades and improved my results.",
         "author": "Sarah Rodriguez",
         "role": "Swing Trader",
         "exchange": "Coinbase"
@@ -126,6 +133,88 @@
       "activeTraders": "Active Traders",
       "tradesAnalyzed": "Trades Analyzed",
       "averageRating": "Average Rating"
+    },
+    "performanceMetrics": {
+      "sectionTitle": "Your Real Performance Insights",
+      "metric1": {
+        "title": "Upload Trades 40 Times Faster",
+        "description": "Batch upload screenshots and process trades in seconds.",
+        "value": "40x"
+      },
+      "metric2": {
+        "title": "Save Up to 97 Percent of Your Time",
+        "description": "Focus on analysis instead of manual work.",
+        "value": "97%"
+      },
+      "metric3": {
+        "title": "Catch More Errors",
+        "description": "Daily review helps you detect mistakes early.",
+        "value": "More Errors Caught"
+      },
+      "metric4": {
+        "title": "Improve Decision Accuracy",
+        "description": "Structured logs and clear analytics support better choices.",
+        "value": "Improved Accuracy"
+      }
+    },
+    "whyImprove": {
+      "header": "A Simple System That Improves Your Trading Decisions",
+      "benefit1": {
+        "title": "You reduce repeated errors",
+        "description": "Tag mistakes and watch them decline over time."
+      },
+      "benefit2": {
+        "title": "You make calmer decisions",
+        "description": "Track emotional trades and improve control."
+      },
+      "benefit3": {
+        "title": "You build skill through daily review",
+        "description": "See what works and refine your process."
+      },
+      "benefit4": {
+        "title": "You find patterns faster",
+        "description": "Spot changes in setups, conditions, and timing."
+      }
+    },
+    "coreFeatures": {
+      "header": "Tools That Give You Better Insight",
+      "features": [
+        "AI Extracts for fast trade logging",
+        "Unlimited manual uploads",
+        "Anti duplicate trade detection",
+        "Screenshot uploads",
+        "Advanced charts and analytics",
+        "Journal with emotional tracking",
+        "Market sentiment with combined LSR",
+        "Exchange fee comparison",
+        "Wealth forecast",
+        "Risk calculator",
+        "Smart performance insights",
+        "Trade history",
+        "Tax report export"
+      ]
+    },
+    "privacy": {
+      "header": "Private and Flexible",
+      "points": [
+        "No APIs",
+        "No exchange connections",
+        "Works with every platform",
+        "Your data stays in your control"
+      ]
+    },
+    "socialProof": {
+      "header": "Trusted by Traders Worldwide",
+      "testimonial1": "Clear analytics helped me correct my mistakes faster.",
+      "testimonial2": "I stopped emotional trades and improved my results."
+    },
+    "pricingPreview": {
+      "header": "Simple Plans for Every Trader",
+      "cta": "View Pricing"
+    },
+    "finalCta": {
+      "header": "Start Tracking Your Trades With Confidence",
+      "cta": "Start Free"
     },
     "hero": {
       "titleShort": "Track every crypto trade. Learn faster.",
@@ -137,26 +226,27 @@
       "ctaPrimary": "Get started free"
     },
     "cta": {
-      "title": "Ready to Level Up Your Trading?",
+      "title": "Start Tracking Your Trades With Confidence",
       "subtitle": "Join thousands of traders improving their discipline and profitability.",
-      "button": "Start Free Trial",
+      "button": "Start Free",
       "note": "No credit card required"
     },
     "footer": {
-      "tagline": "Track smarter. Trade better.",
+      "tagline": "Your AI assisted trading journal. Track your trades with clarity and privacy.",
       "product": "Product",
       "features": "Features",
       "pricing": "Pricing",
+      "blog": "Blog",
+      "login": "Login",
+      "startFree": "Start Free",
       "support": "Support",
-      "help": "Help Center",
-      "documentation": "Documentation",
       "contact": "Contact",
-      "legal": "Legal",
-      "terms": "Terms",
-      "privacy": "Privacy",
-      "securityBadge": "Data encrypted at rest and in transit",
+      "faq": "FAQ",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfUse": "Terms of Use",
+      "security": "Security",
       "allRightsReserved": "All rights reserved.",
-      "madeWith": "Made with ❤️ for traders"
+      "noAPIsPrivacy": "No APIs. Full privacy."
     }
   },
   "contact": {
@@ -253,18 +343,23 @@
     "snapshotNote": "Snapshots help track your portfolio growth over time"
   },
   "pricing": {
-    "title": "Simple, Transparent Pricing",
-    "subtitle": "Choose the plan that fits your trading journey",
+    "title": "Simple Plans for Every Trader",
+    "subtitle": "Choose the plan that fits your trading style.",
     "mostPopular": "Most Popular",
     "perMonth": "month",
     "perMonthBilledAnnually": "month, billed annually",
-    "savingsAmount": "Save ${{amount}}/year",
-    "guaranteeNote": "7-day money-back guarantee • Cancel anytime • No hidden fees",
+    "savingsAmount": "Save {{amount}} percent with yearly plans",
+    "guaranteeNote": "No hidden fees. Cancel anytime. Monthly plans only.",
     "hero": {
-      "title": "Trade with clarity.",
-      "subtitle": "An AI-powered trading diary for crypto investors. Capture every trade, find patterns, and track your edge.",
-      "primaryCta": "Start Free Trial",
+      "title": "Simple Plans. Full Privacy. Clear Insights.",
+      "subtitle": "Choose the plan that fits your trading style.",
+      "primaryCta": "Start Free",
       "secondaryCta": "Watch 2-minute demo"
+    },
+    "benefits": {
+      "benefit1": "Track trades with clarity",
+      "benefit2": "See patterns in your performance",
+      "benefit3": "Stay private with zero API connections"
     },
     "solutions": {
       "title": "Outcomes That Matter",
@@ -324,48 +419,74 @@
       "save20": "Save 20%"
     },
     "plans": {
-      "cta": "Start Free Trial",
-      "terms": "7-day free trial • Cancel anytime • Billed in USD",
+      "cta": "Start Free",
+      "ctaUpgradePro": "Upgrade to Pro",
+      "ctaUpgradeElite": "Upgrade to Elite",
+      "terms": "No hidden fees. Cancel anytime.",
       "basic": {
-        "name": "Basic",
-        "description": "Perfect for active traders building structure",
+        "name": "Starter",
+        "description": "Free",
+        "price": "Free",
         "features": {
-          "uploads": "50 AI trade uploads/month",
+          "aiExtracts": "5 AI Extracts as a limited offer",
+          "tradesPerExtract": "Track up to 10 trades per Extract",
           "manualUploads": "Unlimited manual uploads",
-          "dashboard": "Custom dashboard with 15+ widgets",
-          "charts": "Advanced charts & analytics",
-          "basicJournal": "Basic journal with emotional tracking",
-          "feeAnalytics": "Fee analytics with alerts",
-          "csv": "CSV import & export",
-          "social": "Social feed & leaderboard access"
+          "screenshots": "Screenshot uploads",
+          "antiDuplicate": "Anti duplicate detection",
+          "tradeHistory": "Full trade history",
+          "charts": "Advanced charts and analytics",
+          "journal": "Journal with emotional tracking",
+          "marketSentiment": "Market sentiment with combined LSR",
+          "feeComparison": "Exchange fee comparison",
+          "leverageCalculator": "Trade leverage calculator",
+          "wealthForecast": "Wealth forecast",
+          "riskCalculator": "Risk calculator",
+          "insights": "Smart performance insights",
+          "taxReport": "Tax report export"
+        },
+        "addons": {
+          "title": "Add-ons",
+          "extraExtracts": "10 extra AI Extracts for 5"
+        },
+        "notIncluded": {
+          "title": "Not included",
+          "multipleAccounts": "Multiple accounts",
+          "customDashboard": "Custom dashboard",
+          "discountPacks": "Discount on Extract packs",
+          "unlimitedExtracts": "Unlimited Extracts"
         }
       },
       "pro": {
         "name": "Pro",
-        "description": "For serious traders improving discipline",
+        "description": "18 per month",
+        "monthlyPrice": "18",
+        "yearlyPrice": "14.4",
+        "yearlyDescription": "14.4 per month yearly",
         "features": {
-          "uploads": "100 AI trade uploads/month",
-          "aiAnalysis": "1 AI Performance Analysis per week",
-          "tradingPlan": "Trading Plan Builder with checklist",
-          "goals": "Goals tracking & progress",
-          "richJournal": "Rich journal with mood & pattern analysis",
-          "customWidgets": "3 custom KPI widgets",
-          "fullSocial": "Full social features (posts, XP, badges)",
-          "everythingBasic": "Everything in Basic"
+          "everythingStarter": "Everything in Starter",
+          "unlimitedAccounts": "Unlimited sub accounts",
+          "customDashboard": "Custom dashboard with 6 themes",
+          "widgetControl": "Move, add, remove widgets",
+          "layoutControl": "Full layout control",
+          "aiExtracts": "30 AI Extracts per month",
+          "rollover": "Rollover up to 300 trades",
+          "extractPacks": "Extra Extract packs at 2 for 10",
+          "discount": "Discount on Extract packs"
         }
       },
       "elite": {
         "name": "Elite",
-        "description": "Professional traders & analysts",
+        "description": "30 per month",
+        "monthlyPrice": "30",
+        "yearlyPrice": "24",
+        "yearlyDescription": "24 per month yearly",
         "features": {
-          "uploads": "300 AI trade uploads/month",
-          "aiAnalysis": "5 AI Performance Analyses per week",
-          "tradeReplay": "Trade Replay (step-by-step review)",
-          "positionCalculator": "Advanced Position Size Calculator",
-          "riskDashboard": "Risk Dashboard with drawdown analysis",
-          "advancedAlerts": "Advanced performance & fee alerts",
-          "customWidgets": "10 custom KPI widgets",
-          "everythingPro": "Everything in Pro"
+          "everythingPro": "Everything in Pro",
+          "unlimitedExtracts": "Unlimited AI Extracts per month with unlimited trades",
+          "prioritySupport": "Priority customer support",
+          "exclusiveMetrics": "Exclusive metrics and widgets",
+          "earlyAccess": "Early access to new features",
+          "customColors": "Fully customizable dashboard with custom colors"
         }
       }
     },
@@ -429,6 +550,39 @@
         "teamCollaboration": "Team Collaboration Tools"
       },
       "disclaimer": "Features and timeline subject to change based on user feedback and development priorities"
+    },
+    "privacy": {
+      "title": "Full Privacy",
+      "line1": "We do not use APIs.",
+      "line2": "We do not connect to exchanges.",
+      "line3": "Your data stays in your control."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "Do you connect to exchanges",
+        "answer": "No. We do not use APIs."
+      },
+      "q2": {
+        "question": "Does this work with my exchange",
+        "answer": "Yes. You can upload trades from any platform."
+      },
+      "q3": {
+        "question": "How do I upload my trades",
+        "answer": "Upload screenshots or enter trades manually."
+      },
+      "q4": {
+        "question": "Can I cancel anytime",
+        "answer": "Yes."
+      },
+      "q5": {
+        "question": "How is my data stored",
+        "answer": "Encrypted and private."
+      }
+    },
+    "finalCta": {
+      "title": "Start Your Trading Journal Today",
+      "cta": "Start Free"
     }
   },
   "achievements": {
@@ -516,6 +670,11 @@
   },
   "navigation": {
     "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "login": "Login",
+    "startFree": "Start Free",
     "dashboard": "Dashboard",
     "analytics": "Analytics",
     "upload": "Upload",
@@ -531,8 +690,6 @@
     "economicCalendar": "Economic Calendar",
     "longShortRatio": "Long/Short Ratio",
     "feeAnalysis": "Fee Analysis",
-    "blog": "Blog",
-    "pricing": "Pricing",
     "faq": "FAQ",
     "quickAccess": "Quick Access",
     "tradingAccounts": "Trading Accounts",
