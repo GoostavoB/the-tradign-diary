@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
-type PlanType = 'basic' | 'pro' | 'elite';
+type PlanType = 'starter' | 'pro' | 'elite';
 
 interface PremiumFeaturesHook {
   currentPlan: PlanType;
@@ -16,13 +16,13 @@ interface PremiumFeaturesHook {
  */
 export const usePremiumFeatures = (): PremiumFeaturesHook => {
   const { user } = useAuth();
-  const [currentPlan, setCurrentPlan] = useState<PlanType>('basic');
+  const [currentPlan, setCurrentPlan] = useState<PlanType>('starter');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchSubscription = async () => {
       if (!user) {
-        setCurrentPlan('basic');
+        setCurrentPlan('starter');
         setIsLoading(false);
         return;
       }
@@ -36,19 +36,19 @@ export const usePremiumFeatures = (): PremiumFeaturesHook => {
 
         if (error) {
           console.error('Error fetching subscription:', error);
-          setCurrentPlan('basic');
+          setCurrentPlan('starter');
         } else if (data) {
           // Check if subscription is active
           const isActive = data.status === 'active' || 
             (data.status === 'trial' && data.current_period_end && new Date(data.current_period_end) > new Date());
           
-          setCurrentPlan(isActive ? (data.plan_type as PlanType) : 'basic');
+          setCurrentPlan(isActive ? (data.plan_type as PlanType) : 'starter');
         } else {
-          setCurrentPlan('basic');
+          setCurrentPlan('starter');
         }
       } catch (error) {
         console.error('Error checking subscription:', error);
-        setCurrentPlan('basic');
+        setCurrentPlan('starter');
       } finally {
         setIsLoading(false);
       }
@@ -58,7 +58,7 @@ export const usePremiumFeatures = (): PremiumFeaturesHook => {
   }, [user]);
 
   const planHierarchy: Record<PlanType, number> = {
-    basic: 1,
+    starter: 1,
     pro: 2,
     elite: 3
   };

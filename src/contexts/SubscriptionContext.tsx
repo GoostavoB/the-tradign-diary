@@ -2,7 +2,7 @@ import { createContext, useContext, ReactNode } from 'react';
 import { useSubscription } from '@/hooks/useSubscription';
 import { usePremiumFeatures } from '@/hooks/usePremiumFeatures';
 
-type PlanType = 'basic' | 'pro' | 'elite';
+type PlanType = 'starter' | 'pro' | 'elite';
 
 interface SubscriptionContextType {
   currentPlan: PlanType;
@@ -19,7 +19,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { canAccessFeature, isFeatureLocked } = usePremiumFeatures();
 
   const value: SubscriptionContextType = {
-    currentPlan: subscription?.plan_type || 'basic',
+    currentPlan: subscription?.plan_type || 'starter',
     isActive,
     isLoading,
     canAccessFeature,
