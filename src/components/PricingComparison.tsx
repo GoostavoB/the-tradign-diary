@@ -16,57 +16,57 @@ const PricingComparison = () => {
     {
       category: t('pricing.comparison.categories.aiAnalytics'),
       items: [
-        { name: t('pricing.comparison.features.aiUploads'), basic: "50/mo", pro: "100/mo", elite: "300/mo" },
-        { name: t('pricing.comparison.features.manualUploads'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.aiAnalysis'), basic: false, pro: "1/week", elite: "5/week" },
-        { name: t('pricing.comparison.features.customWidgets'), basic: "15+", pro: "3", elite: "10" },
-        { name: t('pricing.comparison.features.advancedCharts'), basic: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.aiUploads'), starter: "10 trades/extract", pro: "200/mo", elite: "Unlimited" },
+        { name: t('pricing.comparison.features.manualUploads'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.aiAnalysis'), starter: false, pro: "1/week", elite: "5/week" },
+        { name: t('pricing.comparison.features.customWidgets'), starter: "15+", pro: "Unlimited", elite: "Unlimited" },
+        { name: t('pricing.comparison.features.advancedCharts'), starter: true, pro: true, elite: true },
       ]
     },
     {
       category: t('pricing.comparison.categories.tradingTools'),
       items: [
-        { name: t('pricing.comparison.features.tradingPlan'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.preTradeChecklist'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.goalsTracking'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.tradeReplay'), basic: false, pro: false, elite: true },
-        { name: t('pricing.comparison.features.positionCalculator'), basic: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.tradingPlan'), starter: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.preTradeChecklist'), starter: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.goalsTracking'), starter: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.tradeReplay'), starter: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.positionCalculator'), starter: false, pro: false, elite: true },
       ]
     },
     {
       category: t('pricing.comparison.categories.journaling'),
       items: [
-        { name: t('pricing.comparison.features.basicJournal'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.emotionalTimeline'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.richJournal'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.patternAnalysis'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.basicJournal'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.emotionalTimeline'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.richJournal'), starter: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.patternAnalysis'), starter: false, pro: true, elite: true },
       ]
     },
     {
       category: t('pricing.comparison.categories.riskManagement'),
       items: [
-        { name: t('pricing.comparison.features.feeAnalytics'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.riskDashboard'), basic: false, pro: false, elite: true },
-        { name: t('pricing.comparison.features.drawdownAnalysis'), basic: false, pro: false, elite: true },
-        { name: t('pricing.comparison.features.performanceAlerts'), basic: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.feeAnalytics'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.riskDashboard'), starter: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.drawdownAnalysis'), starter: false, pro: false, elite: true },
+        { name: t('pricing.comparison.features.performanceAlerts'), starter: false, pro: false, elite: true },
       ]
     },
     {
       category: t('pricing.comparison.categories.integrations'),
       items: [
-        { name: t('pricing.comparison.features.csvImport'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.exchangeConnections'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.autoRefresh'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.csvImport'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.exchangeConnections'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.autoRefresh'), starter: false, pro: true, elite: true },
       ]
     },
     {
       category: t('pricing.comparison.categories.social'),
       items: [
-        { name: t('pricing.comparison.features.viewFeed'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.createPosts'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.leaderboard'), basic: true, pro: true, elite: true },
-        { name: t('pricing.comparison.features.xpBadges'), basic: false, pro: true, elite: true },
-        { name: t('pricing.comparison.features.challenges'), basic: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.viewFeed'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.createPosts'), starter: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.leaderboard'), starter: true, pro: true, elite: true },
+        { name: t('pricing.comparison.features.xpBadges'), starter: false, pro: true, elite: true },
+        { name: t('pricing.comparison.features.challenges'), starter: false, pro: true, elite: true },
       ]
     },
   ];
@@ -125,7 +125,8 @@ const PricingComparison = () => {
     return () => ctx.revert();
   }, []);
 
-  const renderCell = (value: boolean | string) => {
+  const renderCell = (value: boolean | string | undefined) => {
+    if (value === undefined) return null;
     if (typeof value === 'boolean') {
       return value ? (
         <motion.div
@@ -205,7 +206,7 @@ const PricingComparison = () => {
               <div className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                 {t('pricing.comparison.feature')}
               </div>
-              <div className="text-center text-sm font-bold">Basic</div>
+              <div className="text-center text-sm font-bold">Starter</div>
               <div className="text-center text-sm font-bold relative">
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-primary text-primary-foreground text-[10px] font-medium rounded-full whitespace-nowrap">
                   Most Popular
@@ -234,7 +235,7 @@ const PricingComparison = () => {
                 >
                   <div className="grid grid-cols-4 gap-4 items-center">
                     <div className="font-medium text-sm">{item.name}</div>
-                    <div className="text-center group-hover:scale-105 transition-transform">{renderCell(item.basic)}</div>
+                    <div className="text-center group-hover:scale-105 transition-transform">{renderCell(item.starter)}</div>
                     <div className="text-center bg-primary/5 rounded-lg py-2 group-hover:bg-primary/10 group-hover:scale-105 transition-all">{renderCell(item.pro)}</div>
                     <div className="text-center group-hover:scale-105 transition-transform">{renderCell(item.elite)}</div>
                   </div>

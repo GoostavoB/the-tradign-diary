@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 export type UserRole = 'admin' | 'user';
 
 export interface UserSubscription {
-  tier: 'free' | 'basic' | 'pro' | 'elite';
+  tier: 'free' | 'starter' | 'pro' | 'elite';
   status: 'active' | 'inactive' | 'trial' | 'cancelled';
   trialEndDate?: string;
 }

@@ -23,7 +23,7 @@ interface UpgradeModalProps {
   title?: string;
   message?: string;
   illustration?: UpgradeIllustration;
-  requiredPlan?: 'basic' | 'pro' | 'elite';
+  requiredPlan?: 'starter' | 'pro' | 'elite';
   onPlanSelected?: (planId: string) => void;
 }
 

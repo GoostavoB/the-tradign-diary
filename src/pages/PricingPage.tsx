@@ -50,9 +50,9 @@ const PricingPage = () => {
 
   const plans = [
     {
-      id: 'basic',
-      nameKey: "pricing.plans.basic.name",
-      descriptionKey: "pricing.plans.basic.description",
+      id: 'starter',
+      nameKey: "pricing.plans.starter.name",
+      descriptionKey: "pricing.plans.starter.description",
       monthlyPrice: 0,
       annualPrice: 0,
       annualTotal: 0,
