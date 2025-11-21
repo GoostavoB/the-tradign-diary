@@ -250,11 +250,11 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <LanguageProvider>
-              <ThemeInitializer />
-              <AuthProvider>
-                <SubscriptionProvider>
-                  <SubAccountProvider>
+            <ThemeInitializer />
+            <AuthProvider>
+              <SubscriptionProvider>
+                <SubAccountProvider>
+                  <LanguageProvider>
                     <UpgradeModalProvider>
                       <CalmModeProvider>
                         <CurrencyProvider>
@@ -273,10 +273,10 @@ const App = () => (
                         </CurrencyProvider>
                       </CalmModeProvider>
                     </UpgradeModalProvider>
-                  </SubAccountProvider>
-                </SubscriptionProvider>
-              </AuthProvider>
-            </LanguageProvider>
+                  </LanguageProvider>
+                </SubAccountProvider>
+              </SubscriptionProvider>
+            </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>
