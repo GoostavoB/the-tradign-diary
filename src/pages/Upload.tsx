@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubAccount } from '@/contexts/SubAccountContext';
 import AppLayout from '@/components/layout/AppLayout';
 import { toast } from 'sonner';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -63,6 +64,7 @@ const Upload = () => {
   const {
     user
   } = useAuth();
+  const { activeSubAccount } = useSubAccount();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const editId = searchParams.get('edit');
@@ -696,6 +698,7 @@ const Upload = () => {
         const tradeHash = `${finalTrade.symbol}_${finalTrade.opened_at}_${finalTrade.roi}_${finalTrade.profit_loss}`;
         return {
           user_id: user.id,
+          sub_account_id: activeSubAccount?.id || null,
           symbol: finalTrade.symbol,
           symbol_temp: finalTrade.symbol,
           broker: finalTrade.broker || null,
@@ -829,6 +832,7 @@ const Upload = () => {
     }
     const tradeData = {
       user_id: user.id,
+      sub_account_id: activeSubAccount?.id || null,
       symbol: formData.symbol,
       symbol_temp: formData.symbol,
       setup: formData.setup,
@@ -1481,6 +1485,7 @@ const Upload = () => {
           const tradeHash = `${finalTrade.symbol}_${finalTrade.opened_at}_${finalTrade.roi}_${finalTrade.profit_loss}`;
           return {
             user_id: user.id,
+            sub_account_id: activeSubAccount?.id || null,
             symbol: finalTrade.symbol,
             symbol_temp: finalTrade.symbol,
             broker: finalTrade.broker || null,
@@ -1570,6 +1575,7 @@ const Upload = () => {
           const tradeHash = `${finalTrade.symbol}_${finalTrade.opened_at}_${finalTrade.roi}_${finalTrade.profit_loss}`;
           return {
             user_id: user.id,
+            sub_account_id: activeSubAccount?.id || null,
             symbol: finalTrade.symbol,
             symbol_temp: finalTrade.symbol,
             broker: finalTrade.broker || null,
