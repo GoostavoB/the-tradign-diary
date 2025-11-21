@@ -10,6 +10,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { findBestWorstDays, getTopAssets } from '@/utils/insightCalculations';
 import { cn } from '@/lib/utils';
 import { BlurredCurrency } from '@/components/ui/BlurredValue';
+import { calculateTradePnL } from '@/utils/pnl';
 
 interface PerformanceHighlightsProps {
   trades: Trade[];
@@ -36,6 +37,13 @@ export const PerformanceHighlights = memo(({
 
   if (!bestTrade || !worstTrade) return null;
 
+  // Calculate P&L using the standardized function
+  const bestTradePnL = calculateTradePnL(bestTrade, { includeFees: true });
+  const worstTradePnL = calculateTradePnL(worstTrade, { includeFees: true });
+
+  // Check if best and worst days are the same
+  const isSameDay = bestDay && worstDay && bestDay.date === worstDay.date;
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -60,7 +68,7 @@ export const PerformanceHighlights = memo(({
               </div>
               <ExplainMetricButton
                 metricName={t('insights.bestTrade')}
-                metricValue={formatCurrency(bestTrade.pnl || 0)}
+                metricValue={formatCurrency(bestTradePnL)}
                 context={`${bestTrade.symbol} with ${formatPercent(bestTrade.roi || 0)} ROI`}
                 onExplain={openWithPrompt}
               />
@@ -73,7 +81,7 @@ export const PerformanceHighlights = memo(({
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">{t('insights.pnl')}</span>
                 <span className="text-sm font-bold text-profit">
-                  <BlurredCurrency amount={bestTrade.pnl || 0} className="inline" />
+                  <BlurredCurrency amount={bestTradePnL} className="inline" />
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -167,7 +175,7 @@ export const PerformanceHighlights = memo(({
               </div>
               <ExplainMetricButton
                 metricName={t('insights.worstTrade')}
-                metricValue={formatCurrency(worstTrade.pnl || 0)}
+                metricValue={formatCurrency(worstTradePnL)}
                 context={`${worstTrade.symbol} with ${formatPercent(worstTrade.roi || 0)} ROI`}
                 onExplain={openWithPrompt}
               />
@@ -180,7 +188,7 @@ export const PerformanceHighlights = memo(({
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">{t('insights.pnl')}</span>
                 <span className="text-sm font-bold text-loss">
-                  <BlurredCurrency amount={worstTrade.pnl || 0} className="inline" />
+                  <BlurredCurrency amount={worstTradePnL} className="inline" />
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -192,8 +200,8 @@ export const PerformanceHighlights = memo(({
             </div>
           </Card>
 
-          {/* Worst Day */}
-          {worstDay && (
+          {/* Worst Day - only show if different from best day */}
+          {worstDay && !isSameDay && (
             <Card className="p-4 bg-loss/10 border-loss/30 transition-all duration-300 hover:scale-[1.02]">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
