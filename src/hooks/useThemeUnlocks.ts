@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubAccount } from '@/contexts/SubAccountContext';
 import { UNIFIED_THEMES, getThemeById, ThemeTier } from '@/utils/unifiedThemes';
 import { useUserTier } from './useUserTier';
 
@@ -44,26 +45,27 @@ const hslToHex = (hsl: string): string => {
 
 export const useThemeUnlocks = () => {
   const { user } = useAuth();
+  const { activeSubAccount } = useSubAccount();
   const { tier } = useUserTier();
   const [themes, setThemes] = useState<UnlockableTheme[]>([]);
   const [activeTheme, setActiveTheme] = useState<string>('default');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (user && activeSubAccount) {
       fetchUnlocks();
     }
-  }, [user, tier]);
+  }, [user, activeSubAccount, tier]);
 
   const fetchUnlocks = async () => {
-    if (!user) return;
+    if (!user || !activeSubAccount) return;
 
     try {
       // Fetch user preferences from database
       const { data: preferences } = await supabase
         .from('user_customization_preferences')
         .select('active_theme')
-        .eq('user_id', user.id)
+        .eq('sub_account_id', activeSubAccount.id)
         .single();
 
       // Try database first, fallback to localStorage, then default
@@ -144,10 +146,11 @@ export const useThemeUnlocks = () => {
         .from('user_customization_preferences')
         .upsert({
           user_id: user.id,
+          sub_account_id: activeSubAccount!.id,
           active_theme: themeId,
           updated_at: new Date().toISOString(),
         }, {
-          onConflict: 'user_id'
+          onConflict: 'sub_account_id'
         });
 
       if (error) {

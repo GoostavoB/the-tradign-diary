@@ -3602,6 +3602,7 @@ export type Database = {
           period_end: string | null
           period_start: string | null
           period_type: string
+          sub_account_id: string
           target_value: number
           title: string
           updated_at: string
@@ -3622,6 +3623,7 @@ export type Database = {
           period_end?: string | null
           period_start?: string | null
           period_type?: string
+          sub_account_id: string
           target_value: number
           title: string
           updated_at?: string
@@ -3642,12 +3644,21 @@ export type Database = {
           period_end?: string | null
           period_start?: string | null
           period_type?: string
+          sub_account_id?: string
           target_value?: number
           title?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "trading_goals_sub_account_id_fkey"
+            columns: ["sub_account_id"]
+            isOneToOne: false
+            referencedRelation: "sub_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trading_journal: {
         Row: {
@@ -4107,6 +4118,7 @@ export type Database = {
           last_theme_notification_date: string | null
           profile_frame: string | null
           sound_enabled: boolean
+          sub_account_id: string
           theme_studio_opened_count: number | null
           theme_unlock_dates: Json | null
           unlocked_themes: string[]
@@ -4127,6 +4139,7 @@ export type Database = {
           last_theme_notification_date?: string | null
           profile_frame?: string | null
           sound_enabled?: boolean
+          sub_account_id: string
           theme_studio_opened_count?: number | null
           theme_unlock_dates?: Json | null
           unlocked_themes?: string[]
@@ -4147,13 +4160,22 @@ export type Database = {
           last_theme_notification_date?: string | null
           profile_frame?: string | null
           sound_enabled?: boolean
+          sub_account_id?: string
           theme_studio_opened_count?: number | null
           theme_unlock_dates?: Json | null
           unlocked_themes?: string[]
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_customization_preferences_sub_account_id_fkey"
+            columns: ["sub_account_id"]
+            isOneToOne: true
+            referencedRelation: "sub_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_daily_activity: {
         Row: {
@@ -4549,6 +4571,7 @@ export type Database = {
           rolling_target_suggestions_enabled: boolean | null
           sidebar_style: string | null
           streak_reminders_enabled: boolean | null
+          sub_account_id: string
           theme: string | null
           tour_version_completed: number | null
           trade_reminders: boolean | null
@@ -4620,6 +4643,7 @@ export type Database = {
           rolling_target_suggestions_enabled?: boolean | null
           sidebar_style?: string | null
           streak_reminders_enabled?: boolean | null
+          sub_account_id: string
           theme?: string | null
           tour_version_completed?: number | null
           trade_reminders?: boolean | null
@@ -4691,6 +4715,7 @@ export type Database = {
           rolling_target_suggestions_enabled?: boolean | null
           sidebar_style?: string | null
           streak_reminders_enabled?: boolean | null
+          sub_account_id?: string
           theme?: string | null
           tour_version_completed?: number | null
           trade_reminders?: boolean | null
@@ -4701,7 +4726,15 @@ export type Database = {
           user_id?: string
           weekly_summary?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_settings_sub_account_id_fkey"
+            columns: ["sub_account_id"]
+            isOneToOne: true
+            referencedRelation: "sub_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_setups: {
         Row: {
