@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import { useSubAccount } from './SubAccountContext';
 import { supabase } from '@/integrations/supabase/client';
 
 interface CalmModeContextType {
@@ -15,18 +16,19 @@ const CalmModeContext = createContext<CalmModeContextType | undefined>(undefined
 
 export const CalmModeProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
+  const { activeSubAccount } = useSubAccount();
   const [calmModeEnabled, setCalmModeEnabled] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [animationSpeed, setAnimationSpeedState] = useState<'slow' | 'normal' | 'fast'>('normal');
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !activeSubAccount) return;
 
     const fetchPreferences = async () => {
       const { data, error } = await supabase
         .from('user_customization_preferences')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('sub_account_id', activeSubAccount.id)
         .maybeSingle();
 
       if (error) {
@@ -39,11 +41,12 @@ export const CalmModeProvider = ({ children }: { children: ReactNode }) => {
         setSoundEnabled(data.sound_enabled);
         setAnimationSpeedState(data.animation_speed as 'slow' | 'normal' | 'fast');
       } else {
-        // Initialize preferences for new user
+        // Initialize preferences for new sub-account
         await supabase
           .from('user_customization_preferences')
           .insert({
             user_id: user.id,
+            sub_account_id: activeSubAccount.id,
             calm_mode_enabled: false,
             sound_enabled: true,
             animation_speed: 'normal',
@@ -52,10 +55,10 @@ export const CalmModeProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchPreferences();
-  }, [user]);
+  }, [user, activeSubAccount]);
 
   const toggleCalmMode = async () => {
-    if (!user) return;
+    if (!user || !activeSubAccount) return;
     
     const newValue = !calmModeEnabled;
     setCalmModeEnabled(newValue);
@@ -63,11 +66,11 @@ export const CalmModeProvider = ({ children }: { children: ReactNode }) => {
     await supabase
       .from('user_customization_preferences')
       .update({ calm_mode_enabled: newValue })
-      .eq('user_id', user.id);
+      .eq('sub_account_id', activeSubAccount.id);
   };
 
   const toggleSound = async () => {
-    if (!user) return;
+    if (!user || !activeSubAccount) return;
     
     const newValue = !soundEnabled;
     setSoundEnabled(newValue);
@@ -75,18 +78,18 @@ export const CalmModeProvider = ({ children }: { children: ReactNode }) => {
     await supabase
       .from('user_customization_preferences')
       .update({ sound_enabled: newValue })
-      .eq('user_id', user.id);
+      .eq('sub_account_id', activeSubAccount.id);
   };
 
   const setAnimationSpeed = async (speed: 'slow' | 'normal' | 'fast') => {
-    if (!user) return;
+    if (!user || !activeSubAccount) return;
     
     setAnimationSpeedState(speed);
 
     await supabase
       .from('user_customization_preferences')
       .update({ animation_speed: speed })
-      .eq('user_id', user.id);
+      .eq('sub_account_id', activeSubAccount.id);
   };
 
   return (

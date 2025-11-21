@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubAccount } from '@/contexts/SubAccountContext';
 import { toast } from 'sonner';
 import { Target, TrendingUp, DollarSign, Percent, Plus, Trash2, Edit2, Check, X } from 'lucide-react';
 import type { Trade } from '@/types/trade';
@@ -34,6 +35,7 @@ interface GoalsTrackerProps {
 
 export const GoalsTracker = ({ trades }: GoalsTrackerProps) => {
   const { user } = useAuth();
+  const { activeSubAccount } = useSubAccount();
   const { settings } = useUserSettings();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -170,10 +172,11 @@ export const GoalsTracker = ({ trades }: GoalsTrackerProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user || !activeSubAccount) return;
 
     const goalData = {
       user_id: user.id,
+      sub_account_id: activeSubAccount.id,
       title: formData.title,
       target_value: parseFloat(formData.target_value),
       goal_type: formData.goal_type,
