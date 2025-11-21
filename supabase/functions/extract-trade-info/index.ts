@@ -303,7 +303,7 @@ serve(async (req) => {
 Map from whatever column names you see to our schema:
 - symbol: "Futures", "Symbol", "Pair", "Asset" → extract just symbol (e.g., BTCUSDT)
 - side: "Side", "Type", "Direction" → must be "long" or "short"
-- entry_price: "Open Price", "Avg. Open Price", "Entry Price" → numeric
+- entry_price: "Open Price", "Avg. Open Price", "Entry Price", "Entry", "Avg Open", "Open" → CRITICAL FIELD, extract as numeric. If not visible, we will calculate from exit price and P&L
 - exit_price: "Close Price", "Exit Price" → numeric
 - opened_at: "Open Time", "Entry Time" → ISO timestamp
 - closed_at: "Close Time", "Exit Time" → ISO timestamp
@@ -597,8 +597,23 @@ RETRY MODE: This image failed extraction before. Be extra thorough - extract ALL
     const normalizedTrades = trades.map((t: any) => {
       const profitLoss = Number(t.profit_loss) || 0;
       const positionSize = Number(t.position_size) || 0;
-      const entryPrice = Number(t.entry_price) || 0;
+      let entryPrice = Number(t.entry_price) || 0;
+      const exitPrice = Number(t.exit_price) || 0;
       const leverage = Number(t.leverage) || 1;
+      const side = (t.side ?? t.position_type ?? 'long').toLowerCase();
+
+      // FALLBACK: Calculate entry_price from P&L if missing
+      if (!entryPrice && exitPrice > 0 && positionSize > 0 && profitLoss !== 0) {
+        if (side === 'long') {
+          // For long: PnL = (exit - entry) * size => entry = exit - (PnL / size)
+          entryPrice = exitPrice - (profitLoss / positionSize);
+        } else {
+          // For short: PnL = (entry - exit) * size => entry = exit + (PnL / size)
+          entryPrice = exitPrice + (profitLoss / positionSize);
+        }
+        entryPrice = Math.abs(entryPrice);
+        console.log(`✅ Calculated missing entry_price: ${entryPrice.toFixed(2)} from P&L for ${t.symbol || 'trade'}`);
+      }
       
       // Calculate margin: (position_size * entry_price) / leverage
       // If margin is provided, use it; otherwise calculate it
@@ -618,12 +633,12 @@ RETRY MODE: This image failed extraction before. Be extra thorough - extract ALL
       
       return {
         symbol: t.symbol ?? t.asset ?? '',
-        side: (t.side ?? t.position_type ?? 'long').toLowerCase(),
+        side: side,
         broker: broker || t.broker || '',
         setup: t.setup ?? '',
         emotional_tag: t.emotional_tag ?? '',
         entry_price: entryPrice,
-        exit_price: Number(t.exit_price) || 0,
+        exit_price: exitPrice,
         position_size: positionSize,
         leverage: leverage,
         profit_loss: profitLoss,
