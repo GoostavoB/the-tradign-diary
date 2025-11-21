@@ -31,6 +31,8 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useTranslation } from '@/hooks/useTranslation';
 import { format } from 'date-fns';
+import { IconPicker, getIconComponent } from '@/components/sub-account/IconPicker';
+import { ColorPicker } from '@/components/sub-account/ColorPicker';
 
 const passwordChangeSchema = z.object({
   newPassword: z.string().min(6, 'Password must be at least 6 characters').max(128, 'Password is too long'),
@@ -73,6 +75,8 @@ export const UserAccountMenu = () => {
   const [editingSubAccount, setEditingSubAccount] = useState<SubAccount | null>(null);
   const [newSubAccountName, setNewSubAccountName] = useState('');
   const [newSubAccountDesc, setNewSubAccountDesc] = useState('');
+  const [newSubAccountIcon, setNewSubAccountIcon] = useState('Circle');
+  const [newSubAccountColor, setNewSubAccountColor] = useState('hsl(221, 83%, 53%)');
 
   useEffect(() => {
     if (user) {
@@ -108,6 +112,8 @@ export const UserAccountMenu = () => {
           user_id: user.id,
           name: newSubAccountName,
           description: newSubAccountDesc || null,
+          icon: newSubAccountIcon,
+          color: newSubAccountColor,
           is_active: false,
         });
 
@@ -117,6 +123,8 @@ export const UserAccountMenu = () => {
       setCreateSubAccountOpen(false);
       setNewSubAccountName('');
       setNewSubAccountDesc('');
+      setNewSubAccountIcon('Circle');
+      setNewSubAccountColor('hsl(221, 83%, 53%)');
       await refreshSubAccounts();
     } catch (error) {
       console.error('Error creating sub account:', error);
@@ -135,6 +143,8 @@ export const UserAccountMenu = () => {
         .update({
           name: newSubAccountName.trim(),
           description: newSubAccountDesc.trim() || null,
+          icon: newSubAccountIcon,
+          color: newSubAccountColor,
         })
         .eq('id', editingSubAccount.id);
 
@@ -145,6 +155,8 @@ export const UserAccountMenu = () => {
       setEditingSubAccount(null);
       setNewSubAccountName('');
       setNewSubAccountDesc('');
+      setNewSubAccountIcon('Circle');
+      setNewSubAccountColor('hsl(221, 83%, 53%)');
       await refreshSubAccounts();
     } catch (error) {
       console.error('Error updating sub-account:', error);
@@ -387,6 +399,20 @@ export const UserAccountMenu = () => {
                     >
                       <div className="flex items-center gap-2 flex-1 min-w-0">
                         {isActive && <Check className="w-4 h-4 text-primary flex-shrink-0" />}
+                        {(() => {
+                          const IconComponent = getIconComponent(account.icon || 'Circle');
+                          return (
+                            <div 
+                              className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center"
+                              style={{ 
+                                backgroundColor: account.color ? `${account.color}20` : 'hsl(var(--muted))',
+                                color: account.color || 'hsl(var(--foreground))'
+                              }}
+                            >
+                              <IconComponent className="w-4 h-4" />
+                            </div>
+                          );
+                        })()}
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium truncate">{account.name}</p>
                         {account.description && (
@@ -404,6 +430,8 @@ export const UserAccountMenu = () => {
                           setEditingSubAccount(account);
                           setNewSubAccountName(account.name);
                           setNewSubAccountDesc(account.description || '');
+                          setNewSubAccountIcon(account.icon || 'Circle');
+                          setNewSubAccountColor(account.color || 'hsl(221, 83%, 53%)');
                           setEditSubAccountOpen(true);
                         }}
                       >
@@ -571,6 +599,28 @@ export const UserAccountMenu = () => {
                 maxLength={100}
               />
             </div>
+            
+            <IconPicker 
+              selectedIcon={newSubAccountIcon}
+              onSelectIcon={setNewSubAccountIcon}
+              color={newSubAccountColor}
+            />
+            
+            <ColorPicker
+              selectedColor={newSubAccountColor}
+              onSelectColor={setNewSubAccountColor}
+            />
+            
+            <IconPicker 
+              selectedIcon={newSubAccountIcon}
+              onSelectIcon={setNewSubAccountIcon}
+              color={newSubAccountColor}
+            />
+            
+            <ColorPicker
+              selectedColor={newSubAccountColor}
+              onSelectColor={setNewSubAccountColor}
+            />
             <div className="flex gap-2 justify-end">
               <Button
                 variant="outline"
@@ -578,6 +628,8 @@ export const UserAccountMenu = () => {
                   setCreateSubAccountOpen(false);
                   setNewSubAccountName('');
                   setNewSubAccountDesc('');
+                  setNewSubAccountIcon('Circle');
+                  setNewSubAccountColor('hsl(221, 83%, 53%)');
                 }}
               >
                 Cancel
@@ -632,6 +684,8 @@ export const UserAccountMenu = () => {
                   setEditingSubAccount(null);
                   setNewSubAccountName('');
                   setNewSubAccountDesc('');
+                  setNewSubAccountIcon('Circle');
+                  setNewSubAccountColor('hsl(221, 83%, 53%)');
                 }}
               >
                 Cancel
