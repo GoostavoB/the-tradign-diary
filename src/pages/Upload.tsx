@@ -499,7 +499,9 @@ const Upload = () => {
           duration_minutes: Number(t.duration_minutes) || 0,
           notes: t.notes ?? ''
         }));
-        setExtractedTrades(normalizedTrades);
+        // Calculate ROI for all extracted trades on initial load
+        const recalculatedTrades = normalizedTrades.map(calculateTradeROI);
+        setExtractedTrades(recalculatedTrades);
         await new Promise(resolve => setTimeout(resolve, 500));
         toast.success(`✅ Extracted ${data.trades.length} trade(s) from image!`, {
           description: 'Review and save your trades below'
@@ -555,6 +557,47 @@ const Upload = () => {
     }
     return data.signedUrl;
   };
+
+  // Helper function to calculate ROI for a trade
+  const calculateTradeROI = (trade: ExtractedTrade): ExtractedTrade => {
+    const pnl = parseFloat(String(trade.profit_loss)) || 0;
+    const size = parseFloat(String(trade.position_size)) || 0;
+    let entry = parseFloat(String(trade.entry_price)) || 0;
+    const exit = parseFloat(String(trade.exit_price)) || 0;
+    const leverage = parseFloat(String(trade.leverage)) || 1;
+    const side = trade.side;
+
+    // Calculate entry_price if missing
+    if (!entry && exit > 0 && size > 0 && pnl !== 0) {
+      if (side === 'long') {
+        entry = exit - (pnl / size);
+      } else {
+        entry = exit + (pnl / size);
+      }
+      entry = Math.abs(entry);
+    }
+
+    // Calculate margin
+    let margin = parseFloat(String(trade.margin)) || 0;
+    if (!margin && size > 0 && entry > 0) {
+      margin = (size * entry) / leverage;
+    }
+
+    // Calculate ROI
+    let roi = 0;
+    if (margin > 0 && !isNaN(pnl) && isFinite(pnl)) {
+      roi = (pnl / margin) * 100;
+      roi = Math.round(roi * 100) / 100;
+    }
+
+    return {
+      ...trade,
+      entry_price: entry,
+      margin: margin,
+      roi: roi
+    };
+  };
+
   const updateTradeField = (index: number, field: keyof ExtractedTrade, value: string | number) => {
     setTradeEdits(prev => {
       const currentEdits = prev[index] || {};
@@ -566,45 +609,18 @@ const Upload = () => {
                                    'position_size', 'leverage', 'side'];
       
       if (fieldsAffectingROI.includes(field)) {
-        // Recalculate P&L if price/size/side changed
-        let pnl = parseFloat(String(updatedTrade.profit_loss)) || 0;
-        if (['entry_price', 'exit_price', 'position_size', 'side'].includes(field)) {
-          const entry = parseFloat(String(updatedTrade.entry_price)) || 0;
-          const exit = parseFloat(String(updatedTrade.exit_price)) || 0;
-          const size = parseFloat(String(updatedTrade.position_size)) || 0;
-          if (entry > 0 && exit > 0 && size > 0) {
-            pnl = updatedTrade.side === 'long' 
-              ? (exit - entry) * size 
-              : (entry - exit) * size;
-          }
-        }
-        
-        // Recalculate margin if needed
-        let margin = parseFloat(String(updatedTrade.margin)) || 0;
-        if (['position_size', 'leverage', 'entry_price'].includes(field) || margin === 0) {
-          const size = parseFloat(String(updatedTrade.position_size)) || 0;
-          const leverage = parseFloat(String(updatedTrade.leverage)) || 1;
-          const entry = parseFloat(String(updatedTrade.entry_price)) || 0;
-          if (size > 0 && entry > 0) {
-            margin = (size * entry) / leverage;
-          }
-        }
-        
-        // Calculate ROI
-        let roi = 0;
-        if (margin > 0 && !isNaN(pnl) && isFinite(pnl)) {
-          roi = (pnl / margin) * 100;
-          roi = Math.round(roi * 100) / 100;
-        }
+        // Use the helper to recalculate all dependent fields
+        const recalculated = calculateTradeROI(updatedTrade);
         
         return {
           ...prev,
           [index]: {
             ...currentEdits,
             [field]: value,
-            profit_loss: pnl,
-            margin: margin,
-            roi: roi
+            entry_price: recalculated.entry_price,
+            profit_loss: recalculated.profit_loss,
+            margin: recalculated.margin,
+            roi: recalculated.roi
           }
         };
       }
