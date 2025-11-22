@@ -60,8 +60,43 @@ export const useTradeStationLayout = (userId: string | undefined) => {
 if (data?.trade_station_layout_json) {
   const layoutData = data.trade_station_layout_json as any;
   
+  // Check if migration is needed (missing size/height or wrong mode)
+  const needsMigration = 
+    layoutData.mode === 'adaptive' || 
+    !layoutData.version || 
+    layoutData.version < CURRENT_TRADE_STATION_LAYOUT_VERSION ||
+    (layoutData.positions && layoutData.positions.some((p: any) => p.size === undefined || p.height === undefined));
+
+  if (needsMigration && layoutData.positions && Array.isArray(layoutData.positions)) {
+    console.log('[TradeStation] Migrating old layout to new format with sizes...');
+    
+    // Import helper functions
+    const { getDefaultSizeForWidget, getDefaultHeightForWidget } = await import('@/types/widget');
+    
+    // Assign default sizes based on widget ID
+    const migratedPositions = layoutData.positions.map((p: any, index: number) => {
+      const defaultSize = getDefaultSizeForWidget(p.id, true);
+      const defaultHeight = getDefaultHeightForWidget(p.id, defaultSize);
+      
+      return {
+        id: p.id,
+        column: p.column ?? (index % 6),
+        row: p.row ?? Math.floor(index / 3),
+        size: p.size ?? defaultSize,
+        height: p.height ?? defaultHeight,
+      };
+    });
+
+    // Convert to fixed mode and save
+    setMode('fixed');
+    setPositions(migratedPositions);
+    setOrder(migratedPositions.map(p => p.id));
+    setColumnCount(3);
+    await saveLayout(migratedPositions, migratedPositions.map(p => p.id), 'fixed', 3);
+    toast.info('Trade Station layout upgraded to new system');
+  }
   // Check if this is the new format
-  if (layoutData.mode && layoutData.version === CURRENT_TRADE_STATION_LAYOUT_VERSION) {
+  else if (layoutData.mode && layoutData.version === CURRENT_TRADE_STATION_LAYOUT_VERSION) {
     setMode(layoutData.mode);
     setPositions(layoutData.positions || DEFAULT_TRADE_STATION_POSITIONS);
     setOrder(layoutData.order || layoutData.positions?.map((p: any) => p.id) || DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id));
@@ -75,19 +110,19 @@ if (data?.trade_station_layout_json) {
     if (hasValidLegacyPositions) {
       const migratedPositions = layoutData.positions;
       const migratedOrder = migratedPositions.map((p: any) => p.id);
-      setMode('adaptive');
+      setMode('fixed');
       setPositions(migratedPositions);
       setOrder(migratedOrder);
       setColumnCount(layoutData.columnCount || 3);
       // Save in new format
-      await saveLayout(migratedPositions, migratedOrder, 'adaptive', layoutData.columnCount || 3);
+      await saveLayout(migratedPositions, migratedOrder, 'fixed', layoutData.columnCount || 3);
     } else {
       console.warn('[TradeStation] Invalid layout detected. Resetting to defaults.');
-      setMode('adaptive');
+      setMode('fixed');
       setPositions(DEFAULT_TRADE_STATION_POSITIONS);
       setOrder(DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id));
       setColumnCount(3);
-      await saveLayout(DEFAULT_TRADE_STATION_POSITIONS, DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id), 'adaptive', 3);
+      await saveLayout(DEFAULT_TRADE_STATION_POSITIONS, DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id), 'fixed', 3);
     }
   }
 }
