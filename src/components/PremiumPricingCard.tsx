@@ -43,7 +43,7 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
 
   const getSavings = () => {
     if (plan.monthlyPrice === null || plan.annualTotal === null) return 0;
-    return (plan.monthlyPrice * 12) - plan.annualTotal;
+    return Math.round((plan.monthlyPrice * 12) - plan.annualTotal);
   };
 
   return (
