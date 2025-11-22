@@ -605,12 +605,12 @@ const Dashboard = () => {
     setOriginalPositions([]);
 
     // Actually save the layout to database
-    await saveGridLayout(positions, selectedColumnCount);
+    await saveGridLayout(positions, order, mode, selectedColumnCount);
 
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
-  }, [positions, selectedColumnCount, saveGridLayout]);
+  }, [positions, order, mode, selectedColumnCount, saveGridLayout]);
 
   // Handle drag
   const handleDragStart = useCallback((event: DragStartEvent) => {
@@ -682,9 +682,9 @@ const Dashboard = () => {
     }
 
     // Save immediately - hook manages the state
-    saveGridLayout(updatedPositions);
+    saveGridLayout(updatedPositions, order, mode, columnCount);
     setActiveId(null);
-  }, [positions, saveGridLayout]);
+  }, [positions, order, mode, columnCount, saveGridLayout]);
 
   const handleDragCancel = useCallback(() => {
     setActiveId(null);
@@ -693,11 +693,11 @@ const Dashboard = () => {
   const handleCancelCustomize = useCallback(() => {
     // Revert to original positions
     if (originalPositions.length > 0) {
-      saveGridLayout(originalPositions);
+      saveGridLayout(originalPositions, order, mode, columnCount);
     }
     setIsCustomizing(false);
     setOriginalPositions([]);
-  }, [originalPositions, saveGridLayout]);
+  }, [originalPositions, order, mode, columnCount, saveGridLayout]);
 
   const spotWalletTotal = useMemo(() => {
     return holdings.reduce((sum, holding) => {

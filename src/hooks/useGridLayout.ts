@@ -9,7 +9,9 @@ export interface WidgetPosition {
 }
 
 export interface LayoutData {
+  mode: 'adaptive' | 'fixed';
   positions: WidgetPosition[];
+  order: string[];
   columnCount?: number;
   version?: number;
 }
@@ -138,15 +140,18 @@ if (data?.layout_json) {
     loadLayout();
   }, [subAccountId]);
 
-  const saveLayout = useCallback(async (newPositions: WidgetPosition[], newColumnCount?: number) => {
+  const saveLayout = useCallback(async (newPositions: WidgetPosition[], newOrder: string[], newMode?: 'adaptive' | 'fixed', newColumnCount?: number) => {
     if (!subAccountId) {
       console.warn('[useGridLayout] Cannot save: no subAccountId');
       return;
     }
 
     const countToSave = newColumnCount ?? columnCount;
+    const modeToSave = newMode ?? mode;
     console.log('[useGridLayout] Saving layout:', { 
-      positionCount: newPositions.length, 
+      positionCount: newPositions.length,
+      orderCount: newOrder.length,
+      mode: modeToSave,
       columnCount: countToSave,
       widgetIds: newPositions.map(p => p.id)
     });
@@ -161,9 +166,11 @@ if (data?.layout_json) {
 
     setIsSaving(true);
     try {
-      // Save in new format with both positions and columnCount
+      // Save in new format with mode, positions, order, and columnCount
       const layoutData: LayoutData = {
+        mode: modeToSave,
         positions: newPositions,
+        order: newOrder,
         columnCount: countToSave,
         version: CURRENT_OVERVIEW_LAYOUT_VERSION,
       };
@@ -183,6 +190,8 @@ if (data?.layout_json) {
       
       // Update local state to match what was saved
       setPositions(newPositions);
+      setOrder(newOrder);
+      if (newMode) setMode(newMode);
       if (newColumnCount !== undefined) {
         setColumnCount(newColumnCount);
       }
@@ -196,16 +205,40 @@ if (data?.layout_json) {
     } finally {
       setIsSaving(false);
     }
-  }, [subAccountId, columnCount]);
+  }, [subAccountId, mode, columnCount]);
+
+  // Toggle layout mode
+  const toggleLayoutMode = useCallback((newMode: 'adaptive' | 'fixed') => {
+    if (newMode === mode) return;
+    
+    if (newMode === 'fixed') {
+      // Convert adaptive order to fixed positions
+      const newPositions: WidgetPosition[] = [];
+      order.forEach((widgetId, index) => {
+        const col = index % columnCount;
+        const row = Math.floor(index / columnCount);
+        newPositions.push({ id: widgetId, column: col, row });
+      });
+      saveLayout(newPositions, order, newMode, columnCount);
+    } else {
+      // Convert fixed positions to adaptive order
+      const sortedPositions = [...positions].sort((a, b) => {
+        if (a.row !== b.row) return a.row - b.row;
+        return a.column - b.column;
+      });
+      const newOrder = sortedPositions.map(p => p.id);
+      saveLayout(positions, newOrder, newMode, columnCount);
+    }
+  }, [mode, positions, order, columnCount, saveLayout]);
 
   const updatePosition = useCallback((widgetId: string, column: number, row: number) => {
-    setPositions(prev => {
-      const filtered = prev.filter(p => p.id !== widgetId);
-      return [...filtered, { id: widgetId, column, row }];
-    });
-  }, []);
+    const newPositions = positions.map(p =>
+      p.id === widgetId ? { ...p, column, row } : p
+    );
+    saveLayout(newPositions, order, mode, columnCount);
+  }, [positions, order, mode, columnCount, saveLayout]);
 
-  // Add widget to layout - place in first free position (bottom row, left to right)
+  // Add widget to layout
   const addWidget = useCallback(async (widgetId: string) => {
     console.log('[useGridLayout] addWidget called:', { widgetId, currentPositions: positions.length });
     
@@ -215,92 +248,102 @@ if (data?.layout_json) {
       return;
     }
 
-    // Build grid to find occupied positions
-    const grid: { [row: number]: { [col: number]: boolean } } = {};
-    positions.forEach(pos => {
-      if (!grid[pos.row]) grid[pos.row] = {};
-      grid[pos.row][pos.column] = true;
-    });
+    const newOrder = [...order, widgetId];
+    
+    if (mode === 'fixed') {
+      // Build grid to find occupied positions
+      const grid: { [row: number]: { [col: number]: boolean } } = {};
+      positions.forEach(pos => {
+        if (!grid[pos.row]) grid[pos.row] = {};
+        grid[pos.row][pos.column] = true;
+      });
 
-    // Find max row
-    const maxRow = Math.max(-1, ...positions.map(p => p.row));
-    
-    // Start from bottom row, move left to right
-    let targetCol = 0;
-    let targetRow = maxRow + 1;
-    
-    // Check if there's space in the bottom row
-    if (maxRow >= 0 && grid[maxRow]) {
-      // Count occupied positions in bottom row
-      const occupiedInBottomRow = Object.keys(grid[maxRow]).length;
-      if (occupiedInBottomRow < columnCount) {
-        // Find first free column in bottom row
-        for (let col = 0; col < columnCount; col++) {
-          if (!grid[maxRow][col]) {
-            targetCol = col;
-            targetRow = maxRow;
-            break;
+      const maxRow = Math.max(-1, ...positions.map(p => p.row));
+      let targetCol = 0;
+      let targetRow = maxRow + 1;
+      
+      if (maxRow >= 0 && grid[maxRow]) {
+        const occupiedInBottomRow = Object.keys(grid[maxRow]).length;
+        if (occupiedInBottomRow < columnCount) {
+          for (let col = 0; col < columnCount; col++) {
+            if (!grid[maxRow][col]) {
+              targetCol = col;
+              targetRow = maxRow;
+              break;
+            }
           }
         }
       }
-    }
 
-    const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
-    console.log('[useGridLayout] Widget placement:', { 
-      widgetId, 
-      position: { column: targetCol, row: targetRow },
-      totalWidgets: newPositions.length 
-    });
-    
-    // Update local state immediately for responsive UI
-    setPositions(newPositions);
-    
-    // Save to database immediately
-    try {
-      await saveLayout(newPositions);
-      console.log('[useGridLayout] ✅ Widget added and saved');
-    } catch (error) {
-      // Revert on error
-      console.error('[useGridLayout] ❌ Failed to save widget, reverting:', error);
-      setPositions(positions);
-      toast.error('Failed to add widget');
+      const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
+      console.log('[useGridLayout] Widget placement:', { 
+        widgetId, 
+        position: { column: targetCol, row: targetRow },
+        totalWidgets: newPositions.length 
+      });
+      
+      setPositions(newPositions);
+      setOrder(newOrder);
+      
+      try {
+        await saveLayout(newPositions, newOrder, mode, columnCount);
+        console.log('[useGridLayout] ✅ Widget added and saved');
+      } catch (error) {
+        console.error('[useGridLayout] ❌ Failed to save widget, reverting:', error);
+        setPositions(positions);
+        setOrder(order);
+        toast.error('Failed to add widget');
+      }
+    } else {
+      // Adaptive mode: just add to order
+      setOrder(newOrder);
+      try {
+        await saveLayout(positions, newOrder, mode, columnCount);
+        console.log('[useGridLayout] ✅ Widget added and saved');
+      } catch (error) {
+        console.error('[useGridLayout] ❌ Failed to save widget, reverting:', error);
+        setOrder(order);
+        toast.error('Failed to add widget');
+      }
     }
-  }, [positions, columnCount, saveLayout]);
+  }, [positions, order, mode, columnCount, saveLayout]);
 
   const removeWidget = useCallback(async (widgetId: string) => {
     console.log('[useGridLayout] Removing widget:', widgetId);
     
     const newPositions = positions.filter(p => p.id !== widgetId);
+    const newOrder = order.filter(id => id !== widgetId);
     
-    // Update UI immediately
     setPositions(newPositions);
+    setOrder(newOrder);
     
-    // Save to database
     try {
-      await saveLayout(newPositions);
+      await saveLayout(newPositions, newOrder, mode, columnCount);
       console.log('[useGridLayout] ✅ Widget removed and saved');
       toast.success('Widget removed');
     } catch (error) {
-      // Revert on error
       console.error('[useGridLayout] ❌ Failed to remove widget, reverting:', error);
       setPositions(positions);
+      setOrder(order);
       toast.error('Failed to remove widget');
     }
-  }, [positions, saveLayout]);
+  }, [positions, order, mode, columnCount, saveLayout]);
 
   const resetLayout = useCallback(() => {
+    const defaultOrder = DEFAULT_POSITIONS.map(p => p.id);
     setPositions(DEFAULT_POSITIONS);
+    setOrder(defaultOrder);
     setColumnCount(3);
-    saveLayout(DEFAULT_POSITIONS, 3);
+    saveLayout(DEFAULT_POSITIONS, defaultOrder, 'adaptive', 3);
     toast.success('Layout reset');
   }, [saveLayout]);
 
   const updateColumnCount = useCallback((newCount: number) => {
     if (newCount >= 1 && newCount <= 4) {
       setColumnCount(newCount);
-      saveLayout(positions, newCount);
+      saveLayout(positions, order, mode, newCount);
     }
-  }, [positions, saveLayout]);
+  }, [positions, order, mode, saveLayout]);
 
   return {
     mode,
