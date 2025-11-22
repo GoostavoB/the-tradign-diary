@@ -64,11 +64,13 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
 
   useEffect(() => {
     if (!subAccountId) {
+      console.log('[Dashboard] 🔵 No subAccountId, skipping layout load');
       setIsLoading(false);
       return;
     }
 
     const loadLayout = async () => {
+      console.log('[Dashboard] 🔵 Load Start:', { subAccountId });
       try {
         const { data, error } = await supabase
           .from('user_settings')
@@ -77,38 +79,93 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
           .maybeSingle();
 
         if (error) {
-          console.error('Error loading layout:', error);
+          console.error('[Dashboard] ❌ Error loading layout:', error);
           return;
         }
 
 if (data?.layout_json) {
   const layoutData = data.layout_json as any;
+  console.log('[Dashboard] 📦 Raw layout data:', { 
+    mode: layoutData.mode, 
+    version: layoutData.version, 
+    positionCount: layoutData.positions?.length 
+  });
 
-  // Check if migration is needed (missing size/height or wrong mode)
-  const needsMigration = 
-    layoutData.mode === 'adaptive' || 
-    !layoutData.version || 
-    layoutData.version < CURRENT_OVERVIEW_LAYOUT_VERSION ||
-    (layoutData.positions && layoutData.positions.some((p: any) => p.size === undefined || p.height === undefined));
+  // AGGRESSIVE MIGRATION DETECTION
+  const checks = {
+    wrongMode: layoutData.mode === 'adaptive' || layoutData.mode === undefined,
+    missingVersion: !layoutData.version || layoutData.version < CURRENT_OVERVIEW_LAYOUT_VERSION,
+    missingSizeHeight: layoutData.positions?.some((p: any) => p.size === undefined || p.height === undefined),
+    invalidSizeValues: layoutData.positions?.some((p: any) => 
+      typeof p.size !== 'number' || ![1, 2, 4, 6].includes(p.size)
+    ),
+    invalidHeightValues: layoutData.positions?.some((p: any) => 
+      typeof p.height !== 'number' || ![2, 4, 6].includes(p.height)
+    ),
+    invalidColumns: layoutData.positions?.some((p: any) => 
+      p.column === undefined || typeof p.column !== 'number' || p.column < 0 || p.column > 5
+    ),
+    countMismatch: layoutData.positions?.length !== layoutData.order?.length,
+  };
+
+  const needsMigration = Object.values(checks).some(Boolean);
+
+  console.log('[Dashboard] 🔍 Migration Check:', {
+    needsMigration,
+    currentMode: layoutData.mode,
+    currentVersion: layoutData.version,
+    expectedVersion: CURRENT_OVERVIEW_LAYOUT_VERSION,
+    positionCount: layoutData.positions?.length,
+    checks,
+  });
 
   if (needsMigration && layoutData.positions && Array.isArray(layoutData.positions)) {
-    console.log('[useGridLayout] Migrating old layout to new format with sizes...');
+    console.log('[Dashboard] ⚠️ Migration Needed - Starting migration process...');
     
     // Import helper functions
     const { getDefaultSizeForWidget, getDefaultHeightForWidget } = await import('@/types/widget');
     
-    // Assign default sizes based on widget ID
+    // Assign default sizes based on widget ID with detailed logging
     const migratedPositions = layoutData.positions.map((p: any, index: number) => {
       const defaultSize = getDefaultSizeForWidget(p.id, false);
       const defaultHeight = getDefaultHeightForWidget(p.id, defaultSize);
       
-      return {
+      const migrated = {
         id: p.id,
-        column: p.column ?? (index % 6),
-        row: p.row ?? Math.floor(index / 3),
-        size: p.size ?? defaultSize,
-        height: p.height ?? defaultHeight,
+        column: (typeof p.column === 'number' && p.column >= 0 && p.column <= 5) 
+          ? p.column 
+          : (index % 6),
+        row: (typeof p.row === 'number' && p.row >= 0) 
+          ? p.row 
+          : Math.floor(index / 3),
+        size: ([1, 2, 4, 6].includes(p.size)) ? p.size : defaultSize,
+        height: ([2, 4, 6].includes(p.height)) ? p.height : defaultHeight,
       };
+      
+      console.log(`[Migration] Widget ${p.id}:`, {
+        before: { column: p.column, row: p.row, size: p.size, height: p.height },
+        after: migrated,
+        usedDefaults: {
+          column: migrated.column !== p.column,
+          row: migrated.row !== p.row,
+          size: migrated.size !== p.size,
+          height: migrated.height !== p.height,
+        }
+      });
+      
+      return migrated;
+    });
+
+    console.log('[Dashboard] 📊 Migration Summary:', {
+      total: migratedPositions.length,
+      sizes: migratedPositions.reduce((acc, p) => {
+        acc[`size${p.size}`] = (acc[`size${p.size}`] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>),
+      heights: migratedPositions.reduce((acc, p) => {
+        acc[`height${p.height}`] = (acc[`height${p.height}`] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>),
     });
 
     // Convert to fixed mode and save
@@ -117,7 +174,11 @@ if (data?.layout_json) {
     setOrder(migratedPositions.map(p => p.id));
     setColumnCount(3);
     await saveLayout(migratedPositions, migratedPositions.map(p => p.id), 'fixed', 3);
-    toast.info('Dashboard layout upgraded to new system');
+    console.log('[Dashboard] ✅ Migration Complete - Layout saved with version', CURRENT_OVERVIEW_LAYOUT_VERSION);
+    toast.success('Layout upgraded to puzzle system!', {
+      description: `${migratedPositions.length} widgets migrated to Fixed mode with sizes (1,2,4,6) and heights (2,4,6)`,
+      duration: 5000,
+    });
   }
   // Check if this is the new dual-mode format
   else if (layoutData.mode && layoutData.version === CURRENT_OVERVIEW_LAYOUT_VERSION) {
@@ -181,24 +242,25 @@ if (data?.layout_json) {
 
   const saveLayout = useCallback(async (newPositions: WidgetPosition[], newOrder: string[], newMode?: 'adaptive' | 'fixed', newColumnCount?: number) => {
     if (!subAccountId) {
-      console.warn('[useGridLayout] Cannot save: no subAccountId');
+      console.warn('[Dashboard] 💾 Cannot save: no subAccountId');
       return;
     }
 
     const countToSave = newColumnCount ?? columnCount;
     const modeToSave = newMode ?? mode;
-    console.log('[useGridLayout] Saving layout:', { 
+    console.log('[Dashboard] 💾 Saving Layout:', { 
       positionCount: newPositions.length,
       orderCount: newOrder.length,
       mode: modeToSave,
       columnCount: countToSave,
-      widgetIds: newPositions.map(p => p.id)
+      version: CURRENT_OVERVIEW_LAYOUT_VERSION,
+      widgetIds: newPositions.map(p => p.id).slice(0, 5) + (newPositions.length > 5 ? '...' : '')
     });
     
     // Validate before saving
     const uniqueIds = new Set(newPositions.map(p => p.id));
     if (uniqueIds.size !== newPositions.length) {
-      console.error('[useGridLayout] Duplicate widget IDs detected!', newPositions);
+      console.error('[Dashboard] ❌ Duplicate widget IDs detected!', newPositions);
       toast.error('Cannot save: duplicate widgets detected');
       return;
     }
@@ -223,7 +285,7 @@ if (data?.layout_json) {
         .eq('sub_account_id', subAccountId);
 
       if (error) {
-        console.error('[useGridLayout] Save error:', error);
+        console.error('[Dashboard] ❌ Save error:', error);
         throw error;
       }
       
@@ -235,10 +297,10 @@ if (data?.layout_json) {
         setColumnCount(newColumnCount);
       }
       
-      console.log('[useGridLayout] ✅ Layout saved successfully');
+      console.log('[Dashboard] ✅ Layout saved successfully');
       toast.success('Layout saved');
     } catch (error) {
-      console.error('[useGridLayout] Failed to save layout:', error);
+      console.error('[Dashboard] ❌ Failed to save layout:', error);
       toast.error('Failed to save layout. Please try again.');
       throw error; // Let caller handle the error
     } finally {
@@ -248,9 +310,14 @@ if (data?.layout_json) {
 
   // Toggle layout mode
   const toggleLayoutMode = useCallback((newMode: 'adaptive' | 'fixed') => {
-    if (newMode === mode) return;
+    console.log('[Dashboard] 🔄 Mode Change Requested:', { from: mode, to: newMode });
+    if (newMode === mode) {
+      console.log('[Dashboard] ⏭️ Same mode, skipping');
+      return;
+    }
     
     if (newMode === 'fixed') {
+      console.log('[Dashboard] 🔄 Converting Adaptive → Fixed');
       // Convert adaptive order to fixed positions
       const newPositions: WidgetPosition[] = [];
       order.forEach((widgetId, index) => {
@@ -260,14 +327,17 @@ if (data?.layout_json) {
         const height: 2 | 4 | 6 = 2; // Default height for all widgets in adaptive mode
         newPositions.push({ id: widgetId, column: col, row, size, height });
       });
+      console.log('[Dashboard] 📐 New positions:', { count: newPositions.length });
       saveLayout(newPositions, order, newMode, columnCount);
     } else {
+      console.log('[Dashboard] 🔄 Converting Fixed → Adaptive');
       // Convert fixed positions to adaptive order
       const sortedPositions = [...positions].sort((a, b) => {
         if (a.row !== b.row) return a.row - b.row;
         return a.column - b.column;
       });
       const newOrder = sortedPositions.map(p => p.id);
+      console.log('[Dashboard] 📋 New order:', { count: newOrder.length });
       saveLayout(positions, newOrder, newMode, columnCount);
     }
   }, [mode, positions, order, columnCount, saveLayout]);
@@ -280,6 +350,15 @@ if (data?.layout_json) {
   }, [positions, order, mode, columnCount, saveLayout]);
 
   const resizeWidget = useCallback(async (widgetId: string, newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+    const widget = positions.find(p => p.id === widgetId);
+    console.log('[Dashboard] 📐 Resize Widget:', { 
+      widgetId, 
+      currentSize: widget?.size, 
+      currentHeight: widget?.height,
+      newSize, 
+      newHeight 
+    });
+    
     const newPositions = positions.map(p => {
       if (p.id === widgetId) {
         const updates: Partial<WidgetPosition> = {};
@@ -299,6 +378,7 @@ if (data?.layout_json) {
           }
         }
         
+        console.log('[Dashboard] 📐 Applied updates:', updates);
         return { ...p, ...updates };
       }
       return p;
@@ -306,8 +386,10 @@ if (data?.layout_json) {
     
     try {
       await saveLayout(newPositions, order, mode, columnCount);
+      console.log('[Dashboard] ✅ Widget resized successfully');
       toast.success('Widget redimensionado');
     } catch (error) {
+      console.error('[Dashboard] ❌ Failed to resize:', error);
       toast.error('Falha ao redimensionar widget');
     }
   }, [positions, order, mode, columnCount, saveLayout]);

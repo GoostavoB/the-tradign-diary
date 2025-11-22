@@ -25,28 +25,41 @@ export const AdaptiveGrid = ({
 
   // Responsive column calculation for adaptive mode
   useEffect(() => {
+    console.log('[AdaptiveGrid] 📐 Grid Mode:', { 
+      mode, 
+      columnCount, 
+      positionCount: positions.length, 
+      orderCount: order.length,
+      isCustomizing 
+    });
+    
     if (mode === 'fixed') {
+      console.log('[AdaptiveGrid] 🔒 Fixed mode - using SubcolumnGrid with 6 subcolumns');
       setResponsiveColumns(columnCount);
       return;
     }
 
     const updateColumns = () => {
       const width = window.innerWidth;
+      let cols = columnCount;
       if (width < 768) {
-        setResponsiveColumns(1); // Mobile: 1 column
+        cols = 1; // Mobile: 1 column
       } else if (width < 1280) {
-        setResponsiveColumns(2); // Tablet: 2 columns
+        cols = 2; // Tablet: 2 columns
       } else {
-        setResponsiveColumns(Math.min(columnCount, 4)); // Desktop: user preference
+        cols = Math.min(columnCount, 4); // Desktop: user preference
       }
+      console.log('[AdaptiveGrid] 📱 Responsive columns:', { width, cols });
+      setResponsiveColumns(cols);
     };
 
     updateColumns();
     window.addEventListener('resize', updateColumns);
     return () => window.removeEventListener('resize', updateColumns);
-  }, [mode, columnCount]);
+  }, [mode, columnCount, positions.length, order.length, isCustomizing]);
 
   if (mode === 'adaptive') {
+    console.log('[AdaptiveGrid] 🌊 Rendering Adaptive Grid:', { responsiveColumns, widgetCount: order.length });
     // Adaptive mode: responsive flowing grid with dense packing
     return (
       <div
@@ -73,6 +86,14 @@ export const AdaptiveGrid = ({
   }
 
   // Fixed mode: use the new 6-subcolumn grid system
+  console.log('[AdaptiveGrid] 🧩 Rendering SubcolumnGrid (Fixed mode):', { 
+    positionCount: positions.length,
+    sizeDistribution: positions.reduce((acc, p) => {
+      acc[`size${p.size}`] = (acc[`size${p.size}`] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>)
+  });
+  
   return (
     <SubcolumnGrid
       positions={positions}

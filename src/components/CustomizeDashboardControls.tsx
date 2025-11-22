@@ -30,6 +30,7 @@ interface CustomizeDashboardControlsProps {
   onUndoReset?: () => void;
   layoutMode?: 'adaptive' | 'fixed';
   onLayoutModeChange?: (mode: 'adaptive' | 'fixed') => void;
+  onForceReset?: () => void;
 }
 
 export function CustomizeDashboardControls({
@@ -49,12 +50,22 @@ export function CustomizeDashboardControls({
   onUndoReset,
   layoutMode = 'adaptive',
   onLayoutModeChange,
+  onForceReset,
 }: CustomizeDashboardControlsProps) {
   const { t } = useTranslation();
   const { canCustomizeDashboard } = useUserTier();
   const navigate = useNavigate();
   const visibleCount = widgetCount || widgets.filter(w => w.visible).length;
   const hiddenCount = widgets.filter(w => !w.visible).length;
+
+  console.log('[Controls] 🎛️ Render:', { 
+    isCustomizing, 
+    layoutMode, 
+    columnCount, 
+    hasChanges,
+    visibleCount,
+    hiddenCount
+  });
 
   const widgetLabels: Record<string, string> = {
     totalBalance: t('widgets.totalBalance.title'),
@@ -101,13 +112,43 @@ export function CustomizeDashboardControls({
             Add Trade
           </Button>
           
-          {/* Layout Mode & Column Count Selector */}
+          {/* ALWAYS VISIBLE LAYOUT MODE TOGGLE */}
+          {onLayoutModeChange && (
+            <div className="flex items-center gap-2 glass p-2 rounded-lg">
+              <Label className="text-xs text-muted-foreground">Layout:</Label>
+              <ToggleGroup 
+                type="single" 
+                value={layoutMode} 
+                onValueChange={(value) => {
+                  if (value) {
+                    console.log('[Controls] 🔄 Layout mode toggle clicked:', value);
+                    onLayoutModeChange(value as 'adaptive' | 'fixed');
+                  }
+                }} 
+                size="sm"
+              >
+                <ToggleGroupItem value="adaptive" className="gap-1.5 text-xs">
+                  <LayoutGrid className="h-3 w-3" />
+                  Adaptive
+                </ToggleGroupItem>
+                <ToggleGroupItem value="fixed" className="gap-1.5 text-xs">
+                  <Lock className="h-3 w-3" />
+                  Fixed
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          )}
+          
+          {/* Column count only for adaptive mode */}
           {onColumnCountChange && layoutMode === 'adaptive' && (
             <div className="flex items-center gap-2">
               <Columns className="w-4 h-4 text-muted-foreground" />
               <Select
                 value={columnCount.toString()}
-                onValueChange={(value) => onColumnCountChange(parseInt(value, 10))}
+                onValueChange={(value) => {
+                  console.log('[Controls] 📏 Column count changed:', value);
+                  onColumnCountChange(parseInt(value, 10));
+                }}
               >
                 <SelectTrigger className="w-[120px] glass">
                   <SelectValue />
@@ -120,6 +161,22 @@ export function CustomizeDashboardControls({
                 </SelectContent>
               </Select>
             </div>
+          )}
+
+          {/* Force Reset Button */}
+          {onForceReset && (
+            <Button
+              onClick={() => {
+                console.log('[Controls] 🔴 Force reset clicked');
+                onForceReset();
+              }}
+              variant="ghost"
+              size="sm"
+              className="gap-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Force Reset
+            </Button>
           )}
           
           {/* Tour Button */}

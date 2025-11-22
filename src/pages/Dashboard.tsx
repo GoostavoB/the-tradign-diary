@@ -702,6 +702,40 @@ const Dashboard = () => {
     setOriginalPositions([]);
   }, [originalPositions, order, mode, columnCount, saveGridLayout]);
 
+  // Force reset all layouts - clears database and reloads
+  const handleForceResetLayout = useCallback(async () => {
+    console.log('[Dashboard] 🔴 FORCE RESET - Clearing all saved layouts');
+    
+    if (!activeSubAccountId) {
+      toast.error('No active sub-account');
+      return;
+    }
+    
+    if (!window.confirm('This will completely clear your saved dashboard layout and reload the page. This action cannot be undone. Continue?')) {
+      console.log('[Dashboard] Force reset cancelled by user');
+      return;
+    }
+    
+    try {
+      const { error } = await supabase
+        .from('user_settings')
+        .update({ 
+          layout_json: null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('sub_account_id', activeSubAccountId);
+      
+      if (error) throw error;
+      
+      console.log('[Dashboard] ✅ Layout cleared from database');
+      toast.success('Dashboard layout cleared. Reloading...');
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (error) {
+      console.error('[Dashboard] ❌ Force reset failed:', error);
+      toast.error('Failed to reset layout');
+    }
+  }, [activeSubAccountId]);
+
   const spotWalletTotal = useMemo(() => {
     return holdings.reduce((sum, holding) => {
       const price = Number(prices[holding.token_symbol] || 0);
@@ -1034,6 +1068,7 @@ const Dashboard = () => {
                     onColumnCountChange={handleColumnCountChange}
                     canUndo={canUndo}
                     onUndoReset={undoReset}
+                    onForceReset={handleForceResetLayout}
                   />
 
                   <WidgetLibrary
