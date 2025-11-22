@@ -19,33 +19,35 @@ export interface LayoutData {
 }
 
 // Default positions using the new 6-subcolumn system
+// Columns: 0-1 (first column), 2-3 (second column), 4-5 (third column)
 const DEFAULT_POSITIONS: WidgetPosition[] = [
-  // Row 0 - Size 1 widgets in first column (2 subcolumns = 1 column with 2 size-1 widgets)
+  // Row 0 - Two size-1 widgets in first column, two size-2 widgets
   { id: 'totalBalance', column: 0, row: 0, size: 1 },
   { id: 'winRate', column: 1, row: 0, size: 1 },
-  // Size 2 widgets (each takes 2 subcolumns)
   { id: 'capitalGrowth', column: 2, row: 0, size: 2 },
   { id: 'topMovers', column: 4, row: 0, size: 2 },
   
-  // Row 1 - More size 1 widgets and size 2 widgets
+  // Row 1 - Two size-1 widgets in first column, two size-2 widgets
   { id: 'currentROI', column: 0, row: 1, size: 1 },
   { id: 'avgPnLPerDay', column: 1, row: 1, size: 1 },
   { id: 'goals', column: 2, row: 1, size: 2 },
   { id: 'behaviorAnalytics', column: 4, row: 1, size: 2 },
   
-  // Row 2 - Size 4 widget (spans 2 columns = 4 subcolumns)
+  // Row 2 - Size 4 widget + size 2 widget
   { id: 'combinedPnLROI', column: 0, row: 2, size: 4 },
   { id: 'costEfficiency', column: 4, row: 2, size: 2 },
   
-  // Row 3 - Size 4 and size 2
+  // Row 3 - Size 4 widget + size 2 widget
   { id: 'aiInsights', column: 0, row: 3, size: 4 },
   { id: 'tradingQuality', column: 4, row: 3, size: 2 },
   
-  // Row 4 - Size 6 (full width)
+  // Row 4 - Full width size 6 widget
   { id: 'emotionMistakeCorrelation', column: 0, row: 4, size: 6 },
   
-  // Row 5
+  // Row 5 - Three size-2 widgets
   { id: 'performanceHighlights', column: 0, row: 5, size: 2 },
+  { id: 'avgPnLPerTrade', column: 2, row: 5, size: 1 },
+  { id: 'totalTrades', column: 3, row: 5, size: 1 },
 ];
 
 const CURRENT_OVERVIEW_LAYOUT_VERSION = 4;
