@@ -1,6 +1,10 @@
 import { LucideIcon } from 'lucide-react';
 
-export type WidgetSize = 'small' | 'medium' | 'large' | 'xlarge';
+// Standardized widget sizes: 1, 2, 4, 6 (in subcolumns, total grid = 6 subcolumns)
+export type WidgetSize = 1 | 2 | 4 | 6;
+
+// Legacy size names for compatibility with existing config
+export type WidgetSizeName = 'small' | 'medium' | 'large' | 'xlarge';
 
 export interface WidgetLayout {
   i: string; // widget ID
@@ -14,13 +18,20 @@ export interface WidgetLayout {
   maxH?: number;
 }
 
+// Widget size configuration for the new 6-subcolumn system
+export interface WidgetSizeConfig {
+  id: string;
+  size: WidgetSize;
+  height?: 'small' | 'medium' | 'large'; // Standardized heights
+}
+
 export interface WidgetConfig {
   id: string;
   title: string;
   description: string;
   category: WidgetCategory;
   icon: LucideIcon;
-  defaultSize: WidgetSize;
+  defaultSize: WidgetSizeName; // Legacy size name
   defaultLayout?: Pick<WidgetLayout, 'w' | 'h' | 'minW' | 'minH' | 'maxW' | 'maxH'>;
   component: React.ComponentType<WidgetProps>;
   isPremium?: boolean;
@@ -53,8 +64,48 @@ export interface UserWidgetLayout {
 
 // Size presets for common widget dimensions
 export const WIDGET_SIZES: Record<WidgetSize, Pick<WidgetLayout, 'w' | 'h'>> = {
-  small: { w: 3, h: 2 },
-  medium: { w: 6, h: 3 },
-  large: { w: 12, h: 4 },
-  xlarge: { w: 12, h: 6 },
+  1: { w: 2, h: 2 },    // 1 subcolumn
+  2: { w: 4, h: 3 },    // 1 full column (2 subcolumns)
+  4: { w: 8, h: 3 },    // 2 columns (4 subcolumns)
+  6: { w: 12, h: 4 },   // 3 columns (6 subcolumns)
+};
+
+// Default widget size configurations
+export const WIDGET_SIZE_MAP: Record<string, WidgetSize> = {
+  // Size 1 widgets (occupy 1 subcolumn) - small metrics
+  'totalBalance': 1,
+  'winRate': 1,
+  'avgPnLPerDay': 1,
+  'currentROI': 1,
+  'avgPnLPerTrade': 1,
+  'spotWallet': 1,
+  'weightedAvgROI': 1,
+  'totalTrades': 1,
+  'simpleAvgROI': 1,
+  'avgROIPerTrade': 1,
+  'dailyLossLock': 1,
+  'simpleLeverage': 1,
+  'quickActions': 1,
+  
+  // Size 2 widgets (occupy 1 full column = 2 subcolumns)
+  'goals': 2,
+  'capitalGrowth': 2,
+  'topMovers': 2,
+  'behaviorAnalytics': 2,
+  'costEfficiency': 2,
+  'tradingQuality': 2,
+  'performanceHighlights': 2,
+  'portfolioOverview': 2,
+  'recentTransactions': 2,
+  'riskCalculator': 2,
+  'errorReflection': 2,
+  'heatmap': 2,
+  
+  // Size 4 widgets (occupy 2 columns = 4 subcolumns)
+  'combinedPnLROI': 4,
+  'aiInsights': 4,
+  'emotionMistakeCorrelation': 4,
+  
+  // Size 6 widgets (occupy 3 columns = 6 subcolumns, full width)
+  'rollingTarget': 6,
 };
