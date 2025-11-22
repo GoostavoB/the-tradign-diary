@@ -165,6 +165,8 @@ const Dashboard = () => {
   // Grid layout with free positioning - single source of truth
   const {
     positions,
+    order,
+    mode,
     columnCount: savedColumnCount,
     isLoading: isLayoutLoading,
     updatePosition,
@@ -173,6 +175,7 @@ const Dashboard = () => {
     addWidget,
     removeWidget,
     resetLayout,
+    toggleLayoutMode,
   } = useGridLayout(activeSubAccount?.id, Object.keys(WIDGET_CATALOG));
 
   const [isCustomizing, setIsCustomizing] = useState(false);
@@ -1028,7 +1031,9 @@ const Dashboard = () => {
                   />
 
                   <DashboardGrid
+                    mode={mode}
                     positions={positions}
+                    order={order}
                     selectedColumnCount={selectedColumnCount}
                     isCustomizing={isCustomizing}
                     activeId={activeId}

@@ -180,9 +180,9 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     }
 
     // Save immediately
-    saveLayout(updatedPositions);
+    saveLayout(updatedPositions, order);
     setActiveId(null);
-  }, [positions, saveLayout]);
+  }, [positions, order, saveLayout]);
 
   const handleDragCancel = useCallback(() => {
     setActiveId(null);
@@ -597,11 +597,11 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
 
   const handleCancelCustomize = useCallback(() => {
     if (originalPositions.length > 0) {
-      saveLayout(originalPositions);
+      saveLayout(originalPositions, order);
     }
     setIsCustomizing(false);
     setOriginalPositions([]);
-  }, [originalPositions, saveLayout]);
+  }, [originalPositions, order, saveLayout]);
 
   // Expose controls to parent via callback - parent Dashboard will handle widget library
   const controls = useMemo(() => ({

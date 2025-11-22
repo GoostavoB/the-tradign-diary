@@ -1,15 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Settings2, Save, X, RotateCcw, Eye, EyeOff, LayoutDashboard, Columns, Plus, Crown, Undo2 } from 'lucide-react';
+import { Settings2, Save, X, RotateCcw, Eye, EyeOff, LayoutDashboard, Columns, Plus, Crown, Undo2, LayoutGrid, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { WidgetConfig } from '@/hooks/useDashboardLayout';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { TourButton } from '@/components/tour/TourButton';
 import { useUserTier } from '@/hooks/useUserTier';
+import { Label } from '@/components/ui/label';
 
 interface CustomizeDashboardControlsProps {
   isCustomizing: boolean;
@@ -26,6 +28,8 @@ interface CustomizeDashboardControlsProps {
   widgetCount?: number;
   canUndo?: boolean;
   onUndoReset?: () => void;
+  layoutMode?: 'adaptive' | 'fixed';
+  onLayoutModeChange?: (mode: 'adaptive' | 'fixed') => void;
 }
 
 export function CustomizeDashboardControls({
@@ -43,6 +47,8 @@ export function CustomizeDashboardControls({
   widgetCount = 0,
   canUndo = false,
   onUndoReset,
+  layoutMode = 'adaptive',
+  onLayoutModeChange,
 }: CustomizeDashboardControlsProps) {
   const { t } = useTranslation();
   const { canCustomizeDashboard } = useUserTier();
@@ -95,8 +101,8 @@ export function CustomizeDashboardControls({
             Add Trade
           </Button>
           
-          {/* Column Count Selector */}
-          {onColumnCountChange && (
+          {/* Layout Mode & Column Count Selector */}
+          {onColumnCountChange && layoutMode === 'adaptive' && (
             <div className="flex items-center gap-2">
               <Columns className="w-4 h-4 text-muted-foreground" />
               <Select
@@ -129,12 +135,12 @@ export function CustomizeDashboardControls({
         >
           <Card className="p-4 glass-strong border-primary/30">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-1">
                 <div className="p-2 rounded-xl bg-primary/10">
                   <Settings2 className="w-5 h-5 text-primary" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-sm flex items-center gap-2">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-sm flex items-center gap-2 flex-wrap">
                     {t('dashboard.editMode')}
                     <Badge variant="secondary" className="text-xs">
                       {t('dashboard.visibleCount', { count: visibleCount })}
@@ -143,6 +149,40 @@ export function CustomizeDashboardControls({
                   <p className="text-xs text-muted-foreground">
                     {t('dashboard.dragInstructions')}
                   </p>
+                  
+                  {/* Layout Mode Toggle */}
+                  {onLayoutModeChange && (
+                    <div className="flex items-center gap-2 mt-3">
+                      <Label className="text-xs text-muted-foreground">{t('dashboard.layoutMode.label', 'Layout Mode')}:</Label>
+                      <ToggleGroup type="single" value={layoutMode} onValueChange={(value) => value && onLayoutModeChange(value as 'adaptive' | 'fixed')} size="sm">
+                        <ToggleGroupItem value="adaptive" className="gap-1.5 text-xs">
+                          <LayoutGrid className="h-3 w-3" />
+                          {t('dashboard.layoutMode.adaptive', 'Adaptive')}
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="fixed" className="gap-1.5 text-xs">
+                          <Lock className="h-3 w-3" />
+                          {t('dashboard.layoutMode.fixed', 'Fixed')}
+                        </ToggleGroupItem>
+                      </ToggleGroup>
+                      {layoutMode === 'fixed' && onColumnCountChange && (
+                        <Select
+                          value={columnCount.toString()}
+                          onValueChange={(value) => onColumnCountChange(parseInt(value, 10))}
+                        >
+                          <SelectTrigger className="w-[100px] h-7 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="2">2 cols</SelectItem>
+                            <SelectItem value="3">3 cols</SelectItem>
+                            <SelectItem value="4">4 cols</SelectItem>
+                            <SelectItem value="5">5 cols</SelectItem>
+                            <SelectItem value="6">6 cols</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-2">
