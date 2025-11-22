@@ -9,7 +9,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 export const MobileHeader = () => {
   const { t } = useTranslation();
@@ -36,9 +36,9 @@ export const MobileHeader = () => {
     <header className="fixed top-0 left-0 right-0 z-50 h-14 border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="container mx-auto h-full px-4 flex items-center justify-between">
         {/* Logo - Left */}
-        <div className="flex items-center">
+        <Link to="/" className="flex items-center">
           <Logo variant="horizontal" size="sm" showText={true} />
-        </div>
+        </Link>
 
         {/* Desktop Navigation - Hidden on Mobile */}
         <nav className="hidden md:flex items-center gap-2">
