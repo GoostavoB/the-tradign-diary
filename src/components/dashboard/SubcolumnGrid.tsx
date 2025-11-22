@@ -44,7 +44,7 @@ export const SubcolumnGrid = ({
         />
       )}
       
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Render each row */}
         {Array.from({ length: rowCount }).map((_, rowIndex) => {
           const rowWidgets = rowGroups[rowIndex] || [];
@@ -53,9 +53,9 @@ export const SubcolumnGrid = ({
           return (
             <div
               key={rowIndex}
-              className="relative grid gap-6 transition-all duration-500 ease-out"
+              className="relative grid gap-4 transition-all duration-500 ease-out"
               style={{
-                gridTemplateColumns: `repeat(${TOTAL_SUBCOLUMNS}, minmax(140px, 1fr))`,
+                gridTemplateColumns: `repeat(${TOTAL_SUBCOLUMNS}, minmax(100px, 1fr))`,
                 minHeight: '180px',
               }}
             >
@@ -84,6 +84,11 @@ export const SubcolumnGrid = ({
                         animationFillMode: 'backwards',
                       }}
                     >
+                      {isCustomizing && (
+                        <div className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-md shadow-lg z-10 font-medium">
+                          Size: {widget.size} | Height: {widget.height}
+                        </div>
+                      )}
                       {renderWidget(widget.id)}
                     </div>
                   );
