@@ -1,6 +1,7 @@
 import { DndContext, DragEndEvent, DragStartEvent, MeasuringStrategy, PointerSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import { AdaptiveGrid } from '@/components/dashboard/AdaptiveGrid';
+import { DragPreviewOverlay } from '@/components/widgets/DragPreviewOverlay';
 import { WidgetPosition } from '@/hooks/useGridLayout';
 import { ReactNode } from 'react';
 
@@ -15,6 +16,7 @@ interface DashboardGridProps {
     onDragEnd: (event: DragEndEvent) => void;
     onDragCancel: () => void;
     renderWidget: (widgetId: string) => ReactNode;
+    onOpenWidgetLibrary?: () => void;
 }
 
 export const DashboardGrid = ({
@@ -28,6 +30,7 @@ export const DashboardGrid = ({
     onDragEnd,
     onDragCancel,
     renderWidget,
+    onOpenWidgetLibrary,
 }: DashboardGridProps) => {
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -54,8 +57,15 @@ export const DashboardGrid = ({
                     columnCount={selectedColumnCount}
                     isCustomizing={isCustomizing}
                     renderWidget={renderWidget}
+                    onOpenWidgetLibrary={onOpenWidgetLibrary}
                 />
             </SortableContext>
+            
+            {/* Enhanced drag preview overlay */}
+            <DragPreviewOverlay 
+                activeId={activeId}
+                renderPreview={renderWidget}
+            />
         </DndContext>
     );
 };

@@ -502,6 +502,11 @@
       transform: translateX(4px);
     }
   }
+  
+  /* Slow pulse animation for widget customization */
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
 
   .animate-shake {
     animation: shake 0.5s ease-in-out;
