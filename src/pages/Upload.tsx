@@ -30,7 +30,7 @@ import { EnhancedFileUpload } from '@/components/upload/EnhancedFileUpload';
 import { MultiImageUpload } from '@/components/upload/MultiImageUpload';
 import { AIFeedback } from '@/components/upload/AIFeedback';
 import { runOCR, type OCRResult } from '@/utils/ocrPipeline';
-import { usePageMeta } from '@/hooks/usePageMeta';
+import { SEO } from '@/components/SEO';
 import { pageMeta } from '@/utils/seoHelpers';
 interface ExtractedTrade {
   symbol: string;
@@ -60,7 +60,9 @@ interface ExtractedTrade {
 
 const Upload = () => {
   useKeyboardShortcuts();
-  usePageMeta(pageMeta.upload);
+  useKeyboardShortcuts();
+
+
   const {
     user
   } = useAuth();
@@ -605,15 +607,15 @@ const Upload = () => {
       const currentEdits = prev[index] || {};
       const currentTrade = extractedTrades[index];
       const updatedTrade = { ...currentTrade, ...currentEdits, [field]: value };
-      
+
       // Fields that affect P&L, margin, or ROI calculations
-      const fieldsAffectingROI = ['profit_loss', 'margin', 'entry_price', 'exit_price', 
-                                   'position_size', 'leverage', 'side'];
-      
+      const fieldsAffectingROI = ['profit_loss', 'margin', 'entry_price', 'exit_price',
+        'position_size', 'leverage', 'side'];
+
       if (fieldsAffectingROI.includes(field)) {
         // Use the helper to recalculate all dependent fields
         const recalculated = calculateTradeROI(updatedTrade);
-        
+
         return {
           ...prev,
           [index]: {
@@ -626,7 +628,7 @@ const Upload = () => {
           }
         };
       }
-      
+
       return {
         ...prev,
         [index]: {
@@ -717,8 +719,8 @@ const Upload = () => {
           margin: finalTrade.margin,
           opened_at: finalTrade.opened_at,
           closed_at: finalTrade.closed_at,
-          period_of_day: finalTrade.period_of_day && ['morning', 'afternoon', 'night'].includes(finalTrade.period_of_day) 
-            ? finalTrade.period_of_day 
+          period_of_day: finalTrade.period_of_day && ['morning', 'afternoon', 'night'].includes(finalTrade.period_of_day)
+            ? finalTrade.period_of_day
             : 'morning',
           duration_days: finalTrade.duration_days,
           duration_hours: finalTrade.duration_hours,
@@ -813,7 +815,7 @@ const Upload = () => {
     const size = parseFloat(formData.position_size);
     const leverage = parseFloat(formData.leverage) || 1;
     const margin = parseFloat(formData.margin) || (size / leverage);
-    
+
     // Calculate P&L correctly based on side
     let pnl = 0;
     if (formData.side === 'long') {
@@ -821,7 +823,7 @@ const Upload = () => {
     } else if (formData.side === 'short') {
       pnl = (entry - exit) * size;
     }
-    
+
     // Calculate ROI: (profit_loss / margin) * 100
     // This correctly handles both positive profits and negative losses
     let roi = 0;
@@ -848,8 +850,8 @@ const Upload = () => {
       margin: margin,
       opened_at: formData.opened_at || null,
       closed_at: formData.closed_at || null,
-      period_of_day: formData.period_of_day && ['morning', 'afternoon', 'night'].includes(formData.period_of_day) 
-        ? formData.period_of_day 
+      period_of_day: formData.period_of_day && ['morning', 'afternoon', 'night'].includes(formData.period_of_day)
+        ? formData.period_of_day
         : 'morning',
       pnl: pnl,
       roi: roi,
@@ -898,259 +900,266 @@ const Upload = () => {
     return parts.join(' ') || '0m';
   };
   return <AppLayout>
-      <div className="max-w-[1200px] mx-auto space-y-6">
-        <Tabs defaultValue="ai-extract" className="w-full">
-          <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75 border-b border-border/60 shadow-sm my-0 py-0 px-0 mx-0">
-            <div className="max-w-[1200px] flex items-center justify-between gap-4 bg-[#2c94ef]/[0.14] rounded-full px-[24px] mx-[11px] my-0 py-[2px]">
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-semibold">Upload Trades</h1>
-              </div>
-              <div className="flex items-center gap-3">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Badge variant="secondary" className="cursor-default">Credits: —</Badge>
-                    </TooltipTrigger>
-                    <TooltipContent>2 credits per trade. Add more in Billing.</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TabsList className="grid grid-cols-2">
-                  <TabsTrigger value="ai-extract">
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    AI Extract
-                  </TabsTrigger>
-                  <TabsTrigger value="manual">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Manual Entry
-                  </TabsTrigger>
-                </TabsList>
-              </div>
+    <SEO
+      title={pageMeta.upload.title}
+      description={pageMeta.upload.description}
+      keywords={pageMeta.upload.keywords}
+      canonical={pageMeta.upload.canonical}
+      noindex={true}
+    />
+    <div className="max-w-[1200px] mx-auto space-y-6">
+      <Tabs defaultValue="ai-extract" className="w-full">
+        <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75 border-b border-border/60 shadow-sm my-0 py-0 px-0 mx-0">
+          <div className="max-w-[1200px] flex items-center justify-between gap-4 bg-[#2c94ef]/[0.14] rounded-full px-[24px] mx-[11px] my-0 py-[2px]">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-semibold">Upload Trades</h1>
+            </div>
+            <div className="flex items-center gap-3">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="secondary" className="cursor-default">Credits: —</Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>2 credits per trade. Add more in Billing.</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TabsList className="grid grid-cols-2">
+                <TabsTrigger value="ai-extract">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  AI Extract
+                </TabsTrigger>
+                <TabsTrigger value="manual">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Manual Entry
+                </TabsTrigger>
+              </TabsList>
             </div>
           </div>
+        </div>
 
-          <TabsContent value="ai-extract" className="space-y-6 px-6 py-6">
-            <div className="grid lg:grid-cols-12 gap-8">
-                {/* Left column - Primary upload area */}
-                <div className="lg:col-span-8 space-y-6">
-                  {extractedTrades.length === 0 && <MultiImageUpload onTradesExtracted={trades => {
+        <TabsContent value="ai-extract" className="space-y-6 px-6 py-6">
+          <div className="grid lg:grid-cols-12 gap-8">
+            {/* Left column - Primary upload area */}
+            <div className="lg:col-span-8 space-y-6">
+              {extractedTrades.length === 0 && <MultiImageUpload onTradesExtracted={trades => {
                 toast.success(`Successfully saved ${trades.length} trade${trades.length !== 1 ? 's' : ''}!`);
                 navigate('/dashboard');
               }} maxImages={10} preSelectedBroker={preSelectedBroker} skipBrokerSelection={skipBrokerSelection} onBrokerError={() => {
                 setBrokerError(true);
                 brokerFieldRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
               }} onReviewStart={() => setIsReviewing(true)} onReviewEnd={() => setIsReviewing(false)} />}
+            </div>
+
+            {/* Right column - Supporting information */}
+            {extractedTrades.length === 0 && <div className="lg:col-span-4 space-y-5">
+              {/* Broker selection */}
+              <Card ref={brokerFieldRef} className={cn("p-5 transition-all duration-300", brokerError && !skipBrokerSelection && "border-destructive bg-destructive/5 shadow-sm animate-shake")}>
+                <Label className={cn("text-sm font-semibold mb-1 block", brokerError && !skipBrokerSelection && "text-destructive")}>
+                  Broker
+                </Label>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Used for all extracted trades
+                </p>
+                <BrokerSelect
+                  value={preSelectedBroker}
+                  onChange={value => {
+                    setPreSelectedBroker(value);
+                    setBrokerError(false);
+                  }}
+                  required={!skipBrokerSelection}
+                  error={brokerError && !skipBrokerSelection}
+                />
+                {brokerError && !skipBrokerSelection && <p className="text-xs text-destructive mt-3 flex items-center gap-1.5">
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  Broker is required
+                </p>}
+
+                {/* Skip broker checkbox */}
+                <div className="flex items-start gap-2 mt-4 pt-4 border-t border-border/50">
+                  <Checkbox
+                    id="skipBroker"
+                    checked={skipBrokerSelection}
+                    onCheckedChange={(checked) => {
+                      setSkipBrokerSelection(checked === true);
+                      if (checked) {
+                        setBrokerError(false);
+                      }
+                    }}
+                    className="mt-0.5"
+                  />
+                  <label htmlFor="skipBroker" className="text-xs text-muted-foreground cursor-pointer select-none leading-relaxed">
+                    Extract without broker selection (assign during review)
+                  </label>
                 </div>
+              </Card>
 
-                {/* Right column - Supporting information */}
-                {extractedTrades.length === 0 && <div className="lg:col-span-4 space-y-5">
-                    {/* Broker selection */}
-                    <Card ref={brokerFieldRef} className={cn("p-5 transition-all duration-300", brokerError && !skipBrokerSelection && "border-destructive bg-destructive/5 shadow-sm animate-shake")}>
-                      <Label className={cn("text-sm font-semibold mb-1 block", brokerError && !skipBrokerSelection && "text-destructive")}>
-                        Broker
-                      </Label>
-                      <p className="text-xs text-muted-foreground mb-4">
-                        Used for all extracted trades
-                      </p>
-                      <BrokerSelect 
-                        value={preSelectedBroker} 
-                        onChange={value => {
-                          setPreSelectedBroker(value);
-                          setBrokerError(false);
-                        }} 
-                        required={!skipBrokerSelection}
-                        error={brokerError && !skipBrokerSelection}
-                      />
-                      {brokerError && !skipBrokerSelection && <p className="text-xs text-destructive mt-3 flex items-center gap-1.5">
-                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                          </svg>
-                          Broker is required
-                        </p>}
-                      
-                      {/* Skip broker checkbox */}
-                      <div className="flex items-start gap-2 mt-4 pt-4 border-t border-border/50">
-                        <Checkbox
-                          id="skipBroker"
-                          checked={skipBrokerSelection}
-                          onCheckedChange={(checked) => {
-                            setSkipBrokerSelection(checked === true);
-                            if (checked) {
-                              setBrokerError(false);
-                            }
-                          }}
-                          className="mt-0.5"
-                        />
-                        <label htmlFor="skipBroker" className="text-xs text-muted-foreground cursor-pointer select-none leading-relaxed">
-                          Extract without broker selection (assign during review)
-                        </label>
-                      </div>
-                    </Card>
+              {/* How it works */}
+              <Card className="p-5 border-border/50 bg-card shadow-sm">
+                <h3 className="text-sm font-semibold mb-4">How it works</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">1</div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">Upload screenshots</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">2</div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">AI pulls every trade</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">3</div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">Review and save</p>
+                  </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-border/50">
+                  <p className="text-xs text-muted-foreground">1 scan = 1 credit = Up to 10 trades</p>
+                </div>
+              </Card>
 
-                    {/* How it works */}
-                    <Card className="p-5 border-border/50 bg-card shadow-sm">
-                      <h3 className="text-sm font-semibold mb-4">How it works</h3>
-                      <div className="space-y-3">
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">1</div>
-                          <p className="text-xs text-muted-foreground leading-relaxed">Upload screenshots</p>
-                        </div>
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">2</div>
-                          <p className="text-xs text-muted-foreground leading-relaxed">AI pulls every trade</p>
-                        </div>
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">3</div>
-                          <p className="text-xs text-muted-foreground leading-relaxed">Review and save</p>
-                        </div>
-                      </div>
-                      <div className="mt-4 pt-4 border-t border-border/50">
-                        <p className="text-xs text-muted-foreground">1 scan = 1 credit = Up to 10 trades</p>
-                      </div>
-                    </Card>
+              {/* Privacy card */}
+              <Card className="p-5 border-border/50 bg-card shadow-sm">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+                    <svg className="w-4 h-4 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold mb-1">Privacy</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">Screenshots are processed securely and not stored</p>
+                  </div>
+                </div>
+              </Card>
+            </div>}
 
-                    {/* Privacy card */}
-                    <Card className="p-5 border-border/50 bg-card shadow-sm">
-                      <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-                          <svg className="w-4 h-4 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-semibold mb-1">Privacy</h3>
-                          <p className="text-xs text-muted-foreground leading-relaxed">Screenshots are processed securely and not stored</p>
-                        </div>
-                      </div>
-                    </Card>
-                  </div>}
+            {/* Extracted trades section */}
+            {extractedTrades.length > 0 && !extracting && !showSuccess && <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Extracted Trades ({extractedTrades.length})</h3>
+                <Button onClick={saveAllExtractedTrades} disabled={loading} className="bg-primary text-primary-foreground">
+                  {loading ? <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving All...
+                  </> : <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Save All Trades
+                  </>}
+                </Button>
+              </div>
 
-              {/* Extracted trades section */}
-              {extractedTrades.length > 0 && !extracting && !showSuccess && <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">Extracted Trades ({extractedTrades.length})</h3>
-                      <Button onClick={saveAllExtractedTrades} disabled={loading} className="bg-primary text-primary-foreground">
-                        {loading ? <>
-                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Saving All...
-                          </> : <>
-                            <Check className="w-4 h-4 mr-2" />
-                            Save All Trades
-                          </>}
+              <div className="grid gap-4">
+                {extractedTrades.map((trade, index) => {
+                  const edits = tradeEdits[index] || {};
+                  return <Card key={index} className="p-4 glass-subtle space-y-4">
+                    <div className="mb-3 pb-2 border-b border-border flex items-center justify-between">
+                      <div>
+                        <h4 className="font-semibold text-sm">Trade #{index + 1} - Review & Edit</h4>
+                        <p className="text-xs text-muted-foreground">AI extracted this data. Please verify and correct if needed.</p>
+                      </div>
+                      <Button onClick={() => removeExtractedTrade(index)} variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10">
+                        <X className="w-4 h-4" />
                       </Button>
                     </div>
 
-                    <div className="grid gap-4">
-                      {extractedTrades.map((trade, index) => {
-                  const edits = tradeEdits[index] || {};
-                  return <Card key={index} className="p-4 glass-subtle space-y-4">
-                            <div className="mb-3 pb-2 border-b border-border flex items-center justify-between">
-                              <div>
-                                <h4 className="font-semibold text-sm">Trade #{index + 1} - Review & Edit</h4>
-                                <p className="text-xs text-muted-foreground">AI extracted this data. Please verify and correct if needed.</p>
-                              </div>
-                              <Button onClick={() => removeExtractedTrade(index)} variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10">
-                                <X className="w-4 h-4" />
-                              </Button>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Symbol *</Label>
-                                <Input value={edits.symbol ?? trade.symbol} onChange={e => updateTradeField(index, 'symbol', e.target.value)} className="mt-1 h-8 text-sm" placeholder="BTC/USDT" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Position Type *</Label>
-                                <select value={edits.side ?? trade.side} onChange={e => updateTradeField(index, 'side', e.target.value as 'long' | 'short')} className="mt-1 w-full h-8 px-2 text-sm border border-border rounded-md bg-background">
-                                  <option value="long">Long</option>
-                                  <option value="short">Short</option>
-                                </select>
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Entry Price *</Label>
-                                <Input type="number" step="0.00000001" value={edits.entry_price ?? trade.entry_price} onChange={e => updateTradeField(index, 'entry_price', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Exit Price *</Label>
-                                <Input type="number" step="0.00000001" value={edits.exit_price ?? trade.exit_price} onChange={e => updateTradeField(index, 'exit_price', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Position Size *</Label>
-                                <Input type="number" step="0.00000001" value={edits.position_size ?? trade.position_size} onChange={e => updateTradeField(index, 'position_size', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Leverage</Label>
-                                <Input type="number" step="1" value={edits.leverage ?? trade.leverage} onChange={e => updateTradeField(index, 'leverage', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">P&L *</Label>
-                                <Input type="number" step="0.01" value={edits.profit_loss ?? trade.profit_loss} onChange={e => updateTradeField(index, 'profit_loss', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">ROI % *</Label>
-                                <Input type="number" step="0.01" value={edits.roi ?? trade.roi} onChange={e => updateTradeField(index, 'roi', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Funding Fee</Label>
-                                <Input type="number" step="0.01" value={edits.funding_fee ?? trade.funding_fee} onChange={e => updateTradeField(index, 'funding_fee', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Trading Fee</Label>
-                                <Input type="number" step="0.01" value={edits.trading_fee ?? trade.trading_fee} onChange={e => updateTradeField(index, 'trading_fee', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Period of Day</Label>
-                                <select value={edits.period_of_day ?? trade.period_of_day} onChange={e => updateTradeField(index, 'period_of_day', e.target.value as 'morning' | 'afternoon' | 'night')} className="mt-1 w-full h-8 px-2 text-sm border border-border rounded-md bg-background">
-                                  <option value="morning">Morning</option>
-                                  <option value="afternoon">Afternoon</option>
-                                  <option value="night">Night</option>
-                                </select>
-                              </div>
-                              
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Margin</Label>
-                                <Input type="number" step="0.01" value={edits.margin ?? trade.margin ?? 0} onChange={e => updateTradeField(index, 'margin', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
-                              </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Broker</Label>
-                                <div className="mt-1">
-                                  <BrokerSelect value={edits.broker ?? trade.broker ?? ''} onChange={value => updateTradeField(index, 'broker', value)} required />
-                                </div>
-                              </div>
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Setup</Label>
-                                <Popover open={openExtractedSetup === index} onOpenChange={open => setOpenExtractedSetup(open ? index : null)}>
-                                  <PopoverTrigger asChild>
-                                    <Button variant="outline" role="combobox" aria-expanded={openExtractedSetup === index} className="w-full justify-between mt-1 h-8 text-sm">
-                                      {(edits.setup ?? trade.setup) || "Select or create setup..."}
-                                      <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="w-[300px] p-0" align="start" sideOffset={8}>
-                                    <Command shouldFilter={false}>
-                                      <CommandInput placeholder="Search or type new setup..." value={extractedSetupSearches[index] || ''} onValueChange={value => setExtractedSetupSearches(prev => ({
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Symbol *</Label>
+                        <Input value={edits.symbol ?? trade.symbol} onChange={e => updateTradeField(index, 'symbol', e.target.value)} className="mt-1 h-8 text-sm" placeholder="BTC/USDT" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Position Type *</Label>
+                        <select value={edits.side ?? trade.side} onChange={e => updateTradeField(index, 'side', e.target.value as 'long' | 'short')} className="mt-1 w-full h-8 px-2 text-sm border border-border rounded-md bg-background">
+                          <option value="long">Long</option>
+                          <option value="short">Short</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Entry Price *</Label>
+                        <Input type="number" step="0.00000001" value={edits.entry_price ?? trade.entry_price} onChange={e => updateTradeField(index, 'entry_price', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Exit Price *</Label>
+                        <Input type="number" step="0.00000001" value={edits.exit_price ?? trade.exit_price} onChange={e => updateTradeField(index, 'exit_price', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Position Size *</Label>
+                        <Input type="number" step="0.00000001" value={edits.position_size ?? trade.position_size} onChange={e => updateTradeField(index, 'position_size', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Leverage</Label>
+                        <Input type="number" step="1" value={edits.leverage ?? trade.leverage} onChange={e => updateTradeField(index, 'leverage', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">P&L *</Label>
+                        <Input type="number" step="0.01" value={edits.profit_loss ?? trade.profit_loss} onChange={e => updateTradeField(index, 'profit_loss', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">ROI % *</Label>
+                        <Input type="number" step="0.01" value={edits.roi ?? trade.roi} onChange={e => updateTradeField(index, 'roi', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Funding Fee</Label>
+                        <Input type="number" step="0.01" value={edits.funding_fee ?? trade.funding_fee} onChange={e => updateTradeField(index, 'funding_fee', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Trading Fee</Label>
+                        <Input type="number" step="0.01" value={edits.trading_fee ?? trade.trading_fee} onChange={e => updateTradeField(index, 'trading_fee', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Period of Day</Label>
+                        <select value={edits.period_of_day ?? trade.period_of_day} onChange={e => updateTradeField(index, 'period_of_day', e.target.value as 'morning' | 'afternoon' | 'night')} className="mt-1 w-full h-8 px-2 text-sm border border-border rounded-md bg-background">
+                          <option value="morning">Morning</option>
+                          <option value="afternoon">Afternoon</option>
+                          <option value="night">Night</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Margin</Label>
+                        <Input type="number" step="0.01" value={edits.margin ?? trade.margin ?? 0} onChange={e => updateTradeField(index, 'margin', parseFloat(e.target.value))} className="mt-1 h-8 text-sm" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Broker</Label>
+                        <div className="mt-1">
+                          <BrokerSelect value={edits.broker ?? trade.broker ?? ''} onChange={value => updateTradeField(index, 'broker', value)} required />
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Setup</Label>
+                        <Popover open={openExtractedSetup === index} onOpenChange={open => setOpenExtractedSetup(open ? index : null)}>
+                          <PopoverTrigger asChild>
+                            <Button variant="outline" role="combobox" aria-expanded={openExtractedSetup === index} className="w-full justify-between mt-1 h-8 text-sm">
+                              {(edits.setup ?? trade.setup) || "Select or create setup..."}
+                              <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[300px] p-0" align="start" sideOffset={8}>
+                            <Command shouldFilter={false}>
+                              <CommandInput placeholder="Search or type new setup..." value={extractedSetupSearches[index] || ''} onValueChange={value => setExtractedSetupSearches(prev => ({
                                 ...prev,
                                 [index]: value
                               }))} />
-                                      <CommandList>
-                                        <CommandEmpty>Type to create your first setup.</CommandEmpty>
-                                        {extractedSetupSearches[index] && !userSetups.some(s => s.name.toLowerCase() === extractedSetupSearches[index].toLowerCase()) && <CommandGroup heading="Create New">
-                                            <CommandItem onSelect={async () => {
+                              <CommandList>
+                                <CommandEmpty>Type to create your first setup.</CommandEmpty>
+                                {extractedSetupSearches[index] && !userSetups.some(s => s.name.toLowerCase() === extractedSetupSearches[index].toLowerCase()) && <CommandGroup heading="Create New">
+                                  <CommandItem onSelect={async () => {
                                     const newSetup = await handleCreateSetup(extractedSetupSearches[index]);
                                     if (newSetup) {
                                       updateTradeField(index, 'setup', newSetup.name);
@@ -1161,12 +1170,12 @@ const Upload = () => {
                                     }));
                                     setOpenExtractedSetup(null);
                                   }}>
-                                              <Plus className="mr-2 h-4 w-4" />
-                                              Add "{extractedSetupSearches[index]}"
-                                            </CommandItem>
-                                          </CommandGroup>}
-                                        {userSetups.filter(setup => !extractedSetupSearches[index] || setup.name.toLowerCase().includes(extractedSetupSearches[index].toLowerCase())).length > 0 && <CommandGroup heading="Existing Setups">
-                                            {userSetups.filter(setup => !extractedSetupSearches[index] || setup.name.toLowerCase().includes(extractedSetupSearches[index].toLowerCase())).map(setup => <CommandItem key={setup.id} value={setup.name} onSelect={() => {
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Add "{extractedSetupSearches[index]}"
+                                  </CommandItem>
+                                </CommandGroup>}
+                                {userSetups.filter(setup => !extractedSetupSearches[index] || setup.name.toLowerCase().includes(extractedSetupSearches[index].toLowerCase())).length > 0 && <CommandGroup heading="Existing Setups">
+                                  {userSetups.filter(setup => !extractedSetupSearches[index] || setup.name.toLowerCase().includes(extractedSetupSearches[index].toLowerCase())).map(setup => <CommandItem key={setup.id} value={setup.name} onSelect={() => {
                                     updateTradeField(index, 'setup', setup.name);
                                     setExtractedSetupSearches(prev => ({
                                       ...prev,
@@ -1174,73 +1183,73 @@ const Upload = () => {
                                     }));
                                     setOpenExtractedSetup(null);
                                   }}>
-                                                  <Check className={cn("mr-2 h-4 w-4", (edits.setup ?? trade.setup) === setup.name ? "opacity-100" : "opacity-0")} />
-                                                  {setup.name}
-                                                </CommandItem>)}
-                                          </CommandGroup>}
-                                      </CommandList>
-                                    </Command>
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Emotional Tag</Label>
-                                {edits.emotional_tag ?? trade.emotional_tag ? <div className="mt-1 flex items-center gap-2">
-                                    <Badge variant="secondary" className="h-8 text-sm">
-                                      {edits.emotional_tag ?? trade.emotional_tag}
-                                      <X className="ml-2 h-3 w-3 cursor-pointer hover:text-destructive" onClick={() => updateTradeField(index, 'emotional_tag', '')} />
-                                    </Badge>
-                                  </div> : <Input placeholder="Type and press Enter..." onKeyDown={e => {
+                                    <Check className={cn("mr-2 h-4 w-4", (edits.setup ?? trade.setup) === setup.name ? "opacity-100" : "opacity-0")} />
+                                    {setup.name}
+                                  </CommandItem>)}
+                                </CommandGroup>}
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Emotional Tag</Label>
+                        {edits.emotional_tag ?? trade.emotional_tag ? <div className="mt-1 flex items-center gap-2">
+                          <Badge variant="secondary" className="h-8 text-sm">
+                            {edits.emotional_tag ?? trade.emotional_tag}
+                            <X className="ml-2 h-3 w-3 cursor-pointer hover:text-destructive" onClick={() => updateTradeField(index, 'emotional_tag', '')} />
+                          </Badge>
+                        </div> : <Input placeholder="Type and press Enter..." onKeyDown={e => {
                           if (e.key === 'Enter' && e.currentTarget.value.trim()) {
                             updateTradeField(index, 'emotional_tag', e.currentTarget.value.trim());
                             e.currentTarget.value = '';
                           }
                         }} className="mt-1 h-8 text-sm" />}
-                              </div>
-                              <div>
-                                <Label className="text-xs text-muted-foreground">Notes</Label>
-                                <Input placeholder="Trade observations..." value={edits.notes ?? trade.notes ?? ''} onChange={e => updateTradeField(index, 'notes', e.target.value)} className="mt-1 h-8 text-sm" />
-                              </div>
-                            </div>
-                          </Card>;
-                })}
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">Notes</Label>
+                        <Input placeholder="Trade observations..." value={edits.notes ?? trade.notes ?? ''} onChange={e => updateTradeField(index, 'notes', e.target.value)} className="mt-1 h-8 text-sm" />
+                      </div>
                     </div>
+                  </Card>;
+                })}
+              </div>
 
-                    {/* AI Feedback for extraction quality */}
-                    {extractedTrades.length > 0 && extractionPreview && <AIFeedback extractedData={extractedTrades} imagePath={extractionPreview} />}
-                  </div>}
+              {/* AI Feedback for extraction quality */}
+              {extractedTrades.length > 0 && extractionPreview && <AIFeedback extractedData={extractedTrades} imagePath={extractionPreview} />}
+            </div>}
 
-            </div>
-          </TabsContent>
+          </div>
+        </TabsContent>
 
-          <TabsContent value="manual">
-            <Card className="p-6 glass">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium">Asset</label>
-                    <Input value={formData.symbol} onChange={e => setFormData({
+        <TabsContent value="manual">
+          <Card className="p-6 glass">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Asset</label>
+                  <Input value={formData.symbol} onChange={e => setFormData({
                     ...formData,
                     symbol: e.target.value
                   })} placeholder="BTC/USD" required className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Setup</label>
-                    <Popover open={openSetup} onOpenChange={setOpenSetup}>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline" role="combobox" aria-expanded={openSetup} className="w-full justify-between mt-1">
-                          {formData.setup || "Select or create setup..."}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[400px] p-0" align="start" sideOffset={8}>
-                        <Command shouldFilter={false}>
-                          <CommandInput placeholder="Search or type new setup..." value={setupSearch} onValueChange={setSetupSearch} />
-                          <CommandList>
-                            {userSetups.length === 0 && !setupSearch ? <CommandEmpty>No setups yet. Type to create one.</CommandEmpty> : <>
-                                {setupSearch && !userSetups.some(s => s.name.toLowerCase() === setupSearch.toLowerCase()) && <CommandGroup heading="Create New">
-                                    <CommandItem onSelect={async () => {
+                <div>
+                  <label className="text-sm font-medium">Setup</label>
+                  <Popover open={openSetup} onOpenChange={setOpenSetup}>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" role="combobox" aria-expanded={openSetup} className="w-full justify-between mt-1">
+                        {formData.setup || "Select or create setup..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] p-0" align="start" sideOffset={8}>
+                      <Command shouldFilter={false}>
+                        <CommandInput placeholder="Search or type new setup..." value={setupSearch} onValueChange={setSetupSearch} />
+                        <CommandList>
+                          {userSetups.length === 0 && !setupSearch ? <CommandEmpty>No setups yet. Type to create one.</CommandEmpty> : <>
+                            {setupSearch && !userSetups.some(s => s.name.toLowerCase() === setupSearch.toLowerCase()) && <CommandGroup heading="Create New">
+                              <CommandItem onSelect={async () => {
                                 const newSetup = await handleCreateSetup(setupSearch);
                                 if (newSetup) {
                                   setFormData({
@@ -1251,12 +1260,12 @@ const Upload = () => {
                                 setSetupSearch('');
                                 setOpenSetup(false);
                               }}>
-                                      <Plus className="mr-2 h-4 w-4" />
-                                      Create "{setupSearch}"
-                                    </CommandItem>
-                                  </CommandGroup>}
-                                {userSetups.filter(s => !setupSearch || s.name.toLowerCase().includes(setupSearch.toLowerCase())).length > 0 && <CommandGroup heading="Your Setups">
-                                    {userSetups.filter(s => !setupSearch || s.name.toLowerCase().includes(setupSearch.toLowerCase())).map(setup => <CommandItem key={setup.id} value={setup.name} onSelect={() => {
+                                <Plus className="mr-2 h-4 w-4" />
+                                Create "{setupSearch}"
+                              </CommandItem>
+                            </CommandGroup>}
+                            {userSetups.filter(s => !setupSearch || s.name.toLowerCase().includes(setupSearch.toLowerCase())).length > 0 && <CommandGroup heading="Your Setups">
+                              {userSetups.filter(s => !setupSearch || s.name.toLowerCase().includes(setupSearch.toLowerCase())).map(setup => <CommandItem key={setup.id} value={setup.name} onSelect={() => {
                                 setFormData({
                                   ...formData,
                                   setup: setup.name
@@ -1264,184 +1273,184 @@ const Upload = () => {
                                 setSetupSearch('');
                                 setOpenSetup(false);
                               }}>
-                                          <Check className={cn("mr-2 h-4 w-4", formData.setup === setup.name ? "opacity-100" : "opacity-0")} />
-                                          {setup.name}
-                                        </CommandItem>)}
-                                  </CommandGroup>}
-                              </>}
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                                <Check className={cn("mr-2 h-4 w-4", formData.setup === setup.name ? "opacity-100" : "opacity-0")} />
+                                {setup.name}
+                              </CommandItem>)}
+                            </CommandGroup>}
+                          </>}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Broker</label>
-                    <div className="mt-1">
-                      <BrokerSelect value={formData.broker} onChange={value => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Broker</label>
+                  <div className="mt-1">
+                    <BrokerSelect value={formData.broker} onChange={value => setFormData({
                       ...formData,
                       broker: value
                     })} required />
-                    </div>
                   </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Emotional Tag</label>
-                    <Input value={formData.emotional_tag} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Emotional Tag</label>
+                  <Input value={formData.emotional_tag} onChange={e => setFormData({
                     ...formData,
                     emotional_tag: e.target.value
                   })} placeholder="Confident, Fearful..." className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Entry Price</label>
-                    <Input type="number" step="0.00000001" value={formData.entry_price} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Entry Price</label>
+                  <Input type="number" step="0.00000001" value={formData.entry_price} onChange={e => setFormData({
                     ...formData,
                     entry_price: e.target.value
                   })} placeholder="0.00" required className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Exit Price</label>
-                    <Input type="number" step="0.00000001" value={formData.exit_price} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Exit Price</label>
+                  <Input type="number" step="0.00000001" value={formData.exit_price} onChange={e => setFormData({
                     ...formData,
                     exit_price: e.target.value
                   })} placeholder="0.00" required className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Position Size</label>
-                    <Input type="number" step="0.00000001" value={formData.position_size} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Position Size</label>
+                  <Input type="number" step="0.00000001" value={formData.position_size} onChange={e => setFormData({
                     ...formData,
                     position_size: e.target.value
                   })} placeholder="0.00" required className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Leverage</label>
-                    <Input type="number" step="1" value={formData.leverage} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Leverage</label>
+                  <Input type="number" step="1" value={formData.leverage} onChange={e => setFormData({
                     ...formData,
                     leverage: e.target.value
                   })} placeholder="1" required className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Position Type</label>
-                    <select value={formData.side} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Position Type</label>
+                  <select value={formData.side} onChange={e => setFormData({
                     ...formData,
                     side: e.target.value as 'long' | 'short'
                   })} className="mt-1 w-full px-3 py-2 border border-border rounded-md bg-background">
-                      <option value="long">Long</option>
-                      <option value="short">Short</option>
-                    </select>
-                  </div>
+                    <option value="long">Long</option>
+                    <option value="short">Short</option>
+                  </select>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Period of Day</label>
-                    <select value={formData.period_of_day} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Period of Day</label>
+                  <select value={formData.period_of_day} onChange={e => setFormData({
                     ...formData,
                     period_of_day: e.target.value as 'morning' | 'afternoon' | 'night'
                   })} className="mt-1 w-full px-3 py-2 border border-border rounded-md bg-background">
-                      <option value="morning">Morning (before 12:00)</option>
-                      <option value="afternoon">Afternoon (12:00 - 18:00)</option>
-                      <option value="night">Night (after 18:00)</option>
-                    </select>
-                  </div>
+                    <option value="morning">Morning (before 12:00)</option>
+                    <option value="afternoon">Afternoon (12:00 - 18:00)</option>
+                    <option value="night">Night (after 18:00)</option>
+                  </select>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Funding Fee</label>
-                    <Input type="number" step="0.01" value={formData.funding_fee} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Funding Fee</label>
+                  <Input type="number" step="0.01" value={formData.funding_fee} onChange={e => setFormData({
                     ...formData,
                     funding_fee: e.target.value
                   })} placeholder="0.00" className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Trading Fee</label>
-                    <Input type="number" step="0.01" value={formData.trading_fee} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Trading Fee</label>
+                  <Input type="number" step="0.01" value={formData.trading_fee} onChange={e => setFormData({
                     ...formData,
                     trading_fee: e.target.value
                   })} placeholder="0.00" className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Margin</label>
-                    <Input type="number" step="0.01" value={formData.margin} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Margin</label>
+                  <Input type="number" step="0.01" value={formData.margin} onChange={e => setFormData({
                     ...formData,
                     margin: e.target.value
                   })} placeholder="0.00" className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Opened At</label>
-                    <Input type="datetime-local" value={formData.opened_at} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Opened At</label>
+                  <Input type="datetime-local" value={formData.opened_at} onChange={e => setFormData({
                     ...formData,
                     opened_at: e.target.value
                   })} className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Closed At</label>
-                    <Input type="datetime-local" value={formData.closed_at} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Closed At</label>
+                  <Input type="datetime-local" value={formData.closed_at} onChange={e => setFormData({
                     ...formData,
                     closed_at: e.target.value
                   })} className="mt-1" />
-                  </div>
+                </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Duration (minutes)</label>
-                    <Input type="number" value={formData.duration_minutes} onChange={e => setFormData({
+                <div>
+                  <label className="text-sm font-medium">Duration (minutes)</label>
+                  <Input type="number" value={formData.duration_minutes} onChange={e => setFormData({
                     ...formData,
                     duration_minutes: e.target.value
                   })} placeholder="30" className="mt-1" />
-                  </div>
                 </div>
+              </div>
 
-                <div>
-                  <Label htmlFor="notes">Notes</Label>
-                  <Textarea id="notes" value={formData.notes} onChange={e => setFormData({
+              <div>
+                <Label htmlFor="notes">Notes</Label>
+                <Textarea id="notes" value={formData.notes} onChange={e => setFormData({
                   ...formData,
                   notes: e.target.value
                 })} placeholder="Trade notes, observations..." className="mt-1" rows={4} />
+              </div>
+
+              <div>
+                <Label htmlFor="screenshot">Trade Screenshot (Optional)</Label>
+                <div className="mt-2">
+                  {screenshotPreview ? <div className="relative">
+                    <img src={screenshotPreview} alt="Screenshot preview" className="w-full h-48 object-cover rounded-md border border-border" />
+                    <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2" onClick={removeScreenshot}>
+                      <X size={16} />
+                    </Button>
+                  </div> : <label htmlFor="screenshot" className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-border rounded-md cursor-pointer hover:border-foreground/50 transition-colors">
+                    <UploadIcon className="w-8 h-8 text-muted-foreground mb-2" />
+                    <p className="text-sm text-muted-foreground">
+                      Click to upload screenshot (max 5MB)
+                    </p>
+                    <Input id="screenshot" type="file" accept="image/jpeg,image/png,image/webp" onChange={handleScreenshotChange} className="hidden" />
+                  </label>}
                 </div>
+              </div>
 
-                <div>
-                  <Label htmlFor="screenshot">Trade Screenshot (Optional)</Label>
-                  <div className="mt-2">
-                    {screenshotPreview ? <div className="relative">
-                        <img src={screenshotPreview} alt="Screenshot preview" className="w-full h-48 object-cover rounded-md border border-border" />
-                        <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2" onClick={removeScreenshot}>
-                          <X size={16} />
-                        </Button>
-                      </div> : <label htmlFor="screenshot" className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-border rounded-md cursor-pointer hover:border-foreground/50 transition-colors">
-                        <UploadIcon className="w-8 h-8 text-muted-foreground mb-2" />
-                        <p className="text-sm text-muted-foreground">
-                          Click to upload screenshot (max 5MB)
-                        </p>
-                        <Input id="screenshot" type="file" accept="image/jpeg,image/png,image/webp" onChange={handleScreenshotChange} className="hidden" />
-                      </label>}
-                  </div>
-                </div>
+              <Button type="submit" disabled={loading} className="w-full bg-foreground text-background hover:bg-foreground/90">
+                {loading ? <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Saving...
+                </> : editId ? 'Update Trade' : 'Save Trade'}
+              </Button>
+            </form>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
-                <Button type="submit" disabled={loading} className="w-full bg-foreground text-background hover:bg-foreground/90">
-                  {loading ? <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Saving...
-                    </> : editId ? 'Update Trade' : 'Save Trade'}
-                </Button>
-              </form>
-            </Card>
-          </TabsContent>
-        </Tabs>
+      <UploadHistory />
+    </div>
 
-        <UploadHistory />
-      </div>
-
-      {/* Batch Duplicate Detection Dialog */}
-      <BatchDuplicateDialog open={batchDuplicates.open} duplicates={batchDuplicates.duplicates} onRemoveDuplicates={indicesToRemove => {
+    {/* Batch Duplicate Detection Dialog */}
+    <BatchDuplicateDialog open={batchDuplicates.open} duplicates={batchDuplicates.duplicates} onRemoveDuplicates={indicesToRemove => {
       // Remove selected duplicates from extractedTrades
       const filteredTrades = extractedTrades.filter((_, index) => !indicesToRemove.includes(index));
       setExtractedTrades(filteredTrades);
@@ -1504,8 +1513,8 @@ const Upload = () => {
             margin: finalTrade.margin,
             opened_at: finalTrade.opened_at,
             closed_at: finalTrade.closed_at,
-            period_of_day: finalTrade.period_of_day && ['morning', 'afternoon', 'night'].includes(finalTrade.period_of_day) 
-              ? finalTrade.period_of_day 
+            period_of_day: finalTrade.period_of_day && ['morning', 'afternoon', 'night'].includes(finalTrade.period_of_day)
+              ? finalTrade.period_of_day
               : 'morning',
             duration_days: finalTrade.duration_days,
             duration_hours: finalTrade.duration_hours,
@@ -1555,8 +1564,8 @@ const Upload = () => {
       setLoading(false);
     }} />
 
-      {/* Single Duplicate Trade Detection Dialog (legacy) */}
-      <DuplicateTradeDialog open={duplicateDialog.open} onOpenChange={open => setDuplicateDialog({
+    {/* Single Duplicate Trade Detection Dialog (legacy) */}
+    <DuplicateTradeDialog open={duplicateDialog.open} onOpenChange={open => setDuplicateDialog({
       open
     })} onContinue={async () => {
       setDuplicateDialog({
@@ -1594,8 +1603,8 @@ const Upload = () => {
             margin: finalTrade.margin,
             opened_at: finalTrade.opened_at,
             closed_at: finalTrade.closed_at,
-            period_of_day: finalTrade.period_of_day && ['morning', 'afternoon', 'night'].includes(finalTrade.period_of_day) 
-              ? finalTrade.period_of_day 
+            period_of_day: finalTrade.period_of_day && ['morning', 'afternoon', 'night'].includes(finalTrade.period_of_day)
+              ? finalTrade.period_of_day
               : 'morning',
             duration_days: finalTrade.duration_days,
             duration_hours: finalTrade.duration_hours,
@@ -1634,6 +1643,6 @@ const Upload = () => {
         setLoading(false);
       }
     }} duplicateDate={duplicateDialog.trade?.existingDate} duplicateSymbol={duplicateDialog.trade?.existingSymbol} duplicatePnl={duplicateDialog.trade?.existingPnl} />
-    </AppLayout>;
+  </AppLayout>;
 };
 export default Upload;

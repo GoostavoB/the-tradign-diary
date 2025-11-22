@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { MobileHeader } from '@/components/MobileHeader';
 import Footer from '@/components/Footer';
 import { SkipToContent } from '@/components/SkipToContent';
@@ -44,7 +44,7 @@ export default function BlogArticle() {
   const { slug } = useParams<{ slug: string }>();
   const { t, i18n } = useTranslation();
   const currentLang = getLanguageFromPath(window.location.pathname);
-  
+
   const article = slug ? blogArticles[slug] : null;
 
   if (!article) {
@@ -52,7 +52,7 @@ export default function BlogArticle() {
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
         <SkipToContent />
         <MobileHeader />
-        
+
         <main id="main-content" className="pt-20 pb-16 px-4">
           <div className="container max-w-4xl mx-auto px-4 py-12 text-center">
             <h1 className="text-4xl font-bold mb-4">Article Not Found</h1>
@@ -65,7 +65,7 @@ export default function BlogArticle() {
             </Link>
           </div>
         </main>
-        
+
         <Footer />
       </div>
     );
@@ -102,73 +102,73 @@ export default function BlogArticle() {
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
         <SkipToContent />
         <MobileHeader />
-        
+
         <main id="main-content" className="pt-20 pb-16 px-4">
           <article className="container max-w-4xl mx-auto px-4 py-12">
-          <Link to="/blog" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-8 transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Blog
-          </Link>
+            <Link to="/blog" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-8 transition-colors">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Blog
+            </Link>
 
-          <header className="mb-8">
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
-              <span className="inline-flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                {new Date(article.date).toLocaleDateString()}
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                {article.readingTime}
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <User className="h-4 w-4" />
-                {article.author}
-              </span>
-            </div>
-
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{article.title}</h1>
-            
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex gap-2">
-                {article.tags.map((tag: string) => (
-                  <span key={tag} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                    {tag}
-                  </span>
-                ))}
+            <header className="mb-8">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
+                <span className="inline-flex items-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  {new Date(article.date).toLocaleDateString()}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  {article.readingTime}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <User className="h-4 w-4" />
+                  {article.author}
+                </span>
               </div>
-              <Button variant="outline" size="sm" onClick={handleShare}>
-                <Share2 className="mr-2 h-4 w-4" />
-                Share
-              </Button>
-            </div>
 
-            <img 
-              src={article.image} 
-              alt={article.title}
-              className="w-full h-[400px] object-cover rounded-lg"
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">{article.title}</h1>
+
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex gap-2">
+                  {article.tags.map((tag: string) => (
+                    <span key={tag} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <Button variant="outline" size="sm" onClick={handleShare}>
+                  <Share2 className="mr-2 h-4 w-4" />
+                  Share
+                </Button>
+              </div>
+
+              <img
+                src={article.image}
+                alt={article.title}
+                className="w-full h-[400px] object-cover rounded-lg"
+              />
+            </header>
+
+            <div
+              className="prose prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: article.content }}
             />
-          </header>
 
-          <div 
-            className="prose prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
-
-          <footer className="mt-12 pt-8 border-t border-border">
-            <h3 className="text-xl font-semibold mb-4">About the Author</h3>
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
-                <User className="h-8 w-8 text-primary" />
+            <footer className="mt-12 pt-8 border-t border-border">
+              <h3 className="text-xl font-semibold mb-4">About the Author</h3>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+                  <User className="h-8 w-8 text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold">{article.author}</p>
+                  <p className="text-sm text-muted-foreground">Crypto trading expert and educator</p>
+                </div>
               </div>
-              <div>
-                <p className="font-semibold">{article.author}</p>
-                <p className="text-sm text-muted-foreground">Crypto trading expert and educator</p>
-              </div>
-            </div>
-          </footer>
-        </article>
+            </footer>
+          </article>
         </main>
-        
+
         <Footer />
       </div>
     </>

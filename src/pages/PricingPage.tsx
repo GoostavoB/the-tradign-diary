@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
-import { usePageMeta } from "@/hooks/usePageMeta";
-import { useHreflang } from "@/hooks/useHreflang";
+import { SEO } from "@/components/SEO";
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from "@/utils/languageRouting";
 import { motion } from "framer-motion";
 import PricingComparison from "@/components/PricingComparison";
@@ -18,17 +17,12 @@ import { GlassCard } from "@/components/GlassCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import appStoreSoon from "@/assets/coming_soon_appstore.png";
 import googlePlaySoon from "@/assets/google-play-coming-soon.png";
+import { HreflangLinks } from '@/components/HreflangLinks';
 
 const PricingPage = () => {
   const navigate = useNavigate();
   const { t, changeLanguage } = useTranslation();
-  
-  // Add hreflang tags for SEO
-  useHreflang({
-    languages: [...SUPPORTED_LANGUAGES],
-    defaultLanguage: 'en'
-  });
-  
+
   const heroRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLDivElement>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
@@ -40,13 +34,6 @@ const PricingPage = () => {
       changeLanguage(pathLang as SupportedLanguage);
     }
   }, [changeLanguage]);
-
-  usePageMeta({
-    title: 'Pricing Plans - AI-Powered Crypto Trading Journal',
-    description: 'Choose the perfect plan for your crypto trading journey. AI insights, pattern recognition, risk management, and performance analytics.',
-    canonical: 'https://www.thetradingdiary.com/pricing',
-  });
-
 
   const plans = [
     {
@@ -119,15 +106,21 @@ const PricingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">
+      <HreflangLinks languages={[...SUPPORTED_LANGUAGES]} defaultLanguage="en" />
+      <SEO
+        title={t('pricing.title', 'Pricing - The Trading Diary')}
+        description="Choose the perfect plan for your crypto trading journey. AI insights, pattern recognition, risk management, and performance analytics."
+        canonical="https://www.thetradingdiary.com/pricing"
+      />
       {/* Logo */}
-      <div 
-        className="absolute top-6 left-6 z-50 cursor-pointer" 
+      <div
+        className="absolute top-6 left-6 z-50 cursor-pointer"
         onClick={() => navigate('/')}
       >
-        <Logo 
-          size="lg" 
-          variant="horizontal" 
-          showText={true} 
+        <Logo
+          size="lg"
+          variant="horizontal"
+          showText={true}
           className="hover:opacity-80 transition-opacity"
         />
       </div>
@@ -148,11 +141,11 @@ const PricingPage = () => {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
               {t('pricing.hero.title')}
             </h1>
-            
+
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               {t('pricing.hero.subtitle')}
             </p>
-            
+
             <div className="flex justify-center">
               <MagneticButton
                 onClick={() => navigate('/auth')}
@@ -169,10 +162,10 @@ const PricingPage = () => {
       {/* Solutions Section */}
       <section className="relative py-16 px-6 overflow-hidden">
         <ParallaxTradingElements />
-        
+
         <div className="container mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-16">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -217,7 +210,7 @@ const PricingPage = () => {
       <section ref={pricingRef} className="py-16 px-6">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -227,7 +220,7 @@ const PricingPage = () => {
             >
               {t('pricing.title')}
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.09, ease: [0.22, 1, 0.36, 1] }}
@@ -259,9 +252,9 @@ const PricingPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {plans.map((plan, index) => (
-              <PremiumPricingCard 
-                key={plan.id} 
-                plan={plan} 
+              <PremiumPricingCard
+                key={plan.id}
+                plan={plan}
                 billingCycle={billingCycle}
                 index={index}
                 t={t}
@@ -281,7 +274,7 @@ const PricingPage = () => {
               <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-gradient-to-r from-accent via-primary to-accent bg-size-200 animate-gradient mb-8 shadow-lg shadow-accent/20">
                 <span className="text-sm font-bold text-white uppercase tracking-wider">{t('pricing.comingSoon.badge', 'Coming Soon')}</span>
               </div>
-              
+
               {/* Enterprise */}
               <div className="mb-12">
                 <h3 className="text-3xl md:text-4xl font-bold mb-4">{t('pricing.comingSoon.enterprise.title', 'Enterprise')}</h3>
@@ -309,13 +302,13 @@ const PricingPage = () => {
                   {t('pricing.comingSoon.mobile.description', 'Native mobile apps are in development. Soon you\'ll be able to take your trading diary with you, track trades, analyze performance, and stay on top of your game from anywhere.')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <img 
-                    src={appStoreSoon} 
+                  <img
+                    src={appStoreSoon}
                     alt={t('pricing.comingSoon.mobile.appStoreAlt', 'Coming soon to the App Store')}
                     className="h-14 hover:opacity-80 transition-opacity"
                   />
-                  <img 
-                    src={googlePlaySoon} 
+                  <img
+                    src={googlePlaySoon}
                     alt={t('pricing.comingSoon.mobile.playStoreAlt', 'Coming soon to Google Play')}
                     className="h-14 hover:opacity-80 transition-opacity"
                   />

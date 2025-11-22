@@ -1,23 +1,22 @@
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import AppLayout from '@/components/layout/AppLayout';
-import { usePageMeta } from '@/hooks/usePageMeta';
+import { SEO } from '@/components/SEO';
 import { blogArticles } from '@/data/blogArticles';
 import { ExternalLink } from 'lucide-react';
 
 const Sitemap = () => {
-  usePageMeta({
-    title: 'Sitemap | The Trading Diary',
-    description: 'Complete sitemap of The Trading Diary - Find all pages, blog articles, and resources in one place.',
-    canonical: 'https://www.thetradingdiary.com/sitemap',
-    keywords: 'sitemap, site navigation, all pages'
-  });
-  
   const englishArticles = blogArticles.filter(article => article.language === 'en');
   const categories = Array.from(new Set(englishArticles.map(a => a.category)));
-  
+
   return (
     <AppLayout>
+      <SEO
+        title="Sitemap | The Trading Diary"
+        description="Complete sitemap of The Trading Diary - Find all pages, blog articles, and resources in one place."
+        canonical="https://www.thetradingdiary.com/sitemap"
+        keywords="sitemap, site navigation, all pages"
+      />
       <div className="max-w-5xl mx-auto space-y-8">
         <div className="text-center space-y-3">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
@@ -27,7 +26,7 @@ const Sitemap = () => {
             Navigate through all pages and resources on The Trading Diary
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 gap-6">
           {/* Main Pages */}
           <Card className="p-6">
@@ -62,7 +61,7 @@ const Sitemap = () => {
               </li>
             </ul>
           </Card>
-          
+
           {/* App Features */}
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-4">App Features</h2>
@@ -93,19 +92,19 @@ const Sitemap = () => {
               </li>
             </ul>
           </Card>
-          
+
           {/* Blog Categories */}
           {categories.map(category => {
             const categoryArticles = englishArticles.filter(a => a.category === category);
-            
+
             return (
               <Card key={category} className="p-6">
                 <h2 className="text-2xl font-bold mb-4">{category}</h2>
                 <ul className="space-y-2">
                   {categoryArticles.map(article => (
                     <li key={article.slug}>
-                      <Link 
-                        to={`/blog/${article.slug}`} 
+                      <Link
+                        to={`/blog/${article.slug}`}
                         className="text-primary hover:underline text-sm"
                       >
                         {article.title}
@@ -119,15 +118,15 @@ const Sitemap = () => {
               </Card>
             );
           })}
-          
+
           {/* Resources */}
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-4">Resources</h2>
             <ul className="space-y-3">
               <li>
-                <a 
-                  href="/sitemap.xml" 
-                  target="_blank" 
+                <a
+                  href="/sitemap.xml"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline flex items-center gap-2"
                 >
@@ -137,9 +136,9 @@ const Sitemap = () => {
                 <p className="text-sm text-muted-foreground ml-4">For search engines</p>
               </li>
               <li>
-                <a 
-                  href="/blog/rss.xml" 
-                  target="_blank" 
+                <a
+                  href="/blog/rss.xml"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline flex items-center gap-2"
                 >
@@ -150,7 +149,7 @@ const Sitemap = () => {
               </li>
             </ul>
           </Card>
-          
+
           {/* Languages */}
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-4">Languages</h2>

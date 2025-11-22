@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import AppLayout from '@/components/layout/AppLayout';
 
 export default function CookiePolicy() {
@@ -8,11 +8,11 @@ export default function CookiePolicy() {
         <title>Cookie Policy - The Trading Diary</title>
         <meta name="description" content="Learn about how The Trading Diary uses cookies and similar technologies." />
       </Helmet>
-      
+
       <AppLayout>
         <div className="container max-w-4xl mx-auto px-4 py-12">
           <h1 className="text-4xl font-bold mb-8">Cookie Policy</h1>
-          
+
           <div className="prose prose-invert max-w-none space-y-6">
             <p className="text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
 
@@ -41,7 +41,7 @@ export default function CookiePolicy() {
 
             <section>
               <h2 className="text-2xl font-semibold mb-4">3. Types of Cookies We Use</h2>
-              
+
               <h3 className="text-xl font-semibold mb-3">Essential Cookies</h3>
               <p>
                 These cookies are essential for you to browse the website and use its features, such as accessing

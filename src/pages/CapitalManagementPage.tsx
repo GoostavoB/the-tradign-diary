@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { BlurredCurrency } from '@/components/ui/BlurredValue';
 import AppLayout from '@/components/layout/AppLayout';
 import { useNavigate } from 'react-router-dom';
-import { usePageMeta } from '@/hooks/usePageMeta';
+import { SEO } from '@/components/SEO';
 
 interface CapitalLogEntry {
   id: string;
@@ -30,10 +30,6 @@ interface CapitalLogEntry {
 }
 
 const CapitalManagementPage = () => {
-  usePageMeta({
-    title: 'Capital Management - TradeWise',
-    description: 'Track and manage your trading capital additions for accurate ROI calculations',
-  });
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -64,7 +60,7 @@ const CapitalManagementPage = () => {
       if (!user) throw new Error('Not authenticated');
 
       // Calculate total_after based on chronological order
-      const sortedLog = [...capitalLog].sort((a, b) => 
+      const sortedLog = [...capitalLog].sort((a, b) =>
         new Date(a.log_date).getTime() - new Date(b.log_date).getTime()
       );
 
@@ -87,8 +83,8 @@ const CapitalManagementPage = () => {
         if (error) throw error;
       } else {
         // When adding new, calculate based on last entry
-        const previousTotal = sortedLog.length > 0 
-          ? sortedLog[sortedLog.length - 1].total_after 
+        const previousTotal = sortedLog.length > 0
+          ? sortedLog[sortedLog.length - 1].total_after
           : 0;
         const totalAfter = previousTotal + parseFloat(amountAdded);
 
@@ -152,7 +148,7 @@ const CapitalManagementPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!amountAdded || parseFloat(amountAdded) <= 0) {
       toast.error('Please enter a valid amount');
       return;
@@ -161,14 +157,18 @@ const CapitalManagementPage = () => {
     saveMutation.mutate({});
   };
 
-  const currentCapital = capitalLog.length > 0 
-    ? capitalLog[capitalLog.length - 1].total_after 
+  const currentCapital = capitalLog.length > 0
+    ? capitalLog[capitalLog.length - 1].total_after
     : 0;
   const totalAdded = capitalLog.reduce((sum, entry) => sum + entry.amount_added, 0);
   const averageAddition = capitalLog.length > 0 ? totalAdded / capitalLog.length : 0;
 
   return (
     <AppLayout>
+      <SEO
+        title='Capital Management - TradeWise'
+        description='Track and manage your trading capital additions for accurate ROI calculations'
+      />
       <main className="container mx-auto py-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -328,7 +328,7 @@ const CapitalManagementPage = () => {
             <div className="relative">
               {/* Timeline line */}
               <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent via-primary to-accent/20" />
-              
+
               {/* Timeline entries */}
               <div className="space-y-6">
                 {capitalLog.map((entry, index) => (

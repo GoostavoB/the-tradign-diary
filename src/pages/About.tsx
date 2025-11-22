@@ -1,24 +1,18 @@
 import AppLayout from '@/components/layout/AppLayout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { usePageMeta } from '@/hooks/usePageMeta';
+import { SEO } from '@/components/SEO';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useHreflang } from '@/hooks/useHreflang';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '@/utils/languageRouting';
 import { Target, Users, TrendingUp, Shield } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { HreflangLinks } from '@/components/HreflangLinks';
 
 const About = () => {
   const { t, changeLanguage } = useTranslation();
   const navigate = useNavigate();
-  
-  // Add hreflang tags for SEO
-  useHreflang({
-    languages: [...SUPPORTED_LANGUAGES],
-    defaultLanguage: 'en'
-  });
-  
+
   // Sync language with URL
   useEffect(() => {
     const pathLang = window.location.pathname.split('/')[1];
@@ -26,16 +20,16 @@ const About = () => {
       changeLanguage(pathLang as SupportedLanguage);
     }
   }, [changeLanguage]);
-  
-  usePageMeta({
-    title: `${t('about.pageTitle', 'About Us')} | The Trading Diary`,
-    description: t('about.pageDescription', 'Learn about The Trading Diary team and our mission to help crypto traders improve their performance with AI-powered analytics and insights.'),
-    canonical: 'https://www.thetradingdiary.com/about',
-    keywords: 'about us, trading diary team, crypto trading tools, mission'
-  });
-  
+
   return (
     <AppLayout>
+      <HreflangLinks languages={[...SUPPORTED_LANGUAGES]} defaultLanguage="en" />
+      <SEO
+        title={t('about.title', 'About Us - The Trading Diary')}
+        description={t('about.pageDescription', 'Learn about The Trading Diary team and our mission to help crypto traders improve their performance with AI-powered analytics and insights.')}
+        canonical="https://www.thetradingdiary.com/about"
+        keywords="about us, trading diary team, crypto trading tools, mission"
+      />
       <div className="max-w-4xl mx-auto space-y-12">
         <header className="text-center space-y-4">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
@@ -45,7 +39,7 @@ const About = () => {
             {t('about.subtitle', 'Empowering crypto traders with AI-powered insights and analytics')}
           </p>
         </header>
-        
+
         {/* Mission */}
         <Card className="p-8">
           <div className="flex items-start gap-4">
@@ -60,7 +54,7 @@ const About = () => {
             </div>
           </div>
         </Card>
-        
+
         {/* Team */}
         <Card className="p-8">
           <div className="flex items-start gap-4">
@@ -78,7 +72,7 @@ const About = () => {
             </div>
           </div>
         </Card>
-        
+
         {/* What We Offer */}
         <Card className="p-8">
           <div className="flex items-start gap-4">
@@ -112,7 +106,7 @@ const About = () => {
             </div>
           </div>
         </Card>
-        
+
         {/* Security & Privacy */}
         <Card className="p-8">
           <div className="flex items-start gap-4">
@@ -130,7 +124,7 @@ const About = () => {
             </div>
           </div>
         </Card>
-        
+
         {/* Join Us */}
         <section className="text-center py-8" aria-labelledby="about-cta-heading">
           <h2 id="about-cta-heading" className="text-3xl font-bold mb-4">{t('about.cta.title', 'Join Thousands of Traders')}</h2>
@@ -138,7 +132,7 @@ const About = () => {
             {t('about.cta.subtitle', 'Start tracking your trades and improving your performance today')}
           </p>
           <Button
-            onClick={() => navigate('/auth')} 
+            onClick={() => navigate('/auth')}
             size="lg"
             aria-label="Get started with The Trading Diary for free"
           >

@@ -19,7 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Trade } from "@/types/trade";
 import { BarChart3, TrendingUp, Clock, Target, DollarSign, Percent, Shield, Brain, X } from "lucide-react";
 import { useBadgeNotifications } from "@/hooks/useBadgeNotifications";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import { SEO } from "@/components/SEO";
 import { pageMeta } from "@/utils/seoHelpers";
 import { DateRangeFilter } from "@/components/DateRangeFilter";
 import { useDateRange } from "@/contexts/DateRangeContext";
@@ -28,7 +28,6 @@ import { layout, spacing, typography } from "@/styles/design-tokens";
 import { SkipToContent } from "@/components/SkipToContent";
 
 export default function Analytics() {
-  usePageMeta(pageMeta.analytics);
   const { dateRange, setDateRange, clearDateRange } = useDateRange();
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +72,7 @@ export default function Analytics() {
   }, [fetchTrades]);
 
   // Memoize chart data to prevent recalculation on every render
-  const pnlChartData = useMemo(() => 
+  const pnlChartData = useMemo(() =>
     Array.from({ length: 30 }, (_, i) => ({
       date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
       pnl: Math.random() * 1000 - 300,
@@ -98,6 +97,13 @@ export default function Analytics() {
 
   return (
     <AppLayout>
+      <SEO
+        title={pageMeta.analytics.title}
+        description={pageMeta.analytics.description}
+        keywords={pageMeta.analytics.keywords}
+        canonical={pageMeta.analytics.canonical}
+        noindex={true}
+      />
       <SkipToContent />
       <main id="main-content" className={layout.container}>
         <div className={spacing.section}>
@@ -107,8 +113,8 @@ export default function Analytics() {
               <p className="text-muted-foreground mt-1">Deep dive into your trading performance</p>
             </header>
             <div className="flex items-center gap-2">
-              <DateRangeFilter 
-                dateRange={dateRange} 
+              <DateRangeFilter
+                dateRange={dateRange}
                 onDateRangeChange={setDateRange}
               />
               {dateRange?.from && (
@@ -128,76 +134,76 @@ export default function Analytics() {
           </div>
 
           <Tabs defaultValue="charts" className="space-y-6">
-          <TabsList className="grid w-full max-w-4xl grid-cols-3 md:grid-cols-5 glass p-1">
-            <TabsTrigger value="charts" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
-              <BarChart3 className="h-4 w-4" />
-              <span className="hidden md:inline">Charts</span>
-            </TabsTrigger>
-            <TabsTrigger value="performance" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
-              <TrendingUp className="h-4 w-4" />
-              <span className="hidden md:inline">Performance</span>
-            </TabsTrigger>
-            <TabsTrigger value="risk" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
-              <Shield className="h-4 w-4" />
-              <span className="hidden md:inline">Risk</span>
-            </TabsTrigger>
-            <TabsTrigger value="behavior" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
-              <Brain className="h-4 w-4" />
-              <span className="hidden md:inline">Behavior</span>
-            </TabsTrigger>
-            <TabsTrigger value="capital" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
-              <DollarSign className="h-4 w-4" />
-              <span className="hidden md:inline">Capital</span>
-            </TabsTrigger>
-          </TabsList>
+            <TabsList className="grid w-full max-w-4xl grid-cols-3 md:grid-cols-5 glass p-1">
+              <TabsTrigger value="charts" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
+                <BarChart3 className="h-4 w-4" />
+                <span className="hidden md:inline">Charts</span>
+              </TabsTrigger>
+              <TabsTrigger value="performance" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
+                <TrendingUp className="h-4 w-4" />
+                <span className="hidden md:inline">Performance</span>
+              </TabsTrigger>
+              <TabsTrigger value="risk" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
+                <Shield className="h-4 w-4" />
+                <span className="hidden md:inline">Risk</span>
+              </TabsTrigger>
+              <TabsTrigger value="behavior" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
+                <Brain className="h-4 w-4" />
+                <span className="hidden md:inline">Behavior</span>
+              </TabsTrigger>
+              <TabsTrigger value="capital" className="gap-2 text-xs md:text-sm data-[state=active]:shadow-sm">
+                <DollarSign className="h-4 w-4" />
+                <span className="hidden md:inline">Capital</span>
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="charts" className="space-y-6">
-            <LazyChart height={400}>
-              <InteractivePnLChart data={pnlChartData} />
-            </LazyChart>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <LazyChart height={350}>
-                <AssetPerformanceRadar data={assetData} />
+            <TabsContent value="charts" className="space-y-6">
+              <LazyChart height={400}>
+                <InteractivePnLChart data={pnlChartData} />
               </LazyChart>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <LazyChart height={350}>
+                  <AssetPerformanceRadar data={assetData} />
+                </LazyChart>
+                <LazyChart height={450}>
+                  <WinsByHourChart trades={trades} />
+                </LazyChart>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="performance" className="space-y-6">
+              <div className="glass-subtle p-6 rounded-xl">
+                <div className="flex items-center gap-3 mb-2">
+                  <Target className="h-5 w-5 text-primary" />
+                  <h2 className="text-xl font-bold">Custom Setup Performance</h2>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Analyze how each of your custom-tagged trading strategies performs across win rate and ROI metrics
+                </p>
+              </div>
+              <LazyChart height={600}>
+                <SetupPerformanceChart data={setupData} />
+              </LazyChart>
+            </TabsContent>
+
+            <TabsContent value="risk" className="space-y-6">
+              <RiskCalculator />
+              <ExpenseTracker />
+            </TabsContent>
+
+            <TabsContent value="behavior" className="space-y-6">
+              <TradingJournal />
               <LazyChart height={450}>
                 <WinsByHourChart trades={trades} />
               </LazyChart>
-            </div>
-          </TabsContent>
+            </TabsContent>
 
-          <TabsContent value="performance" className="space-y-6">
-            <div className="glass-subtle p-6 rounded-xl">
-              <div className="flex items-center gap-3 mb-2">
-                <Target className="h-5 w-5 text-primary" />
-                <h2 className="text-xl font-bold">Custom Setup Performance</h2>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Analyze how each of your custom-tagged trading strategies performs across win rate and ROI metrics
-              </p>
-            </div>
-            <LazyChart height={600}>
-              <SetupPerformanceChart data={setupData} />
-            </LazyChart>
-          </TabsContent>
-
-          <TabsContent value="risk" className="space-y-6">
-            <RiskCalculator />
-            <ExpenseTracker />
-          </TabsContent>
-
-          <TabsContent value="behavior" className="space-y-6">
-            <TradingJournal />
-            <LazyChart height={450}>
-              <WinsByHourChart trades={trades} />
-            </LazyChart>
-          </TabsContent>
-
-          <TabsContent value="capital" className="space-y-6">
-            <CapitalManagement />
-            <CapitalHistoryChart />
-            <PeriodBasedROI />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="capital" className="space-y-6">
+              <CapitalManagement />
+              <CapitalHistoryChart />
+              <PeriodBasedROI />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </AppLayout>

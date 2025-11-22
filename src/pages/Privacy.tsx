@@ -1,19 +1,14 @@
-import { Helmet } from 'react-helmet';
+
+import { Helmet } from 'react-helmet-async';
 import AppLayout from '@/components/layout/AppLayout';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useEffect } from 'react';
-import { useHreflang } from '@/hooks/useHreflang';
+import { HreflangLinks } from '@/components/HreflangLinks';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '@/utils/languageRouting';
 
 export default function Privacy() {
   const { t, changeLanguage } = useTranslation();
-  
-  // Add hreflang tags for SEO
-  useHreflang({
-    languages: [...SUPPORTED_LANGUAGES],
-    defaultLanguage: 'en'
-  });
-  
+
   // Sync language with URL
   useEffect(() => {
     const pathLang = window.location.pathname.split('/')[1];
@@ -23,15 +18,16 @@ export default function Privacy() {
   }, [changeLanguage]);
   return (
     <>
+      <HreflangLinks languages={[...SUPPORTED_LANGUAGES]} defaultLanguage="en" />
       <Helmet>
         <title>{t('legal.privacyTitle', 'Privacy Policy')} - The Trading Diary</title>
         <meta name="description" content={t('legal.privacy.description', 'Learn how The Trading Diary collects, uses, and protects your personal information.')} />
       </Helmet>
-      
+
       <AppLayout>
         <div className="container max-w-4xl mx-auto px-4 py-12">
           <h1 className="text-4xl font-bold mb-8">{t('legal.privacyTitle', 'Privacy Policy')}</h1>
-          
+
           <div className="prose prose-invert max-w-none space-y-6">
             <p className="text-muted-foreground">{t('legal.lastUpdated', 'Last updated')}: {new Date().toLocaleDateString()}</p>
 

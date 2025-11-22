@@ -12,25 +12,19 @@ import { ProofBar } from "@/components/ProofBar";
 import { SkipToContent } from "@/components/SkipToContent";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/hooks/useTranslation";
-import { updateLandingMeta, addStructuredData, trackLandingView, trackCTAClick } from "@/utils/i18nLandingMeta";
-import { useHreflang } from "@/hooks/useHreflang";
+import { Helmet } from 'react-helmet-async';
+import { HreflangLinks } from '@/components/HreflangLinks';
+import { landingMeta, getLandingStructuredData, trackLandingView, trackCTAClick } from '@/utils/i18nLandingMeta';
 import { SUPPORTED_LANGUAGES } from "@/utils/languageRouting";
 
 const Index = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Add hreflang tags for SEO
-  useHreflang({
-    languages: [...SUPPORTED_LANGUAGES],
-    defaultLanguage: 'en'
-  });
+  const meta = landingMeta['en'];
+  const { organizationData, softwareData } = getLandingStructuredData('en') || {};
 
   useEffect(() => {
-    // Update meta tags and SEO for English (USA)
-    updateLandingMeta('en');
-    addStructuredData('en');
-    
     // Track landing view
     trackLandingView('en');
   }, []);
@@ -42,9 +36,48 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
+      <HreflangLinks languages={[...SUPPORTED_LANGUAGES]} defaultLanguage="en" />
+      <Helmet>
+        <title>{meta.title}</title>
+        <meta name="description" content={meta.description} />
+        <meta name="keywords" content={meta.keywords} />
+        <link rel="canonical" href={meta.canonical} />
+
+        {/* Open Graph */}
+        <meta property="og:title" content={meta.ogTitle} />
+        <meta property="og:description" content={meta.ogDescription} />
+        <meta property="og:url" content={meta.canonical} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={meta.ogImage} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={meta.ogTitle} />
+        <meta name="twitter:description" content={meta.ogDescription} />
+        <meta name="twitter:image" content={meta.ogImage} />
+
+        {/* Geo */}
+        {meta.geo && <meta name="geo.region" content={meta.geo.region} />}
+        {meta.geo && <meta name="geo.placename" content={meta.geo.placename} />}
+
+        {/* Structured Data */}
+        {organizationData && (
+          <script type="application/ld+json">
+            {JSON.stringify(organizationData)}
+          </script>
+        )}
+        {softwareData && (
+          <script type="application/ld+json">
+            {JSON.stringify(softwareData)}
+          </script>
+        )}
+
+        {/* HTML Lang */}
+        <html lang={meta.lang} />
+      </Helmet>
       <SkipToContent />
       <MobileHeader />
-      
+
       <main id="main-content" className="pt-14">
         <Hero />
         <ProofBar />
@@ -55,7 +88,7 @@ const Index = () => {
         <Pricing />
         <CTA />
       </main>
-      
+
       <Footer />
     </div>
   );

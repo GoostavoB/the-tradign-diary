@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Mail } from 'lucide-react';
 
 const supportSchema = z.object({
@@ -70,7 +70,7 @@ export default function Support() {
         <title>{t('support.pageTitle')} - The Trading Diary</title>
         <meta name="description" content={t('support.pageDescription')} />
       </Helmet>
-      
+
       <div className="container max-w-2xl mx-auto py-8 px-4">
         <Card className="shadow-lg">
           <CardHeader className="text-center">
@@ -80,7 +80,7 @@ export default function Support() {
             <CardTitle className="text-3xl font-bold">{t('support.title')}</CardTitle>
             <CardDescription className="text-lg">{t('support.description')}</CardDescription>
           </CardHeader>
-          
+
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
@@ -138,8 +138,8 @@ export default function Support() {
                 />
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full"
                 disabled={isSubmitting}
               >

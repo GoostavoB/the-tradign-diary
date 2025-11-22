@@ -106,84 +106,114 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
   });
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
-  // Filter and sort trades with memoization
-  const filterAndSortTrades = useCallback(() => {
-    let filtered = [...trades];
-
-    // Filter by date range
-    if (dateRange?.from) {
-      filtered = filtered.filter(trade => {
-        const tradeDate = new Date(trade.trade_date);
-        const from = dateRange.from!;
-        const to = dateRange.to || dateRange.from!;
-        
-        return tradeDate >= from && tradeDate <= to;
-      });
-    }
-
-    // Filter by deleted status
-    if (showDeleted) {
-      filtered = filtered.filter(t => t.deleted_at !== null);
-    } else {
-      filtered = filtered.filter(t => t.deleted_at === null);
-    }
-
-    // Filter by search term (using debounced value)
-    if (debouncedSearchTerm) {
-      filtered = filtered.filter(
-        (t) =>
-          t.symbol?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          t.setup?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          t.broker?.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by type
-    if (filterType === 'wins') {
-      filtered = filtered.filter((t) => calculateTradePnL(t, { includeFees: true }) > 0);
-    } else if (filterType === 'losses') {
-      filtered = filtered.filter((t) => calculateTradePnL(t, { includeFees: true }) <= 0);
-    }
-
-    // Sort
-    filtered.sort((a, b) => {
-      let comparison = 0;
-      
-      if (sortBy === 'date') {
-        // Use opened_at (actual trade date) for chronological sorting
-        comparison = new Date(a.opened_at || a.trade_date || 0).getTime() - 
-                     new Date(b.opened_at || b.trade_date || 0).getTime();
-      } else if (sortBy === 'pnl') {
-        comparison = calculateTradePnL(b, { includeFees: true }) - calculateTradePnL(a, { includeFees: true });
-      } else if (sortBy === 'roi') {
-        comparison = (b.roi || 0) - (a.roi || 0);
-      }
-      
-      return comparison;
-    });
-
-    return filtered;
-  }, [trades, debouncedSearchTerm, filterType, sortBy, showDeleted, dateRange]);
-
-  // Memoized filtered trades
-  const filteredTrades = useMemo(() => filterAndSortTrades(), [filterAndSortTrades]);
+  const [totalTradesCount, setTotalTradesCount] = useState(0);
 
   // Pagination
-  const pagination = useTradePagination(filteredTrades.length);
-  const paginatedTrades = useMemo(() => 
-    filteredTrades.slice(pagination.startIndex, pagination.endIndex),
-    [filteredTrades, pagination.startIndex, pagination.endIndex]
-  );
+  const pagination = useTradePagination(totalTradesCount);
 
-  useEffect(() => {
-    if (user) {
-      fetchTrades();
+  const fetchTrades = useCallback(async () => {
+    if (!user) return;
+
+    setLoading(true);
+
+    try {
+      let query = supabase
+        .from('trades')
+        .select('*', { count: 'exact' })
+        .eq('user_id', user.id);
+
+      // Filter by deleted status
+      if (showDeleted) {
+        query = query.not('deleted_at', 'is', null);
+      } else {
+        query = query.is('deleted_at', null);
+      }
+
+      // Date Range Filter
+      if (dateRange?.from) {
+        const fromStr = dateRange.from.toISOString();
+        query = query.gte('trade_date', fromStr);
+
+        if (dateRange.to) {
+          query = query.lte('trade_date', dateRange.to.toISOString());
+        }
+      }
+
+      // Search Filter
+      if (debouncedSearchTerm) {
+        query = query.or(`symbol.ilike.%${debouncedSearchTerm}%,setup.ilike.%${debouncedSearchTerm}%,broker.ilike.%${debouncedSearchTerm}%`);
+      }
+
+      // Type Filter (Wins/Losses)
+      if (filterType === 'wins') {
+        query = query.gt('pnl', 0);
+      } else if (filterType === 'losses') {
+        query = query.lte('pnl', 0);
+      }
+
+      // Sorting
+      if (sortBy === 'date') {
+        query = query.order('trade_date', { ascending: false });
+      } else if (sortBy === 'pnl') {
+        query = query.order('pnl', { ascending: false });
+      } else if (sortBy === 'roi') {
+        query = query.order('roi', { ascending: false });
+      }
+
+      // Pagination
+      const { startIndex, endIndex } = pagination;
+      query = query.range(startIndex, endIndex - 1);
+
+      const { data, error, count } = await query;
+
+      if (error) {
+        toast.error('Failed to load trades');
+        console.error('Error fetching trades:', error);
+      } else {
+        if (count !== null) {
+          setTotalTradesCount(count);
+        }
+
+        // Load signed URLs for screenshots
+        const tradesWithSignedUrls = await Promise.all((data || []).map(async (trade) => {
+          let signedUrl = trade.screenshot_url;
+
+          if (trade.screenshot_url && user) {
+            const fileName = `${user.id}/${trade.id}.${trade.screenshot_url.split('.').pop()}`;
+            const { data: urlData } = await supabase.storage
+              .from('trade-screenshots')
+              .createSignedUrl(fileName, 3600);
+
+            if (urlData) {
+              signedUrl = urlData.signedUrl;
+            }
+          }
+
+          return {
+            ...trade,
+            screenshot_url: signedUrl,
+            side: trade.side as 'long' | 'short' | null
+          };
+        }));
+
+        setTrades(tradesWithSignedUrls);
+      }
+    } catch (err) {
+      console.error('Unexpected error fetching trades:', err);
+      toast.error('An unexpected error occurred');
+    } finally {
+      setLoading(false);
     }
-  }, [user, showDeleted]);
+  }, [user, showDeleted, dateRange, debouncedSearchTerm, filterType, sortBy, pagination.currentPage, pagination.itemsPerPage, pagination.startIndex, pagination.endIndex]);
 
-  // Reset pagination when filters change
+  // Fetch trades when dependencies change
   useEffect(() => {
-    pagination.reset();
+    fetchTrades();
+  }, [fetchTrades]);
+
+  // Reset pagination when filters change (except page change itself)
+  useEffect(() => {
+    pagination.goToPage(1);
   }, [debouncedSearchTerm, filterType, sortBy, showDeleted, dateRange]);
 
   useEffect(() => {
@@ -203,10 +233,10 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
   };
 
   const toggleAllTrades = () => {
-    if (selectedTradeIds.size === filteredTrades.length) {
+    if (selectedTradeIds.size === trades.length) {
       setSelectedTradeIds(new Set());
     } else {
-      setSelectedTradeIds(new Set(filteredTrades.map(t => t.id)));
+      setSelectedTradeIds(new Set(trades.map(t => t.id)));
     }
   };
 
@@ -284,61 +314,10 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
     }
   };
 
-  const fetchTrades = async () => {
-    if (!user) return;
-
-    let query = supabase
-      .from('trades')
-      .select('*')
-      .eq('user_id', user.id);
-
-    // Filter by deleted status
-    if (showDeleted) {
-      query = query.not('deleted_at', 'is', null);
-    } else {
-      query = query.is('deleted_at', null);
-    }
-
-    query = query.order('trade_date', { ascending: false });
-
-    const { data, error } = await query;
-
-    if (error) {
-      toast.error('Failed to load trades');
-    } else {
-      // Load signed URLs for screenshots
-      const tradesWithSignedUrls = await Promise.all((data || []).map(async (trade) => {
-        let signedUrl = trade.screenshot_url;
-        
-        if (trade.screenshot_url && user) {
-          // Extract file name from URL or construct it
-          const fileName = `${user.id}/${trade.id}.${trade.screenshot_url.split('.').pop()}`;
-          
-          const { data: urlData } = await supabase.storage
-            .from('trade-screenshots')
-            .createSignedUrl(fileName, 3600); // 1 hour expiry
-          
-          if (urlData) {
-            signedUrl = urlData.signedUrl;
-          }
-        }
-        
-        return {
-          ...trade,
-          screenshot_url: signedUrl,
-          side: trade.side as 'long' | 'short' | null
-        };
-      }));
-      
-      setTrades(tradesWithSignedUrls);
-    }
-    setLoading(false);
-  };
-
   const handleDelete = async (id: string) => {
     if (showDeleted) {
       if (!confirm('Are you sure you want to permanently delete this trade? This cannot be undone.')) return;
-      
+
       const { error } = await supabase.from('trades').delete().eq('id', id);
 
       if (error) {
@@ -397,7 +376,7 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
     const entry = editingTrade.entry_price;
     const exit = editingTrade.exit_price;
     const size = editingTrade.position_size;
-    
+
     const pnl = (exit - entry) * size;
     const roi = ((exit - entry) / entry) * 100;
 
@@ -454,8 +433,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-semibold tracking-tight">Trade History</h1>
         <div className="flex items-center gap-2">
-          <DateRangeFilter 
-            dateRange={dateRange} 
+          <DateRangeFilter
+            dateRange={dateRange}
             onDateRangeChange={setDateRange}
           />
           {dateRange?.from && (
@@ -486,8 +465,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
         </div>
 
         {/* Sort */}
-        <Select 
-          value={sortBy} 
+        <Select
+          value={sortBy}
           onValueChange={(value) => setSortBy(value as 'date' | 'pnl' | 'roi')}
         >
           <SelectTrigger className="w-[180px]">
@@ -537,15 +516,15 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
       {showDeleted && (
         <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
           <p className="text-sm text-amber-600 dark:text-amber-400">
-            ⚠️ <strong>Deleted Trades:</strong> These trades are available for recovery for 48 hours. 
+            ⚠️ <strong>Deleted Trades:</strong> These trades are available for recovery for 48 hours.
             After that, they will be permanently removed from the system.
           </p>
         </div>
       )}
 
       {/* Bulk selection toolbar */}
-      {filteredTrades.length > 0 && (
-        <div 
+      {trades.length > 0 && (
+        <div
           className="flex items-center justify-between p-4 rounded-xl"
           style={{
             background: 'rgba(17, 20, 24, 0.7)',
@@ -555,14 +534,14 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
         >
           <div className="flex items-center gap-3">
             <Checkbox
-              checked={selectedTradeIds.size === filteredTrades.length && filteredTrades.length > 0}
+              checked={selectedTradeIds.size === trades.length && trades.length > 0}
               onCheckedChange={toggleAllTrades}
               aria-label="Select all trades"
             />
             <span className="text-sm text-muted-foreground">
-              {selectedTradeIds.size > 0 
+              {selectedTradeIds.size > 0
                 ? `${selectedTradeIds.size} trade(s) selected`
-                : 'Select all'
+                : 'Select all on page'
               }
             </span>
           </div>
@@ -600,7 +579,7 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
       )}
 
       {/* Trade list */}
-      {filteredTrades.length === 0 ? (
+      {trades.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <p className="text-lg text-muted-foreground mb-4">
             No trades found matching your filters
@@ -613,7 +592,7 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
         </div>
       ) : (
         <div className="space-y-3">
-          {paginatedTrades.map((trade) => (
+          {trades.map((trade) => (
             <TradeRowCard
               key={trade.id}
               trade={trade}
@@ -636,12 +615,12 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
       )}
 
       {/* Pagination */}
-      {filteredTrades.length > 0 && (
+      {totalTradesCount > 0 && (
         <PaginationControls
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={pagination.goToPage}
-          totalItems={filteredTrades.length}
+          totalItems={totalTradesCount}
           itemsPerPage={pagination.itemsPerPage}
         />
       )}
@@ -665,8 +644,8 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                   <p className="text-sm text-muted-foreground">Position Type</p>
                   <p className="font-medium">
                     {selectedTrade.side ? (
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className={selectedTrade.side === 'long' ? 'border-neon-green text-neon-green' : 'border-neon-red text-neon-red'}
                       >
                         {selectedTrade.side.toUpperCase()}
@@ -724,25 +703,23 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Funding Fee</p>
-                  <p className={`font-medium ${
-                    (selectedTrade.funding_fee || 0) === 0 
-                      ? 'text-foreground' 
-                      : (selectedTrade.funding_fee || 0) > 0 
-                      ? 'text-neon-green' 
+                  <p className={`font-medium ${(selectedTrade.funding_fee || 0) === 0
+                    ? 'text-foreground'
+                    : (selectedTrade.funding_fee || 0) > 0
+                      ? 'text-neon-green'
                       : 'text-neon-red'
-                  }`}>
+                    }`}>
                     ${(selectedTrade.funding_fee || 0).toFixed(2)}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Trading Fee</p>
-                  <p className={`font-medium ${
-                    (selectedTrade.trading_fee || 0) === 0 
-                      ? 'text-foreground' 
-                      : (selectedTrade.trading_fee || 0) > 0 
-                      ? 'text-neon-green' 
+                  <p className={`font-medium ${(selectedTrade.trading_fee || 0) === 0
+                    ? 'text-foreground'
+                    : (selectedTrade.trading_fee || 0) > 0
+                      ? 'text-neon-green'
                       : 'text-neon-red'
-                  }`}>
+                    }`}>
                     ${(selectedTrade.trading_fee || 0).toFixed(2)}
                   </p>
                 </div>
@@ -792,7 +769,7 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
                   <Label>Position Type *</Label>
                   <Select
                     value={editingTrade.side || 'long'}
-                    onValueChange={(value: 'long' | 'short') => 
+                    onValueChange={(value: 'long' | 'short') =>
                       setEditingTrade({ ...editingTrade, side: value })
                     }
                   >
@@ -933,7 +910,7 @@ export const TradeHistory = memo(({ onTradesChange }: TradeHistoryProps = {}) =>
       <ExportTradesDialog
         open={exportDialogOpen}
         onOpenChange={setExportDialogOpen}
-        trades={filteredTrades}
+        trades={trades}
       />
     </div>
   );

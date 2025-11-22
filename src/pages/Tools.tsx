@@ -4,14 +4,19 @@ import { RiskCalculator } from '@/components/RiskCalculator';
 import { ExpenseTracker } from '@/components/ExpenseTracker';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Calculator, Receipt } from 'lucide-react';
-import { usePageMeta } from '@/hooks/usePageMeta';
+import { SEO } from '@/components/SEO';
 import { pageMeta } from '@/utils/seoHelpers';
 import { SkipToContent } from '@/components/SkipToContent';
 
 const Tools = () => {
-  usePageMeta(pageMeta.tools);
   return (
     <AppLayout>
+      <SEO
+        title={pageMeta.tools.title}
+        description={pageMeta.tools.description}
+        keywords={pageMeta.tools.keywords}
+        canonical={pageMeta.tools.canonical}
+      />
       <SkipToContent />
       <main id="main-content" className="space-y-6">
         <header>

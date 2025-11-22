@@ -10,9 +10,10 @@ import { MobileHeader } from '@/components/MobileHeader';
 import Footer from '@/components/Footer';
 import { SkipToContent } from '@/components/SkipToContent';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useHreflang } from '@/hooks/useHreflang';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '@/utils/languageRouting';
 import { z } from 'zod';
+import { SEO } from '@/components/SEO';
+import { HreflangLinks } from '@/components/HreflangLinks';
 
 const contactSchema = z.object({
   name: z.string()
@@ -35,13 +36,7 @@ const contactSchema = z.object({
 
 const Contact = () => {
   const { t, changeLanguage } = useTranslation();
-  
-  // Add hreflang tags for SEO
-  useHreflang({
-    languages: [...SUPPORTED_LANGUAGES],
-    defaultLanguage: 'en'
-  });
-  
+
   // Sync language with URL
   useEffect(() => {
     const pathLang = window.location.pathname.split('/')[1];
@@ -49,7 +44,7 @@ const Contact = () => {
       changeLanguage(pathLang as SupportedLanguage);
     }
   }, [changeLanguage]);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -60,13 +55,13 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       // Validate form data
       const validatedData = contactSchema.parse(formData);
-      
+
       setIsSubmitting(true);
-      
+
       // Call the edge function
       const { supabase } = await import('@/integrations/supabase/client');
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
@@ -77,11 +72,11 @@ const Contact = () => {
           message: `${validatedData.company ? `Company: ${validatedData.company}\n\n` : ''}${validatedData.message}`,
         },
       });
-      
+
       if (error) throw error;
-      
+
       toast.success('Message sent successfully! We\'ll get back to you soon.');
-      
+
       // Reset form
       setFormData({
         name: '',
@@ -104,119 +99,124 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black">
+      <HreflangLinks languages={[...SUPPORTED_LANGUAGES]} defaultLanguage="en" />
+      <SEO
+        title={t('contact.title', 'Contact Us - The Trading Diary')}
+        description={t('contact.subtitle', 'Get in touch with our team')}
+      />
       <SkipToContent />
       <MobileHeader />
-      
+
       <main id="main-content" className="pt-20 pb-16 px-4">
         <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold">
-            {t('contact.title', 'Contact Us')}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('contact.subtitle', 'Get in touch with our team')}
-          </p>
-        </div>
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold">
+              {t('contact.title', 'Contact Us')}
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {t('contact.subtitle', 'Get in touch with our team')}
+            </p>
+          </div>
 
-        <Card className="p-8 bg-card/50 backdrop-blur-sm border-border">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
+          <Card className="p-8 bg-card/50 backdrop-blur-sm border-border">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    {t('contact.name')} *
+                  </Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder={t('contact.namePlaceholder')}
+                    maxLength={100}
+                    required
+                    className="bg-background/50"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    {t('contact.email')} *
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder={t('contact.emailPlaceholder')}
+                    maxLength={255}
+                    required
+                    className="bg-background/50"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
-                <Label htmlFor="name" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  {t('contact.name')} *
+                <Label htmlFor="company" className="flex items-center gap-2">
+                  <Building2 className="h-4 w-4" />
+                  {t('contact.company')}
                 </Label>
                 <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder={t('contact.namePlaceholder')}
+                  id="company"
+                  value={formData.company}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  placeholder={t('contact.companyPlaceholder')}
                   maxLength={100}
-                  required
                   className="bg-background/50"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  {t('contact.email')} *
+                <Label htmlFor="message" className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  {t('contact.message')} *
                 </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder={t('contact.emailPlaceholder')}
-                  maxLength={255}
+                <Textarea
+                  id="message"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder={t('contact.messagePlaceholder')}
+                  maxLength={1000}
+                  rows={6}
                   required
-                  className="bg-background/50"
+                  className="bg-background/50 resize-none"
                 />
+                <p className="text-xs text-muted-foreground text-right">
+                  {formData.message.length}/1000
+                </p>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="company" className="flex items-center gap-2">
-                <Building2 className="h-4 w-4" />
-                {t('contact.company')}
-              </Label>
-              <Input
-                id="company"
-                value={formData.company}
-                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                placeholder={t('contact.companyPlaceholder')}
-                maxLength={100}
-                className="bg-background/50"
-              />
-            </div>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? t('common.loading') : t('contact.send')}
+              </Button>
+            </form>
+          </Card>
 
-            <div className="space-y-2">
-              <Label htmlFor="message" className="flex items-center gap-2">
-                <MessageSquare className="h-4 w-4" />
-                {t('contact.message')} *
-              </Label>
-              <Textarea
-                id="message"
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                placeholder={t('contact.messagePlaceholder')}
-                maxLength={1000}
-                rows={6}
-                required
-                className="bg-background/50 resize-none"
-              />
-              <p className="text-xs text-muted-foreground text-right">
-                {formData.message.length}/1000
-              </p>
-            </div>
-
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={isSubmitting}
+          <div className="text-center space-y-4 pt-8">
+            <p className="text-sm text-muted-foreground">
+              {t('contact.orEmail')}
+            </p>
+            <a
+              href="mailto:contact@thetradingdiary.com"
+              className="text-primary hover:underline font-medium"
             >
-              {isSubmitting ? t('common.loading') : t('contact.send')}
-            </Button>
-          </form>
-        </Card>
+              contact@thetradingdiary.com
+            </a>
+          </div>
+        </div >
+      </main >
 
-        <div className="text-center space-y-4 pt-8">
-          <p className="text-sm text-muted-foreground">
-            {t('contact.orEmail')}
-          </p>
-          <a
-            href="mailto:contact@thetradingdiary.com"
-            className="text-primary hover:underline font-medium"
-          >
-            contact@thetradingdiary.com
-          </a>
-        </div>
-        </div>
-      </main>
-      
       <Footer />
-    </div>
+    </div >
   );
 };
 

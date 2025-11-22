@@ -5,8 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import AppLayout from '@/components/layout/AppLayout';
 import { Plus, Columns } from 'lucide-react';
-import { DndContext, rectIntersection, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragStartEvent, MeasuringStrategy } from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
+import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { InsightsQuickSummary } from '@/components/insights/InsightsQuickSummary';
@@ -53,6 +52,9 @@ import { useUserTier } from '@/hooks/useUserTier';
 import { UpgradePrompt } from '@/components/UpgradePrompt';
 import { useSubAccount } from '@/contexts/SubAccountContext';
 import { Badge } from '@/components/ui/badge';
+import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
+import { DashboardGrid } from '@/components/dashboard/DashboardGrid';
+import { X } from 'lucide-react'; // Ensure X is imported if used, or remove if moved to Header
 
 // Lazy load heavy components
 const TradeHistory = lazy(() => import('@/components/TradeHistory').then(m => ({ default: m.TradeHistory })));
@@ -71,7 +73,7 @@ const AIAssistant = lazy(() => import('@/components/AIAssistant').then(m => ({ d
 import { TourCTAButton } from '@/components/tour/TourCTAButton';
 import { ChevronLeft } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { usePageMeta } from '@/hooks/usePageMeta';
+import { SEO } from '@/components/SEO';
 import { pageMeta } from '@/utils/seoHelpers';
 import { TradeStationView } from '@/components/trade-station/TradeStationView';
 
@@ -108,7 +110,6 @@ function calculateCurrentStreak(trades: Trade[]): number {
 
 const Dashboard = () => {
   useKeyboardShortcuts();
-  usePageMeta(pageMeta.dashboard);
   const { user } = useAuth();
   const { t } = useTranslation();
   const { activeSubAccount } = useSubAccount();
@@ -126,12 +127,12 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<string>('overview');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const [customWidgets, setCustomWidgets] = useState<any[]>([]);
-  
+
   // Onboarding flow
   const { showOnboarding, loading: onboardingLoading, completeOnboarding } = useOnboarding();
-  
+
   // Memoize processed trades to prevent unnecessary recalculations
-  const processedTrades = useMemo(() => 
+  const processedTrades = useMemo(() =>
     filteredTrades.length > 0 ? filteredTrades : trades,
     [filteredTrades, trades]
   );
@@ -142,7 +143,7 @@ const Dashboard = () => {
   // Memoize current streak calculation
   const currentStreak = useMemo(() => {
     const streak = calculateCurrentStreak(processedTrades);
-    return { 
+    return {
       type: (streak > 0 ? 'win' : 'loss') as 'win' | 'loss',
       count: Math.abs(streak)
     };
@@ -150,7 +151,7 @@ const Dashboard = () => {
 
   // Enable badge notifications
   useBadgeNotifications(processedTrades);
-  
+
   const handleTabChange = useCallback((val: string) => {
     const container = tabsContainerRef.current?.closest('main') as HTMLElement | null;
     const prevScrollTop = container ? container.scrollTop : window.scrollY;
@@ -160,7 +161,7 @@ const Dashboard = () => {
       else window.scrollTo({ top: prevScrollTop });
     });
   }, []);
-  
+
   // Grid layout with free positioning - single source of truth
   const {
     positions,
@@ -184,7 +185,7 @@ const Dashboard = () => {
   // Gamification temporarily disabled
   // const [isGamificationOpen, setIsGamificationOpen] = useState(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
-  
+
   // User tier for feature restrictions
   const { tier, canCustomizeDashboard, isLoading: tierLoading } = useUserTier();
 
@@ -196,10 +197,10 @@ const Dashboard = () => {
   // Track if layout has changed
   const hasLayoutChanges = useMemo(() => {
     if (!isCustomizing || originalPositions.length === 0) return false;
-    
+
     // Compare current positions with original
     if (positions.length !== originalPositions.length) return true;
-    
+
     return positions.some(pos => {
       const original = originalPositions.find(o => o.id === pos.id);
       return !original || original.column !== pos.column || original.row !== pos.row;
@@ -209,7 +210,7 @@ const Dashboard = () => {
   // Gamification system
   const { xpData, showLevelUp, setShowLevelUp } = useXPSystem();
   const { updateChallengeProgress } = useDailyChallenges();
-  
+
   // Award XP for trades
   useTradeXPRewards(trades);
 
@@ -220,7 +221,7 @@ const Dashboard = () => {
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
-    
+
     const updateCols = () => {
       const width = el.clientWidth;
       // On mobile, always use 1 column
@@ -231,7 +232,7 @@ const Dashboard = () => {
         setColumnCount(selectedColumnCount);
       }
     };
-    
+
     updateCols();
     const ro = new ResizeObserver(updateCols);
     ro.observe(el);
@@ -247,14 +248,14 @@ const Dashboard = () => {
   // Organize widgets by column and row
   const grid = useMemo(() => {
     const result: { [col: number]: { [row: number]: string } } = {};
-    
+
     console.log('Building grid from positions:', positions);
-    
+
     positions.forEach(pos => {
       if (!result[pos.column]) result[pos.column] = {};
       result[pos.column][pos.row] = pos.id;
     });
-    
+
     console.log('Grid structure:', result);
     return result;
   }, [positions]);
@@ -264,16 +265,7 @@ const Dashboard = () => {
     console.log('Active widgets:', widgets);
     return widgets;
   }, [positions]);
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+
 
   // Spot wallet data for widget
   const { holdings, isLoading: isSpotWalletLoading } = useSpotWallet();
@@ -286,12 +278,12 @@ const Dashboard = () => {
       .from('capital_log')
       .select('*')
       .eq('user_id', user.id);
-    
+
     // Filter by active sub-account if one exists
     if (activeSubAccountId) {
       query = query.eq('sub_account_id', activeSubAccountId);
     }
-    
+
     const { data, error } = await query.order('log_date', { ascending: true });
 
     if (error) {
@@ -308,12 +300,12 @@ const Dashboard = () => {
       .from('custom_dashboard_widgets')
       .select('*')
       .eq('user_id', user.id);
-    
+
     // Filter by active sub-account if one exists
     if (activeSubAccountId) {
       query = query.eq('sub_account_id', activeSubAccountId);
     }
-    
+
     const { data, error } = await query;
 
     if (error) {
@@ -330,28 +322,28 @@ const Dashboard = () => {
       fetchInitialInvestment();
       fetchCustomWidgets();
     }
-    
+
     // Set up realtime subscription for trades and capital changes
     const tradesChannel = supabase
       .channel('trades-changes-dashboard')
-      .on('postgres_changes', 
+      .on('postgres_changes',
         { event: '*', schema: 'public', table: 'trades', filter: `user_id=eq.${user?.id}` },
         () => {
           fetchStats();
         }
       )
       .subscribe();
-    
+
     const capitalChannel = supabase
       .channel('capital-changes-dashboard')
-      .on('postgres_changes', 
+      .on('postgres_changes',
         { event: '*', schema: 'public', table: 'capital_log', filter: `user_id=eq.${user?.id}` },
         () => {
           fetchCapitalLog().then(() => fetchStats());
         }
       )
       .subscribe();
-    
+
     return () => {
       supabase.removeChannel(tradesChannel);
       supabase.removeChannel(capitalChannel);
@@ -381,7 +373,7 @@ const Dashboard = () => {
       const tradeDate = new Date(trade.trade_date);
       const from = dateRange.from!;
       const to = dateRange.to || new Date();
-      
+
       return tradeDate >= from && tradeDate <= to;
     });
 
@@ -426,12 +418,12 @@ const Dashboard = () => {
       .select('*')
       .eq('user_id', user.id)
       .is('deleted_at', null);
-    
+
     // Filter by active sub-account if one exists
     if (activeSubAccountId) {
       query = query.eq('sub_account_id', activeSubAccountId);
     }
-    
+
     const { data: trades } = await query;
 
     if (trades) {
@@ -439,10 +431,10 @@ const Dashboard = () => {
         ...trade,
         side: trade.side as 'long' | 'short' | null
       })));
-      
+
       // Calculate P&L without fees
       const totalPnlWithoutFees = trades.reduce((sum, t) => sum + (t.profit_loss || 0), 0);
-      
+
       // Calculate P&L with fees (subtract fees from profit)
       const totalPnlWithFees = trades.reduce((sum, t) => {
         const pnl = t.profit_loss || 0;
@@ -450,66 +442,66 @@ const Dashboard = () => {
         const tradingFee = t.trading_fee || 0;
         return sum + (pnl - Math.abs(fundingFee) - Math.abs(tradingFee));
       }, 0);
-      
+
       const winningTrades = trades.filter(t => (t.profit_loss || 0) > 0).length;
       const avgDuration = trades.reduce((sum, t) => sum + (t.duration_minutes || 0), 0) / (trades.length || 1);
 
       // Use consistent trading days calculation with user-selected mode
       const { tradingDays: tradingDaySpan } = calculateTradingDays(trades, tradingDaysMode);
-      
+
       // Calculate average P&L per trade
-      const avgPnLPerTrade = trades.length > 0 
-        ? (includeFeesInPnL ? totalPnlWithFees : totalPnlWithoutFees) / trades.length 
+      const avgPnLPerTrade = trades.length > 0
+        ? (includeFeesInPnL ? totalPnlWithFees : totalPnlWithoutFees) / trades.length
         : 0;
-      
+
       // Calculate average P&L per day
-      const avgPnLPerDay = tradingDaySpan > 0 
-        ? (includeFeesInPnL ? totalPnlWithFees : totalPnlWithoutFees) / tradingDaySpan 
+      const avgPnLPerDay = tradingDaySpan > 0
+        ? (includeFeesInPnL ? totalPnlWithFees : totalPnlWithoutFees) / tradingDaySpan
         : 0;
-      
+
       // Calculate total added capital from capital_log (sum of all additions)
       const totalAddedCapital = capitalLog.reduce((sum, entry) => sum + (entry.amount_added || 0), 0);
-      
+
       // Use total added capital as the "initial investment" for ROI calculation
       // If no capital log exists, fallback to initialInvestment from settings
       const baseCapital = totalAddedCapital > 0 ? totalAddedCapital : initialInvestment;
-      
+
       // Calculate current balance
       const currentBalance = baseCapital + (includeFeesInPnL ? totalPnlWithFees : totalPnlWithoutFees);
-      
+
       // Calculate current ROI based on total invested capital
       let currentROI = 0;
       if (baseCapital > 0) {
         currentROI = ((currentBalance - baseCapital) / baseCapital) * 100;
       }
-      
+
       // Calculate weighted average ROI: total P&L divided by total capital invested
       // Calculate capital invested per trade using available data
       const totalCapitalInvested = trades.reduce((sum, t) => {
         // Priority 1: Use margin if available
         if (t.margin && t.margin > 0) return sum + t.margin;
-        
+
         // Priority 2: Calculate from position_size and entry_price
         if (t.position_size && t.entry_price && t.position_size > 0 && t.entry_price > 0) {
           const notionalValue = t.position_size * t.entry_price;
           const leverage = t.leverage && t.leverage > 0 ? t.leverage : 1;
           return sum + (notionalValue / leverage);
         }
-        
+
         // Priority 3: Reverse calculate from ROI if available
         if (t.roi && t.roi !== 0 && t.profit_loss) {
           return sum + Math.abs(t.profit_loss / (t.roi / 100));
         }
-        
+
         // Priority 4: Use position_size as approximation
         if (t.position_size && t.position_size > 0) {
           const leverage = t.leverage && t.leverage > 0 ? t.leverage : 1;
           return sum + (t.position_size / leverage);
         }
-        
+
         return sum;
       }, 0);
-      
+
       const avgROIPerTrade = totalCapitalInvested > 0
         ? ((includeFeesInPnL ? totalPnlWithFees : totalPnlWithoutFees) / totalCapitalInvested) * 100
         : 0;
@@ -600,7 +592,7 @@ const Dashboard = () => {
       setShowUpgradePrompt(true);
       return;
     }
-    
+
     setOriginalPositions([...positions]);
     setIsCustomizing(true);
   }, [positions, canCustomizeDashboard]);
@@ -608,10 +600,10 @@ const Dashboard = () => {
   const handleSaveLayout = useCallback(async () => {
     setIsCustomizing(false);
     setOriginalPositions([]);
-    
+
     // Actually save the layout to database
     await saveGridLayout(positions, selectedColumnCount);
-    
+
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
@@ -661,7 +653,7 @@ const Dashboard = () => {
       const [, colStr, rowStr] = overId.split('-');
       const targetCol = parseInt(colStr, 10);
       const targetRow = parseInt(rowStr, 10);
-      
+
       updatedPositions = positions.map(p =>
         p.id === activeId ? { ...p, column: targetCol, row: targetRow } : p
       );
@@ -675,7 +667,7 @@ const Dashboard = () => {
     // Validate all widgets are still present
     const originalIds = new Set(positions.map(p => p.id));
     const updatedIds = new Set(updatedPositions.map(p => p.id));
-    
+
     if (originalIds.size !== updatedIds.size) {
       console.error('Widget count mismatch!', {
         original: Array.from(originalIds),
@@ -758,7 +750,7 @@ const Dashboard = () => {
     if (widgetId.startsWith('custom-')) {
       const customWidgetId = widgetId.replace('custom-', '');
       const customWidget = customWidgets.find(w => w.id === customWidgetId);
-      
+
       if (!customWidget) return null;
 
       return (
@@ -768,7 +760,7 @@ const Dashboard = () => {
           isEditMode={isCustomizing}
           onRemove={() => removeWidget(widgetId)}
         >
-          <CustomWidgetRenderer 
+          <CustomWidgetRenderer
             widget={customWidget}
             onDelete={() => {
               removeWidget(widgetId);
@@ -799,8 +791,8 @@ const Dashboard = () => {
         const totalInvestedCapital = totalCapitalAdditions > 0 ? totalCapitalAdditions : initialInvestment;
         widgetProps.totalBalance = totalInvestedCapital + (stats?.total_pnl || 0);
         widgetProps.change24h = stats?.total_pnl || 0;
-        widgetProps.changePercent24h = totalInvestedCapital > 0 
-          ? ((stats?.total_pnl || 0) / totalInvestedCapital) * 100 
+        widgetProps.changePercent24h = totalInvestedCapital > 0
+          ? ((stats?.total_pnl || 0) / totalInvestedCapital) * 100
           : 0;
         widgetProps.tradingDays = stats?.trading_days || 0;
         break;
@@ -844,7 +836,7 @@ const Dashboard = () => {
         widgetProps.currentStreak = currentStreak;
         break;
       case 'tradingQuality':
-        const minPnl = processedTrades.length > 0 
+        const minPnl = processedTrades.length > 0
           ? Math.min(...processedTrades.map(t => t.profit_loss || 0))
           : 0;
         widgetProps.avgWin = dashboardStats.avgWin;
@@ -852,8 +844,8 @@ const Dashboard = () => {
         widgetProps.winCount = dashboardStats.winningTrades.length;
         widgetProps.lossCount = dashboardStats.losingTrades.length;
         widgetProps.maxDrawdownAmount = Math.min(0, minPnl);
-        widgetProps.maxDrawdownPercent = initialInvestment > 0 
-          ? Math.abs((minPnl / initialInvestment) * 100) 
+        widgetProps.maxDrawdownPercent = initialInvestment > 0
+          ? Math.abs((minPnl / initialInvestment) * 100)
           : 0;
         widgetProps.profitFactor = dashboardStats.profitFactor;
         break;
@@ -866,10 +858,10 @@ const Dashboard = () => {
       case 'avgPnLPerDay':
         // Calculate from filtered trades to respect date range
         const { tradingDays: filteredTradingDays } = calculateTradingDays(
-          processedTrades, 
+          processedTrades,
           tradingDaysMode
         );
-        
+
         // Calculate PnL with/without fees based on user setting
         const filteredTotalPnL = processedTrades.reduce((sum, t) => {
           const pnl = t.profit_loss || 0;
@@ -880,9 +872,9 @@ const Dashboard = () => {
           }
           return sum + pnl;
         }, 0);
-        
-        widgetProps.avgPnLPerDay = filteredTradingDays > 0 
-          ? filteredTotalPnL / filteredTradingDays 
+
+        widgetProps.avgPnLPerDay = filteredTradingDays > 0
+          ? filteredTotalPnL / filteredTradingDays
           : 0;
         widgetProps.tradingDays = filteredTradingDays;
         break;
@@ -890,7 +882,7 @@ const Dashboard = () => {
         widgetProps.currentROI = stats?.current_roi || 0;
         // Show total invested capital from capital_log as "initial investment"
         widgetProps.initialInvestment = totalCapitalAdditions > 0 ? totalCapitalAdditions : initialInvestment;
-        widgetProps.currentBalance = totalCapitalAdditions > 0 
+        widgetProps.currentBalance = totalCapitalAdditions > 0
           ? totalCapitalAdditions + (stats?.total_pnl || 0)
           : initialInvestment + (stats?.total_pnl || 0);
         widgetProps.onInitialInvestmentUpdate = async (newValue: number) => {
@@ -959,273 +951,191 @@ const Dashboard = () => {
 
   return (
     <>
-    <AppLayout>
-      {/* Onboarding Flow - shows for new users */}
-      {showOnboarding && !onboardingLoading && (
-        <OnboardingFlow onComplete={completeOnboarding} />
-      )}
-      
-      <FloatingXP />
-      <MicroFeedbackOverlay />
-      <WeeklySummaryRecap />
-      <LessonLearnedPopup />
-      <LevelUpModal
-        show={showLevelUp} 
-        level={xpData.currentLevel} 
-        onClose={() => setShowLevelUp(false)} 
+      <SEO
+        title={pageMeta.dashboard.title}
+        description={pageMeta.dashboard.description}
+        keywords={pageMeta.dashboard.keywords}
+        canonical={pageMeta.dashboard.canonical}
       />
-      
-      {/* Skip to main content link for keyboard navigation */}
-      <a 
-        href="#main-dashboard-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg"
-      >
-        Skip to main content
-      </a>
-
-      {/* Screen reader announcements for dynamic updates */}
-      <div aria-live="polite" aria-atomic="true" className="sr-only">
-        {stats && `Dashboard updated. Total P&L: ${formatCurrency(stats.total_pnl)}, Win rate: ${stats.win_rate.toFixed(1)}%, Total trades: ${stats.total_trades}`}
-      </div>
-
-      <div id="main-dashboard-content" className="space-y-6 mobile-safe animate-fade-in">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                {t('dashboard.title')}
-              </h1>
-              {activeSubAccount && (
-                <Badge variant="secondary" className="text-sm px-3 py-1">
-                  {activeSubAccount.name}
-                </Badge>
-              )}
-            </div>
-            <p className="text-sm text-muted-foreground/80">{t('dashboard.overview')}</p>
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <DateRangeFilter dateRange={dateRange} onDateRangeChange={handleDateRangeChange} />
-            {/* Gamification Button temporarily hidden */}
-            {/* <Button
-              size="icon"
-              onClick={() => setIsGamificationOpen(!isGamificationOpen)}
-              variant="outline"
-              className="glass hover:glass-strong"
-            >
-              <Zap className="h-4 w-4" />
-            </Button> */}
-          </div>
-        </div>
-
-        {/* Customize Dashboard Controls - Show for Overview and Trade Station tabs */}
-        {!loading && stats && stats.total_trades > 0 && (activeTab === 'overview' || activeTab === 'tradestation') && (
-          <div data-tour="dashboard-customization">
-            {activeTab === 'overview' ? (
-              <CustomizeDashboardControls
-                isCustomizing={isCustomizing}
-                hasChanges={hasLayoutChanges}
-                onStartCustomize={handleStartCustomize}
-                onSave={handleSaveLayout}
-                onCancel={handleCancelCustomize}
-                onReset={resetLayout}
-                onAddWidget={() => {
-                  if (!canCustomizeDashboard) {
-                    setShowUpgradePrompt(true);
-                    return;
-                  }
-                  setShowWidgetLibrary(true);
-                }}
-                columnCount={selectedColumnCount}
-                onColumnCountChange={handleColumnCountChange}
-                widgetCount={positions.length}
-              />
-            ) : tradeStationControls ? (
-              <CustomizeDashboardControls
-                isCustomizing={tradeStationControls.isCustomizing}
-                hasChanges={tradeStationControls.hasChanges}
-                onStartCustomize={tradeStationControls.handleStartCustomize}
-                onSave={tradeStationControls.handleSave}
-                onCancel={tradeStationControls.handleCancel}
-                onReset={tradeStationControls.handleReset}
-                onAddWidget={() => {
-                  if (!canCustomizeDashboard) {
-                    setShowUpgradePrompt(true);
-                    return;
-                  }
-                  setShowWidgetLibrary(true);
-                }}
-                columnCount={tradeStationControls.columnCount}
-                onColumnCountChange={tradeStationControls.handleColumnCountChange}
-                widgetCount={tradeStationControls.widgetCount}
-                canUndo={tradeStationControls.canUndo}
-                onUndoReset={tradeStationControls.handleUndoReset}
-              />
-            ) : null}
-          </div>
+      <AppLayout>
+        {/* Onboarding Flow - shows for new users */}
+        {showOnboarding && !onboardingLoading && (
+          <OnboardingFlow onComplete={completeOnboarding} />
         )}
 
-        {loading ? (
-          <DashboardSkeleton />
-        ) : stats && stats.total_trades === 0 ? (
-          <Card className="p-8 text-center glass">
-            <h3 className="text-xl font-semibold mb-2">{t('trades.trades')}</h3>
-            <p className="text-muted-foreground mb-4">
-              Upload your first trades to activate the dashboard and see your performance metrics
-            </p>
-            <a href="/upload" className="text-primary hover:underline">
-              {t('trades.addTrade')} →
-            </a>
-          </Card>
-        ) : (
-          <>
-            {/* Main Content Tabs */}
-            <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6 animate-fade-in" style={{animationDelay: '0.5s'}}>
-              <TabsList className="glass rounded-2xl grid w-full grid-cols-4 h-auto p-1.5">
-                <TabsTrigger value="tradestation" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">Trade Station</TabsTrigger>
-                <TabsTrigger value="overview" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">Command Center</TabsTrigger>
-                <TabsTrigger value="insights" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">{t('analytics.insights')}</TabsTrigger>
-                <TabsTrigger value="history" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">{t('trades.tradeHistory')}</TabsTrigger>
-              </TabsList>
+        <FloatingXP />
+        <MicroFeedbackOverlay />
+        <WeeklySummaryRecap />
+        <LessonLearnedPopup />
+        <LevelUpModal
+          show={showLevelUp}
+          level={xpData.currentLevel}
+          onClose={() => setShowLevelUp(false)}
+        />
 
-              <TabsContent value="tradestation" className="space-y-6">
-                <TradeStationView onControlsReady={setTradeStationControls} />
-              </TabsContent>
+        <div id="main-dashboard-content" className="space-y-6 mobile-safe animate-fade-in">
+          {loading ? (
+            <DashboardSkeleton />
+          ) : stats && stats.total_trades === 0 ? (
+            <Card className="p-8 text-center glass">
+              <h3 className="text-xl font-semibold mb-2">{t('trades.trades')}</h3>
+              <p className="text-muted-foreground mb-4">
+                Upload your first trades to activate the dashboard and see your performance metrics
+              </p>
+              <a href="/upload" className="text-primary hover:underline">
+                {t('trades.addTrade')} →
+              </a>
+            </Card>
+          ) : (
+            <>
+              <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+                <TabsList className="glass rounded-2xl grid w-full grid-cols-4 h-auto p-1.5">
+                  <TabsTrigger value="tradestation" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">Trade Station</TabsTrigger>
+                  <TabsTrigger value="overview" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">Command Center</TabsTrigger>
+                  <TabsTrigger value="insights" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">{t('analytics.insights')}</TabsTrigger>
+                  <TabsTrigger value="history" className="text-sm py-2.5 data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm rounded-xl transition-all">{t('trades.tradeHistory')}</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="overview" className="space-y-6">
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={rectIntersection}
-                  onDragStart={handleDragStart}
-                  onDragEnd={handleDragEnd}
-                  onDragCancel={handleDragCancel}
-                >
-                  <SortableContext 
-                    items={positions.map(p => p.id)}
-                    strategy={rectSortingStrategy}
-                  >
-                    <div 
-                      ref={gridRef} 
-                      className="dashboard-grid-free"
-                      style={{ '--column-count': columnCount } as React.CSSProperties}
-                    >
-                      {Array.from({ length: columnCount }, (_, colIdx) => (
-                        <div key={`col-${colIdx}`} className="dashboard-column-free">
-                          {Object.entries(grid[colIdx] || {})
-                            .sort(([rowA], [rowB]) => parseInt(rowA) - parseInt(rowB))
-                            .map(([row, widgetId]) => (
-                              <div key={widgetId}>
-                                {renderWidget(widgetId)}
-                              </div>
-                            ))}
-                          {isCustomizing && (
-                            <DropZone id={`dropzone-${colIdx}-${Object.keys(grid[colIdx] || {}).length}`} />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </SortableContext>
-                </DndContext>
-              </TabsContent>
+                <TabsContent value="tradestation" className="space-y-6">
+                  <TradeStationView onControlsReady={setTradeStationControls} />
+                </TabsContent>
 
-            {/* Insights Tab */}
-            <TabsContent value="insights" className="space-y-6">
-                <Suspense fallback={<DashboardSkeleton />}>
-                  {/* Layer 1: Quick Summary */}
-                  <InsightsQuickSummary
-                    totalPnL={dashboardStats.totalPnL}
-                    winRate={dashboardStats.winRate}
-                    profitFactor={dashboardStats.profitFactor}
-                    avgROI={dashboardStats.avgRoi}
-                    totalTrades={dashboardStats.totalTrades}
+                <TabsContent value="overview" className="space-y-6">
+                  <DashboardHeader
+                    dateRange={dateRange}
+                    setDateRange={handleDateRangeChange}
+                    clearDateRange={clearDateRange}
+                    isCustomizing={isCustomizing}
+                    onStartCustomize={handleStartCustomize}
+                    onSaveLayout={handleSaveLayout}
+                    onCancelCustomize={handleCancelCustomize}
+                    onResetLayout={resetLayout}
+                    canCustomizeDashboard={canCustomizeDashboard}
+                    showUpgradePrompt={setShowUpgradePrompt}
                   />
 
-                  {/* Layer 2: Performance + Quality */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <PerformanceHighlights
-                      trades={processedTrades}
-                      bestTrade={dashboardStats.bestTrade}
-                      worstTrade={dashboardStats.worstTrade}
-                      currentStreak={currentStreak}
-                    />
-                    
-                    <TradingQualityMetrics
-                      avgWin={dashboardStats.avgWin}
-                      avgLoss={dashboardStats.avgLoss}
-                      winCount={dashboardStats.winningTrades.length}
-                      lossCount={dashboardStats.losingTrades.length}
-                      maxDrawdownPercent={Math.abs((Math.min(...processedTrades.map(t => t.profit_loss || 0)) / initialInvestment) * 100)}
-                      maxDrawdownAmount={Math.min(...processedTrades.map(t => t.profit_loss || 0))}
+                  <WidgetLibrary
+                    open={isCustomizing}
+                    onClose={() => setIsCustomizing(false)}
+                    onAddWidget={addWidget}
+                  />
+
+                  <UpgradePrompt
+                    open={showUpgradePrompt}
+                    onClose={() => setShowUpgradePrompt(false)}
+                  />
+
+                  <DashboardGrid
+                    positions={positions}
+                    selectedColumnCount={selectedColumnCount}
+                    isCustomizing={isCustomizing}
+                    activeId={activeId}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    onDragCancel={handleDragCancel}
+                    renderWidget={renderWidget}
+                  />
+                </TabsContent>
+
+                {/* Insights Tab */}
+                <TabsContent value="insights" className="space-y-6">
+                  <Suspense fallback={<DashboardSkeleton />}>
+                    {/* Layer 1: Quick Summary */}
+                    <InsightsQuickSummary
+                      totalPnL={dashboardStats.totalPnL}
+                      winRate={dashboardStats.winRate}
                       profitFactor={dashboardStats.profitFactor}
+                      avgROI={dashboardStats.avgRoi}
+                      totalTrades={dashboardStats.totalTrades}
                     />
-                  </div>
 
-                  {/* Layer 3: Cost Efficiency + Behavior */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <CostEfficiencyPanel trades={processedTrades} />
-                    <BehaviorAnalytics trades={processedTrades} />
-                  </div>
+                    {/* Layer 2: Performance + Quality */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <PerformanceHighlights
+                        trades={processedTrades}
+                        bestTrade={dashboardStats.bestTrade}
+                        worstTrade={dashboardStats.worstTrade}
+                        currentStreak={currentStreak}
+                      />
 
-                  {/* Layer 4: Heatmap + Drawdown */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <TradingHeatmap trades={processedTrades} />
-                    <DrawdownAnalysis trades={processedTrades} initialInvestment={initialInvestment} />
-                  </div>
+                      <TradingQualityMetrics
+                        avgWin={dashboardStats.avgWin}
+                        avgLoss={dashboardStats.avgLoss}
+                        winCount={dashboardStats.winningTrades.length}
+                        lossCount={dashboardStats.losingTrades.length}
+                        maxDrawdownPercent={Math.abs((Math.min(...processedTrades.map(t => t.profit_loss || 0)) / initialInvestment) * 100)}
+                        maxDrawdownAmount={Math.min(...processedTrades.map(t => t.profit_loss || 0))}
+                        profitFactor={dashboardStats.profitFactor}
+                      />
+                    </div>
 
-                  {/* Trading Streaks */}
-                  <TradingStreaks trades={processedTrades} />
-                </Suspense>
-              </TabsContent>
+                    {/* Layer 3: Cost Efficiency + Behavior */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <CostEfficiencyPanel trades={processedTrades} />
+                      <BehaviorAnalytics trades={processedTrades} />
+                    </div>
 
-              {/* History Tab */}
-              <TabsContent value="history" className="relative glass rounded-2xl p-6">
-                <Suspense fallback={<DashboardSkeleton />}>
-                  <TradeHistory onTradesChange={fetchStats} />
-                </Suspense>
-              </TabsContent>
-            </Tabs>
-          </>
-        )}
-        
-        {/* AI Assistant */}
-        <Suspense fallback={null}>
-          <AIAssistant />
-        </Suspense>
+                    {/* Layer 4: Heatmap + Drawdown */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <TradingHeatmap trades={processedTrades} />
+                      <DrawdownAnalysis trades={processedTrades} initialInvestment={initialInvestment} />
+                    </div>
 
-        {/* Widget Library Modal - Context-aware for Overview vs Trade Station */}
-        <WidgetLibrary
-          open={showWidgetLibrary}
-          onClose={() => setShowWidgetLibrary(false)}
-          onAddWidget={(widgetId) => {
-            if (activeTab === 'tradestation' && tradeStationControls) {
-              tradeStationControls.handleAddWidgetDirect(widgetId);
-            } else {
-              addWidget(widgetId);
-            }
-          }}
-          onRemoveWidget={(widgetId) => {
-            if (activeTab === 'tradestation' && tradeStationControls) {
-              tradeStationControls.handleRemoveWidgetDirect(widgetId);
-            } else {
-              removeWidget(widgetId);
-            }
-          }}
-          activeWidgets={activeTab === 'tradestation' && tradeStationControls ? tradeStationControls.activeWidgets : activeWidgets}
-        />
-        
-        {/* Tour CTA Button */}
-        <TourCTAButton />
-        
-        {/* Upgrade Prompt for Free Users */}
-        <UpgradePrompt
-          open={showUpgradePrompt}
-          onClose={() => setShowUpgradePrompt(false)}
-          feature="dashboard customization"
-        />
-      </div>
-    </AppLayout>
-    
-    {/* Glassmorphic Overlay Sidebar - Gamification temporarily disabled */}
-    {/* <AnimatePresence>
+                    {/* Trading Streaks */}
+                    <TradingStreaks trades={processedTrades} />
+                  </Suspense>
+                </TabsContent >
+
+                {/* History Tab */}
+                < TabsContent value="history" className="relative glass rounded-2xl p-6" >
+                  <Suspense fallback={<DashboardSkeleton />}>
+                    <TradeHistory onTradesChange={fetchStats} />
+                  </Suspense>
+                </TabsContent >
+              </Tabs >
+            </>
+          )}
+
+          {/* AI Assistant */}
+          <Suspense fallback={null}>
+            <AIAssistant />
+          </Suspense>
+
+          {/* Widget Library Modal - Context-aware for Overview vs Trade Station */}
+          <WidgetLibrary
+            open={showWidgetLibrary}
+            onClose={() => setShowWidgetLibrary(false)}
+            onAddWidget={(widgetId) => {
+              if (activeTab === 'tradestation' && tradeStationControls) {
+                tradeStationControls.handleAddWidgetDirect(widgetId);
+              } else {
+                addWidget(widgetId);
+              }
+            }}
+            onRemoveWidget={(widgetId) => {
+              if (activeTab === 'tradestation' && tradeStationControls) {
+                tradeStationControls.handleRemoveWidgetDirect(widgetId);
+              } else {
+                removeWidget(widgetId);
+              }
+            }}
+            activeWidgets={activeTab === 'tradestation' && tradeStationControls ? tradeStationControls.activeWidgets : activeWidgets}
+          />
+
+          {/* Tour CTA Button */}
+          <TourCTAButton />
+
+          {/* Upgrade Prompt for Free Users */}
+          <UpgradePrompt
+            open={showUpgradePrompt}
+            onClose={() => setShowUpgradePrompt(false)}
+            feature="dashboard customization"
+          />
+        </div >
+      </AppLayout >
+
+      {/* Glassmorphic Overlay Sidebar - Gamification temporarily disabled */}
+      {/* <AnimatePresence>
       {isGamificationOpen && (
         <>
           <motion.div

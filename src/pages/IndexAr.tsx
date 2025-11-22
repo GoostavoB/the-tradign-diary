@@ -11,31 +11,23 @@ import { MobileHeader } from "@/components/MobileHeader";
 import { ProofBar } from "@/components/ProofBar";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/hooks/useTranslation";
-import { updateLandingMeta, addStructuredData, trackLandingView, trackCTAClick } from "@/utils/i18nLandingMeta";
-import { useHreflang } from "@/hooks/useHreflang";
+import { Helmet } from 'react-helmet-async';
+import { HreflangLinks } from '@/components/HreflangLinks';
+import { landingMeta, getLandingStructuredData, trackLandingView, trackCTAClick } from '@/utils/i18nLandingMeta';
 import { SUPPORTED_LANGUAGES } from "@/utils/languageRouting";
 
 const IndexAr = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-
-  // Add hreflang tags for SEO
-  useHreflang({
-    languages: [...SUPPORTED_LANGUAGES],
-    defaultLanguage: 'en'
-  });
+  const meta = landingMeta['ar'];
 
   useEffect(() => {
-    // Update meta tags and SEO
-    updateLandingMeta('ar');
-    addStructuredData('ar');
-    
     // Track landing view
     trackLandingView('ar');
-    
+
     // Add RTL direction for Arabic
     document.documentElement.dir = 'rtl';
-    
+
     return () => {
       document.documentElement.dir = 'ltr';
     };
@@ -48,8 +40,30 @@ const IndexAr = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background">
+      <HreflangLinks languages={[...SUPPORTED_LANGUAGES]} defaultLanguage="en" />
+      <Helmet>
+        <title>{meta.title}</title>
+        <meta name="description" content={meta.description} />
+        <meta name="keywords" content={meta.keywords} />
+        <link rel="canonical" href={meta.canonical} />
+
+        <meta property="og:title" content={meta.ogTitle} />
+        <meta property="og:description" content={meta.ogDescription} />
+        <meta property="og:image" content={meta.ogImage} />
+        <meta property="og:url" content={meta.canonical} />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={meta.ogTitle} />
+        <meta name="twitter:description" content={meta.ogDescription} />
+        <meta name="twitter:image" content={meta.ogImage} />
+
+        <script type="application/ld+json">
+          {JSON.stringify(getLandingStructuredData('ar'))}
+        </script>
+      </Helmet>
       <MobileHeader />
-      
+
       <main className="pt-14">
         <Hero />
         <ProofBar />
@@ -60,7 +74,7 @@ const IndexAr = () => {
         <Pricing />
         <CTA />
       </main>
-      
+
       <Footer />
     </div>
   );

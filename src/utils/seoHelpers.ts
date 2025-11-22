@@ -21,63 +21,7 @@ export interface PageMeta {
 /**
  * Update page meta tags dynamically
  */
-export const updatePageMeta = (meta: PageMeta) => {
-  // Update title
-  document.title = meta.title;
 
-  // Update or create meta tags
-  const metaTags: MetaTag[] = [
-    { name: 'description', content: meta.description },
-    { property: 'og:title', content: meta.title },
-    { property: 'og:description', content: meta.description },
-    { name: 'twitter:title', content: meta.title },
-    { name: 'twitter:description', content: meta.description },
-  ];
-
-  if (meta.keywords) {
-    metaTags.push({ name: 'keywords', content: meta.keywords });
-  }
-
-  if (meta.ogImage) {
-    metaTags.push(
-      { property: 'og:image', content: meta.ogImage },
-      { name: 'twitter:image', content: meta.ogImage }
-    );
-  }
-
-  if (meta.ogType) {
-    metaTags.push({ property: 'og:type', content: meta.ogType });
-  }
-
-  if (meta.robots) {
-    metaTags.push({ name: 'robots', content: meta.robots });
-  }
-
-  metaTags.forEach(({ name, property, content }) => {
-    const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
-    let element = document.querySelector(selector);
-
-    if (!element) {
-      element = document.createElement('meta');
-      if (name) element.setAttribute('name', name);
-      if (property) element.setAttribute('property', property);
-      document.head.appendChild(element);
-    }
-
-    element.setAttribute('content', content);
-  });
-
-  // Update canonical URL
-  if (meta.canonical) {
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = meta.canonical;
-  }
-};
 
 /**
  * Add structured data (JSON-LD) to page

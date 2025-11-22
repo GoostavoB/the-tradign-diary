@@ -1,19 +1,14 @@
-import { Helmet } from 'react-helmet';
+
+import { Helmet } from 'react-helmet-async';
 import AppLayout from '@/components/layout/AppLayout';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useEffect } from 'react';
-import { useHreflang } from '@/hooks/useHreflang';
+import { HreflangLinks } from '@/components/HreflangLinks';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '@/utils/languageRouting';
 
 export default function Terms() {
   const { t, changeLanguage } = useTranslation();
-  
-  // Add hreflang tags for SEO
-  useHreflang({
-    languages: [...SUPPORTED_LANGUAGES],
-    defaultLanguage: 'en'
-  });
-  
+
   // Sync language with URL
   useEffect(() => {
     const pathLang = window.location.pathname.split('/')[1];
@@ -23,18 +18,19 @@ export default function Terms() {
   }, [changeLanguage]);
   return (
     <>
+      <HreflangLinks languages={[...SUPPORTED_LANGUAGES]} defaultLanguage="en" />
       <Helmet>
         <title>{t('legal.terms.title', 'Terms of Service')} - The Trading Diary</title>
         <meta name="description" content={t('legal.terms.description', 'Read our terms of service and understand the rules for using The Trading Diary platform.')} />
       </Helmet>
-      
+
       <AppLayout>
         <div className="container max-w-4xl mx-auto px-4 py-12">
           <h1 className="text-4xl font-bold mb-8">{t('legal.termsTitle', 'Terms of Service')}</h1>
-          
+
           <div className="prose prose-invert max-w-none space-y-6">
             <p className="text-muted-foreground">{t('legal.lastUpdated', 'Last updated')}: {new Date().toLocaleDateString()}</p>
-            
+
             {/* Beta Notice */}
             <section className="bg-primary/10 border border-primary/20 rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-3">{t('legal.betaNotice', 'Beta Product Notice')}</h2>

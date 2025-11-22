@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import AppLayout from '@/components/layout/AppLayout';
 import { AdvancedMetricsCard } from '@/components/analytics/AdvancedMetricsCard';
 import { ABTestingPanel } from '@/components/analytics/ABTestingPanel';
@@ -44,110 +44,110 @@ export default function AdvancedAnalytics() {
               </p>
             </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <AdvancedMetricsCard
-              title="Total P&L"
-              value="$12,450"
-              change={15.3}
-              data={performanceData}
-              type="area"
-              icon="dollar"
-            />
-            <AdvancedMetricsCard
-              title="Win Rate"
-              value="68.5%"
-              change={5.2}
-              data={winRateData}
-              type="line"
-              icon="percent"
-            />
-            <AdvancedMetricsCard
-              title="Average Profit"
-              value="$245"
-              change={-2.1}
-              data={profitData}
-              type="area"
-              icon="trending"
-            />
-          </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <AdvancedMetricsCard
+                title="Total P&L"
+                value="$12,450"
+                change={15.3}
+                data={performanceData}
+                type="area"
+                icon="dollar"
+              />
+              <AdvancedMetricsCard
+                title="Win Rate"
+                value="68.5%"
+                change={5.2}
+                data={winRateData}
+                type="line"
+                icon="percent"
+              />
+              <AdvancedMetricsCard
+                title="Average Profit"
+                value="$245"
+                change={-2.1}
+                data={profitData}
+                type="area"
+                icon="trending"
+              />
+            </div>
 
-          <Tabs defaultValue="metrics" className="w-full">
-            <TabsList>
-              <TabsTrigger value="metrics">Performance Metrics</TabsTrigger>
-              <TabsTrigger value="testing">A/B Testing</TabsTrigger>
-              <TabsTrigger value="cohorts">Cohort Analysis</TabsTrigger>
-            </TabsList>
+            <Tabs defaultValue="metrics" className="w-full">
+              <TabsList>
+                <TabsTrigger value="metrics">Performance Metrics</TabsTrigger>
+                <TabsTrigger value="testing">A/B Testing</TabsTrigger>
+                <TabsTrigger value="cohorts">Cohort Analysis</TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="metrics" className="space-y-4 mt-6">
-              <div className="grid gap-4 md:grid-cols-2">
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Trade Distribution</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Scalping ({"<"}5min)</span>
-                      <span className="font-medium">35%</span>
+              <TabsContent value="metrics" className="space-y-4 mt-6">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold mb-4">Trade Distribution</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Scalping ({"<"}5min)</span>
+                        <span className="font-medium">35%</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Day Trading (5min-1d)</span>
+                        <span className="font-medium">45%</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Swing Trading ({">"}1d)</span>
+                        <span className="font-medium">20%</span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Day Trading (5min-1d)</span>
-                      <span className="font-medium">45%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Swing Trading ({">"}1d)</span>
-                      <span className="font-medium">20%</span>
-                    </div>
-                  </div>
-                </Card>
+                  </Card>
 
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Risk Metrics</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Sharpe Ratio</span>
-                      <span className="font-medium">2.34</span>
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold mb-4">Risk Metrics</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Sharpe Ratio</span>
+                        <span className="font-medium">2.34</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Max Drawdown</span>
+                        <span className="font-medium text-red-500">-12.5%</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">Profit Factor</span>
+                        <span className="font-medium">1.85</span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Max Drawdown</span>
-                      <span className="font-medium text-red-500">-12.5%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Profit Factor</span>
-                      <span className="font-medium">1.85</span>
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="testing" className="mt-6">
-              <ABTestingPanel />
-            </TabsContent>
-
-            <TabsContent value="cohorts" className="space-y-4 mt-6">
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">User Cohorts</h3>
-                <p className="text-muted-foreground mb-4">
-                  Analyze performance across different time periods and user segments
-                </p>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <div>
-                      <p className="font-medium">January 2025 Cohort</p>
-                      <p className="text-sm text-muted-foreground">45 active users</p>
-                    </div>
-                    <span className="text-green-500 font-medium">+18.5%</span>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <div>
-                      <p className="font-medium">December 2024 Cohort</p>
-                      <p className="text-sm text-muted-foreground">62 active users</p>
-                    </div>
-                    <span className="text-green-500 font-medium">+12.3%</span>
-                  </div>
+                  </Card>
                 </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
+              </TabsContent>
+
+              <TabsContent value="testing" className="mt-6">
+                <ABTestingPanel />
+              </TabsContent>
+
+              <TabsContent value="cohorts" className="space-y-4 mt-6">
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">User Cohorts</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Analyze performance across different time periods and user segments
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <div>
+                        <p className="font-medium">January 2025 Cohort</p>
+                        <p className="text-sm text-muted-foreground">45 active users</p>
+                      </div>
+                      <span className="text-green-500 font-medium">+18.5%</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <div>
+                        <p className="font-medium">December 2024 Cohort</p>
+                        <p className="text-sm text-muted-foreground">62 active users</p>
+                      </div>
+                      <span className="text-green-500 font-medium">+12.3%</span>
+                    </div>
+                  </div>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
         </PremiumFeatureLock>
       </AppLayout>
     </>

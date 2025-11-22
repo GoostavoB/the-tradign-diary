@@ -127,78 +127,9 @@ export const landingMeta: Record<string, LandingMeta> = {
   },
 };
 
-export const updateLandingMeta = (langCode: string) => {
+export const getLandingStructuredData = (langCode: string) => {
   const meta = landingMeta[langCode];
-  if (!meta) return;
-
-  // Update document title
-  document.title = meta.title;
-
-  // Update or create meta tags
-  const updateMetaTag = (name: string, content: string, isProperty = false) => {
-    const attr = isProperty ? 'property' : 'name';
-    let element = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement;
-    
-    if (!element) {
-      element = document.createElement('meta');
-      element.setAttribute(attr, name);
-      document.head.appendChild(element);
-    }
-    element.content = content;
-  };
-
-  // Update basic meta tags
-  updateMetaTag('description', meta.description);
-  updateMetaTag('keywords', meta.keywords);
-
-  // Update Open Graph tags
-  updateMetaTag('og:title', meta.ogTitle, true);
-  updateMetaTag('og:description', meta.ogDescription, true);
-  updateMetaTag('og:url', meta.canonical, true);
-  updateMetaTag('og:type', 'website', true);
-  updateMetaTag('og:image', meta.ogImage, true);
-
-  // Update Twitter Card tags
-  updateMetaTag('twitter:card', 'summary_large_image');
-  updateMetaTag('twitter:title', meta.ogTitle);
-  updateMetaTag('twitter:description', meta.ogDescription);
-  updateMetaTag('twitter:image', meta.ogImage);
-
-  // Update geo-targeting meta tags if available
-  if (meta.geo) {
-    updateMetaTag('geo.region', meta.geo.region);
-    updateMetaTag('geo.placename', meta.geo.placename);
-  }
-
-  // Update canonical link
-  let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-  if (!canonical) {
-    canonical = document.createElement('link');
-    canonical.rel = 'canonical';
-    document.head.appendChild(canonical);
-  }
-  canonical.href = meta.canonical;
-
-  // Update html lang attribute
-  document.documentElement.lang = meta.lang;
-
-  // Add hreflang alternates
-  // Remove existing hreflang links
-  document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(el => el.remove());
-  
-  // Add new hreflang links
-  meta.alternates.forEach(({ lang, url }) => {
-    const link = document.createElement('link');
-    link.rel = 'alternate';
-    link.hreflang = lang;
-    link.href = url;
-    document.head.appendChild(link);
-  });
-};
-
-export const addStructuredData = (langCode: string) => {
-  const meta = landingMeta[langCode];
-  if (!meta) return;
+  if (!meta) return null;
 
   // Organization Schema
   const organizationData = {
@@ -249,20 +180,7 @@ export const addStructuredData = (langCode: string) => {
     "inLanguage": meta.lang
   };
 
-  // Remove existing structured data
-  document.querySelectorAll('script[type="application/ld+json"]').forEach(el => el.remove());
-
-  // Add organization schema
-  const orgScript = document.createElement('script');
-  orgScript.type = 'application/ld+json';
-  orgScript.textContent = JSON.stringify(organizationData);
-  document.head.appendChild(orgScript);
-
-  // Add software application schema
-  const appScript = document.createElement('script');
-  appScript.type = 'application/ld+json';
-  appScript.textContent = JSON.stringify(softwareData);
-  document.head.appendChild(appScript);
+  return { organizationData, softwareData };
 };
 
 export const trackLandingView = (langCode: string) => {
@@ -316,6 +234,6 @@ export const trackCTAClick = (langCode: string, location: string) => {
     landingPage: window.location.pathname,
     timestamp: new Date().toISOString(),
   };
-  
+
   localStorage.setItem('acquisition_data', JSON.stringify(utmData));
 };
