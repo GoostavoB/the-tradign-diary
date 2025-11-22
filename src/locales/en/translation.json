@@ -348,7 +348,7 @@
     "mostPopular": "Most Popular",
     "perMonth": "month",
     "perMonthBilledAnnually": "month, billed annually",
-    "savingsAmount": "Save {{amount}} percent with yearly plans",
+    "savingsAmount": "Save ${{amount}}/year",
     "guaranteeNote": "No hidden fees. Cancel anytime. Monthly plans only.",
     "hero": {
       "title": "Simple Plans. Full Privacy. Clear Insights.",
