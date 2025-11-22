@@ -48,22 +48,23 @@ export const AdaptiveGrid = ({
   }, [mode, columnCount]);
 
   if (mode === 'adaptive') {
-    // Adaptive mode: widgets flow in order with compact layout
+    // Adaptive mode: responsive flowing grid with dense packing
     return (
       <div
-        className="grid gap-4 transition-all duration-300 ease-in-out auto-rows-auto"
+        className="grid gap-6 auto-rows-auto transition-all duration-500 ease-out"
         style={{
           gridTemplateColumns: `repeat(${responsiveColumns}, minmax(0, 1fr))`,
           gridAutoFlow: 'dense',
         }}
       >
-        {order.map((widgetId) => (
+        {order.map((widgetId, index) => (
           <div 
             key={widgetId} 
-            className={`
-              relative min-h-[200px] transition-all duration-200
-              ${isCustomizing ? 'ring-2 ring-primary/20 ring-offset-2 ring-offset-background rounded-xl' : ''}
-            `}
+            className="animate-fade-in"
+            style={{
+              animationDelay: `${index * 50}ms`,
+              animationFillMode: 'backwards',
+            }}
           >
             {renderWidget(widgetId)}
           </div>
@@ -72,7 +73,7 @@ export const AdaptiveGrid = ({
     );
   }
 
-  // Fixed mode: widgets stay at exact grid positions
+  // Fixed mode: precise grid positioning with horizontal scroll on small screens
   const gridCells = [];
   const maxRow = Math.max(...positions.map(p => p.row), 0);
   const rowCount = isCustomizing ? maxRow + 2 : maxRow + 1;
@@ -81,19 +82,23 @@ export const AdaptiveGrid = ({
     for (let col = 0; col < columnCount; col++) {
       const position = positions.find(p => p.row === row && p.column === col);
       const widgetId = position?.id;
+      const index = row * columnCount + col;
 
       gridCells.push(
         <div
           key={`${col}-${row}`}
           className={`
-            relative min-h-[200px] h-full transition-all duration-200
+            relative min-h-[220px] h-full transition-all duration-300
             ${isCustomizing ? 'border-2 border-dashed rounded-xl' : ''}
             ${isCustomizing && !widgetId ? 'border-border/30 hover:border-primary/50 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/10' : ''}
             ${isCustomizing && widgetId ? 'border-primary/20' : ''}
+            ${!isCustomizing && widgetId ? 'animate-fade-in' : ''}
           `}
           style={{
             gridColumn: col + 1,
             gridRow: row + 1,
+            animationDelay: widgetId && !isCustomizing ? `${index * 30}ms` : '0ms',
+            animationFillMode: 'backwards',
           }}
         >
           {isCustomizing && !widgetId && (
@@ -111,7 +116,7 @@ export const AdaptiveGrid = ({
   }
 
   return (
-    <div className="relative">
+    <div className="relative w-full overflow-x-auto">
       {/* Grid guides overlay in fixed mode */}
       <GridGuides 
         columnCount={columnCount} 
@@ -120,9 +125,10 @@ export const AdaptiveGrid = ({
       />
       
       <div
-        className={`relative grid gap-4 transition-all duration-300 ease-in-out ${isCustomizing ? 'overflow-x-auto' : ''}`}
+        className="relative grid gap-6 transition-all duration-500 ease-out min-w-full"
         style={{
-          gridTemplateColumns: `repeat(${columnCount}, minmax(250px, 1fr))`,
+          gridTemplateColumns: `repeat(${columnCount}, minmax(300px, 1fr))`,
+          gridAutoRows: 'minmax(220px, auto)',
         }}
       >
         {gridCells}
