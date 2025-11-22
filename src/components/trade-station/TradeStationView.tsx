@@ -60,7 +60,9 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
   const [dataLoading, setDataLoading] = useState(true);
   
   const {
+    mode,
     positions,
+    order,
     columnCount,
     isLoading,
     addWidget,
