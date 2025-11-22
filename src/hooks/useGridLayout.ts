@@ -54,7 +54,7 @@ const DEFAULT_POSITIONS: WidgetPosition[] = [
 const CURRENT_OVERVIEW_LAYOUT_VERSION = 4;
 
 export const useGridLayout = (subAccountId: string | undefined, availableWidgets: string[]) => {
-  const [mode, setMode] = useState<'adaptive' | 'fixed'>('adaptive');
+  const [mode, setMode] = useState<'adaptive' | 'fixed'>('fixed');
   const [positions, setPositions] = useState<WidgetPosition[]>(DEFAULT_POSITIONS);
   const [order, setOrder] = useState<string[]>(DEFAULT_POSITIONS.map(p => p.id));
   const [columnCount, setColumnCount] = useState<number>(3);

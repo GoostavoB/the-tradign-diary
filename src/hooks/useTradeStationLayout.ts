@@ -6,6 +6,8 @@ export interface TradeStationWidgetPosition {
   id: string;
   column: number;
   row: number;
+  size: 1 | 2 | 4 | 6;
+  height: 2 | 4 | 6;
 }
 
 interface TradeStationLayoutData {
@@ -18,18 +20,16 @@ interface TradeStationLayoutData {
 
 // Default widgets for Trade Station
 const DEFAULT_TRADE_STATION_POSITIONS: TradeStationWidgetPosition[] = [
-  // Row 1: Leverage, Risk, Error Reflection
-  { id: 'simpleLeverage', column: 0, row: 0 },
-  { id: 'riskCalculator', column: 1, row: 0 },
-  { id: 'errorReflection', column: 2, row: 0 },
-  // Row 2: Rolling Target (spans all columns)
-  { id: 'rollingTarget', column: 0, row: 1 },
+  { id: 'simpleLeverage', column: 0, row: 0, size: 2, height: 2 },
+  { id: 'riskCalculator', column: 2, row: 0, size: 2, height: 2 },
+  { id: 'errorReflection', column: 4, row: 0, size: 2, height: 2 },
+  { id: 'rollingTarget', column: 0, row: 1, size: 6, height: 4 },
 ];
 
 const CURRENT_TRADE_STATION_LAYOUT_VERSION = 2;
 
 export const useTradeStationLayout = (userId: string | undefined) => {
-  const [mode, setMode] = useState<'adaptive' | 'fixed'>('adaptive');
+  const [mode, setMode] = useState<'adaptive' | 'fixed'>('fixed');
   const [positions, setPositions] = useState<TradeStationWidgetPosition[]>(DEFAULT_TRADE_STATION_POSITIONS);
   const [order, setOrder] = useState<string[]>(DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id));
   const [columnCount, setColumnCount] = useState(3);
@@ -153,7 +153,10 @@ if (data?.trade_station_layout_json) {
       order.forEach((widgetId, index) => {
         const col = index % columnCount;
         const row = Math.floor(index / columnCount);
-        newPositions.push({ id: widgetId, column: col, row });
+        const defaultWidget = DEFAULT_TRADE_STATION_POSITIONS.find(p => p.id === widgetId);
+        const size: 1 | 2 | 4 | 6 = (defaultWidget?.size || 2) as 1 | 2 | 4 | 6;
+        const height: 2 | 4 | 6 = (defaultWidget?.height || 2) as 2 | 4 | 6;
+        newPositions.push({ id: widgetId, column: col, row, size, height });
       });
       saveLayout(newPositions, order, newMode, columnCount);
     } else {
@@ -209,7 +212,7 @@ if (data?.trade_station_layout_json) {
         }
       }
 
-      const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
+      const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow, size: 2 as 1 | 2 | 4 | 6, height: 2 as 2 | 4 | 6 }];
       saveLayout(newPositions, newOrder, mode, columnCount);
     } else {
       // Adaptive mode: just add to order
@@ -278,6 +281,37 @@ if (data?.trade_station_layout_json) {
     }
   }, [mode, positions, order, saveLayout]);
 
+  // Resize widget
+  const resizeWidget = useCallback(async (widgetId: string, newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+    const newPositions = positions.map(p => {
+      if (p.id === widgetId) {
+        const updates: Partial<TradeStationWidgetPosition> = {};
+        
+        if (newSize !== undefined && p.size !== 1) {
+          updates.size = newSize;
+        }
+        
+        if (newHeight !== undefined) {
+          if (p.size === 1) {
+            updates.height = 2;
+          } else {
+            updates.height = newHeight;
+          }
+        }
+        
+        return { ...p, ...updates };
+      }
+      return p;
+    });
+    
+    try {
+      await saveLayout(newPositions, order, mode, columnCount);
+      toast.success('Widget resized');
+    } catch (error) {
+      toast.error('Failed to resize widget');
+    }
+  }, [positions, order, mode, columnCount, saveLayout]);
+
   return {
     mode,
     positions,
@@ -287,6 +321,7 @@ if (data?.trade_station_layout_json) {
     isSaving,
     toggleLayoutMode,
     updatePosition,
+    resizeWidget,
     saveLayout,
     addWidget,
     removeWidget,
