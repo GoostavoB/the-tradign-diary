@@ -61,23 +61,33 @@ export const SubcolumnGrid = ({
             >
               {hasWidgets ? (
                 // Render widgets in this row
-                rowWidgets.map((widget, index) => (
-                  <div
-                    key={widget.id}
-                    className={`
-                      relative min-h-[180px] transition-all duration-300
-                      ${isCustomizing ? 'border-2 border-dashed rounded-xl border-primary/30' : ''}
-                      ${!isCustomizing ? 'animate-fade-in' : ''}
-                    `}
-                    style={{
-                      gridColumn: `${widget.column + 1} / span ${widget.size}`,
-                      animationDelay: !isCustomizing ? `${index * 50}ms` : '0ms',
-                      animationFillMode: 'backwards',
-                    }}
-                  >
-                    {renderWidget(widget.id)}
-                  </div>
-                ))
+                rowWidgets.map((widget, index) => {
+                  // Calculate height based on widget height property (default to 2 if not specified)
+                  const widgetHeight = widget.height || 2;
+                  const heightClass = widgetHeight === 2 
+                    ? 'h-[180px]' 
+                    : widgetHeight === 4 
+                    ? 'h-[380px]' 
+                    : 'h-[580px]';
+                  
+                  return (
+                    <div
+                      key={widget.id}
+                      className={`
+                        relative transition-all duration-300 ${heightClass}
+                        ${isCustomizing ? 'border-2 border-dashed rounded-xl border-primary/30' : ''}
+                        ${!isCustomizing ? 'animate-fade-in' : ''}
+                      `}
+                      style={{
+                        gridColumn: `${widget.column + 1} / span ${widget.size}`,
+                        animationDelay: !isCustomizing ? `${index * 50}ms` : '0ms',
+                        animationFillMode: 'backwards',
+                      }}
+                    >
+                      {renderWidget(widget.id)}
+                    </div>
+                  );
+                })
               ) : isCustomizing ? (
                 // Empty row in customization mode - show drop zones
                 <div

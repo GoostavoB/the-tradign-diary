@@ -8,6 +8,7 @@ export interface WidgetPosition {
   column: number; // 0-5 (6 subcolumns total)
   row: number;
   size: 1 | 2 | 4 | 6; // Widget size in subcolumns
+  height: 2 | 4 | 6; // Widget height in rows
 }
 
 export interface LayoutData {
@@ -22,32 +23,32 @@ export interface LayoutData {
 // Columns: 0-1 (first column), 2-3 (second column), 4-5 (third column)
 const DEFAULT_POSITIONS: WidgetPosition[] = [
   // Row 0 - Two size-1 widgets in first column, two size-2 widgets
-  { id: 'totalBalance', column: 0, row: 0, size: 1 },
-  { id: 'winRate', column: 1, row: 0, size: 1 },
-  { id: 'capitalGrowth', column: 2, row: 0, size: 2 },
-  { id: 'topMovers', column: 4, row: 0, size: 2 },
+  { id: 'totalBalance', column: 0, row: 0, size: 1, height: 2 },
+  { id: 'winRate', column: 1, row: 0, size: 1, height: 2 },
+  { id: 'capitalGrowth', column: 2, row: 0, size: 2, height: 2 },
+  { id: 'topMovers', column: 4, row: 0, size: 2, height: 2 },
   
   // Row 1 - Two size-1 widgets in first column, two size-2 widgets
-  { id: 'currentROI', column: 0, row: 1, size: 1 },
-  { id: 'avgPnLPerDay', column: 1, row: 1, size: 1 },
-  { id: 'goals', column: 2, row: 1, size: 2 },
-  { id: 'behaviorAnalytics', column: 4, row: 1, size: 2 },
+  { id: 'currentROI', column: 0, row: 1, size: 1, height: 2 },
+  { id: 'avgPnLPerDay', column: 1, row: 1, size: 1, height: 2 },
+  { id: 'goals', column: 2, row: 1, size: 2, height: 2 },
+  { id: 'behaviorAnalytics', column: 4, row: 1, size: 2, height: 2 },
   
   // Row 2 - Size 4 widget + size 2 widget
-  { id: 'combinedPnLROI', column: 0, row: 2, size: 4 },
-  { id: 'costEfficiency', column: 4, row: 2, size: 2 },
+  { id: 'combinedPnLROI', column: 0, row: 2, size: 4, height: 2 },
+  { id: 'costEfficiency', column: 4, row: 2, size: 2, height: 2 },
   
   // Row 3 - Size 4 widget + size 2 widget
-  { id: 'aiInsights', column: 0, row: 3, size: 4 },
-  { id: 'tradingQuality', column: 4, row: 3, size: 2 },
+  { id: 'aiInsights', column: 0, row: 3, size: 4, height: 2 },
+  { id: 'tradingQuality', column: 4, row: 3, size: 2, height: 2 },
   
   // Row 4 - Full width size 6 widget
-  { id: 'emotionMistakeCorrelation', column: 0, row: 4, size: 6 },
+  { id: 'emotionMistakeCorrelation', column: 0, row: 4, size: 6, height: 2 },
   
   // Row 5 - Three size-2 widgets
-  { id: 'performanceHighlights', column: 0, row: 5, size: 2 },
-  { id: 'avgPnLPerTrade', column: 2, row: 5, size: 1 },
-  { id: 'totalTrades', column: 3, row: 5, size: 1 },
+  { id: 'performanceHighlights', column: 0, row: 5, size: 2, height: 2 },
+  { id: 'avgPnLPerTrade', column: 2, row: 5, size: 1, height: 2 },
+  { id: 'totalTrades', column: 3, row: 5, size: 1, height: 2 },
 ];
 
 const CURRENT_OVERVIEW_LAYOUT_VERSION = 4;
@@ -220,7 +221,8 @@ if (data?.layout_json) {
         const col = index % columnCount;
         const row = Math.floor(index / columnCount);
         const size = WIDGET_SIZE_MAP[widgetId] || 2;
-        newPositions.push({ id: widgetId, column: col, row, size });
+        const height: 2 | 4 | 6 = 2; // Default height for all widgets in adaptive mode
+        newPositions.push({ id: widgetId, column: col, row, size, height });
       });
       saveLayout(newPositions, order, newMode, columnCount);
     } else {
@@ -239,6 +241,39 @@ if (data?.layout_json) {
       p.id === widgetId ? { ...p, column, row, ...(size && { size }) } : p
     );
     saveLayout(newPositions, order, mode, columnCount);
+  }, [positions, order, mode, columnCount, saveLayout]);
+
+  const resizeWidget = useCallback(async (widgetId: string, newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+    const newPositions = positions.map(p => {
+      if (p.id === widgetId) {
+        const updates: Partial<WidgetPosition> = {};
+        
+        // Update size if provided (only for size 2+ widgets)
+        if (newSize !== undefined && p.size !== 1) {
+          updates.size = newSize;
+        }
+        
+        // Update height if provided
+        if (newHeight !== undefined) {
+          // Size 1 widgets always have height 2
+          if (p.size === 1) {
+            updates.height = 2;
+          } else {
+            updates.height = newHeight;
+          }
+        }
+        
+        return { ...p, ...updates };
+      }
+      return p;
+    });
+    
+    try {
+      await saveLayout(newPositions, order, mode, columnCount);
+      toast.success('Widget redimensionado');
+    } catch (error) {
+      toast.error('Falha ao redimensionar widget');
+    }
   }, [positions, order, mode, columnCount, saveLayout]);
 
   // Add widget to layout
@@ -292,7 +327,13 @@ if (data?.layout_json) {
         }
       }
 
-      const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow, size }];
+      const newPositions = [...positions, { 
+        id: widgetId, 
+        column: targetCol, 
+        row: targetRow, 
+        size, 
+        height: 2 as 2 | 4 | 6 // Default height
+      }];
       console.log('[useGridLayout] Widget placement:', { 
         widgetId, 
         position: { column: targetCol, row: targetRow, size },
@@ -371,6 +412,7 @@ if (data?.layout_json) {
     isSaving,
     toggleLayoutMode,
     updatePosition,
+    resizeWidget,
     saveLayout,
     updateColumnCount,
     addWidget,

@@ -3,6 +3,9 @@ import { LucideIcon } from 'lucide-react';
 // Standardized widget sizes: 1, 2, 4, 6 (in subcolumns, total grid = 6 subcolumns)
 export type WidgetSize = 1 | 2 | 4 | 6;
 
+// Widget height options: 2, 4, 6 (rows)
+export type WidgetHeight = 2 | 4 | 6;
+
 // Legacy size names for compatibility with existing config
 export type WidgetSizeName = 'small' | 'medium' | 'large' | 'xlarge';
 

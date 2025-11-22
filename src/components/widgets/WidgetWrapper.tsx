@@ -3,6 +3,8 @@ import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
 import { Trash2, Maximize2, GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { WidgetResizeControls } from './WidgetResizeControls';
+import { WidgetSize, WidgetHeight } from '@/types/widget';
 
 interface WidgetWrapperProps {
   id: string;
@@ -12,6 +14,9 @@ interface WidgetWrapperProps {
   isCompact?: boolean;
   onRemove?: () => void;
   onExpand?: () => void;
+  onResize?: (newSize?: WidgetSize, newHeight?: WidgetHeight) => void;
+  currentSize?: WidgetSize;
+  currentHeight?: WidgetHeight;
   className?: string;
   headerActions?: ReactNode;
 }
@@ -24,6 +29,9 @@ export const WidgetWrapper = memo(({
   isCompact = false,
   onRemove,
   onExpand,
+  onResize,
+  currentSize,
+  currentHeight,
   className,
   headerActions,
 }: WidgetWrapperProps) => {
@@ -58,6 +66,13 @@ export const WidgetWrapper = memo(({
           <div className="drag-handle cursor-move p-1.5 rounded bg-background/95 hover:bg-background shadow-md border border-primary/40 transition-all duration-200 hover:scale-110 hover:shadow-lg">
             <GripVertical className="h-4 w-4 text-primary" />
           </div>
+          {onResize && currentSize && currentHeight && (
+            <WidgetResizeControls
+              currentSize={currentSize}
+              currentHeight={currentHeight}
+              onResize={onResize}
+            />
+          )}
           {onRemove && (
             <Button
               variant="ghost"
