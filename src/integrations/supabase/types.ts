@@ -4543,6 +4543,8 @@ export type Database = {
           last_streak_milestone: number | null
           last_visit_date: string | null
           layout_json: Json | null
+          layout_mode_command_center: string | null
+          layout_mode_trade_station: string | null
           longest_visit_streak: number | null
           monthly_report: boolean | null
           onboarding_completed: boolean | null
@@ -4615,6 +4617,8 @@ export type Database = {
           last_streak_milestone?: number | null
           last_visit_date?: string | null
           layout_json?: Json | null
+          layout_mode_command_center?: string | null
+          layout_mode_trade_station?: string | null
           longest_visit_streak?: number | null
           monthly_report?: boolean | null
           onboarding_completed?: boolean | null
@@ -4687,6 +4691,8 @@ export type Database = {
           last_streak_milestone?: number | null
           last_visit_date?: string | null
           layout_json?: Json | null
+          layout_mode_command_center?: string | null
+          layout_mode_trade_station?: string | null
           longest_visit_streak?: number | null
           monthly_report?: boolean | null
           onboarding_completed?: boolean | null

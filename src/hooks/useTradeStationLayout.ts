@@ -9,7 +9,9 @@ export interface TradeStationWidgetPosition {
 }
 
 interface TradeStationLayoutData {
+  mode: 'adaptive' | 'fixed';
   positions: TradeStationWidgetPosition[];
+  order: string[];
   columnCount: number;
   version?: number;
 }
@@ -27,11 +29,13 @@ const DEFAULT_TRADE_STATION_POSITIONS: TradeStationWidgetPosition[] = [
 const CURRENT_TRADE_STATION_LAYOUT_VERSION = 2;
 
 export const useTradeStationLayout = (userId: string | undefined) => {
+  const [mode, setMode] = useState<'adaptive' | 'fixed'>('adaptive');
   const [positions, setPositions] = useState<TradeStationWidgetPosition[]>(DEFAULT_TRADE_STATION_POSITIONS);
+  const [order, setOrder] = useState<string[]>(DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id));
   const [columnCount, setColumnCount] = useState(3);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [previousLayout, setPreviousLayout] = useState<{ positions: TradeStationWidgetPosition[], columnCount: number } | null>(null);
+  const [previousLayout, setPreviousLayout] = useState<{ mode: 'adaptive' | 'fixed', positions: TradeStationWidgetPosition[], order: string[], columnCount: number } | null>(null);
 
   // Load layout from database
   useEffect(() => {
@@ -56,22 +60,35 @@ export const useTradeStationLayout = (userId: string | undefined) => {
 if (data?.trade_station_layout_json) {
   const layoutData = data.trade_station_layout_json as any;
   
-  // Consider newer/older versions or invalid shapes as outdated
-  const hasValidLegacyPositions = Array.isArray(layoutData.positions) && layoutData.positions.every((p: any) => 
-    p && typeof p.id === 'string' && typeof p.column === 'number' && typeof p.row === 'number'
-  );
-  const isVersionMismatch = !layoutData.version || layoutData.version !== CURRENT_TRADE_STATION_LAYOUT_VERSION;
-  
-  if (hasValidLegacyPositions && !isVersionMismatch) {
-    setPositions(layoutData.positions);
-    if (typeof layoutData.columnCount === 'number') {
-      setColumnCount(layoutData.columnCount);
-    }
+  // Check if this is the new format
+  if (layoutData.mode && layoutData.version === CURRENT_TRADE_STATION_LAYOUT_VERSION) {
+    setMode(layoutData.mode);
+    setPositions(layoutData.positions || DEFAULT_TRADE_STATION_POSITIONS);
+    setOrder(layoutData.order || layoutData.positions?.map((p: any) => p.id) || DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id));
+    setColumnCount(layoutData.columnCount || 3);
   } else {
-    console.warn('[TradeStation] Invalid or incompatible layout detected. Resetting to defaults.');
-    setPositions(DEFAULT_TRADE_STATION_POSITIONS);
-    setColumnCount(3);
-    await saveLayout(DEFAULT_TRADE_STATION_POSITIONS, 3);
+    // Legacy format - migrate to new format
+    const hasValidLegacyPositions = Array.isArray(layoutData.positions) && layoutData.positions.every((p: any) => 
+      p && typeof p.id === 'string' && typeof p.column === 'number' && typeof p.row === 'number'
+    );
+    
+    if (hasValidLegacyPositions) {
+      const migratedPositions = layoutData.positions;
+      const migratedOrder = migratedPositions.map((p: any) => p.id);
+      setMode('adaptive');
+      setPositions(migratedPositions);
+      setOrder(migratedOrder);
+      setColumnCount(layoutData.columnCount || 3);
+      // Save in new format
+      await saveLayout(migratedPositions, migratedOrder, 'adaptive', layoutData.columnCount || 3);
+    } else {
+      console.warn('[TradeStation] Invalid layout detected. Resetting to defaults.');
+      setMode('adaptive');
+      setPositions(DEFAULT_TRADE_STATION_POSITIONS);
+      setOrder(DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id));
+      setColumnCount(3);
+      await saveLayout(DEFAULT_TRADE_STATION_POSITIONS, DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id), 'adaptive', 3);
+    }
   }
 }
       } catch (error) {
@@ -85,13 +102,15 @@ if (data?.trade_station_layout_json) {
   }, [userId]);
 
   // Save layout to database
-  const saveLayout = useCallback(async (newPositions: TradeStationWidgetPosition[], newColumnCount?: number) => {
+  const saveLayout = useCallback(async (newPositions: TradeStationWidgetPosition[], newOrder: string[], newMode?: 'adaptive' | 'fixed', newColumnCount?: number) => {
     if (!userId) return;
 
     setIsSaving(true);
     try {
-const layoutData: TradeStationLayoutData = {
+      const layoutData: TradeStationLayoutData = {
+        mode: newMode ?? mode,
         positions: newPositions,
+        order: newOrder,
         columnCount: newColumnCount ?? columnCount,
         version: CURRENT_TRADE_STATION_LAYOUT_VERSION,
       };
@@ -109,6 +128,8 @@ const layoutData: TradeStationLayoutData = {
       }
 
       setPositions(newPositions);
+      setOrder(newOrder);
+      if (newMode) setMode(newMode);
       if (newColumnCount !== undefined) {
         setColumnCount(newColumnCount);
       }
@@ -120,79 +141,104 @@ const layoutData: TradeStationLayoutData = {
     } finally {
       setIsSaving(false);
     }
-  }, [userId, columnCount]);
+  }, [userId, mode, columnCount]);
+
+  // Toggle layout mode
+  const toggleLayoutMode = useCallback((newMode: 'adaptive' | 'fixed') => {
+    if (newMode === mode) return;
+    
+    if (newMode === 'fixed') {
+      // Convert adaptive order to fixed positions
+      const newPositions: TradeStationWidgetPosition[] = [];
+      order.forEach((widgetId, index) => {
+        const col = index % columnCount;
+        const row = Math.floor(index / columnCount);
+        newPositions.push({ id: widgetId, column: col, row });
+      });
+      saveLayout(newPositions, order, newMode, columnCount);
+    } else {
+      // Convert fixed positions to adaptive order
+      const sortedPositions = [...positions].sort((a, b) => {
+        if (a.row !== b.row) return a.row - b.row;
+        return a.column - b.column;
+      });
+      const newOrder = sortedPositions.map(p => p.id);
+      saveLayout(positions, newOrder, newMode, columnCount);
+    }
+  }, [mode, positions, order, columnCount, saveLayout]);
 
   // Update position of a specific widget
   const updatePosition = useCallback((widgetId: string, column: number, row: number) => {
-    setPositions(prev => {
-      const updated = prev.map(p =>
-        p.id === widgetId ? { ...p, column, row } : p
-      );
-      return updated;
-    });
-  }, []);
+    const newPositions = positions.map(p =>
+      p.id === widgetId ? { ...p, column, row } : p
+    );
+    saveLayout(newPositions, order, mode, columnCount);
+  }, [positions, order, mode, columnCount, saveLayout]);
 
-  // Add widget to layout - place in first free position (bottom row, left to right)
+  // Add widget to layout
   const addWidget = useCallback((widgetId: string) => {
     if (positions.find(p => p.id === widgetId)) {
       toast.info('Widget already added');
       return;
     }
 
-    // Build grid to find occupied positions
-    const grid: { [row: number]: { [col: number]: boolean } } = {};
-    positions.forEach(pos => {
-      if (!grid[pos.row]) grid[pos.row] = {};
-      grid[pos.row][pos.column] = true;
-    });
+    const newOrder = [...order, widgetId];
+    
+    if (mode === 'fixed') {
+      // Build grid to find occupied positions
+      const grid: { [row: number]: { [col: number]: boolean } } = {};
+      positions.forEach(pos => {
+        if (!grid[pos.row]) grid[pos.row] = {};
+        grid[pos.row][pos.column] = true;
+      });
 
-    // Find max row
-    const maxRow = Math.max(-1, ...positions.map(p => p.row));
-    
-    // Start from bottom row, move left to right
-    let targetCol = 0;
-    let targetRow = maxRow + 1;
-    
-    // Check if there's space in the bottom row
-    if (maxRow >= 0 && grid[maxRow]) {
-      // Count occupied positions in bottom row
-      const occupiedInBottomRow = Object.keys(grid[maxRow]).length;
-      if (occupiedInBottomRow < columnCount) {
-        // Find first free column in bottom row
-        for (let col = 0; col < columnCount; col++) {
-          if (!grid[maxRow][col]) {
-            targetCol = col;
-            targetRow = maxRow;
-            break;
+      const maxRow = Math.max(-1, ...positions.map(p => p.row));
+      let targetCol = 0;
+      let targetRow = maxRow + 1;
+      
+      if (maxRow >= 0 && grid[maxRow]) {
+        const occupiedInBottomRow = Object.keys(grid[maxRow]).length;
+        if (occupiedInBottomRow < columnCount) {
+          for (let col = 0; col < columnCount; col++) {
+            if (!grid[maxRow][col]) {
+              targetCol = col;
+              targetRow = maxRow;
+              break;
+            }
           }
         }
       }
-    }
 
-    const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
-    console.log('[TradeStation] Adding widget:', widgetId, 'at position:', { column: targetCol, row: targetRow });
-    saveLayout(newPositions);
+      const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
+      saveLayout(newPositions, newOrder, mode, columnCount);
+    } else {
+      // Adaptive mode: just add to order
+      saveLayout(positions, newOrder, mode, columnCount);
+    }
+    
     toast.success('Widget added');
-  }, [positions, columnCount, saveLayout]);
+  }, [positions, order, mode, columnCount, saveLayout]);
 
   // Remove widget from layout
   const removeWidget = useCallback((widgetId: string) => {
     const newPositions = positions.filter(p => p.id !== widgetId);
-    saveLayout(newPositions);
-  }, [positions, saveLayout]);
+    const newOrder = order.filter(id => id !== widgetId);
+    saveLayout(newPositions, newOrder, mode, columnCount);
+  }, [positions, order, mode, columnCount, saveLayout]);
 
   // Reset to default layout
   const resetLayout = useCallback(() => {
     // Save current layout for undo
-    setPreviousLayout({ positions: [...positions], columnCount });
-    saveLayout(DEFAULT_TRADE_STATION_POSITIONS, 3);
+    setPreviousLayout({ mode, positions: [...positions], order: [...order], columnCount });
+    const defaultOrder = DEFAULT_TRADE_STATION_POSITIONS.map(p => p.id);
+    saveLayout(DEFAULT_TRADE_STATION_POSITIONS, defaultOrder, 'adaptive', 3);
     toast.success('Trade Station reset to default');
-  }, [saveLayout, positions, columnCount]);
+  }, [saveLayout, mode, positions, order, columnCount]);
 
   // Undo last reset
   const undoReset = useCallback(() => {
     if (previousLayout) {
-      saveLayout(previousLayout.positions, previousLayout.columnCount);
+      saveLayout(previousLayout.positions, previousLayout.order, previousLayout.mode, previousLayout.columnCount);
       setPreviousLayout(null);
       toast.success('Layout restored');
     }
@@ -200,38 +246,46 @@ const layoutData: TradeStationLayoutData = {
 
   // Update column count
   const updateColumnCount = useCallback((count: number) => {
-    // Reflow positions to fit new column count
-    const sortedPositions = [...positions].sort((a, b) => {
-      if (a.column !== b.column) return a.column - b.column;
-      return a.row - b.row;
-    });
-
-    const reflowed: TradeStationWidgetPosition[] = [];
-    let currentCol = 0;
-    let currentRow = 0;
-
-    sortedPositions.forEach(pos => {
-      reflowed.push({
-        ...pos,
-        column: currentCol,
-        row: currentRow,
+    if (mode === 'fixed') {
+      // Reflow positions to fit new column count
+      const sortedPositions = [...positions].sort((a, b) => {
+        if (a.row !== b.row) return a.row - b.row;
+        return a.column - b.column;
       });
 
-      currentCol++;
-      if (currentCol >= count) {
-        currentCol = 0;
-        currentRow++;
-      }
-    });
+      const reflowed: TradeStationWidgetPosition[] = [];
+      let currentCol = 0;
+      let currentRow = 0;
 
-    saveLayout(reflowed, count);
-  }, [positions, saveLayout]);
+      sortedPositions.forEach(pos => {
+        reflowed.push({
+          ...pos,
+          column: currentCol,
+          row: currentRow,
+        });
+
+        currentCol++;
+        if (currentCol >= count) {
+          currentCol = 0;
+          currentRow++;
+        }
+      });
+
+      saveLayout(reflowed, order, mode, count);
+    } else {
+      // Adaptive mode: just update column count
+      saveLayout(positions, order, mode, count);
+    }
+  }, [mode, positions, order, saveLayout]);
 
   return {
+    mode,
     positions,
+    order,
     columnCount,
     isLoading,
     isSaving,
+    toggleLayoutMode,
     updatePosition,
     saveLayout,
     addWidget,
