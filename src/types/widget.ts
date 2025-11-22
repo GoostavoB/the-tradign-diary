@@ -112,3 +112,11 @@ export const WIDGET_SIZE_MAP: Record<string, WidgetSize> = {
   // Size 6 widgets (occupy 3 columns = 6 subcolumns, full width)
   'rollingTarget': 6,
 };
+
+// Trade Station widget sizes
+export const TRADE_STATION_WIDGET_SIZE_MAP: Record<string, WidgetSize> = {
+  'simpleLeverage': 2,
+  'riskCalculator': 2,
+  'errorReflection': 2,
+  'rollingTarget': 6,
+};

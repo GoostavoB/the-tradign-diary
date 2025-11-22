@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTradeStationLayout, TradeStationWidgetPosition } from '@/hooks/useTradeStationLayout';
 // Use unified widget catalog that includes all widgets
 import { TRADE_STATION_WIDGET_CATALOG } from '@/config/tradeStationWidgetCatalog';
+import { AdaptiveGrid } from '@/components/dashboard/AdaptiveGrid';
 import { SortableWidget } from '@/components/widgets/SortableWidget';
 import { DropZone } from '@/components/widgets/DropZone';
 import { CustomizeDashboardControls } from '@/components/CustomizeDashboardControls';
@@ -72,6 +73,7 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     resetLayout,
     undoReset,
     canUndo,
+    resizeWidget,
   } = useTradeStationLayout(user?.id);
 
   // Spot wallet and prices
@@ -409,12 +411,20 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     if (!widgetConfig) return null;
     
     const WidgetComponent = widgetConfig.component;
+    const widgetPosition = positions.find(p => p.id === widgetId);
     
     // Build widget props based on widget requirements
     const widgetProps: any = {
       id: widgetId,
       isEditMode: isCustomizing,
       onRemove: () => removeWidget(widgetId),
+      onResize: (newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+        if (resizeWidget) {
+          resizeWidget(widgetId, newSize, newHeight);
+        }
+      },
+      currentSize: widgetPosition?.size,
+      currentHeight: widgetPosition?.height,
     };
     
     // Calculate common values
@@ -545,7 +555,7 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
         <WidgetComponent {...widgetProps} />
       </SortableWidget>
     );
-  }, [isCustomizing, removeWidget, processedTrades, stats, holdings, prices, capitalLog, initialInvestment, dashboardStats, calculateCurrentStreak]);
+  }, [isCustomizing, removeWidget, resizeWidget, positions, processedTrades, stats, holdings, prices, capitalLog, initialInvestment, dashboardStats, calculateCurrentStreak]);
   
   // Render spanning widget (full width) - no extra wrapper
   const renderSpanningWidget = useCallback((widgetId: string) => {
@@ -667,78 +677,15 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Dynamic Grid with DnD */}
-      <DndContext
-        sensors={sensors}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        onDragCancel={handleDragCancel}
-        collisionDetection={rectIntersection}
-      >
-        <SortableContext
-          items={positions.map(p => p.id)}
-          strategy={rectSortingStrategy}
-        >
-          {/* Single grid container - spanning widgets will use col-span-full */}
-          <div 
-            className="grid gap-4"
-            style={{ 
-              gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
-            }}
-          >
-            {/* Sort all positions by row, then column */}
-            {[...positions]
-              .sort((a, b) => {
-                const ar = a.row ?? 0;
-                const br = b.row ?? 0;
-                if (ar !== br) return ar - br;
-                const ac = a.column ?? 0;
-                const bc = b.column ?? 0;
-                return ac - bc;
-              })
-              .map((pos) => {
-                const isSpanning = pos.id === 'rollingTarget';
-                
-                return (
-                  <div
-                    key={pos.id}
-                    className={isSpanning ? 'col-span-full' : ''}
-                    style={
-                      isSpanning
-                        ? undefined
-                        : {
-                            gridColumn: (pos.column ?? 0) + 1,
-                            gridRow: (pos.row ?? 0) + 1,
-                          }
-                    }
-                  >
-                    {isSpanning ? renderSpanningWidget(pos.id) : renderWidget(pos.id)}
-                  </div>
-                );
-              })}
-            
-            {/* Drop zones for customization */}
-            {isCustomizing &&
-              Array.from({ length: columnCount }, (_, colIdx) => {
-                const maxRow = Math.max(
-                  0,
-                  ...positions.filter(p => (p.column ?? -1) === colIdx).map(p => (p.row ?? 0))
-                );
-                return (
-                  <div
-                    key={`dropzone-${colIdx}`}
-                    style={{
-                      gridColumn: colIdx + 1,
-                      gridRow: maxRow + 2,
-                    }}
-                  >
-                    <DropZone id={`dropzone-${colIdx}-${maxRow + 1}`} />
-                  </div>
-                );
-              })}
-          </div>
-        </SortableContext>
-      </DndContext>
+      {/* Dynamic Grid with Puzzle Layout */}
+      <AdaptiveGrid
+        mode={mode}
+        positions={positions}
+        order={order}
+        columnCount={columnCount}
+        isCustomizing={isCustomizing}
+        renderWidget={renderWidget}
+      />
       
       {/* Widget Library - Removed from here, handled by parent Dashboard */}
     </div>
