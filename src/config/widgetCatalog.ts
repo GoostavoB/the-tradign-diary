@@ -1,8 +1,8 @@
-import { 
-  DollarSign, 
-  Target, 
-  BarChart3, 
-  Wallet, 
+import {
+  DollarSign,
+  Target,
+  BarChart3,
+  Wallet,
   TrendingUp,
   Brain,
   Clock,
@@ -20,6 +20,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { WidgetConfig, WIDGET_SIZES } from '@/types/widget';
+import { WidgetGridConfig } from '@/types/grid';
 import { TotalBalanceWidget } from '@/components/widgets/TotalBalanceWidget';
 import { WinRateWidget } from '@/components/widgets/WinRateWidget';
 import { TotalTradesWidget } from '@/components/widgets/TotalTradesWidget';
@@ -67,7 +68,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: TotalBalanceWidget,
     requiresData: ['stats'],
   },
-  
+
   winRate: {
     id: 'winRate',
     title: 'Win Rate',
@@ -78,7 +79,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: WinRateWidget,
     requiresData: ['stats'],
   },
-  
+
   totalTrades: {
     id: 'totalTrades',
     title: 'Total Trades',
@@ -89,7 +90,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: TotalTradesWidget,
     requiresData: ['stats'],
   },
-  
+
   spotWallet: {
     id: 'spotWallet',
     title: 'Spot Wallet',
@@ -100,7 +101,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: SpotWalletWidget,
     requiresData: ['holdings'],
   },
-  
+
   portfolioOverview: {
     id: 'portfolioOverview',
     title: 'Portfolio Overview',
@@ -111,7 +112,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: PortfolioOverviewWidget,
     requiresData: ['stats', 'trades'],
   },
-  
+
   topMovers: {
     id: 'topMovers',
     title: 'Top Movers',
@@ -122,7 +123,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: TopMoversWidget,
     requiresData: ['trades'],
   },
-  
+
   aiInsights: {
     id: 'aiInsights',
     title: 'AI Insights',
@@ -133,7 +134,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: AIInsightsWidget,
     isPremium: false,
   },
-  
+
   recentTransactions: {
     id: 'recentTransactions',
     title: 'Recent Transactions',
@@ -144,7 +145,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: RecentTransactionsWidget,
     requiresData: ['trades'],
   },
-  
+
   quickActions: {
     id: 'quickActions',
     title: 'Quick Actions',
@@ -322,7 +323,7 @@ export const WIDGET_CATALOG: Record<string, WidgetConfig> = {
     component: EmotionMistakeCorrelationWidget,
     requiresData: ['trades'],
   },
-  
+
   // Trade Station widgets - also available in Overview
   errorReflection: {
     id: 'errorReflection',
