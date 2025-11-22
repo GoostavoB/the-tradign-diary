@@ -116,7 +116,7 @@ export const PremiumPricingCard = ({ plan, billingCycle, index, t }: PremiumPric
                   /{billingCycle === 'monthly' ? t('pricing.perMonth') : t('pricing.perMonthBilledAnnually')}
                 </span>
               </div>
-              {billingCycle === 'annual' && (
+              {billingCycle === 'annual' && getSavings() > 0 && (
                 <motion.div 
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
