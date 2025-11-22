@@ -264,7 +264,7 @@
     "success": "Message sent successfully!",
     "error": "Failed to send message. Please try again.",
     "messageSent": "Email client opened. Please send the message.",
-    "orEmail": "Or email us directly at:"
+    "orEmail": "Email us"
   },
   "premium": {
     "proFeature": "Pro Feature",
