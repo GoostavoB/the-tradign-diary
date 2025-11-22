@@ -1,6 +1,5 @@
-import { EnhancedDropZone } from '@/components/widgets/EnhancedDropZone';
-import { GridGuides } from '@/components/widgets/GridGuides';
 import { WidgetPosition } from '@/hooks/useGridLayout';
+import { SubcolumnGrid } from './SubcolumnGrid';
 import { ReactNode, useEffect, useState } from 'react';
 
 interface AdaptiveGridProps {
@@ -73,66 +72,13 @@ export const AdaptiveGrid = ({
     );
   }
 
-  // Fixed mode: precise grid positioning with horizontal scroll on small screens
-  const gridCells = [];
-  const maxRow = Math.max(...positions.map(p => p.row), 0);
-  const rowCount = isCustomizing ? maxRow + 2 : maxRow + 1;
-
-  for (let row = 0; row < rowCount; row++) {
-    for (let col = 0; col < columnCount; col++) {
-      const position = positions.find(p => p.row === row && p.column === col);
-      const widgetId = position?.id;
-      const index = row * columnCount + col;
-
-      gridCells.push(
-        <div
-          key={`${col}-${row}`}
-          className={`
-            relative min-h-[220px] h-full transition-all duration-300
-            ${isCustomizing ? 'border-2 border-dashed rounded-xl' : ''}
-            ${isCustomizing && !widgetId ? 'border-border/30 hover:border-primary/50 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/10' : ''}
-            ${isCustomizing && widgetId ? 'border-primary/20' : ''}
-            ${!isCustomizing && widgetId ? 'animate-fade-in' : ''}
-          `}
-          style={{
-            gridColumn: col + 1,
-            gridRow: row + 1,
-            animationDelay: widgetId && !isCustomizing ? `${index * 30}ms` : '0ms',
-            animationFillMode: 'backwards',
-          }}
-        >
-          {isCustomizing && !widgetId && (
-            <EnhancedDropZone 
-              id={`dropzone-${col}-${row}`} 
-              onAddWidget={onOpenWidgetLibrary}
-              showAddButton={true}
-            />
-          )}
-
-          {widgetId && renderWidget(widgetId)}
-        </div>
-      );
-    }
-  }
-
+  // Fixed mode: use the new 6-subcolumn grid system
   return (
-    <div className="relative w-full overflow-x-auto">
-      {/* Grid guides overlay in fixed mode */}
-      <GridGuides 
-        columnCount={columnCount} 
-        rowCount={rowCount} 
-        show={isCustomizing}
-      />
-      
-      <div
-        className="relative grid gap-6 transition-all duration-500 ease-out min-w-full"
-        style={{
-          gridTemplateColumns: `repeat(${columnCount}, minmax(300px, 1fr))`,
-          gridAutoRows: 'minmax(220px, auto)',
-        }}
-      >
-        {gridCells}
-      </div>
-    </div>
+    <SubcolumnGrid
+      positions={positions}
+      isCustomizing={isCustomizing}
+      renderWidget={renderWidget}
+      onOpenWidgetLibrary={onOpenWidgetLibrary}
+    />
   );
 };

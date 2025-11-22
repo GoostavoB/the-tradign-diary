@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { WIDGET_SIZE_MAP } from '@/types/widget';
 
 export interface WidgetPosition {
   id: string;
-  column: number;
+  column: number; // 0-5 (6 subcolumns total)
   row: number;
+  size: 1 | 2 | 4 | 6; // Widget size in subcolumns
 }
 
 export interface LayoutData {
@@ -16,36 +18,34 @@ export interface LayoutData {
   version?: number;
 }
 
+// Default positions using the new 6-subcolumn system
 const DEFAULT_POSITIONS: WidgetPosition[] = [
-  // Row 0 - Key metrics
-  { id: 'totalBalance', column: 0, row: 0 },
-  { id: 'currentROI', column: 1, row: 0 },
-  { id: 'avgPnLPerDay', column: 2, row: 0 },
+  // Row 0 - Size 1 widgets in first column (2 subcolumns = 1 column with 2 size-1 widgets)
+  { id: 'totalBalance', column: 0, row: 0, size: 1 },
+  { id: 'winRate', column: 1, row: 0, size: 1 },
+  // Size 2 widgets (each takes 2 subcolumns)
+  { id: 'capitalGrowth', column: 2, row: 0, size: 2 },
+  { id: 'topMovers', column: 4, row: 0, size: 2 },
   
-  // Row 1
-  { id: 'winRate', column: 0, row: 1 },
-  { id: 'topMovers', column: 1, row: 1 },
-  { id: 'capitalGrowth', column: 2, row: 1 },
+  // Row 1 - More size 1 widgets and size 2 widgets
+  { id: 'currentROI', column: 0, row: 1, size: 1 },
+  { id: 'avgPnLPerDay', column: 1, row: 1, size: 1 },
+  { id: 'goals', column: 2, row: 1, size: 2 },
+  { id: 'behaviorAnalytics', column: 4, row: 1, size: 2 },
   
-  // Row 2
-  { id: 'combinedPnLROI', column: 0, row: 2 },
+  // Row 2 - Size 4 widget (spans 2 columns = 4 subcolumns)
+  { id: 'combinedPnLROI', column: 0, row: 2, size: 4 },
+  { id: 'costEfficiency', column: 4, row: 2, size: 2 },
   
-  // Row 3
-  { id: 'aiInsights', column: 0, row: 3 },
+  // Row 3 - Size 4 and size 2
+  { id: 'aiInsights', column: 0, row: 3, size: 4 },
+  { id: 'tradingQuality', column: 4, row: 3, size: 2 },
   
-  // Row 4
-  { id: 'goals', column: 0, row: 4 },
+  // Row 4 - Size 6 (full width)
+  { id: 'emotionMistakeCorrelation', column: 0, row: 4, size: 6 },
   
   // Row 5
-  { id: 'emotionMistakeCorrelation', column: 0, row: 5 },
-  
-  // Row 6
-  { id: 'behaviorAnalytics', column: 0, row: 6 },
-  { id: 'costEfficiency', column: 1, row: 6 },
-  
-  // Row 7
-  { id: 'performanceHighlights', column: 0, row: 7 },
-  { id: 'tradingQuality', column: 1, row: 7 },
+  { id: 'performanceHighlights', column: 0, row: 5, size: 2 },
 ];
 
 const CURRENT_OVERVIEW_LAYOUT_VERSION = 4;
@@ -217,7 +217,8 @@ if (data?.layout_json) {
       order.forEach((widgetId, index) => {
         const col = index % columnCount;
         const row = Math.floor(index / columnCount);
-        newPositions.push({ id: widgetId, column: col, row });
+        const size = WIDGET_SIZE_MAP[widgetId] || 2;
+        newPositions.push({ id: widgetId, column: col, row, size });
       });
       saveLayout(newPositions, order, newMode, columnCount);
     } else {
@@ -231,9 +232,9 @@ if (data?.layout_json) {
     }
   }, [mode, positions, order, columnCount, saveLayout]);
 
-  const updatePosition = useCallback((widgetId: string, column: number, row: number) => {
+  const updatePosition = useCallback((widgetId: string, column: number, row: number, size?: 1 | 2 | 4 | 6) => {
     const newPositions = positions.map(p =>
-      p.id === widgetId ? { ...p, column, row } : p
+      p.id === widgetId ? { ...p, column, row, ...(size && { size }) } : p
     );
     saveLayout(newPositions, order, mode, columnCount);
   }, [positions, order, mode, columnCount, saveLayout]);
@@ -249,36 +250,50 @@ if (data?.layout_json) {
     }
 
     const newOrder = [...order, widgetId];
+    const size = WIDGET_SIZE_MAP[widgetId] || 2;
     
     if (mode === 'fixed') {
       // Build grid to find occupied positions
       const grid: { [row: number]: { [col: number]: boolean } } = {};
       positions.forEach(pos => {
         if (!grid[pos.row]) grid[pos.row] = {};
-        grid[pos.row][pos.column] = true;
+        // Mark all subcolumns occupied by this widget
+        for (let i = 0; i < pos.size; i++) {
+          grid[pos.row][pos.column + i] = true;
+        }
       });
 
       const maxRow = Math.max(-1, ...positions.map(p => p.row));
       let targetCol = 0;
       let targetRow = maxRow + 1;
       
-      if (maxRow >= 0 && grid[maxRow]) {
-        const occupiedInBottomRow = Object.keys(grid[maxRow]).length;
-        if (occupiedInBottomRow < columnCount) {
-          for (let col = 0; col < columnCount; col++) {
-            if (!grid[maxRow][col]) {
+      // Try to find space in existing rows
+      if (maxRow >= 0) {
+        for (let row = 0; row <= maxRow; row++) {
+          if (!grid[row]) grid[row] = {};
+          // Try to find consecutive empty subcolumns
+          for (let col = 0; col <= 6 - size; col++) {
+            let canFit = true;
+            for (let i = 0; i < size; i++) {
+              if (grid[row][col + i]) {
+                canFit = false;
+                break;
+              }
+            }
+            if (canFit) {
               targetCol = col;
-              targetRow = maxRow;
+              targetRow = row;
               break;
             }
           }
+          if (targetRow === row) break;
         }
       }
 
-      const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow }];
+      const newPositions = [...positions, { id: widgetId, column: targetCol, row: targetRow, size }];
       console.log('[useGridLayout] Widget placement:', { 
         widgetId, 
-        position: { column: targetCol, row: targetRow },
+        position: { column: targetCol, row: targetRow, size },
         totalWidgets: newPositions.length 
       });
       
