@@ -15,6 +15,12 @@ interface DashboardHeaderProps {
     onResetLayout: () => void;
     canCustomizeDashboard: boolean;
     showUpgradePrompt: (show: boolean) => void;
+    layoutMode?: 'adaptive' | 'fixed';
+    onLayoutModeChange?: (mode: 'adaptive' | 'fixed') => void;
+    columnCount?: number;
+    onColumnCountChange?: (count: number) => void;
+    canUndo?: boolean;
+    onUndoReset?: () => void;
 }
 
 export const DashboardHeader = ({
@@ -28,6 +34,12 @@ export const DashboardHeader = ({
     onResetLayout,
     canCustomizeDashboard,
     showUpgradePrompt,
+    layoutMode,
+    onLayoutModeChange,
+    columnCount,
+    onColumnCountChange,
+    canUndo,
+    onUndoReset,
 }: DashboardHeaderProps) => {
     return (
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
@@ -54,11 +66,18 @@ export const DashboardHeader = ({
 
                 <CustomizeDashboardControls
                     isCustomizing={isCustomizing}
-                    hasChanges={false} // You might want to pass this as a prop too if needed
+                    hasChanges={false}
                     onStartCustomize={onStartCustomize}
                     onSave={onSaveLayout}
                     onCancel={onCancelCustomize}
                     onReset={onResetLayout}
+                    layoutMode={layoutMode}
+                    onLayoutModeChange={onLayoutModeChange}
+                    columnCount={columnCount}
+                    onColumnCountChange={onColumnCountChange}
+                    canUndo={canUndo}
+                    onUndoReset={onUndoReset}
+                    widgets={[]}
                 />
             </div>
         </div>

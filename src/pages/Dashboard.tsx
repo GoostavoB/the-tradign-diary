@@ -177,6 +177,8 @@ const Dashboard = () => {
     resetLayout,
     toggleLayoutMode,
     resizeWidget,
+    undoReset,
+    canUndo,
   } = useGridLayout(activeSubAccount?.id, Object.keys(WIDGET_CATALOG));
 
   const [isCustomizing, setIsCustomizing] = useState(false);
@@ -1026,6 +1028,12 @@ const Dashboard = () => {
                     onResetLayout={resetLayout}
                     canCustomizeDashboard={canCustomizeDashboard}
                     showUpgradePrompt={setShowUpgradePrompt}
+                    layoutMode={mode}
+                    onLayoutModeChange={toggleLayoutMode}
+                    columnCount={selectedColumnCount}
+                    onColumnCountChange={handleColumnCountChange}
+                    canUndo={canUndo}
+                    onUndoReset={undoReset}
                   />
 
                   <WidgetLibrary

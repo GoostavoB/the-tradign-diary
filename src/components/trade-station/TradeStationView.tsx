@@ -74,6 +74,7 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     undoReset,
     canUndo,
     resizeWidget,
+    toggleLayoutMode,
   } = useTradeStationLayout(user?.id);
 
   // Spot wallet and prices
@@ -656,6 +657,23 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
   
   return (
     <div className="space-y-4 relative">
+      {/* Customization Controls */}
+      <CustomizeDashboardControls
+        isCustomizing={isCustomizing}
+        hasChanges={hasChanges}
+        onStartCustomize={handleStartCustomize}
+        onSave={handleSaveLayout}
+        onCancel={handleCancelCustomize}
+        onReset={() => setShowResetDialog(true)}
+        layoutMode={mode}
+        onLayoutModeChange={toggleLayoutMode}
+        columnCount={columnCount}
+        onColumnCountChange={updateColumnCount}
+        canUndo={canUndo}
+        onUndoReset={undoReset}
+        widgets={[]}
+      />
+
       {/* Reset Confirmation Dialog */}
       <AlertDialog open={showResetDialog} onOpenChange={setShowResetDialog}>
         <AlertDialogContent>

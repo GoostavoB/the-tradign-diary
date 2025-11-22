@@ -120,3 +120,26 @@ export const TRADE_STATION_WIDGET_SIZE_MAP: Record<string, WidgetSize> = {
   'errorReflection': 2,
   'rollingTarget': 6,
 };
+
+// Helper functions for widget sizing during migration
+export function getDefaultSizeForWidget(widgetId: string, isTradeStation = false): WidgetSize {
+  const sizeMap = isTradeStation ? TRADE_STATION_WIDGET_SIZE_MAP : WIDGET_SIZE_MAP;
+  return sizeMap[widgetId] || 2; // Default to size 2 if not found
+}
+
+export function getDefaultHeightForWidget(widgetId: string, size?: WidgetSize): WidgetHeight {
+  // Size 1 widgets always have height 2
+  const widgetSize = size ?? getDefaultSizeForWidget(widgetId);
+  if (widgetSize === 1) {
+    return 2;
+  }
+  
+  // Large widgets get height 4
+  const largeWidgets = ['portfolioOverview', 'rollingTarget', 'behaviorAnalytics', 'aiInsights', 'emotionMistakeCorrelation'];
+  if (largeWidgets.includes(widgetId)) {
+    return 4;
+  }
+  
+  // Default height
+  return 2;
+}

@@ -60,6 +60,7 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
   const [columnCount, setColumnCount] = useState<number>(3);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [previousLayout, setPreviousLayout] = useState<{ mode: 'adaptive' | 'fixed', positions: WidgetPosition[], order: string[], columnCount: number } | null>(null);
 
   useEffect(() => {
     if (!subAccountId) {
@@ -83,8 +84,43 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
 if (data?.layout_json) {
   const layoutData = data.layout_json as any;
 
+  // Check if migration is needed (missing size/height or wrong mode)
+  const needsMigration = 
+    layoutData.mode === 'adaptive' || 
+    !layoutData.version || 
+    layoutData.version < CURRENT_OVERVIEW_LAYOUT_VERSION ||
+    (layoutData.positions && layoutData.positions.some((p: any) => p.size === undefined || p.height === undefined));
+
+  if (needsMigration && layoutData.positions && Array.isArray(layoutData.positions)) {
+    console.log('[useGridLayout] Migrating old layout to new format with sizes...');
+    
+    // Import helper functions
+    const { getDefaultSizeForWidget, getDefaultHeightForWidget } = await import('@/types/widget');
+    
+    // Assign default sizes based on widget ID
+    const migratedPositions = layoutData.positions.map((p: any, index: number) => {
+      const defaultSize = getDefaultSizeForWidget(p.id, false);
+      const defaultHeight = getDefaultHeightForWidget(p.id, defaultSize);
+      
+      return {
+        id: p.id,
+        column: p.column ?? (index % 6),
+        row: p.row ?? Math.floor(index / 3),
+        size: p.size ?? defaultSize,
+        height: p.height ?? defaultHeight,
+      };
+    });
+
+    // Convert to fixed mode and save
+    setMode('fixed');
+    setPositions(migratedPositions);
+    setOrder(migratedPositions.map(p => p.id));
+    setColumnCount(3);
+    await saveLayout(migratedPositions, migratedPositions.map(p => p.id), 'fixed', 3);
+    toast.info('Dashboard layout upgraded to new system');
+  }
   // Check if this is the new dual-mode format
-  if (layoutData.mode && layoutData.version === CURRENT_OVERVIEW_LAYOUT_VERSION) {
+  else if (layoutData.mode && layoutData.version === CURRENT_OVERVIEW_LAYOUT_VERSION) {
     setMode(layoutData.mode);
     setPositions(layoutData.positions || DEFAULT_POSITIONS);
     setOrder(layoutData.order || layoutData.positions?.map((p: any) => p.id) || DEFAULT_POSITIONS.map(p => p.id));
@@ -96,15 +132,15 @@ if (data?.layout_json) {
     if (isOutdated) {
       console.warn('Outdated overview layout detected; applying defaults');
       const defaultOrder = DEFAULT_POSITIONS.map(p => p.id);
-      setMode('adaptive');
+      setMode('fixed');
       setPositions(DEFAULT_POSITIONS);
       setOrder(defaultOrder);
       setColumnCount(3);
-      await saveLayout(DEFAULT_POSITIONS, defaultOrder, 'adaptive', 3);
+      await saveLayout(DEFAULT_POSITIONS, defaultOrder, 'fixed', 3);
     } else {
       console.log('Loading layout with column count:', layoutData);
       const migratedOrder = layoutData.positions.map((p: any) => p.id);
-      setMode('adaptive');
+      setMode(layoutData.mode || 'fixed');
       setPositions(layoutData.positions);
       setOrder(migratedOrder);
       if (layoutData.columnCount && layoutData.columnCount >= 1 && layoutData.columnCount <= 4) {
@@ -116,21 +152,21 @@ if (data?.layout_json) {
   else if (Array.isArray(layoutData) && layoutData.length > 0 && layoutData[0]?.column !== undefined) {
     console.warn('Legacy position-based layout detected; applying defaults');
     const defaultOrder = DEFAULT_POSITIONS.map(p => p.id);
-    setMode('adaptive');
+    setMode('fixed');
     setPositions(DEFAULT_POSITIONS);
     setOrder(defaultOrder);
     setColumnCount(3);
-    await saveLayout(DEFAULT_POSITIONS, defaultOrder, 'adaptive', 3);
+    await saveLayout(DEFAULT_POSITIONS, defaultOrder, 'fixed', 3);
   }
   // Order-based array (legacy strings) -> treat as outdated and reset
   else if (Array.isArray(layoutData) && layoutData.length > 0 && typeof layoutData[0] === 'string') {
     console.warn('Legacy order-based layout detected; applying defaults');
     const defaultOrder = DEFAULT_POSITIONS.map(p => p.id);
-    setMode('adaptive');
+    setMode('fixed');
     setPositions(DEFAULT_POSITIONS);
     setOrder(defaultOrder);
     setColumnCount(3);
-    await saveLayout(DEFAULT_POSITIONS, defaultOrder, 'adaptive', 3);
+    await saveLayout(DEFAULT_POSITIONS, defaultOrder, 'fixed', 3);
   }
 }
       } catch (error) {
@@ -388,13 +424,23 @@ if (data?.layout_json) {
   }, [positions, order, mode, columnCount, saveLayout]);
 
   const resetLayout = useCallback(() => {
+    // Save current layout for undo
+    setPreviousLayout({ mode, positions: [...positions], order: [...order], columnCount });
     const defaultOrder = DEFAULT_POSITIONS.map(p => p.id);
     setPositions(DEFAULT_POSITIONS);
     setOrder(defaultOrder);
     setColumnCount(3);
     saveLayout(DEFAULT_POSITIONS, defaultOrder, 'adaptive', 3);
     toast.success('Layout reset');
-  }, [saveLayout]);
+  }, [saveLayout, mode, positions, order, columnCount]);
+
+  const undoReset = useCallback(() => {
+    if (previousLayout) {
+      saveLayout(previousLayout.positions, previousLayout.order, previousLayout.mode, previousLayout.columnCount);
+      setPreviousLayout(null);
+      toast.success('Layout restored');
+    }
+  }, [previousLayout, saveLayout]);
 
   const updateColumnCount = useCallback((newCount: number) => {
     if (newCount >= 1 && newCount <= 4) {
@@ -418,5 +464,7 @@ if (data?.layout_json) {
     addWidget,
     removeWidget,
     resetLayout,
+    undoReset,
+    canUndo: previousLayout !== null,
   };
 };
