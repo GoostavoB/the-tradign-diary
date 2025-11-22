@@ -1,7 +1,9 @@
+import { WidgetPosition } from '@/hooks/useGridLayout';
 import { EnhancedDropZone } from '@/components/widgets/EnhancedDropZone';
 import { GridGuides } from '@/components/widgets/GridGuides';
-import { WidgetPosition } from '@/hooks/useGridLayout';
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
+import { useDndContext } from '@dnd-kit/core';
+import { toGridWidgets, isWithinBounds, hasCollision } from '@/utils/gridValidator';
 
 interface SubcolumnGridProps {
   positions: WidgetPosition[];
@@ -16,22 +18,64 @@ export const SubcolumnGrid = ({
   renderWidget,
   onOpenWidgetLibrary,
 }: SubcolumnGridProps) => {
-  // Build grid with 6 subcolumns (3 columns x 2 subcolumns each)
   const TOTAL_SUBCOLUMNS = 6;
-  const maxRow = Math.max(...positions.map(p => p.row), 0);
-  const rowCount = isCustomizing ? maxRow + 2 : maxRow + 1;
+  const { active, over } = useDndContext();
+  const [hoveredCell, setHoveredCell] = useState<{ column: number; row: number; size: number; height: number } | null>(null);
+  const [isValidDrop, setIsValidDrop] = useState(true);
+  
+  // Calculate required rows dynamically based on widget positions
+  const maxRow = positions.reduce((max, pos) => {
+    const widgetEndRow = pos.row + Math.ceil(pos.height / 2);
+    return Math.max(max, widgetEndRow);
+  }, 0);
+  
+  // Add extra rows in customization mode for drop zones
+  const totalRows = isCustomizing ? Math.max(maxRow + 3, 6) : maxRow;
 
-  // Group widgets by row
-  const rowGroups: { [row: number]: WidgetPosition[] } = {};
-  positions.forEach(pos => {
-    if (!rowGroups[pos.row]) rowGroups[pos.row] = [];
-    rowGroups[pos.row].push(pos);
-  });
+  // Track active widget and validate drop zones in real-time
+  useEffect(() => {
+    if (!active || !over) {
+      setHoveredCell(null);
+      return;
+    }
 
-  // Sort widgets in each row by column
-  Object.keys(rowGroups).forEach(row => {
-    rowGroups[Number(row)].sort((a, b) => a.column - b.column);
-  });
+    const overId = over.id as string;
+    if (!overId.startsWith('dropzone-')) {
+      setHoveredCell(null);
+      return;
+    }
+
+    const [, colStr, rowStr] = overId.split('-');
+    const targetCol = parseInt(colStr, 10);
+    const targetRow = parseInt(rowStr, 10);
+
+    // Get active widget
+    const activePos = positions.find(p => p.id === active.id);
+    if (!activePos) {
+      setIsValidDrop(false);
+      return;
+    }
+
+    setHoveredCell({ 
+      column: targetCol, 
+      row: targetRow,
+      size: activePos.size,
+      height: activePos.height
+    });
+
+    // Validate if this drop would be valid
+    const gridWidgets = toGridWidgets(positions);
+    const testWidget = {
+      ...activePos,
+      column: targetCol,
+      row: targetRow
+    };
+
+    const withinBounds = isWithinBounds(testWidget, TOTAL_SUBCOLUMNS);
+    const noCollision = !hasCollision(testWidget, gridWidgets, activePos.id);
+    
+    setIsValidDrop(withinBounds && noCollision);
+  }, [active, over, positions]);
 
   return (
     <div className="relative w-full">
@@ -39,7 +83,7 @@ export const SubcolumnGrid = ({
       {isCustomizing && (
         <GridGuides 
           columnCount={TOTAL_SUBCOLUMNS} 
-          rowCount={rowCount} 
+          rowCount={totalRows} 
           show={isCustomizing}
         />
       )}
@@ -49,9 +93,31 @@ export const SubcolumnGrid = ({
         className="relative grid gap-4 transition-all duration-500 ease-out"
         style={{
           gridTemplateColumns: `repeat(${TOTAL_SUBCOLUMNS}, minmax(100px, 1fr))`,
-          gridTemplateRows: `repeat(${rowCount}, minmax(180px, auto))`,
+          gridTemplateRows: `repeat(${totalRows}, minmax(180px, auto))`,
         }}
       >
+        {/* Visual feedback for hovered drop zone */}
+        {isCustomizing && hoveredCell && active && (
+          <div
+            className={`absolute pointer-events-none transition-all duration-200 rounded-xl border-2 z-50 ${
+              isValidDrop 
+                ? 'bg-primary/10 border-primary shadow-lg shadow-primary/20' 
+                : 'bg-destructive/10 border-destructive shadow-lg shadow-destructive/20'
+            }`}
+            style={{
+              gridColumn: `${hoveredCell.column + 1} / span ${hoveredCell.size}`,
+              gridRow: `${hoveredCell.row + 1} / span ${Math.ceil(hoveredCell.height / 2)}`,
+            }}
+          >
+            <div className={`absolute inset-0 flex items-center justify-center text-sm font-semibold ${
+              isValidDrop ? 'text-primary' : 'text-destructive'
+            }`}>
+              {isValidDrop ? '✓ Valid Position' : '✗ Invalid Position'}
+            </div>
+          </div>
+        )}
+
+        {/* Render actual widgets */}
         {positions.map((widget, index) => {
           // Calculate grid row span based on widget height
           const widgetHeight = widget.height || 2;
@@ -74,7 +140,7 @@ export const SubcolumnGrid = ({
             >
               {isCustomizing && (
                 <div className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-md shadow-lg z-10 font-medium">
-                  Size: {widget.size} | Height: {widget.height}
+                  Col: {widget.column} | Size: {widget.size} | Height: {widget.height}
                 </div>
               )}
               {renderWidget(widget.id)}
