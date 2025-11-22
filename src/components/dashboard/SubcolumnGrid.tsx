@@ -44,71 +44,57 @@ export const SubcolumnGrid = ({
         />
       )}
       
-      <div className="space-y-4">
-        {/* Render each row */}
-        {Array.from({ length: rowCount }).map((_, rowIndex) => {
-          const rowWidgets = rowGroups[rowIndex] || [];
-          const hasWidgets = rowWidgets.length > 0;
-
+      {/* Single unified grid that respects both column and row positioning */}
+      <div 
+        className="relative grid gap-4 transition-all duration-500 ease-out"
+        style={{
+          gridTemplateColumns: `repeat(${TOTAL_SUBCOLUMNS}, minmax(100px, 1fr))`,
+          gridTemplateRows: `repeat(${rowCount}, minmax(180px, auto))`,
+        }}
+      >
+        {positions.map((widget, index) => {
+          // Calculate grid row span based on widget height
+          const widgetHeight = widget.height || 2;
+          const rowSpan = Math.ceil(widgetHeight / 2); // Each row unit is 2 height units
+          
           return (
             <div
-              key={rowIndex}
-              className="relative grid gap-4 transition-all duration-500 ease-out"
+              key={widget.id}
+              className={`
+                relative transition-all duration-300
+                ${isCustomizing ? 'border-2 border-dashed rounded-xl border-primary/30' : ''}
+                ${!isCustomizing ? 'animate-fade-in' : ''}
+              `}
               style={{
-                gridTemplateColumns: `repeat(${TOTAL_SUBCOLUMNS}, minmax(100px, 1fr))`,
-                minHeight: '180px',
+                gridColumn: `${widget.column + 1} / span ${widget.size}`,
+                gridRow: `${widget.row + 1} / span ${rowSpan}`,
+                animationDelay: !isCustomizing ? `${index * 50}ms` : '0ms',
+                animationFillMode: 'backwards',
               }}
             >
-              {hasWidgets ? (
-                // Render widgets in this row
-                rowWidgets.map((widget, index) => {
-                  // Calculate height based on widget height property (default to 2 if not specified)
-                  const widgetHeight = widget.height || 2;
-                  const heightClass = widgetHeight === 2 
-                    ? 'h-[180px]' 
-                    : widgetHeight === 4 
-                    ? 'h-[380px]' 
-                    : 'h-[580px]';
-                  
-                  return (
-                    <div
-                      key={widget.id}
-                      className={`
-                        relative transition-all duration-300 ${heightClass}
-                        ${isCustomizing ? 'border-2 border-dashed rounded-xl border-primary/30' : ''}
-                        ${!isCustomizing ? 'animate-fade-in' : ''}
-                      `}
-                      style={{
-                        gridColumn: `${widget.column + 1} / span ${widget.size}`,
-                        animationDelay: !isCustomizing ? `${index * 50}ms` : '0ms',
-                        animationFillMode: 'backwards',
-                      }}
-                    >
-                      {isCustomizing && (
-                        <div className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-md shadow-lg z-10 font-medium">
-                          Size: {widget.size} | Height: {widget.height}
-                        </div>
-                      )}
-                      {renderWidget(widget.id)}
-                    </div>
-                  );
-                })
-              ) : isCustomizing ? (
-                // Empty row in customization mode - show drop zones
-                <div
-                  className="border-2 border-dashed rounded-xl border-border/20 hover:border-primary/30 hover:bg-primary/5 transition-all"
-                  style={{ gridColumn: '1 / -1' }}
-                >
-                  <EnhancedDropZone 
-                    id={`dropzone-row-${rowIndex}`} 
-                    onAddWidget={onOpenWidgetLibrary}
-                    showAddButton={true}
-                  />
+              {isCustomizing && (
+                <div className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-md shadow-lg z-10 font-medium">
+                  Size: {widget.size} | Height: {widget.height}
                 </div>
-              ) : null}
+              )}
+              {renderWidget(widget.id)}
             </div>
           );
         })}
+        
+        {/* Empty grid cells for customization mode */}
+        {isCustomizing && positions.length === 0 && (
+          <div
+            className="border-2 border-dashed rounded-xl border-border/20 hover:border-primary/30 hover:bg-primary/5 transition-all"
+            style={{ gridColumn: '1 / -1', gridRow: '1 / -1' }}
+          >
+            <EnhancedDropZone 
+              id="dropzone-empty" 
+              onAddWidget={onOpenWidgetLibrary}
+              showAddButton={true}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
