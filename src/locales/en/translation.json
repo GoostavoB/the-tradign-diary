@@ -246,7 +246,14 @@
       "termsOfUse": "Terms of Use",
       "security": "Security",
       "allRightsReserved": "All rights reserved.",
-      "noAPIsPrivacy": "No APIs. Full privacy."
+      "noAPIsPrivacy": "No APIs. Full privacy.",
+      "securityBadge": "Your data stays private. No third-party APIs.",
+      "madeWith": "Made with ❤️ for traders worldwide",
+      "help": "Help Center",
+      "documentation": "Documentation",
+      "legal": "Legal",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy"
     }
   },
   "contact": {
