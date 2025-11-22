@@ -1,4 +1,5 @@
-import { DropZone } from '@/components/widgets/DropZone';
+import { EnhancedDropZone } from '@/components/widgets/EnhancedDropZone';
+import { GridGuides } from '@/components/widgets/GridGuides';
 import { WidgetPosition } from '@/hooks/useGridLayout';
 import { ReactNode, useEffect, useState } from 'react';
 
@@ -9,6 +10,7 @@ interface AdaptiveGridProps {
   columnCount: number;
   isCustomizing: boolean;
   renderWidget: (widgetId: string) => ReactNode;
+  onOpenWidgetLibrary?: () => void;
 }
 
 export const AdaptiveGrid = ({
@@ -18,6 +20,7 @@ export const AdaptiveGrid = ({
   columnCount,
   isCustomizing,
   renderWidget,
+  onOpenWidgetLibrary,
 }: AdaptiveGridProps) => {
   const [responsiveColumns, setResponsiveColumns] = useState(columnCount);
 
@@ -45,17 +48,23 @@ export const AdaptiveGrid = ({
   }, [mode, columnCount]);
 
   if (mode === 'adaptive') {
-    // Adaptive mode: widgets flow in order
+    // Adaptive mode: widgets flow in order with compact layout
     return (
       <div
-        className="grid gap-4 transition-all duration-300 ease-in-out"
+        className="grid gap-4 transition-all duration-300 ease-in-out auto-rows-auto"
         style={{
           gridTemplateColumns: `repeat(${responsiveColumns}, minmax(0, 1fr))`,
           gridAutoFlow: 'dense',
         }}
       >
         {order.map((widgetId) => (
-          <div key={widgetId} className="relative min-h-[200px]">
+          <div 
+            key={widgetId} 
+            className={`
+              relative min-h-[200px] transition-all duration-200
+              ${isCustomizing ? 'ring-2 ring-primary/20 ring-offset-2 ring-offset-background rounded-xl' : ''}
+            `}
+          >
             {renderWidget(widgetId)}
           </div>
         ))}
@@ -77,9 +86,10 @@ export const AdaptiveGrid = ({
         <div
           key={`${col}-${row}`}
           className={`
-            relative min-h-[200px] h-full
-            ${isCustomizing ? 'border-2 border-dashed border-muted/20 rounded-xl transition-colors duration-200' : ''}
-            ${isCustomizing && !widgetId ? 'hover:border-primary/50 hover:bg-primary/5' : ''}
+            relative min-h-[200px] h-full transition-all duration-200
+            ${isCustomizing ? 'border-2 border-dashed rounded-xl' : ''}
+            ${isCustomizing && !widgetId ? 'border-border/30 hover:border-primary/50 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/10' : ''}
+            ${isCustomizing && widgetId ? 'border-primary/20' : ''}
           `}
           style={{
             gridColumn: col + 1,
@@ -87,7 +97,11 @@ export const AdaptiveGrid = ({
           }}
         >
           {isCustomizing && !widgetId && (
-            <DropZone id={`dropzone-${col}-${row}`} />
+            <EnhancedDropZone 
+              id={`dropzone-${col}-${row}`} 
+              onAddWidget={onOpenWidgetLibrary}
+              showAddButton={true}
+            />
           )}
 
           {widgetId && renderWidget(widgetId)}
@@ -97,13 +111,22 @@ export const AdaptiveGrid = ({
   }
 
   return (
-    <div
-      className={`grid gap-4 transition-all duration-300 ease-in-out ${isCustomizing ? 'overflow-x-auto' : ''}`}
-      style={{
-        gridTemplateColumns: `repeat(${columnCount}, minmax(250px, 1fr))`,
-      }}
-    >
-      {gridCells}
+    <div className="relative">
+      {/* Grid guides overlay in fixed mode */}
+      <GridGuides 
+        columnCount={columnCount} 
+        rowCount={rowCount} 
+        show={isCustomizing}
+      />
+      
+      <div
+        className={`relative grid gap-4 transition-all duration-300 ease-in-out ${isCustomizing ? 'overflow-x-auto' : ''}`}
+        style={{
+          gridTemplateColumns: `repeat(${columnCount}, minmax(250px, 1fr))`,
+        }}
+      >
+        {gridCells}
+      </div>
     </div>
   );
 };

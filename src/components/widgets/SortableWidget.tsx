@@ -1,7 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { memo, useEffect, useRef, useState } from 'react';
-import { X } from 'lucide-react';
+import { X, GripVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ErrorBoundary } from './ErrorBoundary';
 
@@ -59,21 +59,40 @@ export const SortableWidget = memo(({ id, children, isEditMode, onRemove }: Sort
       ref={(el) => { setNodeRef(el); nodeRef.current = el; }}
       style={style}
       data-sortable-id={id}
-      className={`widget-item relative ${isEditMode ? 'cursor-grab active:cursor-grabbing' : ''} ${isDragging ? 'dragging ring-2 ring-primary/60 shadow-2xl shadow-primary/40 rounded-lg' : ''}`}
+      className={`
+        widget-item relative rounded-xl transition-all duration-200
+        ${isEditMode ? 'cursor-grab active:cursor-grabbing' : ''} 
+        ${isDragging ? 'dragging ring-4 ring-primary/60 shadow-2xl shadow-primary/40 scale-105 z-50' : ''} 
+        ${isEditMode && !isDragging ? 'ring-2 ring-primary/30 ring-offset-2 ring-offset-background hover:ring-primary/50 animate-pulse-slow' : ''}
+      `}
       {...(isEditMode ? { ...attributes, ...listeners } : {})}
     >
+      {/* Drag handle indicator in edit mode */}
+      {isEditMode && !isDragging && (
+        <div className="absolute top-2 left-2 z-40 p-1.5 rounded-md bg-primary/10 backdrop-blur-sm border border-primary/20 shadow-sm opacity-0 group-hover:opacity-100 transition-all duration-200">
+          <GripVertical className="h-4 w-4 text-primary" />
+        </div>
+      )}
+
+      {/* Widget dimension indicator in edit mode */}
+      {isEditMode && !isDragging && (
+        <div className="absolute bottom-2 right-2 z-40 px-2 py-1 rounded-md bg-background/90 backdrop-blur-sm border border-border/50 text-xs font-mono text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-200">
+          {Math.round(lockedSize?.width || 0)}×{Math.round(lockedSize?.height || 0)}
+        </div>
+      )}
+      
       {/* Remove button in edit mode */}
       {isEditMode && (
         <Button
           variant="destructive"
           size="icon"
-          className="absolute -top-2 -right-2 z-50 h-6 w-6 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute -top-2 -right-2 z-50 h-7 w-7 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
           onClick={(e) => {
             e.stopPropagation();
             onRemove();
           }}
         >
-          <X className="h-3.5 w-3.5" />
+          <X className="h-4 w-4" />
         </Button>
       )}
       

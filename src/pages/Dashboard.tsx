@@ -1041,6 +1041,7 @@ const Dashboard = () => {
                     onDragEnd={handleDragEnd}
                     onDragCancel={handleDragCancel}
                     renderWidget={renderWidget}
+                    onOpenWidgetLibrary={() => setShowWidgetLibrary(true)}
                   />
                 </TabsContent>
 
