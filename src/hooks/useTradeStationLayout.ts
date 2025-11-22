@@ -18,15 +18,15 @@ interface TradeStationLayoutData {
   version?: number;
 }
 
-// Default widgets for Trade Station
+// Default widgets for Trade Station with varied sizes for visual impact
 const DEFAULT_TRADE_STATION_POSITIONS: TradeStationWidgetPosition[] = [
-  { id: 'simpleLeverage', column: 0, row: 0, size: 2, height: 2 },
-  { id: 'riskCalculator', column: 2, row: 0, size: 2, height: 2 },
-  { id: 'errorReflection', column: 4, row: 0, size: 2, height: 2 },
-  { id: 'rollingTarget', column: 0, row: 1, size: 6, height: 4 },
+  { id: 'riskCalculator', column: 0, row: 0, size: 4, height: 4 },      // LARGE & TALL
+  { id: 'simpleLeverage', column: 4, row: 0, size: 2, height: 2 },     // MEDIUM
+  { id: 'errorReflection', column: 4, row: 1, size: 2, height: 2 },    // MEDIUM
+  { id: 'rollingTarget', column: 0, row: 2, size: 6, height: 4 },      // FULL WIDTH
 ];
 
-const CURRENT_TRADE_STATION_LAYOUT_VERSION = 2;
+const CURRENT_TRADE_STATION_LAYOUT_VERSION = 3;
 
 export const useTradeStationLayout = (userId: string | undefined) => {
   const [mode, setMode] = useState<'adaptive' | 'fixed'>('fixed');
