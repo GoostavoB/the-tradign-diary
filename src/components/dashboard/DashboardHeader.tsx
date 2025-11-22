@@ -21,6 +21,7 @@ interface DashboardHeaderProps {
     onColumnCountChange?: (count: number) => void;
     canUndo?: boolean;
     onUndoReset?: () => void;
+    onForceReset?: () => void;
 }
 
 export const DashboardHeader = ({
@@ -40,6 +41,7 @@ export const DashboardHeader = ({
     onColumnCountChange,
     canUndo,
     onUndoReset,
+    onForceReset,
 }: DashboardHeaderProps) => {
     return (
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
@@ -77,6 +79,7 @@ export const DashboardHeader = ({
                     onColumnCountChange={onColumnCountChange}
                     canUndo={canUndo}
                     onUndoReset={onUndoReset}
+                    onForceReset={onForceReset}
                     widgets={[]}
                 />
             </div>

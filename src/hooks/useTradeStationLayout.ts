@@ -40,11 +40,13 @@ export const useTradeStationLayout = (userId: string | undefined) => {
   // Load layout from database
   useEffect(() => {
     if (!userId) {
+      console.log('[TradeStation] 🔵 No userId, skipping layout load');
       setIsLoading(false);
       return;
     }
 
     const loadLayout = async () => {
+      console.log('[TradeStation] 🔵 Load Start:', { userId });
       try {
         const { data, error } = await supabase
           .from('user_settings')
@@ -53,38 +55,93 @@ export const useTradeStationLayout = (userId: string | undefined) => {
           .single();
 
         if (error) {
-          console.error('Error loading Trade Station layout:', error);
+          console.error('[TradeStation] ❌ Error loading layout:', error);
           return;
         }
 
 if (data?.trade_station_layout_json) {
   const layoutData = data.trade_station_layout_json as any;
+  console.log('[TradeStation] 📦 Raw layout data:', { 
+    mode: layoutData.mode, 
+    version: layoutData.version, 
+    positionCount: layoutData.positions?.length 
+  });
   
-  // Check if migration is needed (missing size/height or wrong mode)
-  const needsMigration = 
-    layoutData.mode === 'adaptive' || 
-    !layoutData.version || 
-    layoutData.version < CURRENT_TRADE_STATION_LAYOUT_VERSION ||
-    (layoutData.positions && layoutData.positions.some((p: any) => p.size === undefined || p.height === undefined));
+  // AGGRESSIVE MIGRATION DETECTION
+  const checks = {
+    wrongMode: layoutData.mode === 'adaptive' || layoutData.mode === undefined,
+    missingVersion: !layoutData.version || layoutData.version < CURRENT_TRADE_STATION_LAYOUT_VERSION,
+    missingSizeHeight: layoutData.positions?.some((p: any) => p.size === undefined || p.height === undefined),
+    invalidSizeValues: layoutData.positions?.some((p: any) => 
+      typeof p.size !== 'number' || ![1, 2, 4, 6].includes(p.size)
+    ),
+    invalidHeightValues: layoutData.positions?.some((p: any) => 
+      typeof p.height !== 'number' || ![2, 4, 6].includes(p.height)
+    ),
+    invalidColumns: layoutData.positions?.some((p: any) => 
+      p.column === undefined || typeof p.column !== 'number' || p.column < 0 || p.column > 5
+    ),
+    countMismatch: layoutData.positions?.length !== layoutData.order?.length,
+  };
+
+  const needsMigration = Object.values(checks).some(Boolean);
+
+  console.log('[TradeStation] 🔍 Migration Check:', {
+    needsMigration,
+    currentMode: layoutData.mode,
+    currentVersion: layoutData.version,
+    expectedVersion: CURRENT_TRADE_STATION_LAYOUT_VERSION,
+    positionCount: layoutData.positions?.length,
+    checks,
+  });
 
   if (needsMigration && layoutData.positions && Array.isArray(layoutData.positions)) {
-    console.log('[TradeStation] Migrating old layout to new format with sizes...');
+    console.log('[TradeStation] ⚠️ Migration Needed - Starting migration process...');
     
     // Import helper functions
     const { getDefaultSizeForWidget, getDefaultHeightForWidget } = await import('@/types/widget');
     
-    // Assign default sizes based on widget ID
+    // Assign default sizes based on widget ID with detailed logging
     const migratedPositions = layoutData.positions.map((p: any, index: number) => {
       const defaultSize = getDefaultSizeForWidget(p.id, true);
       const defaultHeight = getDefaultHeightForWidget(p.id, defaultSize);
       
-      return {
+      const migrated = {
         id: p.id,
-        column: p.column ?? (index % 6),
-        row: p.row ?? Math.floor(index / 3),
-        size: p.size ?? defaultSize,
-        height: p.height ?? defaultHeight,
+        column: (typeof p.column === 'number' && p.column >= 0 && p.column <= 5) 
+          ? p.column 
+          : (index % 6),
+        row: (typeof p.row === 'number' && p.row >= 0) 
+          ? p.row 
+          : Math.floor(index / 3),
+        size: ([1, 2, 4, 6].includes(p.size)) ? p.size : defaultSize,
+        height: ([2, 4, 6].includes(p.height)) ? p.height : defaultHeight,
       };
+      
+      console.log(`[Migration] Widget ${p.id}:`, {
+        before: { column: p.column, row: p.row, size: p.size, height: p.height },
+        after: migrated,
+        usedDefaults: {
+          column: migrated.column !== p.column,
+          row: migrated.row !== p.row,
+          size: migrated.size !== p.size,
+          height: migrated.height !== p.height,
+        }
+      });
+      
+      return migrated;
+    });
+
+    console.log('[TradeStation] 📊 Migration Summary:', {
+      total: migratedPositions.length,
+      sizes: migratedPositions.reduce((acc, p) => {
+        acc[`size${p.size}`] = (acc[`size${p.size}`] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>),
+      heights: migratedPositions.reduce((acc, p) => {
+        acc[`height${p.height}`] = (acc[`height${p.height}`] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>),
     });
 
     // Convert to fixed mode and save
@@ -93,7 +150,11 @@ if (data?.trade_station_layout_json) {
     setOrder(migratedPositions.map(p => p.id));
     setColumnCount(3);
     await saveLayout(migratedPositions, migratedPositions.map(p => p.id), 'fixed', 3);
-    toast.info('Trade Station layout upgraded to new system');
+    console.log('[TradeStation] ✅ Migration Complete - Layout saved with version', CURRENT_TRADE_STATION_LAYOUT_VERSION);
+    toast.success('Trade Station upgraded to puzzle system!', {
+      description: `${migratedPositions.length} widgets migrated to Fixed mode with sizes (1,2,4,6) and heights (2,4,6)`,
+      duration: 5000,
+    });
   }
   // Check if this is the new format
   else if (layoutData.mode && layoutData.version === CURRENT_TRADE_STATION_LAYOUT_VERSION) {
@@ -138,7 +199,18 @@ if (data?.trade_station_layout_json) {
 
   // Save layout to database
   const saveLayout = useCallback(async (newPositions: TradeStationWidgetPosition[], newOrder: string[], newMode?: 'adaptive' | 'fixed', newColumnCount?: number) => {
-    if (!userId) return;
+    if (!userId) {
+      console.warn('[TradeStation] 💾 Cannot save: no userId');
+      return;
+    }
+
+    console.log('[TradeStation] 💾 Saving Layout:', { 
+      positionCount: newPositions.length,
+      orderCount: newOrder.length,
+      mode: newMode ?? mode,
+      columnCount: newColumnCount ?? columnCount,
+      version: CURRENT_TRADE_STATION_LAYOUT_VERSION,
+    });
 
     setIsSaving(true);
     try {
@@ -159,6 +231,7 @@ if (data?.trade_station_layout_json) {
         .eq('user_id', userId);
 
       if (error) {
+        console.error('[TradeStation] ❌ Save error:', error);
         throw error;
       }
 
@@ -169,9 +242,10 @@ if (data?.trade_station_layout_json) {
         setColumnCount(newColumnCount);
       }
       
+      console.log('[TradeStation] ✅ Layout saved successfully');
       toast.success('Trade Station layout saved');
     } catch (error) {
-      console.error('Failed to save Trade Station layout:', error);
+      console.error('[TradeStation] ❌ Failed to save layout:', error);
       toast.error('Failed to save layout');
     } finally {
       setIsSaving(false);
@@ -180,9 +254,14 @@ if (data?.trade_station_layout_json) {
 
   // Toggle layout mode
   const toggleLayoutMode = useCallback((newMode: 'adaptive' | 'fixed') => {
-    if (newMode === mode) return;
+    console.log('[TradeStation] 🔄 Mode Change Requested:', { from: mode, to: newMode });
+    if (newMode === mode) {
+      console.log('[TradeStation] ⏭️ Same mode, skipping');
+      return;
+    }
     
     if (newMode === 'fixed') {
+      console.log('[TradeStation] 🔄 Converting Adaptive → Fixed');
       // Convert adaptive order to fixed positions
       const newPositions: TradeStationWidgetPosition[] = [];
       order.forEach((widgetId, index) => {
@@ -193,14 +272,17 @@ if (data?.trade_station_layout_json) {
         const height: 2 | 4 | 6 = (defaultWidget?.height || 2) as 2 | 4 | 6;
         newPositions.push({ id: widgetId, column: col, row, size, height });
       });
+      console.log('[TradeStation] 📐 New positions:', { count: newPositions.length });
       saveLayout(newPositions, order, newMode, columnCount);
     } else {
+      console.log('[TradeStation] 🔄 Converting Fixed → Adaptive');
       // Convert fixed positions to adaptive order
       const sortedPositions = [...positions].sort((a, b) => {
         if (a.row !== b.row) return a.row - b.row;
         return a.column - b.column;
       });
       const newOrder = sortedPositions.map(p => p.id);
+      console.log('[TradeStation] 📋 New order:', { count: newOrder.length });
       saveLayout(positions, newOrder, newMode, columnCount);
     }
   }, [mode, positions, order, columnCount, saveLayout]);
@@ -318,6 +400,15 @@ if (data?.trade_station_layout_json) {
 
   // Resize widget
   const resizeWidget = useCallback(async (widgetId: string, newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+    const widget = positions.find(p => p.id === widgetId);
+    console.log('[TradeStation] 📐 Resize Widget:', { 
+      widgetId, 
+      currentSize: widget?.size, 
+      currentHeight: widget?.height,
+      newSize, 
+      newHeight 
+    });
+    
     const newPositions = positions.map(p => {
       if (p.id === widgetId) {
         const updates: Partial<TradeStationWidgetPosition> = {};
@@ -334,6 +425,7 @@ if (data?.trade_station_layout_json) {
           }
         }
         
+        console.log('[TradeStation] 📐 Applied updates:', updates);
         return { ...p, ...updates };
       }
       return p;
@@ -341,8 +433,10 @@ if (data?.trade_station_layout_json) {
     
     try {
       await saveLayout(newPositions, order, mode, columnCount);
+      console.log('[TradeStation] ✅ Widget resized successfully');
       toast.success('Widget resized');
     } catch (error) {
+      console.error('[TradeStation] ❌ Failed to resize:', error);
       toast.error('Failed to resize widget');
     }
   }, [positions, order, mode, columnCount, saveLayout]);

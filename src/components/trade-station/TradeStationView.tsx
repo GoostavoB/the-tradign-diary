@@ -616,6 +616,40 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
     setOriginalPositions([]);
   }, [originalPositions, order, saveLayout]);
 
+  // Force reset Trade Station layout - clears database and reloads
+  const handleForceResetLayout = useCallback(async () => {
+    console.log('[TradeStation] 🔴 FORCE RESET - Clearing all saved layouts');
+    
+    if (!user?.id) {
+      toast.error('No user ID');
+      return;
+    }
+    
+    if (!window.confirm('This will completely clear your saved Trade Station layout and reload the page. This action cannot be undone. Continue?')) {
+      console.log('[TradeStation] Force reset cancelled by user');
+      return;
+    }
+    
+    try {
+      const { error } = await supabase
+        .from('user_settings')
+        .update({ 
+          trade_station_layout_json: null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+      
+      console.log('[TradeStation] ✅ Layout cleared from database');
+      toast.success('Trade Station layout cleared. Reloading...');
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (error) {
+      console.error('[TradeStation] ❌ Force reset failed:', error);
+      toast.error('Failed to reset layout');
+    }
+  }, [user]);
+
   // Expose controls to parent via callback - parent Dashboard will handle widget library
   const controls = useMemo(() => ({
     isCustomizing,
@@ -671,6 +705,7 @@ export const TradeStationView = ({ onControlsReady }: TradeStationViewProps = {}
         onColumnCountChange={updateColumnCount}
         canUndo={canUndo}
         onUndoReset={undoReset}
+        onForceReset={handleForceResetLayout}
         widgets={[]}
       />
 
