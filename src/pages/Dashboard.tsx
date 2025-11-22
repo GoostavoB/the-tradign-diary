@@ -44,8 +44,8 @@ import { SortableWidget } from '@/components/widgets/SortableWidget';
 import { CustomWidgetRenderer } from '@/components/widgets/CustomWidgetRenderer';
 import { toast } from 'sonner';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useGridLayout, WidgetPosition } from '@/hooks/useGridLayout';
-import { DropZone } from '@/components/widgets/DropZone';
+import { GridDashboardWrapper } from '@/components/grid';
+import { DEFAULT_OVERVIEW_LAYOUT } from '@/config/defaultGridLayouts';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { useUserTier } from '@/hooks/useUserTier';
@@ -53,7 +53,7 @@ import { UpgradePrompt } from '@/components/UpgradePrompt';
 import { useSubAccount } from '@/contexts/SubAccountContext';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-import { DashboardGrid } from '@/components/dashboard/DashboardGrid';
+
 import { X } from 'lucide-react'; // Ensure X is imported if used, or remove if moved to Header
 
 // Lazy load heavy components
@@ -162,32 +162,10 @@ const Dashboard = () => {
     });
   }, []);
 
-  // Grid layout with free positioning - single source of truth
-  const {
-    positions,
-    order,
-    mode,
-    columnCount: savedColumnCount,
-    isLoading: isLayoutLoading,
-    updatePosition,
-    saveLayout: saveGridLayout,
-    updateColumnCount,
-    addWidget,
-    removeWidget,
-    resetLayout,
-    toggleLayoutMode,
-    resizeWidget,
-    undoReset,
-    canUndo,
-  } = useGridLayout(activeSubAccount?.id, Object.keys(WIDGET_CATALOG));
-
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [showWidgetLibrary, setShowWidgetLibrary] = useState(false);
   // State for Trade Station controls
   const [tradeStationControls, setTradeStationControls] = useState<any>(null);
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [selectedColumnCount, setSelectedColumnCount] = useState(3);
-  const [originalPositions, setOriginalPositions] = useState<WidgetPosition[]>([]);
   // Gamification temporarily disabled
   // const [isGamificationOpen, setIsGamificationOpen] = useState(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
@@ -195,15 +173,8 @@ const Dashboard = () => {
   // User tier for feature restrictions
   const { tier, canCustomizeDashboard, isLoading: tierLoading } = useUserTier();
 
-  // Sync column count from saved settings
-  useEffect(() => {
-    setSelectedColumnCount(savedColumnCount);
-  }, [savedColumnCount]);
-
   // Track if layout has changed
   const hasLayoutChanges = useMemo(() => {
-    if (!isCustomizing || originalPositions.length === 0) return false;
-
     // Compare current positions with original
     if (positions.length !== originalPositions.length) return true;
 
@@ -646,11 +617,11 @@ const Dashboard = () => {
     if (overPos) {
       // Import validation utilities
       const { validateLayout, toGridWidgets, isValidSwap } = require('@/utils/gridValidator');
-      
+
       const gridWidgets = toGridWidgets(positions);
       const activeWidget = gridWidgets.find(w => w.id === activeId)!;
       const overWidget = gridWidgets.find(w => w.id === overId)!;
-      
+
       // Test if swap is valid
       if (!isValidSwap(activeWidget, overWidget, gridWidgets, TOTAL_SUBCOLUMNS)) {
         console.warn('Invalid swap: would cause overlap or go off-grid');
@@ -658,7 +629,7 @@ const Dashboard = () => {
         setActiveId(null);
         return;
       }
-      
+
       // Perform swap
       updatedPositions = positions.map(p => {
         if (p.id === activeId) {
@@ -675,11 +646,11 @@ const Dashboard = () => {
       const [, colStr, rowStr] = overId.split('-');
       let targetCol = parseInt(colStr, 10);
       let targetRow = parseInt(rowStr, 10);
-      
+
       const { findNearestValidPosition, toGridWidgets } = require('@/utils/gridValidator');
       const gridWidgets = toGridWidgets(positions);
       const activeWidget = gridWidgets.find(w => w.id === activeId)!;
-      
+
       // Find nearest valid position
       const validPosition = findNearestValidPosition(
         activeWidget,
@@ -688,14 +659,14 @@ const Dashboard = () => {
         gridWidgets.filter(w => w.id !== activeId),
         TOTAL_SUBCOLUMNS
       );
-      
+
       if (!validPosition) {
         console.warn('No valid position found near target');
         toast.error('Cannot place widget here - no valid position nearby');
         setActiveId(null);
         return;
       }
-      
+
       updatedPositions = positions.map(p =>
         p.id === activeId ? { ...p, column: validPosition.column, row: validPosition.row } : p
       );
@@ -709,7 +680,7 @@ const Dashboard = () => {
     // Final validation before saving
     const { validateLayout, toGridWidgets } = require('@/utils/gridValidator');
     const finalValidation = validateLayout(toGridWidgets(updatedPositions), TOTAL_SUBCOLUMNS);
-    
+
     if (!finalValidation.isValid) {
       console.error('Final layout invalid:', finalValidation.errors);
       toast.error('Layout update failed validation');
@@ -738,28 +709,28 @@ const Dashboard = () => {
   // Force reset all layouts - clears database and reloads
   const handleForceResetLayout = useCallback(async () => {
     console.log('[Dashboard] 🔴 FORCE RESET - Clearing all saved layouts');
-    
+
     if (!activeSubAccountId) {
       toast.error('No active sub-account');
       return;
     }
-    
+
     if (!window.confirm('This will completely clear your saved dashboard layout and reload the page. This action cannot be undone. Continue?')) {
       console.log('[Dashboard] Force reset cancelled by user');
       return;
     }
-    
+
     try {
       const { error } = await supabase
         .from('user_settings')
-        .update({ 
+        .update({
           layout_json: null,
           updated_at: new Date().toISOString()
         })
         .eq('sub_account_id', activeSubAccountId);
-      
+
       if (error) throw error;
-      
+
       console.log('[Dashboard] ✅ Layout cleared from database');
       toast.success('Dashboard layout cleared. Reloading...');
       setTimeout(() => window.location.reload(), 1000);
@@ -852,7 +823,7 @@ const Dashboard = () => {
 
     // Get widget position for size and height
     const widgetPosition = positions.find(p => p.id === widgetId);
-    
+
     // Prepare props based on widget ID
     const widgetProps: any = {
       id: widgetId,

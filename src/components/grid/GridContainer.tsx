@@ -7,7 +7,6 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { GridWidget as GridWidgetType, GRID_CONSTANTS } from '@/types/grid';
-import { GridWidget } from './GridWidget';
 import { GridDropZone } from './GridDropZone';
 import { DndContext, DragEndEvent, DragStartEvent, useSensor, useSensors, PointerSensor, DragOverlay } from '@dnd-kit/core';
 
@@ -20,6 +19,7 @@ interface GridContainerProps {
     onDragEnd?: () => void;
     canPlace?: (widget: GridWidgetType, x: number, y: number) => boolean;
     className?: string;
+    renderWidget?: (widget: GridWidgetType) => React.ReactNode;
 }
 
 export const GridContainer: React.FC<GridContainerProps> = ({
@@ -31,6 +31,7 @@ export const GridContainer: React.FC<GridContainerProps> = ({
     onDragEnd,
     canPlace,
     className,
+    renderWidget,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [unitSize, setUnitSize] = useState(60); // Responsive unit size in pixels
@@ -161,17 +162,9 @@ export const GridContainer: React.FC<GridContainerProps> = ({
                     </div>
                 )}
 
-                {/* Widgets */}
+                {/* Widgets - rendered by renderWidget prop */}
                 <div className="relative" style={{ minHeight: gridHeight }}>
-                    {widgets.map(widget => (
-                        <GridWidget
-                            key={widget.id}
-                            widget={widget}
-                            unitSize={unitSize}
-                            isEditing={isEditing}
-                            isDragging={widget.id === activeId}
-                        />
-                    ))}
+                    {renderWidget && widgets.map(widget => renderWidget(widget))}
                 </div>
 
                 {/* Drag overlay */}

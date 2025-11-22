@@ -61,7 +61,7 @@ export const DEFAULT_OVERVIEW_LAYOUT: GridWidget[] = [
 
     // Row 4: Behavior Analytics (6 units) + Trading Quality (4 units)
     createGridWidget('behaviorAnalytics', 0, 4, 6, 3),
-    createGridWidget('cost Efficiency', 6, 4, 4, 2),
+    createGridWidget('costEfficiency', 6, 4, 4, 2),
     createGridWidget('tradingQuality', 10, 4, 2, 2),
 
     // Row 5: Emotion/Mistake Correlation (full width 12 units)
