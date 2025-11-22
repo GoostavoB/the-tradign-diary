@@ -176,6 +176,7 @@ const Dashboard = () => {
     removeWidget,
     resetLayout,
     toggleLayoutMode,
+    resizeWidget,
   } = useGridLayout(activeSubAccount?.id, Object.keys(WIDGET_CATALOG));
 
   const [isCustomizing, setIsCustomizing] = useState(false);
@@ -780,12 +781,22 @@ const Dashboard = () => {
 
     const WidgetComponent = widgetConfig.component;
 
+    // Get widget position for size and height
+    const widgetPosition = positions.find(p => p.id === widgetId);
+    
     // Prepare props based on widget ID
     const widgetProps: any = {
       id: widgetId,
       isEditMode: isCustomizing,
       isCompact: false,
       onRemove: () => removeWidget(widgetId),
+      onResize: (newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+        if (resizeWidget) {
+          resizeWidget(widgetId, newSize, newHeight);
+        }
+      },
+      currentSize: widgetPosition?.size,
+      currentHeight: widgetPosition?.height,
     };
 
     // Add widget-specific data
