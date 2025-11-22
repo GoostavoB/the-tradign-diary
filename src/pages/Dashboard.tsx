@@ -639,11 +639,27 @@ const Dashboard = () => {
     }
 
     let updatedPositions: WidgetPosition[];
+    const TOTAL_SUBCOLUMNS = 6;
 
-    // Handle drop on another widget - swap positions
+    // Handle drop on another widget - SWAP with validation
     const overPos = positions.find(p => p.id === overId);
     if (overPos) {
-      // Simply swap positions - no shifting needed
+      // Import validation utilities
+      const { validateLayout, toGridWidgets, isValidSwap } = require('@/utils/gridValidator');
+      
+      const gridWidgets = toGridWidgets(positions);
+      const activeWidget = gridWidgets.find(w => w.id === activeId)!;
+      const overWidget = gridWidgets.find(w => w.id === overId)!;
+      
+      // Test if swap is valid
+      if (!isValidSwap(activeWidget, overWidget, gridWidgets, TOTAL_SUBCOLUMNS)) {
+        console.warn('Invalid swap: would cause overlap or go off-grid');
+        toast.error('Cannot swap: widgets would overlap or exceed grid boundaries');
+        setActiveId(null);
+        return;
+      }
+      
+      // Perform swap
       updatedPositions = positions.map(p => {
         if (p.id === activeId) {
           return { ...p, column: overPos.column, row: overPos.row };
@@ -654,14 +670,34 @@ const Dashboard = () => {
         return p;
       });
     }
-    // Handle drop on dropzone
+    // Handle drop on dropzone - VALIDATE and snap to grid
     else if (overId.startsWith('dropzone-')) {
       const [, colStr, rowStr] = overId.split('-');
-      const targetCol = parseInt(colStr, 10);
-      const targetRow = parseInt(rowStr, 10);
-
+      let targetCol = parseInt(colStr, 10);
+      let targetRow = parseInt(rowStr, 10);
+      
+      const { findNearestValidPosition, toGridWidgets } = require('@/utils/gridValidator');
+      const gridWidgets = toGridWidgets(positions);
+      const activeWidget = gridWidgets.find(w => w.id === activeId)!;
+      
+      // Find nearest valid position
+      const validPosition = findNearestValidPosition(
+        activeWidget,
+        targetCol,
+        targetRow,
+        gridWidgets.filter(w => w.id !== activeId),
+        TOTAL_SUBCOLUMNS
+      );
+      
+      if (!validPosition) {
+        console.warn('No valid position found near target');
+        toast.error('Cannot place widget here - no valid position nearby');
+        setActiveId(null);
+        return;
+      }
+      
       updatedPositions = positions.map(p =>
-        p.id === activeId ? { ...p, column: targetCol, row: targetRow } : p
+        p.id === activeId ? { ...p, column: validPosition.column, row: validPosition.row } : p
       );
     }
     else {
@@ -670,16 +706,13 @@ const Dashboard = () => {
       return;
     }
 
-    // Validate all widgets are still present
-    const originalIds = new Set(positions.map(p => p.id));
-    const updatedIds = new Set(updatedPositions.map(p => p.id));
-
-    if (originalIds.size !== updatedIds.size) {
-      console.error('Widget count mismatch!', {
-        original: Array.from(originalIds),
-        updated: Array.from(updatedIds)
-      });
-      toast.error('Layout update failed - widgets would be lost');
+    // Final validation before saving
+    const { validateLayout, toGridWidgets } = require('@/utils/gridValidator');
+    const finalValidation = validateLayout(toGridWidgets(updatedPositions), TOTAL_SUBCOLUMNS);
+    
+    if (!finalValidation.isValid) {
+      console.error('Final layout invalid:', finalValidation.errors);
+      toast.error('Layout update failed validation');
       setActiveId(null);
       return;
     }
