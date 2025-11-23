@@ -53,7 +53,7 @@ import { UpgradePrompt } from '@/components/UpgradePrompt';
 import { useSubAccount } from '@/contexts/SubAccountContext';
 import { Badge } from '@/components/ui/badge';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-
+import { DashboardGridCompat as DashboardGrid } from '@/components/grid';
 import { X } from 'lucide-react'; // Ensure X is imported if used, or remove if moved to Header
 
 // Lazy load heavy components
