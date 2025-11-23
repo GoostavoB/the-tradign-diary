@@ -89,9 +89,7 @@ export const GridDashboardDemo = () => {
                     onDrop={async (widget, x, y) => {
                         await dropWidget(widget, x, y);
                     }}
-                >
-                    {/* Render widget content */}
-                    {widgets.map(widget => {
+                    renderWidget={(widget) => {
                         const catalogEntry = WIDGET_CATALOG[widget.id];
                         if (!catalogEntry) return null;
 
@@ -110,8 +108,8 @@ export const GridDashboardDemo = () => {
                                 </Card>
                             </div>
                         );
-                    })}
-                </GridContainer>
+                    }}
+                />
 
                 {/* Debug Info */}
                 {isEditing && (

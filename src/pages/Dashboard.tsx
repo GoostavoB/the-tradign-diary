@@ -27,6 +27,7 @@ import { DateRangeFilter } from '@/components/DateRangeFilter';
 import { useDateRange } from '@/contexts/DateRangeContext';
 import { CustomizeDashboardControls } from '@/components/CustomizeDashboardControls';
 import { useWidgetLayout } from '@/hooks/useWidgetLayout';
+import { useGridLayout, type WidgetPosition } from '@/hooks/useGridLayout';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 import { LessonLearnedPopup } from '@/components/lessons/LessonLearnedPopup';
@@ -173,6 +174,33 @@ const Dashboard = () => {
   // User tier for feature restrictions
   const { tier, canCustomizeDashboard, isLoading: tierLoading } = useUserTier();
 
+  // Available widgets from catalog
+  const availableWidgets = useMemo(() => Object.keys(WIDGET_CATALOG), []);
+
+  // Grid layout management
+  const {
+    mode,
+    positions,
+    order,
+    columnCount: selectedColumnCount,
+    isLoading: layoutLoading,
+    isSaving: layoutSaving,
+    saveLayout: saveGridLayout,
+    toggleLayoutMode,
+    updatePosition,
+    resizeWidget,
+    addWidget,
+    removeWidget,
+    resetLayout,
+    undoReset,
+    canUndo,
+    updateColumnCount
+  } = useGridLayout(activeSubAccountId, availableWidgets);
+
+  // Track original positions for cancel functionality
+  const [originalPositions, setOriginalPositions] = useState(positions);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   // Track if layout has changed
   const hasLayoutChanges = useMemo(() => {
     // Compare current positions with original
@@ -218,7 +246,6 @@ const Dashboard = () => {
 
   // Save column count to backend when user changes it
   const handleColumnCountChange = useCallback((newCount: number) => {
-    setSelectedColumnCount(newCount);
     updateColumnCount(newCount);
   }, [updateColumnCount]);
 
@@ -1089,7 +1116,7 @@ const Dashboard = () => {
                   />
 
                   <DashboardGrid
-                    mode={mode}
+                    mode={mode === 'fixed' ? 'free' : mode}
                     positions={positions}
                     order={order}
                     selectedColumnCount={selectedColumnCount}
