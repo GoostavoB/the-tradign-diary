@@ -1,0 +1,179 @@
+{
+  "tooltips": [
+    {
+      "id": "favorite-heart-icon",
+      "targetElement": "[data-tooltip='favorite-button']",
+      "text": "Click to add this page to your Favorites. Maximum 12 favorites allowed.",
+      "placement": "right",
+      "trigger": "hover"
+    },
+    {
+      "id": "sidebar-search",
+      "targetElement": "[data-tooltip='menu-search']",
+      "text": "Search for pages by name or keywords. Try 'wallet', 'btc', or 'fees'.",
+      "placement": "bottom",
+      "trigger": "focus"
+    },
+    {
+      "id": "dashboard-widget",
+      "targetElement": "[data-tooltip='dashboard-widget']",
+      "text": "Drag widgets to rearrange. Click settings icon to customize or remove.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "add-trade-button",
+      "targetElement": "[data-tooltip='add-trade']",
+      "text": "Upload CSV, connect exchange API, or enter trade details manually.",
+      "placement": "bottom",
+      "trigger": "hover"
+    },
+    {
+      "id": "win-rate-metric",
+      "targetElement": "[data-tooltip='win-rate']",
+      "text": "Percentage of profitable trades. Calculated as (winning trades / total trades) × 100%.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "roi-metric",
+      "targetElement": "[data-tooltip='roi']",
+      "text": "Return on Investment: (Current Balance - Initial Capital) / Initial Capital × 100%.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "streak-indicator",
+      "targetElement": "[data-tooltip='streak']",
+      "text": "Your current winning or losing streak. Maintain streaks to earn XP bonuses.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "connect-exchange",
+      "targetElement": "[data-tooltip='connect-exchange']",
+      "text": "Connect your exchange to automatically sync trade history. API keys are encrypted.",
+      "placement": "right",
+      "trigger": "hover"
+    },
+    {
+      "id": "sync-trades-button",
+      "targetElement": "[data-tooltip='sync-trades']",
+      "text": "Fetch recent trades from connected exchange. Review before importing.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "trade-setup-tag",
+      "targetElement": "[data-tooltip='trade-setup']",
+      "text": "Tag with strategy type (breakout, reversal, scalp) to analyze which setups work best.",
+      "placement": "right",
+      "trigger": "focus"
+    },
+    {
+      "id": "psychology-log",
+      "targetElement": "[data-tooltip='psychology']",
+      "text": "Log your emotional state and confidence level. Identify patterns in your behavior.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "fee-efficiency",
+      "targetElement": "[data-tooltip='fees']",
+      "text": "Track fee costs by exchange and trade type. High fees reduce net profits.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "risk-calculator",
+      "targetElement": "[data-tooltip='risk-calc']",
+      "text": "Calculate position size based on account balance, risk percentage, and stop loss.",
+      "placement": "right",
+      "trigger": "hover"
+    },
+    {
+      "id": "goal-milestone",
+      "targetElement": "[data-tooltip='goal']",
+      "text": "Set measurable goals with deadlines. Track progress and adjust as needed.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "report-generator",
+      "targetElement": "[data-tooltip='report']",
+      "text": "Generate PDF or CSV reports for any date range. Perfect for tax records.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "theme-selector",
+      "targetElement": "[data-tooltip='theme']",
+      "text": "Choose light, dark, or system theme. Accent colors customize the look.",
+      "placement": "left",
+      "trigger": "hover"
+    },
+    {
+      "id": "notification-settings",
+      "targetElement": "[data-tooltip='notifications']",
+      "text": "Enable alerts for performance milestones, streaks, and price movements.",
+      "placement": "left",
+      "trigger": "hover"
+    },
+    {
+      "id": "csv-upload",
+      "targetElement": "[data-tooltip='csv-upload']",
+      "text": "Drag and drop CSV file from your broker. Supported: Binance, Bybit, and more.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "portfolio-allocation",
+      "targetElement": "[data-tooltip='allocation']",
+      "text": "Visual breakdown of your holdings by asset. Click to see details.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "leaderboard-rank",
+      "targetElement": "[data-tooltip='leaderboard']",
+      "text": "Your rank among all traders. Earn XP by logging trades and maintaining streaks.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "achievement-badge",
+      "targetElement": "[data-tooltip='badge']",
+      "text": "Unlock badges by hitting milestones. Showcase your achievements on your profile.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "market-data-widget",
+      "targetElement": "[data-tooltip='market']",
+      "text": "Real-time cryptocurrency prices and 24h changes. Click for detailed charts.",
+      "placement": "left",
+      "trigger": "hover"
+    },
+    {
+      "id": "calendar-event",
+      "targetElement": "[data-tooltip='calendar']",
+      "text": "Important economic events that may impact crypto markets. Set reminders.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "ai-forecast",
+      "targetElement": "[data-tooltip='forecast']",
+      "text": "AI-powered projections based on your historical performance. Not financial advice.",
+      "placement": "top",
+      "trigger": "hover"
+    },
+    {
+      "id": "social-share",
+      "targetElement": "[data-tooltip='share']",
+      "text": "Share your trade or strategy with the community. Choose public or followers-only.",
+      "placement": "top",
+      "trigger": "hover"
+    }
+  ]
+}

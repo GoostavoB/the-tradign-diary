@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Blog Article 1: AI Tools -->
+  <url>
+    <loc>https://www.thetradingdiary.com/blog/ai-tools-for-crypto-trading</loc>
+    <image:image>
+      <image:loc>https://www.thetradingdiary.com/blog/ai-tools-dashboard.png</image:loc>
+      <image:caption>AI tools for crypto trading dashboard showing risk metrics and breach indicators</image:caption>
+      <image:title>AI Tools Dashboard for Crypto Trading</image:title>
+    </image:image>
+  </url>
+  
+  <!-- Blog Article 2: Trading Journal -->
+  <url>
+    <loc>https://www.thetradingdiary.com/blog/trading-journal-for-crypto</loc>
+    <image:image>
+      <image:loc>https://www.thetradingdiary.com/blog/journal-template.png</image:loc>
+      <image:caption>Crypto trading journal template with setup fields and emotion tracking</image:caption>
+      <image:title>Trading Journal Template</image:title>
+    </image:image>
+  </url>
+  
+  <!-- Blog Article 3: Trading Psychology -->
+  <url>
+    <loc>https://www.thetradingdiary.com/blog/trading-psychology-control-emotions</loc>
+    <image:image>
+      <image:loc>https://www.thetradingdiary.com/blog/psychology-checklist.png</image:loc>
+      <image:caption>Trading psychology checklist with cooldown rules and emotion control steps</image:caption>
+      <image:title>Trading Psychology Checklist</image:title>
+    </image:image>
+  </url>
+  
+  <!-- Blog Article 4: Data-Driven Trading -->
+  <url>
+    <loc>https://www.thetradingdiary.com/blog/data-driven-trading</loc>
+    <image:image>
+      <image:loc>https://www.thetradingdiary.com/blog/data-driven-dashboard.png</image:loc>
+      <image:caption>Data-driven trading dashboard showing expectancy by setup and performance metrics</image:caption>
+      <image:title>Data-Driven Trading Dashboard</image:title>
+    </image:image>
+  </url>
+  
+  <!-- Blog Article 5: AI-Powered Journal -->
+  <url>
+    <loc>https://www.thetradingdiary.com/blog/ai-powered-trading-journal</loc>
+    <image:image>
+      <image:loc>https://www.thetradingdiary.com/blog/ai-automation-pipeline.png</image:loc>
+      <image:caption>AI-powered trading journal automation pipeline from import to coaching</image:caption>
+      <image:title>AI Automation Pipeline</image:title>
+    </image:image>
+  </url>
+  
+  <!-- OG Images for Landing Pages -->
+  <url>
+    <loc>https://www.thetradingdiary.com/</loc>
+    <image:image>
+      <image:loc>https://www.thetradingdiary.com/og-image-en.png</image:loc>
+      <image:caption>The Trading Diary - AI-powered crypto trading journal</image:caption>
+      <image:title>The Trading Diary</image:title>
+    </image:image>
+  </url>
+</urlset>

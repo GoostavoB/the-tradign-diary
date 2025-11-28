@@ -1,0 +1,99 @@
+import { memo, useState } from 'react';
+import { WidgetWrapper } from './WidgetWrapper';
+import { WidgetProps } from '@/types/widget';
+import { useTranslation } from '@/hooks/useTranslation';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+interface PerformanceItem {
+    label: string;
+    value: string;
+}
+
+interface PerformanceHighlightsWidgetProps extends WidgetProps {
+    workingItems: PerformanceItem[];
+    improvementItems: PerformanceItem[];
+    insight?: string;
+}
+
+/**
+ * L Widget (2×2) - Large analytics
+ * Per spec: padding 14-20px, 2-column layout, max 3 items per column
+ */
+export const PerformanceHighlightsWidget = memo(({
+    id,
+    isEditMode,
+    onRemove,
+    workingItems,
+    improvementItems,
+    insight,
+}: PerformanceHighlightsWidgetProps) => {
+    const { t } = useTranslation();
+    const [period, setPeriod] = useState('30d');
+
+    return (
+        <WidgetWrapper
+            id={id}
+            title="Performance Highlights"
+            isEditMode={isEditMode}
+            onRemove={onRemove}
+            className="p-4 flex flex-col h-full"
+        >
+            {/* Line 1: Title + Filter */}
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base font-semibold">Performance Highlights</h3>
+                <Select value={period} onValueChange={setPeriod}>
+                    <SelectTrigger className="w-[100px] h-8 text-xs">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="7d">Last 7d</SelectItem>
+                        <SelectItem value="30d">Last 30d</SelectItem>
+                        <SelectItem value="90d">Last 90d</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Line 2: Two columns */}
+            <div className="grid grid-cols-2 gap-4 flex-1">
+                {/* Left: What's Working */}
+                <div>
+                    <h4 className="text-sm font-medium mb-2 text-profit">What's Working</h4>
+                    <ul className="space-y-1.5">
+                        {workingItems.slice(0, 3).map((item, idx) => (
+                            <li key={idx} className="text-sm">
+                                {item.label} · <span className="text-profit font-medium">{item.value}</span>
+                            </li>
+                        ))}
+                    </ul>
+                    {workingItems.length === 0 && (
+                        <p className="text-xs text-muted-foreground">Not enough data yet</p>
+                    )}
+                </div>
+
+                {/* Right: Areas to Improve */}
+                <div>
+                    <h4 className="text-sm font-medium mb-2 text-amber-600">Areas to Improve</h4>
+                    <ul className="space-y-1.5">
+                        {improvementItems.slice(0, 3).map((item, idx) => (
+                            <li key={idx} className="text-sm">
+                                {item.label} · <span className="text-loss font-medium">{item.value}</span>
+                            </li>
+                        ))}
+                    </ul>
+                    {improvementItems.length === 0 && (
+                        <p className="text-xs text-muted-foreground">Not enough data yet</p>
+                    )}
+                </div>
+            </div>
+
+            {/* Line 3: Insight (optional) */}
+            {insight && (
+                <div className="text-xs text-muted-foreground mt-3 pt-3 border-t">
+                    {insight}
+                </div>
+            )}
+        </WidgetWrapper>
+    );
+});
+
+PerformanceHighlightsWidget.displayName = 'PerformanceHighlightsWidget';

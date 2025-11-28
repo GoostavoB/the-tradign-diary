@@ -1,0 +1,45 @@
+project_id = "qziawervfvptoretkjrn"
+
+[functions.ai-dashboard-assistant]
+verify_jwt = true
+
+[functions.send-support-email]
+verify_jwt = true
+
+[functions.ai-psychology-analysis]
+verify_jwt = true
+
+[functions.ai-performance-prediction]
+verify_jwt = true
+
+# Gamification CRON Jobs
+[functions.calculate-leaderboard]
+verify_jwt = false
+schedule = "0 0 * * *"  # Daily at midnight UTC
+
+[functions.update-challenges]
+verify_jwt = false
+schedule = "0 0 * * *"  # Daily at midnight UTC
+
+[functions.check-user-activity]
+verify_jwt = false
+schedule = "0 */6 * * *"  # Every 6 hours
+
+[functions.monitor-performance-alerts]
+verify_jwt = false
+schedule = "*/15 * * * *"  # Every 15 minutes
+
+[functions.economic-calendar-proxy]
+verify_jwt = true
+
+[functions.generate-logo-variations]
+verify_jwt = true
+
+[functions.sync-coingecko-categories]
+verify_jwt = true
+
+[functions.ai-generate-report]
+verify_jwt = true
+
+[functions.process-multi-upload]
+verify_jwt = true

@@ -1,0 +1,2004 @@
+{
+  "timestamp": "2025-11-26T11:12:02.226Z",
+  "issueCount": 166,
+  "issues": [
+    {
+      "id": "spacing_node_5_margin",
+      "componentId": "node_5",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: -1px",
+      "description": "The margin '-1px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_main-content_padding",
+      "componentId": "main-content",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 56px",
+      "description": "The padding '56px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_53_margin",
+      "componentId": "node_53",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: -96px",
+      "description": "The margin '-96px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_109_padding",
+      "componentId": "node_109",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 112px",
+      "description": "The padding '112px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_110_margin",
+      "componentId": "node_110",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 168px",
+      "description": "The margin '168px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_145_padding",
+      "componentId": "node_145",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 112px",
+      "description": "The padding '112px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_146_margin",
+      "componentId": "node_146",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 104px",
+      "description": "The margin '104px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_150_margin",
+      "componentId": "node_150",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_155_margin",
+      "componentId": "node_155",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_160_margin",
+      "componentId": "node_160",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_165_margin",
+      "componentId": "node_165",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_170_margin",
+      "componentId": "node_170",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_175_margin",
+      "componentId": "node_175",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_180_margin",
+      "componentId": "node_180",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_185_margin",
+      "componentId": "node_185",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_190_margin",
+      "componentId": "node_190",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_195_margin",
+      "componentId": "node_195",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_200_margin",
+      "componentId": "node_200",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_205_margin",
+      "componentId": "node_205",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_210_margin",
+      "componentId": "node_210",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_214_padding",
+      "componentId": "node_214",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 112px",
+      "description": "The padding '112px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_215_margin",
+      "componentId": "node_215",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 168px",
+      "description": "The margin '168px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_243_padding",
+      "componentId": "node_243",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 112px",
+      "description": "The padding '112px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_265_margin",
+      "componentId": "node_265",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_273_margin",
+      "componentId": "node_273",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_277_margin",
+      "componentId": "node_277",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 208px",
+      "description": "The margin '208px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_281_padding",
+      "componentId": "node_281",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 2px",
+      "description": "The padding '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_285_margin",
+      "componentId": "node_285",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 6px",
+      "description": "The margin '6px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_294_margin",
+      "componentId": "node_294",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_297_margin",
+      "componentId": "node_297",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_298_margin",
+      "componentId": "node_298",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_301_margin",
+      "componentId": "node_301",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_302_margin",
+      "componentId": "node_302",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_305_margin",
+      "componentId": "node_305",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_306_margin",
+      "componentId": "node_306",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_309_margin",
+      "componentId": "node_309",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_310_margin",
+      "componentId": "node_310",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_313_margin",
+      "componentId": "node_313",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_314_margin",
+      "componentId": "node_314",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_317_margin",
+      "componentId": "node_317",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_318_margin",
+      "componentId": "node_318",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_321_margin",
+      "componentId": "node_321",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_322_margin",
+      "componentId": "node_322",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_325_margin",
+      "componentId": "node_325",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_326_margin",
+      "componentId": "node_326",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_329_margin",
+      "componentId": "node_329",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_330_margin",
+      "componentId": "node_330",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_342_margin",
+      "componentId": "node_342",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 6px",
+      "description": "The margin '6px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_351_margin",
+      "componentId": "node_351",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_354_margin",
+      "componentId": "node_354",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_355_margin",
+      "componentId": "node_355",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_358_margin",
+      "componentId": "node_358",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_359_margin",
+      "componentId": "node_359",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_362_margin",
+      "componentId": "node_362",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_363_margin",
+      "componentId": "node_363",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_366_margin",
+      "componentId": "node_366",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_367_margin",
+      "componentId": "node_367",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_370_margin",
+      "componentId": "node_370",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_371_margin",
+      "componentId": "node_371",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_374_margin",
+      "componentId": "node_374",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_375_margin",
+      "componentId": "node_375",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_378_margin",
+      "componentId": "node_378",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_379_margin",
+      "componentId": "node_379",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_384_margin",
+      "componentId": "node_384",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 6px",
+      "description": "The margin '6px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_393_margin",
+      "componentId": "node_393",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_396_margin",
+      "componentId": "node_396",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_397_margin",
+      "componentId": "node_397",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_400_margin",
+      "componentId": "node_400",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_401_margin",
+      "componentId": "node_401",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_404_margin",
+      "componentId": "node_404",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_405_margin",
+      "componentId": "node_405",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_408_margin",
+      "componentId": "node_408",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_409_margin",
+      "componentId": "node_409",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_412_margin",
+      "componentId": "node_412",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_413_margin",
+      "componentId": "node_413",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_416_margin",
+      "componentId": "node_416",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_417_margin",
+      "componentId": "node_417",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 2px",
+      "description": "The margin '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_438_padding",
+      "componentId": "node_438",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 2px",
+      "description": "The padding '2px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "typo_node_438_size",
+      "componentId": "node_438",
+      "type": "typography",
+      "severity": "medium",
+      "message": "Font size too small: 10px",
+      "description": "Text element has font-size 10px, which is below the minimum of 12px."
+    },
+    {
+      "id": "spacing_node_457_margin",
+      "componentId": "node_457",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_461_margin",
+      "componentId": "node_461",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_465_margin",
+      "componentId": "node_465",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_471_margin",
+      "componentId": "node_471",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_492_margin",
+      "componentId": "node_492",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_496_margin",
+      "componentId": "node_496",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_500_margin",
+      "componentId": "node_500",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_509_margin",
+      "componentId": "node_509",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_514_margin",
+      "componentId": "node_514",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_518_margin",
+      "componentId": "node_518",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_524_margin",
+      "componentId": "node_524",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_529_margin",
+      "componentId": "node_529",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_533_margin",
+      "componentId": "node_533",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_539_margin",
+      "componentId": "node_539",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_544_margin",
+      "componentId": "node_544",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_548_margin",
+      "componentId": "node_548",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_554_margin",
+      "componentId": "node_554",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_558_margin",
+      "componentId": "node_558",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_563_margin",
+      "componentId": "node_563",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_569_margin",
+      "componentId": "node_569",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_573_margin",
+      "componentId": "node_573",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_578_margin",
+      "componentId": "node_578",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_588_margin",
+      "componentId": "node_588",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_592_margin",
+      "componentId": "node_592",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_596_margin",
+      "componentId": "node_596",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_603_margin",
+      "componentId": "node_603",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_607_margin",
+      "componentId": "node_607",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_611_margin",
+      "componentId": "node_611",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_617_margin",
+      "componentId": "node_617",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_622_margin",
+      "componentId": "node_622",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_626_margin",
+      "componentId": "node_626",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_632_margin",
+      "componentId": "node_632",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_637_margin",
+      "componentId": "node_637",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_641_margin",
+      "componentId": "node_641",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_651_margin",
+      "componentId": "node_651",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_655_margin",
+      "componentId": "node_655",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_659_margin",
+      "componentId": "node_659",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_665_margin",
+      "componentId": "node_665",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_669_margin",
+      "componentId": "node_669",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_674_margin",
+      "componentId": "node_674",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_680_margin",
+      "componentId": "node_680",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_684_margin",
+      "componentId": "node_684",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_689_margin",
+      "componentId": "node_689",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_695_margin",
+      "componentId": "node_695",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_699_margin",
+      "componentId": "node_699",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_704_margin",
+      "componentId": "node_704",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_714_margin",
+      "componentId": "node_714",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_718_margin",
+      "componentId": "node_718",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_722_margin",
+      "componentId": "node_722",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_729_margin",
+      "componentId": "node_729",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_733_margin",
+      "componentId": "node_733",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_737_margin",
+      "componentId": "node_737",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_743_margin",
+      "componentId": "node_743",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_748_margin",
+      "componentId": "node_748",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_752_margin",
+      "componentId": "node_752",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_762_margin",
+      "componentId": "node_762",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_766_margin",
+      "componentId": "node_766",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_770_margin",
+      "componentId": "node_770",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_776_margin",
+      "componentId": "node_776",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_781_margin",
+      "componentId": "node_781",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_785_margin",
+      "componentId": "node_785",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_792_margin",
+      "componentId": "node_792",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_796_margin",
+      "componentId": "node_796",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_800_margin",
+      "componentId": "node_800",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_806_margin",
+      "componentId": "node_806",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_811_margin",
+      "componentId": "node_811",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_815_margin",
+      "componentId": "node_815",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_821_margin",
+      "componentId": "node_821",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_826_margin",
+      "componentId": "node_826",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_830_margin",
+      "componentId": "node_830",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 114.75px",
+      "description": "The margin '114.75px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_832_padding",
+      "componentId": "node_832",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 112px",
+      "description": "The padding '112px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_833_margin",
+      "componentId": "node_833",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 232px",
+      "description": "The margin '232px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_837_padding",
+      "componentId": "node_837",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 28px",
+      "description": "The padding '28px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_868_padding",
+      "componentId": "node_868",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 6px",
+      "description": "The padding '6px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_871_padding",
+      "componentId": "node_871",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 6px",
+      "description": "The padding '6px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_875_padding",
+      "componentId": "node_875",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 6px",
+      "description": "The padding '6px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_880_padding",
+      "componentId": "node_880",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid padding value: 6px",
+      "description": "The padding '6px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_898_margin",
+      "componentId": "node_898",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_900_margin",
+      "componentId": "node_900",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_902_margin",
+      "componentId": "node_902",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_904_margin",
+      "componentId": "node_904",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_906_margin",
+      "componentId": "node_906",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_912_margin",
+      "componentId": "node_912",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_914_margin",
+      "componentId": "node_914",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_916_margin",
+      "componentId": "node_916",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_918_margin",
+      "componentId": "node_918",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    },
+    {
+      "id": "spacing_node_920_margin",
+      "componentId": "node_920",
+      "type": "spacing",
+      "severity": "low",
+      "message": "Invalid margin value: 10px",
+      "description": "The margin '10px' is not in the allowed spacing scale: 0px, 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px, 80px, 96px, 128px."
+    }
+  ],
+  "componentLookup": {
+    "node_5": {
+      "tagName": "a",
+      "className": "sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:shadow-lg focus:font-semibold focus:text-sm focus:animate-slide-up focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+      "text": "Skip to main content"
+    },
+    "main-content": {
+      "tagName": "main",
+      "className": "pt-14"
+    },
+    "node_53": {
+      "tagName": "section",
+      "className": "relative -mt-24 z-20 px-6"
+    },
+    "node_109": {
+      "tagName": "section",
+      "className": "py-20 md:py-28 px-6 bg-gradient-to-b from-black/0 via-primary/5 to-black/0"
+    },
+    "node_110": {
+      "tagName": "div",
+      "className": "container mx-auto max-w-4xl"
+    },
+    "node_145": {
+      "tagName": "section",
+      "className": "py-20 md:py-28 px-6"
+    },
+    "node_146": {
+      "tagName": "div",
+      "className": "container mx-auto max-w-5xl"
+    },
+    "node_150": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_155": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_160": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_165": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_170": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_175": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_180": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_185": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_190": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_195": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_200": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_205": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_210": {
+      "tagName": "div",
+      "className": "flex-shrink-0 mt-0.5"
+    },
+    "node_214": {
+      "tagName": "section",
+      "className": "py-20 md:py-28 px-6 bg-gradient-to-b from-primary/5 via-accent/5 to-primary/5"
+    },
+    "node_215": {
+      "tagName": "div",
+      "className": "container mx-auto max-w-4xl"
+    },
+    "node_243": {
+      "tagName": "section",
+      "className": "py-20 md:py-28 px-6"
+    },
+    "node_265": {
+      "tagName": "div",
+      "className": "text-xs text-muted-foreground"
+    },
+    "node_273": {
+      "tagName": "div",
+      "className": "text-xs text-muted-foreground"
+    },
+    "node_277": {
+      "tagName": "p",
+      "className": "text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6",
+      "text": "Choose the plan that fits your trading style."
+    },
+    "node_281": {
+      "tagName": "span",
+      "className": "absolute -top-2 -right-2 bg-green-500 text-primary-foreground text-xs px-2 py-0.5 rounded-full font-semibold",
+      "text": "Save 20%"
+    },
+    "node_285": {
+      "tagName": "h3",
+      "className": "text-xl md:text-2xl font-bold mb-1.5",
+      "text": "pricing.plans.starter.name"
+    },
+    "node_294": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_297": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_298": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_301": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_302": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_305": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_306": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_309": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_310": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_313": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_314": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_317": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_318": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_321": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_322": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_325": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_326": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_329": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_330": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_342": {
+      "tagName": "h3",
+      "className": "text-xl md:text-2xl font-bold mb-1.5",
+      "text": "Pro"
+    },
+    "node_351": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_354": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_355": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_358": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_359": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_362": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_363": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_366": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_367": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_370": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_371": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_374": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_375": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_378": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_379": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_384": {
+      "tagName": "h3",
+      "className": "text-xl md:text-2xl font-bold mb-1.5",
+      "text": "Elite"
+    },
+    "node_393": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_396": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_397": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_400": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_401": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_404": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_405": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_408": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_409": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_412": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_413": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_416": {
+      "tagName": "li",
+      "className": "flex items-start gap-2.5"
+    },
+    "node_417": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_438": {
+      "tagName": "div",
+      "className": "absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-primary text-primary-foreground text-[10px] font-medium rounded-full whitespace-nowrap",
+      "text": "Most Popular"
+    },
+    "node_457": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_461": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_465": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_471": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_492": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_496": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_500": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_509": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_514": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_518": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_524": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_529": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_533": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_539": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_544": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_548": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_554": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_558": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_563": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_569": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_573": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_578": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_588": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_592": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_596": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_603": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_607": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_611": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_617": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_622": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_626": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_632": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_637": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_641": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_651": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_655": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_659": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_665": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_669": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_674": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_680": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_684": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_689": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_695": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_699": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_704": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_714": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_718": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_722": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_729": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_733": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_737": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_743": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_748": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_752": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_762": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_766": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_770": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_776": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_781": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_785": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_792": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_796": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_800": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_806": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_811": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_815": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_821": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_826": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_830": {
+      "tagName": "svg",
+      "className": {}
+    },
+    "node_832": {
+      "tagName": "section",
+      "className": "py-20 md:py-28 px-6"
+    },
+    "node_833": {
+      "tagName": "div",
+      "className": "container mx-auto max-w-3xl"
+    },
+    "node_837": {
+      "tagName": "button",
+      "className": "inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-10 py-7 text-base font-medium rounded-xl",
+      "text": "Start Free"
+    },
+    "node_868": {
+      "tagName": "a",
+      "className": "text-muted-foreground hover:text-primary transition-colors p-1.5 glass-subtle rounded-lg hover-lift"
+    },
+    "node_871": {
+      "tagName": "a",
+      "className": "text-muted-foreground hover:text-primary transition-colors p-1.5 glass-subtle rounded-lg hover-lift"
+    },
+    "node_875": {
+      "tagName": "a",
+      "className": "text-muted-foreground hover:text-primary transition-colors p-1.5 glass-subtle rounded-lg hover-lift"
+    },
+    "node_880": {
+      "tagName": "a",
+      "className": "text-muted-foreground hover:text-primary transition-colors p-1.5 glass-subtle rounded-lg hover-lift"
+    },
+    "node_898": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_900": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_902": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_904": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_906": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_912": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_914": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_916": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_918": {
+      "tagName": "li",
+      "className": ""
+    },
+    "node_920": {
+      "tagName": "li",
+      "className": ""
+    }
+  }
+}

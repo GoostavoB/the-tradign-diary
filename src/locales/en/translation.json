@@ -1,0 +1,2382 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "loading": "Loading",
+    "error": "Error",
+    "success": "Success",
+    "inDevelopment": "In Development",
+    "comingSoon": "Coming Soon",
+    "confirm": "Confirm",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "filter": "Filter",
+    "clear": "Clear",
+    "apply": "Apply",
+    "remove": "Remove",
+    "duplicate": "Duplicate",
+    "share": "Share",
+    "download": "Download",
+    "upload": "Upload",
+    "view": "View",
+    "customize": "Customize",
+    "settings": "Settings",
+    "startFree": "Start Free",
+    "viewPricing": "View Pricing",
+    "learnMore": "Learn More",
+    "continue": "Continue",
+    "addTrade": "Add Trade",
+    "upgradeToPro": "Upgrade to Pro",
+    "upgradeToElite": "Upgrade to Elite"
+  },
+  "landing": {
+    "hero": {
+      "mainTitle": "Trade With Clarity and Control",
+      "subtitle": "AI helps you upload trades faster, see patterns, and improve decisions. No APIs. No exchange connections. Full privacy.",
+      "cta": "Start Free",
+      "ctaPrimary": "Start Free",
+      "ctaSubtext": "No hidden fees. Cancel anytime."
+    },
+    "stats": {
+      "fasterUploads": {
+        "title": "40× Faster Uploads",
+        "description": "Batch upload from screenshots. No more manual entry."
+      },
+      "knowEveryFee": {
+        "title": "Know Every Fee",
+        "description": "Compare exchanges and uncover hidden costs."
+      },
+      "yourRules": {
+        "title": "Your Dashboard, Your Rules",
+        "description": "Fully customizable metrics, colors, and layout."
+      }
+    },
+    "benefits": {
+      "fasterUploads": {
+        "title": "40× Faster Uploads",
+        "description": "Batch upload from screenshots. No more manual entry."
+      },
+      "knowEveryFee": {
+        "title": "Know Every Fee",
+        "description": "Compare exchanges and uncover hidden costs."
+      },
+      "yourRules": {
+        "title": "Your Dashboard, Your Rules",
+        "description": "Fully customizable metrics, colors, and layout."
+      }
+    },
+    "dashboardShowcase": {
+      "title": "Your trades, organized. This one shows progress.",
+      "subtitle": "Track everything in one place—P&L, emotions, errors. Find what works.",
+      "cta": "Start Tracking"
+    },
+    "exchangeLogos": {
+      "title": "Trusted by 10,000+ crypto traders worldwide",
+      "subtitle": "Connect your favorite exchanges and import trades automatically"
+    },
+    "features": {
+      "title": "Trade Better with Data",
+      "subtitle": "Everything you need to improve your trading performance",
+      "smartLogging": {
+        "title": "Smart Logging",
+        "description": "Capture screenshots, add emotional tags, track errors—all in one place.",
+        "blogLinkText": "Learn More"
+      },
+      "autoImports": {
+        "title": "Auto Imports",
+        "description": "Connect Binance, Bybit, and more. Sync trades automatically.",
+        "blogLinkText": "View Exchanges"
+      },
+      "advancedAnalytics": {
+        "title": "Advanced Analytics",
+        "description": "Win rate, expectancy, streaks—see what's actually profitable.",
+        "blogLinkText": "Explore Analytics"
+      },
+      "tagFilter": {
+        "title": "Tag & Filter",
+        "description": "Organize by setup, timeframe, emotion. Find patterns instantly.",
+        "blogLinkText": "How It Works"
+      },
+      "mobileFriendly": {
+        "title": "Mobile Friendly",
+        "description": "Log trades on the go. Full experience on any device.",
+        "blogLinkText": "Get Started"
+      },
+      "learnMore": "Learn More",
+      "readMoreInsights": "Read More Trading Insights"
+    },
+    "testimonials": {
+      "sectionTitle": "Trusted by Traders Worldwide",
+      "testimonial1": {
+        "quote": "Clear analytics helped me correct my mistakes faster.",
+        "author": "Marcus Chen",
+        "role": "Day Trader",
+        "exchange": "Binance"
+      },
+      "testimonial2": {
+        "quote": "I stopped emotional trades and improved my results.",
+        "author": "Sarah Rodriguez",
+        "role": "Swing Trader",
+        "exchange": "Coinbase"
+      }
+    },
+    "proofBar": {
+      "activeTraders": "Active Traders",
+      "tradesAnalyzed": "Trades Analyzed",
+      "averageRating": "Average Rating"
+    },
+    "performanceMetrics": {
+      "sectionTitle": "Your Real Performance Insights",
+      "metric1": {
+        "title": "Upload Trades 40 Times Faster",
+        "description": "Batch upload screenshots and process trades in seconds.",
+        "value": "40x"
+      },
+      "metric2": {
+        "title": "Save Up to 97 Percent of Your Time",
+        "description": "Focus on analysis instead of manual work.",
+        "value": "97%"
+      },
+      "metric3": {
+        "title": "Catch More Errors",
+        "description": "Daily review helps you detect mistakes early.",
+        "value": "More Errors Caught"
+      },
+      "metric4": {
+        "title": "Improve Decision Accuracy",
+        "description": "Structured logs and clear analytics support better choices.",
+        "value": "Improved Accuracy"
+      }
+    },
+    "whyImprove": {
+      "header": "A Simple System That Improves Your Trading Decisions",
+      "benefit1": {
+        "title": "You reduce repeated errors",
+        "description": "Tag mistakes and watch them decline over time."
+      },
+      "benefit2": {
+        "title": "You make calmer decisions",
+        "description": "Track emotional trades and improve control."
+      },
+      "benefit3": {
+        "title": "You build skill through daily review",
+        "description": "See what works and refine your process."
+      },
+      "benefit4": {
+        "title": "You find patterns faster",
+        "description": "Spot changes in setups, conditions, and timing."
+      }
+    },
+    "coreFeatures": {
+      "header": "Tools That Give You Better Insight",
+      "features": [
+        "AI Extracts for fast trade logging",
+        "Unlimited manual uploads",
+        "Anti duplicate trade detection",
+        "Screenshot uploads",
+        "Advanced charts and analytics",
+        "Journal with emotional tracking",
+        "Market sentiment with combined LSR",
+        "Exchange fee comparison",
+        "Wealth forecast",
+        "Risk calculator",
+        "Smart performance insights",
+        "Trade history",
+        "Tax report export"
+      ]
+    },
+    "privacy": {
+      "header": "Private and Flexible",
+      "points": [
+        "No APIs",
+        "No exchange connections",
+        "Works with every platform",
+        "Your data stays in your control"
+      ]
+    },
+    "socialProof": {
+      "header": "Trusted by Traders Worldwide",
+      "testimonial1": "Clear analytics helped me correct my mistakes faster.",
+      "testimonial2": "I stopped emotional trades and improved my results."
+    },
+    "pricingPreview": {
+      "header": "Simple Plans for Every Trader",
+      "cta": "View Pricing"
+    },
+    "finalCta": {
+      "header": "Start Tracking Your Trades With Confidence",
+      "cta": "Start Free"
+    },
+    "hero": {
+      "titleShort": "Track every crypto trade. Learn faster.",
+      "benefits": [
+        "Import trades in minutes",
+        "See true PnL with fees",
+        "Review setups with tags"
+      ],
+      "ctaPrimary": "Get started free"
+    },
+    "cta": {
+      "title": "Start Tracking Your Trades With Confidence",
+      "subtitle": "Join thousands of traders improving their discipline and profitability.",
+      "button": "Start Free",
+      "note": "No credit card required"
+    },
+    "footer": {
+      "tagline": "Your AI assisted trading journal. Track your trades with clarity and privacy.",
+      "product": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "blog": "Blog",
+      "login": "Login",
+      "startFree": "Start Free",
+      "support": "Support",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfUse": "Terms of Use",
+      "security": "Security",
+      "allRightsReserved": "All rights reserved.",
+      "noAPIsPrivacy": "No APIs. Full privacy.",
+      "securityBadge": "Your data stays private. No third-party APIs.",
+      "madeWith": "Made with ❤️ for traders worldwide",
+      "help": "Help Center",
+      "documentation": "Documentation",
+      "legal": "Legal",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with our team",
+    "name": "Name",
+    "email": "Email",
+    "company": "Company",
+    "message": "Message",
+    "send": "Send Message",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "your@email.com",
+    "companyPlaceholder": "Your company (optional)",
+    "messagePlaceholder": "Tell us how we can help...",
+    "success": "Message sent successfully!",
+    "error": "Failed to send message. Please try again.",
+    "messageSent": "Email client opened. Please send the message.",
+    "orEmail": "Email us"
+  },
+  "premium": {
+    "proFeature": "Pro Feature",
+    "eliteFeature": "Elite Feature",
+    "upgradeMessage": "Upgrade to {{plan}} to unlock this feature",
+    "upgradeCTA": "Upgrade Now"
+  },
+  "social": {
+    "shareRewards": "Share & Earn Rewards",
+    "shareDescription": "Share The Trading Diary on social media and earn bonus AI uploads",
+    "shareText": "I'm using The Trading Diary to track my crypto trades with AI! 🚀",
+    "shareOn": "Share on {{platform}}",
+    "shareSuccess": "Shared on {{platform}}! You earned +{{uploads}} uploads",
+    "shareRewardDescription": "Bonus uploads added to your account",
+    "earnedRewards": "Total Earned",
+    "uploadsEarned": "AI uploads earned",
+    "shareLimit": "Rewards are limited to once per platform"
+  },
+  "referral": {
+    "title": "Refer Friends",
+    "description": "Invite friends and earn bonus uploads when they sign up",
+    "rewardAmount": "+20 Uploads per Referral",
+    "rewardDetails": "You and your friend both get 20 bonus AI uploads when they create an account",
+    "yourLink": "Your Referral Link",
+    "shareButton": "Share Link",
+    "copied": "Link copied!",
+    "copiedDescription": "Referral link copied to clipboard",
+    "copyError": "Failed to copy link",
+    "shareTitle": "Join The Trading Diary",
+    "shareText": "Track your crypto trades with AI-powered insights",
+    "totalReferrals": "Total Referrals",
+    "uploadsEarned": "Uploads Earned",
+    "terms": "Both parties receive rewards once the referred user completes signup"
+  },
+  "errors": {
+    "title": "Trading Errors",
+    "description": "Track mistakes to learn and improve your trading discipline",
+    "addError": "Add Error",
+    "errorType": "Error Type",
+    "notes": "Notes",
+    "notesPlaceholder": "What happened and what can you learn from it?",
+    "save": "Save Error",
+    "added": "Error logged successfully",
+    "removed": "Error removed",
+    "selectType": "Please select an error type",
+    "noErrors": "No errors tracked for this trade",
+    "totalErrors": "Total Errors: {{count}}",
+    "optional": "(optional)"
+  },
+  "fearGreed": {
+    "title": "Fear & Greed Index",
+    "description": "Market sentiment indicator for crypto",
+    "crypto": "Crypto",
+    "extremeFear": "Extreme Fear",
+    "neutral": "Neutral",
+    "extremeGreed": "Extreme Greed",
+    "lastUpdate": "Last updated",
+    "error": "Unable to load Fear & Greed Index"
+  },
+  "portfolio": {
+    "snapshots": "Portfolio Snapshots",
+    "snapshotsDescription": "Capture and share your portfolio performance",
+    "myPortfolio": "My Portfolio",
+    "totalValue": "Total Value",
+    "totalROI": "Total ROI",
+    "topHoldings": "Top Holdings",
+    "noData": "No portfolio data available",
+    "download": "Download Snapshot",
+    "share": "Share",
+    "capturing": "Capturing...",
+    "snapshotSuccess": "Snapshot saved successfully",
+    "snapshotError": "Failed to capture snapshot",
+    "shareTitle": "My Portfolio Performance",
+    "shareText": "Check out my trading portfolio performance",
+    "shareNotSupported": "Sharing not supported on this browser",
+    "snapshotNote": "Snapshots help track your portfolio growth over time"
+  },
+  "pricing": {
+    "title": "Simple Plans for Every Trader",
+    "subtitle": "Choose the plan that fits your trading style.",
+    "mostPopular": "Most Popular",
+    "perMonth": "month",
+    "perMonthBilledAnnually": "month, billed annually",
+    "savingsAmount": "Save ${{amount}}/year",
+    "guaranteeNote": "No hidden fees. Cancel anytime. Monthly plans only.",
+    "hero": {
+      "title": "Simple Plans. Full Privacy. Clear Insights.",
+      "subtitle": "Choose the plan that fits your trading style.",
+      "primaryCta": "Start Free",
+      "secondaryCta": "Watch 2-minute demo"
+    },
+    "benefits": {
+      "benefit1": "Track trades with clarity",
+      "benefit2": "See patterns in your performance",
+      "benefit3": "Stay private with zero API connections"
+    },
+    "solutions": {
+      "title": "Outcomes That Matter",
+      "subtitle": "Premium capabilities built for elite traders",
+      "seePatterns": {
+        "headline": "See patterns instantly",
+        "subhead": "AI reads your entire history. Highlights what actually makes money.",
+        "metric": "4.2x faster reviews",
+        "proofPoint": "Average trader discovers 3 profitable patterns in first week"
+      },
+      "knowEdge": {
+        "headline": "Know your edge",
+        "subhead": "Every setup, every hour, every market condition. Measured.",
+        "metric": "67%",
+        "metricValue": 67,
+        "proofPoint": "Win rate improvement (average user)"
+      },
+      "tradeConfidence": {
+        "headline": "Trade with confidence",
+        "subhead": "Position sizing calculated. Risk controlled. Drawdowns predicted.",
+        "metric": "89%",
+        "metricValue": 89,
+        "proofPoint": "Fewer oversized losses"
+      },
+      "trackEffortlessly": {
+        "headline": "Track everything effortlessly",
+        "subhead": "Screenshots, notes, emotional state. All organized. Always searchable.",
+        "metric": "12 minutes saved",
+        "metricValue": 12,
+        "proofPoint": "Per review session"
+      },
+      "performanceSpeaks": {
+        "headline": "Performance that speaks",
+        "subhead": "Win rate, expectancy, R-multiples. Charts that tell your story.",
+        "metric": "2.3 Sharpe",
+        "metricValue": 2.3,
+        "proofPoint": "Average elite user performance"
+      },
+      "yourRules": {
+        "headline": "Your dashboard, your rules",
+        "subhead": "Widgets you need. Metrics that matter. Nothing else.",
+        "metric": "8 layouts",
+        "metricValue": 8,
+        "proofPoint": "Custom configurations per user (avg)"
+      },
+      "builtByTraders": {
+        "headline": "Built by traders who get it",
+        "subhead": "Every workflow from real journals. Every feature battle-tested.",
+        "metric": "10,000+ hours",
+        "metricValue": 10000,
+        "proofPoint": "Of trader feedback integrated"
+      }
+    },
+    "billing": {
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "save20": "Save 20%"
+    },
+    "plans": {
+      "cta": "Start Free",
+      "ctaUpgradePro": "Upgrade to Pro",
+      "ctaUpgradeElite": "Upgrade to Elite",
+      "terms": "No hidden fees. Cancel anytime.",
+      "basic": {
+        "name": "Starter",
+        "description": "Free",
+        "price": "Free",
+        "features": {
+          "aiExtracts": "5 AI Extracts as a limited offer",
+          "tradesPerExtract": "Track up to 10 trades per Extract",
+          "manualUploads": "Unlimited manual uploads",
+          "screenshots": "Screenshot uploads",
+          "antiDuplicate": "Anti duplicate detection",
+          "tradeHistory": "Full trade history",
+          "charts": "Advanced charts and analytics",
+          "journal": "Journal with emotional tracking",
+          "marketSentiment": "Market sentiment with combined LSR",
+          "feeComparison": "Exchange fee comparison",
+          "leverageCalculator": "Trade leverage calculator",
+          "wealthForecast": "Wealth forecast",
+          "riskCalculator": "Risk calculator",
+          "insights": "Smart performance insights",
+          "taxReport": "Tax report export"
+        },
+        "addons": {
+          "title": "Add-ons",
+          "extraExtracts": "10 extra AI Extracts for 5"
+        },
+        "notIncluded": {
+          "title": "Not included",
+          "multipleAccounts": "Multiple accounts",
+          "customDashboard": "Custom dashboard",
+          "discountPacks": "Discount on Extract packs",
+          "unlimitedExtracts": "Unlimited Extracts"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "18 per month",
+        "monthlyPrice": "18",
+        "yearlyPrice": "14.4",
+        "yearlyDescription": "14.4 per month yearly",
+        "features": {
+          "everythingStarter": "Everything in Starter",
+          "unlimitedAccounts": "Unlimited sub accounts",
+          "customDashboard": "Custom dashboard with 6 themes",
+          "widgetControl": "Move, add, remove widgets",
+          "layoutControl": "Full layout control",
+          "aiExtracts": "30 AI Extracts per month",
+          "rollover": "Rollover up to 300 trades",
+          "extractPacks": "Extra Extract packs at 2 for 10",
+          "discount": "Discount on Extract packs"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "description": "30 per month",
+        "monthlyPrice": "30",
+        "yearlyPrice": "24",
+        "yearlyDescription": "24 per month yearly",
+        "features": {
+          "everythingPro": "Everything in Pro",
+          "unlimitedExtracts": "Unlimited AI Extracts per month with unlimited trades",
+          "prioritySupport": "Priority customer support",
+          "exclusiveMetrics": "Exclusive metrics and widgets",
+          "earlyAccess": "Early access to new features",
+          "customColors": "Fully customizable dashboard with custom colors"
+        }
+      }
+    },
+    "comparison": {
+      "title": "Compare Plans in Detail",
+      "subtitle": "See exactly what's included in each plan",
+      "feature": "Feature",
+      "unlimited": "Unlimited",
+      "categories": {
+        "aiAnalytics": "AI & Analytics",
+        "tradingTools": "Trading Tools",
+        "journaling": "Journaling & Psychology",
+        "riskManagement": "Risk Management",
+        "integrations": "Integrations",
+        "social": "Social & Community"
+      },
+      "features": {
+        "aiUploads": "AI Trade Uploads",
+        "manualUploads": "Manual Trade Uploads",
+        "aiAnalysis": "AI Performance Analysis",
+        "customWidgets": "Custom KPI Widgets",
+        "advancedCharts": "Advanced Charts & Analytics",
+        "tradingPlan": "Trading Plan Builder",
+        "preTradeChecklist": "Pre-Trade Checklist",
+        "goalsTracking": "Goals Tracking",
+        "tradeReplay": "Trade Replay",
+        "positionCalculator": "Position Size Calculator",
+        "basicJournal": "Basic Journal",
+        "emotionalTimeline": "Emotional Timeline",
+        "richJournal": "Rich Journal with Mood Tracking",
+        "patternAnalysis": "Pattern Analysis",
+        "feeAnalytics": "Fee Analytics",
+        "riskDashboard": "Risk Dashboard",
+        "drawdownAnalysis": "Drawdown Analysis",
+        "performanceAlerts": "Performance Alerts",
+        "csvImport": "CSV Import/Export",
+        "exchangeConnections": "Exchange Connections",
+        "autoRefresh": "Auto-Refresh",
+        "viewFeed": "View Social Feed",
+        "createPosts": "Create Posts & Comments",
+        "leaderboard": "Leaderboard",
+        "xpBadges": "XP & Badges",
+        "challenges": "Daily/Weekly Challenges"
+      }
+    },
+    "roadmap": {
+      "title": "Coming Soon",
+      "subtitle": "Exciting new features we're building for you",
+      "targetQuarter": "Target",
+      "highPriority": "High Priority",
+      "mediumPriority": "Medium Priority",
+      "features": {
+        "bestAssetFinder": "Best Asset Finder - Identify your most profitable pairs",
+        "batchEdit": "Batch Edit - Edit multiple trades at once",
+        "valueAtRisk": "Value at Risk (VaR) Calculator",
+        "apiAccess": "Read-Only API Key Access",
+        "portfolioTracking": "Portfolio Analytics & Snapshots",
+        "inAppAlerts": "In-App Alert System",
+        "autosyncDelta": "Autosync Delta Imports",
+        "savedViews": "Fast Filters & Saved Views",
+        "teamCollaboration": "Team Collaboration Tools"
+      },
+      "disclaimer": "Features and timeline subject to change based on user feedback and development priorities"
+    },
+    "privacy": {
+      "title": "Full Privacy",
+      "line1": "We do not use APIs.",
+      "line2": "We do not connect to exchanges.",
+      "line3": "Your data stays in your control."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "Do you connect to exchanges",
+        "answer": "No. We do not use APIs."
+      },
+      "q2": {
+        "question": "Does this work with my exchange",
+        "answer": "Yes. You can upload trades from any platform."
+      },
+      "q3": {
+        "question": "How do I upload my trades",
+        "answer": "Upload screenshots or enter trades manually."
+      },
+      "q4": {
+        "question": "Can I cancel anytime",
+        "answer": "Yes."
+      },
+      "q5": {
+        "question": "How is my data stored",
+        "answer": "Encrypted and private."
+      }
+    },
+    "finalCta": {
+      "title": "Start Your Trading Journal Today",
+      "cta": "Start Free"
+    }
+  },
+  "achievements": {
+    "title": "Achievements",
+    "firstUpload": "First Upload",
+    "firstUploadDesc": "Upload your first trade document",
+    "tradeMaster": "Trade Master",
+    "tradeMasterDesc": "Process 100 trades",
+    "errorTracker": "Learning from Mistakes",
+    "errorTrackerDesc": "Track 10 trading errors",
+    "socialSharer": "Social Butterfly",
+    "socialSharerDesc": "Share on all social platforms"
+  },
+  "dashboard": {
+    "marketSentiment": "Market Sentiment",
+    "totalPnL": "Total P&L",
+    "winRate": "Win Rate",
+    "totalTrades": "Total Trades",
+    "avgProfit": "Avg Profit"
+  },
+  "journal": {
+    "title": "Trade Journal",
+    "newEntry": "New Entry",
+    "tradePair": "Trade Pair",
+    "notes": "Notes",
+    "notesPlaceholder": "What happened with this trade?",
+    "emotions": "Emotions",
+    "emotionsPlaceholder": "How did you feel?",
+    "lessons": "Lessons Learned",
+    "lessonsPlaceholder": "What did you learn?",
+    "entrySaved": "Journal entry saved successfully",
+    "fillRequired": "Please fill in required fields",
+    "noEntries": "No journal entries yet. Start documenting your trades!"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "uploadTrades": "Upload Trades",
+    "viewReports": "View Reports",
+    "portfolioSnapshot": "Portfolio Snapshot",
+    "logError": "Log Trading Error",
+    "tradeJournal": "Trade Journal",
+    "shareResults": "Share Results",
+    "exportData": "Export Data"
+  },
+  "charts": {
+    "performance": "Performance Over Time"
+  },
+  "blog": {
+    "title": "Crypto Trading Blog",
+    "subtitle": "Expert insights on AI-powered trading, psychology, risk management, and data-driven strategies",
+    "readMore": "Read More",
+    "relatedArticles": "Related Articles",
+    "shareArticle": "Share Article",
+    "backToBlog": "Back to Blog",
+    "searchPlaceholder": "Search articles...",
+    "allArticles": "All Articles",
+    "categories": {
+      "aiTools": "AI Tools",
+      "tradingJournal": "Trading Journal",
+      "tradingPsychology": "Trading Psychology",
+      "tradingStrategy": "Trading Strategy",
+      "riskManagement": "Risk Management"
+    },
+    "showing": "Showing {{count}} article",
+    "showing_plural": "Showing {{count}} articles"
+  },
+  "sidebar": {
+    "groups": {
+      "dashboard": "Dashboard",
+      "portfolio": "Portfolio",
+      "trades": "Trades",
+      "analytics": "Analytics",
+      "planning": "Planning",
+      "reports": "Reports",
+      "community": "Community"
+    },
+    "expandAll": "Expand All",
+    "collapseAll": "Collapse All",
+    "searchPlaceholder": "Search menu...",
+    "favorites": "Favorites",
+    "archived": "Archived",
+    "restore": "Restore",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites"
+  },
+  "navigation": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "login": "Login",
+    "startFree": "Start Free",
+    "dashboard": "Dashboard",
+    "analytics": "Analytics",
+    "upload": "Upload",
+    "tools": "Tools",
+    "settings": "Settings",
+    "social": "Social",
+    "aiTools": "AI Tools",
+    "achievements": "Achievements",
+    "forecast": "Forecast",
+    "spotWallet": "Spot Wallet",
+    "exchanges": "Exchanges",
+    "marketData": "Market Data",
+    "economicCalendar": "Economic Calendar",
+    "longShortRatio": "Long/Short Ratio",
+    "feeAnalysis": "Fee Analysis",
+    "faq": "FAQ",
+    "quickAccess": "Quick Access",
+    "tradingAccounts": "Trading Accounts",
+    "tradeAnalysis": "Trade Analysis",
+    "riskManagement": "Risk Management",
+    "tradingJournal": "Trading Journal",
+    "performanceAlerts": "Performance Alerts",
+    "tradingPlan": "Trading Plan",
+    "goals": "Goals",
+    "psychology": "Psychology",
+    "reports": "Reports",
+    "taxReports": "Tax Reports",
+    "myMetrics": "My Metrics",
+    "leaderboard": "Leaderboard",
+    "progressXP": "Progress & XP",
+    "userGuide": "User Guide"
+  },
+  "exchanges": {
+    "title": "Exchange Connections",
+    "subtitle": "Connect your exchange accounts to automatically sync your trading history",
+    "connect": "Connect",
+    "sync": "Sync Trades",
+    "syncing": "Syncing...",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "lastSynced": "Last synced",
+    "soon": "Soon",
+    "confirmDisconnect": "Are you sure you want to disconnect? This will not delete your synced trades.",
+    "status": {
+      "syncing": "syncing",
+      "error": "error",
+      "success": "success",
+      "pending_review": "pending review"
+    },
+    "descriptions": {
+      "binance": "World's largest crypto exchange - sync spot & futures trades",
+      "bybit": "Leading derivatives exchange - sync spot & futures trades",
+      "coinbase": "US market leader - sync your trading activity",
+      "kraken": "European leader - comprehensive trade history sync",
+      "bitfinex": "OG exchange since 2012 - sync all your trades",
+      "bingx": "Copy trading platform - sync spot & futures",
+      "mexc": "Altcoin specialist - sync your diverse portfolio",
+      "kucoin": "Popular in Asia - requires API passphrase",
+      "okx": "Major derivatives exchange - requires API passphrase",
+      "gateio": "Comprehensive trading platform - full sync support",
+      "bitstamp": "Oldest exchange since 2011 - requires customer ID"
+    },
+    "connect": {
+      "title": "Connect to {{exchange}}",
+      "description": "Enter your {{exchange}} API credentials to sync your trades automatically",
+      "securityNotice": "Important Security Notice:",
+      "readOnlyKeys": "Only use read-only API keys",
+      "neverGrant": "Never grant trading, withdrawal, or transfer permissions",
+      "encrypted": "Your credentials are encrypted and stored securely",
+      "apiKey": "API Key *",
+      "apiSecret": "API Secret *",
+      "apiPassphrase": "API Passphrase *",
+      "customerId": "Customer ID *",
+      "enterApiKey": "Enter your API key",
+      "enterApiSecret": "Enter your API secret",
+      "enterPassphrase": "Enter your {{label}}",
+      "howToGet": "How to get {{exchange}} API keys",
+      "testing": "Testing...",
+      "connect": "Connect",
+      "fillAllFields": "Please fill in all fields"
+    },
+    "sync": {
+      "title": "Fetch Trades from {{exchange}}",
+      "description": "Select the time period for trades you want to fetch and review",
+      "timePeriod": "Time Period",
+      "last7days": "Last 7 days",
+      "last30days": "Last 30 days (recommended)",
+      "last90days": "Last 90 days",
+      "custom": "Custom date range",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "pickDate": "Pick date",
+      "selectedRange": "Selected Range:",
+      "reviewNote": "You'll be able to review and select specific trades before importing",
+      "fetching": "Fetching Trades...",
+      "fetchTrades": "Fetch Trades",
+      "selectBothDates": "Please select both start and end dates for custom range",
+      "startBeforeEnd": "Start date must be before end date"
+    },
+    "preview": {
+      "title": "Review Trades from {{exchange}}",
+      "description": "Select the trades you want to import to your dashboard",
+      "selected": "{{count}} of {{total}} trades selected",
+      "totalPnL": "Total P&L: ${{amount}}",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "allSymbols": "All Symbols",
+      "allSides": "All Sides",
+      "long": "Long",
+      "short": "Short",
+      "profitableOnly": "Profitable only",
+      "date": "Date",
+      "symbol": "Symbol",
+      "side": "Side",
+      "size": "Size",
+      "price": "Price",
+      "pnl": "P&L",
+      "fee": "Fee",
+      "importing": "Importing...",
+      "importSelected": "Import Selected ({{count}} trades)",
+      "noTrades": "No trades found matching your filters"
+    },
+    "history": {
+      "title": "Recent Sync History",
+      "description": "Last 10 synchronization operations",
+      "exchange": "Exchange",
+      "date": "Date",
+      "fetched": "Fetched",
+      "imported": "Imported",
+      "skipped": "Skipped",
+      "status": "Status",
+      "noHistory": "No sync history yet. Connect an exchange to get started."
+    }
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset Password",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "welcomeBack": "Welcome Back",
+    "getStarted": "Get Started",
+    "loginSuccess": "Successfully logged in",
+    "logoutSuccess": "Successfully logged out",
+    "signupSuccess": "Account created successfully",
+    "fullName": "Full Name",
+    "country": "Country",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "backToSignIn": "Back to Sign In",
+    "dontHaveAccount": "Don't have an account? Sign up",
+    "alreadyHaveAccountSignIn": "Already have an account? Sign in",
+    "termsAccept": "I agree to the Terms and Conditions and Privacy Policy. I authorize the collection and use of my trading data (non-personal) for developing reports and analytics.",
+    "privacyAccept": "I have read and accept the Privacy Policy regarding the collection and use of my personal data.",
+    "marketingConsent": "I agree to receive communications and marketing updates about promotions and news from The Trading Diary.",
+    "rememberMe": "Keep me logged in",
+    "sendResetLink": "Send Reset Link",
+    "resetDescription": "Enter your email address and we'll send you a link to reset your password.",
+    "orContinueWith": "OR CONTINUE WITH",
+    "placeholders": {
+      "email": "trader@example.com",
+      "fullName": "John Doe",
+      "country": "United States",
+      "password": "Enter your password",
+      "confirmPassword": "Confirm your password"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "overview": "Overview",
+    "insights": "Insights",
+    "history": "History",
+    "stats": "Statistics",
+    "totalBalance": "Total Balance",
+    "winRate": "Win Rate",
+    "totalTrades": "Total Trades",
+    "avgPnL": "Avg P&L",
+    "avgROI": "Avg ROI",
+    "currentROI": "Current ROI",
+    "maxDrawdown": "Max Drawdown",
+    "currentStreak": "Current Streak",
+    "profitFactor": "Profit Factor",
+    "wins": "Wins",
+    "losses": "Losses",
+    "recentTransactions": "Recent Transactions",
+    "topMovers": "Top Movers",
+    "aiInsights": "AI Insights",
+    "quickActions": "Quick Actions",
+    "addTrade": "Add Trade",
+    "viewAnalytics": "View Analytics",
+    "exportData": "Export Data",
+    "customizeLayout": "Customize Dashboard",
+    "addWidget": "Add Widget",
+    "saveLayout": "Save Layout",
+    "resetLayout": "Reset Layout",
+    "editMode": "Edit Mode",
+    "exitEditMode": "Exit Edit Mode",
+    "noTradesYet": "No trades yet",
+    "uploadTrade": "Upload Trade",
+    "overviewDescription": "Your trading performance at a glance",
+    "columns": {
+      "one": "1 Column",
+      "two": "2 Columns",
+      "three": "3 Columns",
+      "four": "4 Columns"
+    },
+    "pickDateRange": "Pick date range",
+    "hiddenWidgets": "Hidden Widgets",
+    "clickToShow": "Click to show these widgets again",
+    "visibleCount": "{{count}} visible",
+    "dragInstructions": "Drag widgets to rearrange, toggle visibility, or resize them"
+  },
+  "uploadPage": {
+    "title": "Upload Trade",
+    "subtitle": "Record your trading activity manually or extract from image",
+    "aiExtract": "AI Extract from Image",
+    "manualEntry": "Manual Entry",
+    "uploadScreenshot": "Upload Trade Screenshot",
+    "uploadDescription": "Upload a screenshot containing your trade information. The AI will automatically extract all trades.",
+    "brokerRequired": "Broker (Required) *",
+    "brokerHelper": "Select your broker to pre-fill this field in extracted trades",
+    "selectBroker": "Select broker...",
+    "clickUpload": "Click to upload or drag and drop",
+    "supportsFormats": "Supports PNG, JPG, WEBP (max 10MB)",
+    "uploadHistory": "Upload History",
+    "deleteAllHistory": "Delete All History",
+    "broker": "Broker:",
+    "trades": "trades",
+    "assets": "Assets:",
+    "totalPnL": "Total P&L:",
+    "uploaded": "Uploaded",
+    "dragAndDrop": "Drag and drop your screenshot here",
+    "dropHere": "Drop here to upload",
+    "orClickToSelect": "or click to select file",
+    "maxSize": "Max {{size}}MB"
+  },
+  "tradeForm": {
+    "asset": "Asset",
+    "setup": "Setup",
+    "emotionalTag": "Emotional Tag",
+    "entryPrice": "Entry Price",
+    "exitPrice": "Exit Price",
+    "positionSize": "Position Size",
+    "leverage": "Leverage",
+    "positionType": "Position Type",
+    "periodOfDay": "Period of Day",
+    "fundingFee": "Funding Fee",
+    "tradingFee": "Trading Fee",
+    "margin": "Margin",
+    "openedAt": "Opened At",
+    "closedAt": "Closed At",
+    "duration": "Duration (minutes)",
+    "notes": "Notes",
+    "tradeScreenshotOptional": "Trade Screenshot (Optional)",
+    "selectSetup": "Select or create setup...",
+    "emotionalPlaceholder": "Confident, Fearful...",
+    "long": "Long",
+    "short": "Short",
+    "morningPeriod": "Morning (before 12:00)",
+    "afternoonPeriod": "Afternoon (12:00-18:00)",
+    "eveningPeriod": "Evening (after 18:00)",
+    "notesPlaceholder": "Trade notes, observations...",
+    "clickUploadScreenshot": "Click to upload screenshot (max 5MB)"
+  },
+  "spotWallet": {
+    "title": "Spot Wallet",
+    "subtitle": "Track your portfolio with real-time P&L, cost basis, and performance analytics",
+    "addAsset": "Add Asset",
+    "value": "Value",
+    "percent": "Percent",
+    "sync": "Sync",
+    "totalValue": "Total Value",
+    "unrealizedPnL": "Unrealized P&L",
+    "realizedPnL": "Realized P&L",
+    "totalAssets": "Total Assets",
+    "costBasis": "Cost basis",
+    "roi": "ROI",
+    "fromClosedPositions": "From closed positions",
+    "portfolioPerformance": "Portfolio Performance",
+    "categories": "Categories",
+    "allocation": "Allocation",
+    "portfolioComposition": "Portfolio Composition",
+    "tokenHoldings": "Token Holdings",
+    "token": "Token",
+    "quantity": "Quantity",
+    "percentOfTotal": "% of Total",
+    "actions": "Actions"
+  },
+  "portfolioSettings": {
+    "title": "Portfolio Settings",
+    "blurSensitiveData": "Blur Sensitive Data",
+    "blurDescription": "Hide values and amounts for privacy",
+    "splitCategories": "Split Categories",
+    "splitDescription": "Distribute assets across all their categories",
+    "baseCurrency": "Base Currency:",
+    "costMethod": "Cost Method:"
+  },
+  "addToken": {
+    "title": "Add Token to Spot Wallet",
+    "description": "Add a cryptocurrency to track in your spot wallet",
+    "quickSelect": "Quick Select",
+    "selectPopular": "Select popular token",
+    "symbol": "Symbol *",
+    "tokenName": "Token Name *",
+    "quantity": "Quantity *",
+    "purchasePrice": "Purchase Price",
+    "purchaseDate": "Purchase Date",
+    "pickDate": "Pick a date",
+    "exchange": "Exchange",
+    "selectExchange": "Select exchange",
+    "notes": "Notes",
+    "notesPlaceholder": "Additional notes about this holding...",
+    "cancel": "Cancel",
+    "addToken": "Add Token"
+  },
+  "tradingAccounts": {
+    "title": "Trading Accounts",
+    "subtitle": "Manage your trading accounts across different brokers",
+    "addAccount": "Add Account",
+    "totalBalance": "Total Balance",
+    "acrossAll": "Across all accounts",
+    "totalPnL": "Total P&L",
+    "combinedPortfolio": "Combined portfolio",
+    "activeAccounts": "Active Accounts",
+    "outOfTotal": "Out of {{total}} total",
+    "noAccounts": "No Trading Accounts",
+    "getStarted": "Get started by adding your first trading account",
+    "addFirstAccount": "Add Your First Account",
+    "createNew": "Create New Account",
+    "editAccount": "Edit Account",
+    "createDescription": "Add a new trading account to track",
+    "editDescription": "Update your trading account details",
+    "accountName": "Account Name *",
+    "accountNamePlaceholder": "Main Trading Account",
+    "broker": "Broker *",
+    "brokerPlaceholder": "Binance, Bybit, etc.",
+    "accountType": "Account Type",
+    "live": "Live",
+    "demo": "Demo",
+    "currency": "Currency",
+    "initialBalance": "Initial Balance",
+    "currentBalance": "Current Balance",
+    "accountNumber": "Account Number (Optional)",
+    "accountNumberPlaceholder": "Account or ID number",
+    "notesOptional": "Notes (Optional)",
+    "notesPlaceholder": "Additional details about this account...",
+    "activeAccount": "Active Account",
+    "createAccount": "Create Account",
+    "updateAccount": "Update Account"
+  },
+  "progress": {
+    "yourProgress": "Your Progress",
+    "yourLevel": "Your Level",
+    "total": "Total",
+    "todaysChallenges": "Today's Challenges",
+    "reflectionMaster": "Reflection Master",
+    "consistencyChampion": "Consistency Champion",
+    "activeTrader": "Active Trader"
+  },
+  "connectExchange": {
+    "connectToBinance": "Connect to Binance",
+    "description": "Enter your Binance API credentials to sync your trades automatically",
+    "securityNotice": "Important Security Notice:",
+    "readOnlyKeys": "Only use read-only API keys",
+    "neverGrant": "Never grant trading, withdrawal, or transfer permissions",
+    "encrypted": "Your credentials are encrypted and stored securely",
+    "apiKey": "API Key *",
+    "apiKeyPlaceholder": "Enter your API key",
+    "apiSecret": "API Secret *",
+    "apiSecretPlaceholder": "Enter your API secret",
+    "howToGet": "How to get Binance API keys",
+    "cancel": "Cancel",
+    "connect": "Connect"
+  },
+  "tradeAnalysis": {
+    "title": "Trade Analysis",
+    "compareTrades": "Compare Trades",
+    "tradeComparator": "Trade Comparator",
+    "comparatorDescription": "Compare two trades side-by-side to identify patterns and improve decision-making",
+    "trade1": "Trade 1",
+    "trade2": "Trade 2",
+    "selectFirstTrade": "Select first trade",
+    "selectSecondTrade": "Select second trade",
+    "selectTwoTrades": "Select Two Trades to Compare",
+    "chooseFromDropdowns": "Choose trades from the dropdowns above to see detailed comparison",
+    "veryLow": "Very Low",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "veryHigh": "Very High"
+  },
+  "tradingPlan": {
+    "title": "Trading Plan",
+    "subtitle": "Create and follow your structured trading strategy",
+    "myPlans": "My Plans",
+    "checklist": "Checklist",
+    "editor": "Editor",
+    "preTradeChecklist": "Pre-Trade Checklist",
+    "noActivePlan": "No active plan selected",
+    "reset": "Reset",
+    "completion": "Completion",
+    "preTrade": "Pre-Trade",
+    "entry": "Entry",
+    "inTrade": "In-Trade",
+    "checkMarketConditions": "Check market conditions",
+    "reviewActivePlan": "Review active trading plan",
+    "assessMentalState": "Assess mental/emotional state",
+    "verifyRiskLimits": "Verify daily risk limits not exceeded",
+    "validSetupIdentified": "Valid setup identified per plan",
+    "allEntryCriteria": "All entry criteria met",
+    "positionSizeCalculated": "Position size calculated correctly",
+    "stopLossSet": "Stop loss set before entry",
+    "profitTargetDefined": "Profit target defined",
+    "createPlan": "Create Trading Plan",
+    "editPlan": "Edit Trading Plan",
+    "documentStrategy": "Document your strategy, rules, and risk management",
+    "basics": "Basics",
+    "rules": "Rules",
+    "risk": "Risk",
+    "schedule": "Schedule",
+    "planName": "Plan Name *",
+    "planNamePlaceholder": "e.g., Scalping Strategy, Swing Trading Plan",
+    "description": "Description",
+    "descriptionPlaceholder": "Brief overview of your trading approach...",
+    "markets": "Markets",
+    "crypto": "Crypto",
+    "forex": "Forex",
+    "stocks": "Stocks",
+    "futures": "Futures",
+    "options": "Options",
+    "timeframes": "Timeframes",
+    "savePlan": "Save Plan",
+    "noPlansYet": "No Trading Plans Yet",
+    "createFirstPlan": "Create your first trading plan to document your strategy and rules",
+    "createTradingPlan": "Create Trading Plan",
+    "yourPlans": "Your Trading Plans"
+  },
+  "goals": {
+    "title": "Goals & Milestones",
+    "subtitle": "Set and track your trading objectives",
+    "createGoal": "Create Goal",
+    "activeGoals": "Active Goals",
+    "completed": "Completed",
+    "overdue": "Overdue",
+    "totalProgress": "Total Progress",
+    "active": "Active",
+    "allGoals": "All Goals",
+    "noActiveGoals": "No Active Goals",
+    "createFirstGoal": "Create your first goal to start tracking your progress",
+    "goalTitle": "Goal Title *",
+    "goalTitlePlaceholder": "e.g., Reach $10,000 profit",
+    "goalDescription": "Description",
+    "goalDescriptionPlaceholder": "Add more details about your goal...",
+    "goalType": "Goal Type *",
+    "profitTarget": "Profit Target",
+    "winRate": "Win Rate",
+    "numberOfTrades": "Number of Trades",
+    "winningStreak": "Winning Streak",
+    "roiPercentage": "ROI Percentage",
+    "targetValue": "Target Value * ($)",
+    "targetValuePlaceholder": "Enter target value",
+    "targetDate": "Target Date *",
+    "updateGoal": "Update Goal",
+    "editGoal": "Edit Goal",
+    "createNewGoal": "Create New Goal"
+  },
+  "psychology": {
+    "title": "Trading Psychology",
+    "subtitle": "Track and improve your mental game",
+    "logState": "Log State",
+    "timeline": "Timeline",
+    "analysis": "Analysis",
+    "insights": "Insights",
+    "logEmotionalState": "Log Emotional State",
+    "trackMentalState": "Track your mental and emotional state before/during trading",
+    "howFeeling": "How are you feeling?",
+    "confident": "Confident",
+    "fearful": "Fearful",
+    "greedy": "Greedy",
+    "calm": "Calm",
+    "anxious": "Anxious",
+    "intensity": "Intensity",
+    "tradingConditions": "Trading Conditions",
+    "clearHeaded": "Clear headed",
+    "wellRested": "Well rested",
+    "stressed": "Stressed",
+    "distracted": "Distracted",
+    "rushed": "Rushed",
+    "patient": "Patient",
+    "disciplined": "Disciplined",
+    "emotional": "Emotional",
+    "notesOptional": "Notes (Optional)",
+    "notesPlaceholder": "What triggered this emotion? Any specific thoughts or concerns?",
+    "emotionalTimeline": "Emotional Timeline",
+    "recentStates": "Your recent emotional states and patterns",
+    "intensityLevel": "Intensity: {{level}}/10",
+    "emotionalFrequency": "Emotional Frequency",
+    "commonStates": "Your most common emotional states",
+    "timesPercent": "{{count}} times ({{percent}}%)",
+    "averageIntensity": "Average Intensity Levels",
+    "intensityDescription": "How intense each emotion typically is",
+    "commonConditions": "Common Trading Conditions",
+    "typicalMentalState": "Your typical mental state while trading",
+    "psychologicalInsights": "Psychological Insights",
+    "keyPatterns": "Key patterns and recommendations",
+    "dominantEmotion": "Dominant Emotion",
+    "mostOftenTrade": "You most often trade while feeling {{emotion}}",
+    "watchFor": "Watch For",
+    "monitorHighIntensity": "Monitor your performance when experiencing high-intensity emotions",
+    "recommendation": "Recommendation",
+    "trackCorrelation": "Track correlation between emotional states and trade outcomes",
+    "aiInsightsSoon": "AI Insights Coming Soon",
+    "aiInsightsDescription": "Advanced AI-powered psychological insights and recommendations"
+  },
+  "reports": {
+    "title": "Reports & Export",
+    "subtitle": "Generate comprehensive trading performance reports",
+    "generate": "Generate",
+    "history": "History",
+    "scheduled": "Scheduled",
+    "reportSettings": "Report Settings",
+    "configureParameters": "Configure your trading report parameters",
+    "reportType": "Report Type",
+    "monthlyReport": "Monthly Report",
+    "quarterlyReport": "Quarterly Report",
+    "yearlyReport": "Yearly Report",
+    "customDateRange": "Custom Date Range",
+    "reportFormat": "Report Format",
+    "excelSpreadsheet": "Excel Spreadsheet",
+    "jsonData": "JSON Data",
+    "reportSections": "Report Sections",
+    "selectSections": "Select sections to include in your report",
+    "executiveSummary": "Executive Summary",
+    "performanceMetrics": "Performance Metrics",
+    "tradeHistory": "Trade History",
+    "advancedAnalytics": "Advanced Analytics",
+    "riskAnalysis": "Risk Analysis",
+    "goalsProgress": "Goals Progress",
+    "chartsVisualizations": "Charts & Visualizations",
+    "aiInsights": "AI Insights",
+    "generateReport": "Generate Report",
+    "email": "Email",
+    "reportHistory": "Report History",
+    "previousReports": "Previously generated trading reports",
+    "monthly": "monthly",
+    "excel": "EXCEL",
+    "pdf": "PDF",
+    "generated": "Generated: {{date}}",
+    "view": "View",
+    "download": "Download",
+    "delete": "Delete",
+    "scheduledReports": "Scheduled Reports",
+    "automateReports": "Automate report generation and delivery",
+    "addSchedule": "Add Schedule",
+    "createNewSchedule": "Create New Schedule",
+    "scheduleName": "Schedule Name",
+    "scheduleNamePlaceholder": "e.g., Weekly Performance Report",
+    "frequency": "Frequency",
+    "weekly": "Weekly",
+    "format": "Format",
+    "emailWhenGenerated": "Email report when generated",
+    "cancel": "Cancel",
+    "createSchedule": "Create Schedule",
+    "noScheduledReports": "No Scheduled Reports",
+    "createFirstSchedule": "Create your first automated report schedule"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences",
+    "profile": "Profile",
+    "trading": "Trading",
+    "setups": "Setups",
+    "appearance": "Appearance",
+    "notifications": "Notifications",
+    "data": "Data",
+    "profileInformation": "Profile Information",
+    "uploadPhoto": "Upload Photo",
+    "fileInfo": "JPG, PNG or GIF. Max 2MB.",
+    "fullName": "Full Name",
+    "email": "Email",
+    "emailCannotChange": "Email cannot be changed",
+    "saveChanges": "Save Changes",
+    "capitalManagement": "Capital Management",
+    "trackCapitalAdditions": "Track capital additions for accurate ROI calculations",
+    "addCapital": "Add Capital",
+    "currentCapital": "Current Capital",
+    "totalAdded": "Total Added",
+    "date": "Date",
+    "amountAdded": "Amount Added",
+    "totalAfter": "Total After",
+    "notes": "Notes",
+    "actions": "Actions",
+    "displayPreferences": "Display Preferences",
+    "blurSensitiveData": "Blur Sensitive Data",
+    "hideFinancialNumbers": "Hide financial numbers by default",
+    "tradeSetups": "Trade Setups",
+    "manageCustomSetups": "Manage your custom trade setup tags. These will be available when logging trades.",
+    "enterNewSetup": "Enter new setup name (e.g., Breakout, Reversal)",
+    "add": "Add",
+    "themePreferences": "Theme Preferences",
+    "dashboardThemes": "Dashboard Themes",
+    "defaultTheme": "Default Theme",
+    "cleanProfessional": "Clean and professional",
+    "level": "Level {{level}}",
+    "animationSound": "Animation & Sound",
+    "calmMode": "Calm Mode",
+    "reduceAnimations": "Reduce animations for a more focused experience",
+    "soundEffects": "Sound Effects",
+    "playSounds": "Play sounds for achievements and rewards",
+    "notificationPreferences": "Notification Preferences",
+    "chooseUpdates": "Choose what updates you want to receive",
+    "tradeConfirmations": "Trade Confirmations",
+    "notifyTradesLogged": "Get notified when trades are logged",
+    "milestoneAlerts": "Milestone Alerts",
+    "celebrateMilestones": "Celebrate when you hit profit milestones",
+    "weeklySummary": "Weekly Summary",
+    "receiveWeeklyReport": "Receive a weekly performance report",
+    "dataManagement": "Data Management",
+    "exportYourData": "Export Your Data",
+    "downloadTradingData": "Download all your trading data in CSV format for use in other applications.",
+    "exportTradesToCSV": "Export Trades to CSV",
+    "dangerZone": "Danger Zone",
+    "deleteAccountWarning": "Once you delete your account, there is no going back. Please be certain.",
+    "deleteAccount": "Delete Account",
+    "contactSupport": "Contact support to delete your account"
+  },
+  "community": {
+    "title": "Trading Community",
+    "subtitle": "Connect, share, and learn from fellow traders",
+    "sharePlaceholder": "Share your trading insights, strategies, or milestones...",
+    "tradingTip": "Trading Tip",
+    "public": "Public",
+    "post": "Post",
+    "allPosts": "All Posts",
+    "following": "Following",
+    "noPostsYet": "No posts yet. Be the first to share!"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "season": "Season {{number}} - {{name}}",
+    "launchSeason": "Launch Season",
+    "currentSeason": "Current Season",
+    "allTime": "All-Time",
+    "noRankingsYet": "No Rankings Yet",
+    "climbLeaderboard": "Be the first to climb the leaderboard! Start trading to earn your rank."
+  },
+  "achievements": {
+    "title": "Achievement Badges",
+    "subtitle": "Track your trading milestones and unlock badges as you progress",
+    "achievementBadges": "Achievement Badges",
+    "unlocked": "{{count}}/{{total}} Unlocked",
+    "unlockByReaching": "Unlock badges by reaching trading milestones",
+    "firstTrade": "First Trade",
+    "completeFirstTrade": "Complete your first trade",
+    "consistentTrader": "Consistent Trader",
+    "logTrades": "Log {{count}} trades",
+    "veteranTrader": "Veteran Trader",
+    "hotStreak": "Hot Streak",
+    "winInRow": "Win {{count}} trades in a row",
+    "onFire": "On Fire",
+    "unstoppable": "Unstoppable",
+    "firstProfit": "First Profit",
+    "reachProfit": "Reach ${{amount}} total profit",
+    "highRoller": "High Roller",
+    "masterTrader": "Master Trader",
+    "sharpshooter": "Sharpshooter",
+    "achieveWinRate": "Achieve {{percent}}% win rate with {{count}}+ trades",
+    "beastMode": "Beast Mode",
+    "daysWithWinRate": "Have {{days}} days with >{{percent}}% win rate",
+    "common": "common",
+    "rare": "rare",
+    "epic": "epic",
+    "legendary": "legendary",
+    "unlockedBadge": "Unlocked"
+  },
+  "metrics": {
+    "title": "My Metrics",
+    "subtitle": "Create and track custom metrics that matter to your trading strategy",
+    "addMetric": "Add Metric",
+    "customWinRate": "Custom Win Rate",
+    "weeklyProfitTarget": "Weekly Profit Target",
+    "maxDailyTrades": "Max Daily Trades",
+    "target": "Target: {{value}}",
+    "benchmarkComparison": "Benchmark Comparison",
+    "winRateVsAverage": "Your Win Rate vs Market Average",
+    "lastDays": "Last {{days}} days",
+    "averageTradeDuration": "Average Trade Duration",
+    "comparedToTarget": "Compared to your target",
+    "createCustomMetric": "Create Custom Metric",
+    "metricName": "Metric Name",
+    "metricNamePlaceholder": "e.g., Weekly Win Rate",
+    "type": "Type",
+    "percentage": "Percentage",
+    "targetValue": "Target Value",
+    "targetValuePlaceholder": "e.g., 75% or $5000",
+    "createMetric": "Create Metric",
+    "edit": "Edit"
+  },
+  "trades": {
+    "trade": "Trade",
+    "trades": "Trades",
+    "addTrade": "Add Trade",
+    "editTrade": "Edit Trade",
+    "deleteTrade": "Delete Trade",
+    "duplicateTrade": "Duplicate Trade",
+    "shareTrade": "Share Trade",
+    "tradeHistory": "Trade History",
+    "symbol": "Symbol",
+    "side": "Side",
+    "entryPrice": "Entry Price",
+    "exitPrice": "Exit Price",
+    "quantity": "Quantity",
+    "pnl": "P&L",
+    "roi": "ROI",
+    "date": "Date",
+    "time": "Time",
+    "notes": "Notes",
+    "setup": "Setup",
+    "exchange": "Exchange",
+    "long": "Long",
+    "short": "Short",
+    "buy": "Buy",
+    "sell": "Sell",
+    "win": "Win",
+    "loss": "Loss",
+    "breakeven": "Breakeven",
+    "openTrades": "Open Trades",
+    "closedTrades": "Closed Trades",
+    "totalPnL": "Total P&L",
+    "avgWin": "Avg Win",
+    "avgLoss": "Avg Loss",
+    "profitFactor": "Profit Factor",
+    "sharpeRatio": "Sharpe Ratio",
+    "filters": "Filters",
+    "dateRange": "Date Range",
+    "asset": "Asset",
+    "status": "Status"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "trades": "Trades",
+    "analytics": "Analytics",
+    "goals": "Goals",
+    "social": "Social",
+    "reports": "Reports",
+    "tools": "Tools",
+    "settings": "Settings",
+    "help": "Help",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "signIn": "Sign In",
+    "faq": "FAQ",
+    "advancedAnalytics": "Advanced Analytics",
+    "tradeAnalysis": "Trade Analysis",
+    "feeAnalysis": "Fee Analysis",
+    "riskManagement": "Risk Management",
+    "psychology": "Trading Psychology",
+    "tradingPlan": "Trading Plan",
+    "journal": "Journal",
+    "forecast": "Forecast",
+    "exchanges": "Exchanges",
+    "quickAccess": "Quick Access",
+    "aiTools": "AI Tools",
+    "achievements": "Achievements",
+    "upload": "Upload",
+    "spotWallet": "Spot Wallet",
+    "marketData": "Market Data",
+    "economicCalendar": "Economic Calendar",
+    "longShortRatio": "Long/Short Ratio",
+    "tradingAccounts": "Trading Accounts",
+    "tradingJournal": "Trading Journal",
+    "performanceAlerts": "Performance Alerts",
+    "taxReports": "Tax Reports",
+    "myMetrics": "My Metrics",
+    "leaderboard": "Leaderboard",
+    "progressXP": "Progress & XP",
+    "userGuide": "User Guide"
+  },
+  "blog": {
+    "title": "Crypto Trading Blog",
+    "subtitle": "Expert insights on AI-powered trading",
+    "searchPlaceholder": "Search articles...",
+    "allArticles": "All Articles",
+    "stats": {
+      "activeTraders": "Active Traders",
+      "tradesLogged": "Trades Logged",
+      "satisfaction": "Satisfaction"
+    },
+    "dashboardShowcase": {
+      "title": "Other journals show numbers. This one shows progress.",
+      "subtitle": "Every feature was designed by active traders to help you understand your decisions, not just record them. It's not a tool, it's your trading coach.",
+      "cta": "See it in action"
+    },
+    "features": {
+      "title": "Everything You Need to Trade Better",
+      "subtitle": "Powerful features designed to help you make better decisions.",
+      "smartLogging": {
+        "title": "Smart Trade Logging",
+        "description": "Add trades in seconds with details, screenshots, and notes.",
+        "blogLinkText": "Learn about Trading Journals"
+      },
+      "autoImports": {
+        "title": "Auto Imports",
+        "description": "Connect your exchange or broker for instant sync.",
+        "blogLinkText": "Discover AI Trading Tools"
+      },
+      "advancedAnalytics": {
+        "title": "Advanced Analytics",
+        "description": "Visualize win rates, risk ratios, and strategy performance.",
+        "blogLinkText": "Read about Data-Driven Trading"
+      },
+      "tagFilter": {
+        "title": "Tag and Filter Everything",
+        "description": "Track setups, emotions, and mistakes with custom metrics.",
+        "blogLinkText": "See AI-Powered Features"
+      },
+      "mobileFriendly": {
+        "title": "Mobile Friendly",
+        "description": "Access your journal anywhere — phone, tablet, or desktop.",
+        "blogLinkText": "Master Trading Psychology"
+      },
+      "learnMore": "Learn More",
+      "readMoreInsights": "Read More Trading Insights"
+    },
+    "testimonials": {
+      "title": "Trusted by Thousands of Traders",
+      "subtitle": "Real results from real traders.",
+      "alex": {
+        "name": "Alex Chen",
+        "role": "Day Trader",
+        "text": "Win rate went from 52% to 68% in 3 months."
+      },
+      "sarah": {
+        "name": "Sarah Mitchell",
+        "role": "Crypto Investor",
+        "text": "The emotional tags feature is genius... My consistency has never been better."
+      },
+      "marcus": {
+        "name": "Marcus Rodriguez",
+        "role": "Swing Trader",
+        "text": "AI extraction saves me 2 hours per week... Worth every penny."
+      }
+    },
+    "exchangeLogos": {
+      "title": "Built for crypto traders who take performance seriously.",
+      "subtitle": "Whether you scalp, day trade, or swing — track what's working and what's costing you."
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the plan that fits your trading style. Upgrade or downgrade anytime.",
+      "mostPopular": "Most Popular",
+      "starter": {
+        "name": "Starter",
+        "price": "Free",
+        "period": "forever",
+        "description": "Perfect for beginners getting started",
+        "cta": "Get Started Free",
+        "features": {
+          "trades": "Up to 50 trades per month",
+          "analytics": "Basic analytics & charts",
+          "manualEntry": "Manual trade entry",
+          "retention": "7-day data retention",
+          "support": "Email support"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$19",
+        "period": "per month",
+        "description": "For serious traders who need more",
+        "cta": "Start Free Trial",
+        "features": {
+          "unlimited": "Unlimited trades",
+          "advancedAnalytics": "Advanced analytics & forecasting",
+          "aiExtraction": "AI-powered trade extraction",
+          "unlimitedRetention": "Unlimited data retention",
+          "prioritySupport": "Priority support",
+          "customSetups": "Custom setups & tags",
+          "exportReports": "Export reports"
+        }
+      },
+      "elite": {
+        "name": "Elite",
+        "price": "$49",
+        "period": "per month",
+        "description": "For professional traders & teams",
+        "cta": "Contact Sales",
+        "features": {
+          "everythingPro": "Everything in Pro",
+          "multiAccount": "Multi-account tracking",
+          "apiAccess": "API access",
+          "whiteLabel": "White-label reports",
+          "accountManager": "Dedicated account manager",
+          "earlyAccess": "Early access to features",
+          "teamCollaboration": "Team collaboration tools"
+        }
+      },
+      "trialNote": "All plans include 14-day free trial • No credit card required • Cancel anytime"
+    },
+    "cta": {
+      "title": "Start journaling smarter today.",
+      "subtitle": "Create your free account and see your trading with clarity.",
+      "button": "Get Started Free",
+      "note": "Free forever • No credit card • 2 minute setup"
+    },
+    "footer": {
+      "tagline": "The comprehensive trading journal platform",
+      "madeWith": "Made with ❤️ for traders worldwide",
+      "product": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "support": "Support",
+      "help": "Help Center",
+      "documentation": "Documentation",
+      "contact": "Contact",
+      "legal": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "allRightsReserved": "All rights reserved"
+    }
+  },
+  "widgets": {
+    "totalBalance": {
+      "title": "Total Balance",
+      "description": "Your total trading account balance with 24h change"
+    },
+    "winRate": {
+      "title": "Win Rate",
+      "description": "Your win rate percentage and W/L ratio"
+    },
+    "totalTrades": {
+      "title": "Total Trades",
+      "description": "Total number of trades executed"
+    },
+    "spotWallet": {
+      "title": "Spot Wallet",
+      "description": "Quick overview of your spot wallet holdings"
+    },
+    "portfolioOverview": {
+      "title": "Portfolio Overview",
+      "description": "Portfolio value chart over time"
+    },
+    "topMovers": {
+      "title": "Top Movers",
+      "description": "Assets with biggest price movements"
+    },
+    "aiInsights": {
+      "title": "AI Insights",
+      "description": "AI-powered trading insights and recommendations"
+    },
+    "recentTransactions": {
+      "title": "Recent Transactions",
+      "description": "Your latest trading activity",
+      "viewAll": "View all",
+      "noTransactions": "No transactions yet"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "description": "Fast access to common actions"
+    },
+    "avgPnLPerTrade": {
+      "title": "Avg P&L Per Trade",
+      "description": "Average profit/loss per executed trade"
+    },
+    "avgPnLPerDay": {
+      "title": "Avg P&L Per Day",
+      "description": "Average profit/loss per trading day"
+    },
+    "currentROI": {
+      "title": "Current ROI",
+      "description": "Return on investment from initial capital"
+    },
+    "avgROIPerTrade": {
+      "title": "Avg ROI Per Trade",
+      "description": "Average ROI across all trades"
+    },
+    "avgMetrics": {
+      "title": "Avg P&L & ROI"
+    },
+    "capitalGrowth": {
+      "title": "Capital Growth",
+      "description": "Visualize your capital growth over time"
+    },
+    "behaviorAnalytics": {
+      "title": "Behavior Analytics",
+      "description": "Analyze your trading patterns and behaviors"
+    },
+    "costEfficiency": {
+      "title": "Cost Efficiency",
+      "description": "Track fees and exchange cost analysis"
+    },
+    "performanceHighlights": {
+      "title": "Performance Highlights",
+      "description": "Best/worst trades and current streaks"
+    },
+    "tradingQuality": {
+      "title": "Trading Quality Metrics",
+      "description": "Win/loss analysis and profit factor"
+    },
+    "categories": {
+      "overview": {
+        "label": "Overview",
+        "description": "Essential dashboard metrics"
+      },
+      "trading": {
+        "label": "Trading",
+        "description": "Win rate, trades, and performance"
+      },
+      "portfolio": {
+        "label": "Portfolio",
+        "description": "Holdings and allocation"
+      },
+      "market": {
+        "label": "Market Data",
+        "description": "Price movements and market info"
+      },
+      "performance": {
+        "label": "Performance",
+        "description": "ROI, P&L, and analytics"
+      },
+      "insights": {
+        "label": "Insights",
+        "description": "Advanced trading analytics"
+      },
+      "ai": {
+        "label": "AI & Insights",
+        "description": "AI-powered recommendations"
+      }
+    },
+    "viewAll": "View all",
+    "tokens": "tokens",
+    "trades": "trades",
+    "thisWeek": "this week",
+    "assets": "assets",
+    "wins": "{{count}}W",
+    "losses": "{{count}}L",
+    "initialCapital": "Initial capital",
+    "currentCapital": "Current capital",
+    "initial": "Initial",
+    "current": "Current",
+    "growth": "Growth",
+    "balance": "Balance",
+    "setInitialCapital": "Set Initial Capital",
+    "enterStartingCapital": "Enter your starting capital to calculate accurate ROI. This should be the amount you started trading with.",
+    "initialCapitalLabel": "Initial Capital ($)",
+    "currentBalance": "Current balance",
+    "tradingDays": "trading days",
+    "totalTrades": "trades",
+    "avgROIAcross": "Average ROI across {{count}} trades",
+    "avgPnLDescription": "Average profit/loss per executed trade",
+    "newTrade": "New Trade",
+    "importCSV": "Import CSV",
+    "viewAnalytics": "View Analytics",
+    "noTransactions": "No transactions yet",
+    "noData": "No data available",
+    "unknown": "Unknown"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences",
+    "profile": "Profile",
+    "appearance": "Appearance",
+    "notifications": "Notifications",
+    "preferences": "Preferences",
+    "data": "Data",
+    "trading": "Trading",
+    "setups": "Setups",
+    "account": "Account",
+    "theme": "Theme",
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "systemMode": "System",
+    "accentColor": "Accent Color",
+    "emailNotifications": "Email Notifications",
+    "pushNotifications": "Push Notifications",
+    "tradingReminders": "Trading Reminders",
+    "exportData": "Export Data",
+    "importData": "Import Data",
+    "deleteAccount": "Delete Account",
+    "changePassword": "Change Password",
+    "timezone": "Timezone",
+    "currency": "Currency",
+    "dateFormat": "Date Format",
+    "profileInfo": "Profile Information",
+    "fullName": "Full Name",
+    "uploadPhoto": "Upload Photo",
+    "uploading": "Uploading...",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "displayPreferences": "Display Preferences",
+    "blurSensitiveData": "Blur Sensitive Data",
+    "blurDescription": "Hide financial numbers by default",
+    "tradeSetups": "Trade Setups",
+    "setupsDescription": "Manage your custom trade setup tags. These will be available when logging trades.",
+    "addSetup": "Add",
+    "noSetups": "No setups yet. Add your first setup above.",
+    "enterSetupName": "Enter new setup name (e.g., Breakout, Reversal)",
+    "notificationPreferences": "Notification Preferences",
+    "notificationDescription": "Choose what updates you want to receive",
+    "tradeConfirmations": "Trade Confirmations",
+    "tradeConfirmationsDesc": "Get notified when trades are logged",
+    "milestoneAlerts": "Milestone Alerts",
+    "milestoneAlertsDesc": "Celebrate when you hit profit milestones",
+    "weeklySummary": "Weekly Summary",
+    "weeklySummaryDesc": "Receive weekly performance reports",
+    "emailCannotChange": "Email cannot be changed"
+  },
+  "analytics": {
+    "title": "Advanced Analytics",
+    "subtitle": "Deep dive into your trading performance",
+    "overview": "Overview",
+    "performance": "Performance",
+    "insights": "Insights",
+    "charts": "Charts",
+    "risk": "Risk",
+    "behavior": "Behavior",
+    "capital": "Capital",
+    "timeframe": "Timeframe",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "allTime": "All Time",
+    "comparison": "Comparison",
+    "breakdown": "Breakdown",
+    "distribution": "Distribution",
+    "heatmap": "Heatmap",
+    "calendar": "Calendar",
+    "reports": "Reports",
+    "generateReport": "Generate Report"
+  },
+  "insights": {
+    "performanceHighlights": "Performance Highlights",
+    "whatWorking": "What's Working",
+    "areasToImprove": "Areas to Improve",
+    "bestTrade": "Best Trade",
+    "worstTrade": "Worst Trade",
+    "bestDay": "Best Day",
+    "worstDay": "Worst Day",
+    "topAssets": "Top Assets",
+    "underperforming": "Underperforming",
+    "currentStreak": "Current Streak",
+    "symbol": "Symbol",
+    "pnl": "P&L",
+    "trades": "trades",
+    "tradingQuality": "Trading Quality Metrics",
+    "riskManagement": "Risk management and consistency indicators",
+    "riskReward": "Risk-to-Reward Ratio",
+    "avgWin": "Avg Win",
+    "avgLoss": "Avg Loss",
+    "winDistribution": "Win/Loss Distribution",
+    "maxDrawdown": "Max Drawdown",
+    "profitFactor": "Profit Factor",
+    "exchangeCostEfficiency": "Exchange Cost Efficiency",
+    "compareTradingCosts": "Compare trading costs across exchanges",
+    "viewFullAnalysis": "View Full Analysis",
+    "totalFeesPaid": "Total Fees Paid",
+    "feeImpactOnPnL": "Fee Impact on P&L",
+    "effectiveFeeRate": "Effective Fee Rate",
+    "tip": "Tip",
+    "behaviorPatterns": "Trading Behavior Patterns",
+    "understandHabits": "Understand your trading habits and timing",
+    "avgHoldingTime": "Average Holding Time",
+    "youreA": "You're a",
+    "avgPositionSize": "Avg Position Size",
+    "avgLeverage": "Avg Leverage",
+    "bestTradingHours": "Best Trading Hours",
+    "worstTradingHours": "Avoid Trading",
+    "bestDayOfWeek": "Best Day",
+    "worstDayOfWeek": "Worst Day",
+    "wr": "WR",
+    "scalper": "Scalper",
+    "dayTrader": "Day Trader",
+    "swingTrader": "Swing Trader",
+    "positionTrader": "Position Trader"
+  },
+  "upload": {
+    "title": "Upload Trade",
+    "dragAndDrop": "Drag and drop your trade screenshot here",
+    "orBrowse": "or click to browse",
+    "supportedFormats": "Supported formats: PNG, JPG, JPEG (max 20MB)",
+    "uploadSuccess": "Trades uploaded successfully",
+    "uploadError": "Error uploading trades",
+    "manualEntry": "Manual Entry",
+    "csvUpload": "CSV Upload",
+    "exchangeSync": "Exchange Sync",
+    "aiExtraction": "AI Extraction",
+    "processing": "Processing...",
+    "extractTrades": "Extract Trades",
+    "symbol": "Symbol/Asset",
+    "setup": "Setup",
+    "broker": "Broker",
+    "entryPrice": "Entry Price",
+    "exitPrice": "Exit Price",
+    "positionSize": "Position Size",
+    "leverage": "Leverage",
+    "fundingFee": "Funding Fee",
+    "tradingFee": "Trading Fee",
+    "margin": "Margin",
+    "openedAt": "Opened At",
+    "closedAt": "Closed At",
+    "periodOfDay": "Period of Day",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "night": "Night",
+    "screenshot": "Screenshot",
+    "uploadScreenshot": "Upload screenshot",
+    "removeScreenshot": "Remove",
+    "saveTrade": "Save Trade",
+    "editTrade": "Edit Trade",
+    "history": "History",
+    "noTrades": "No trades yet",
+    "uploadFirst": "Upload your first trade to get started"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question or feedback? We'd love to hear from you.",
+    "name": "Name",
+    "namePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "company": "Company (Optional)",
+    "companyPlaceholder": "Your company name",
+    "message": "Message",
+    "messagePlaceholder": "Tell us how we can help you...",
+    "send": "Send Message",
+    "messageSent": "Message sent! We'll get back to you soon.",
+    "directEmail": "Or email us directly at:"
+  },
+  "support": {
+    "pageTitle": "Support",
+    "pageDescription": "Get technical support and help for The Trading Diary",
+    "title": "Get Support",
+    "description": "Need help? Our support team is here to assist you",
+    "form": {
+      "email": "Your Email",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "subject": "Subject",
+      "subjectPlaceholder": "Brief description of your issue",
+      "message": "Message",
+      "messagePlaceholder": "Please describe your issue in detail...",
+      "submit": "Submit Support Request",
+      "sending": "Sending...",
+      "successMessage": "Support request submitted successfully! We'll respond within 24 hours.",
+      "errorMessage": "Failed to submit support request. Please try again.",
+      "responseTime": "We typically respond within 24 hours"
+    },
+    "categories": {
+      "technical": "Technical Support",
+      "billing": "Billing & Subscription",
+      "feature": "Feature Request",
+      "bug": "Bug Report",
+      "other": "Other"
+    }
+  },
+  "legal": {
+    "title": "Legal Information",
+    "subtitle": "Terms of Service & Privacy Policy",
+    "termsTitle": "Terms of Service",
+    "privacyTitle": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "betaNotice": "Beta Product Notice",
+    "betaDescription": "The Trading Diary is currently in beta. Features and services are provided \"as is\" and may change without notice. We appreciate your feedback as we continue to improve.",
+    "terms": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing and using The Trading Diary, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services."
+      },
+      "service": {
+        "title": "2. Description of Service",
+        "content": "The Trading Diary provides a comprehensive trading journal and analytics platform. Our services include:",
+        "features": {
+          "trading": "Trade logging and analysis tools",
+          "analytics": "Performance metrics and visualizations",
+          "ai": "AI-powered insights and pattern recognition",
+          "social": "Community features and leaderboards"
+        }
+      },
+      "accounts": {
+        "title": "3. User Accounts",
+        "content": "You are responsible for maintaining the confidentiality of your account credentials. You agree to notify us immediately of any unauthorized access to your account."
+      },
+      "payment": {
+        "title": "4. Payment and Subscriptions",
+        "content": "Subscription plans are billed monthly or annually. All fees are non-refundable except as required by law or specified in our refund policy.",
+        "refundPolicy": "7-Day Money-Back Guarantee",
+        "refundDetails": "If you are not satisfied with your subscription, you may request a full refund within 7 days of your initial purchase. Refunds are only available for first-time subscriptions."
+      },
+      "disclaimer": {
+        "title": "5. Trading Disclaimer",
+        "content": "The Trading Diary is a tool for tracking and analyzing your trades. We do not provide investment advice. Trading involves risk, and past performance does not guarantee future results. You are solely responsible for your trading decisions."
+      },
+      "termination": {
+        "title": "6. Termination",
+        "content": "We reserve the right to terminate or suspend your account at any time for violation of these terms. Upon termination, your right to use the service will immediately cease."
+      },
+      "changes": {
+        "title": "7. Changes to Terms",
+        "content": "We may modify these terms at any time. We will notify users of significant changes via email or through the platform. Continued use of the service after changes constitutes acceptance of the new terms."
+      }
+    },
+    "privacy": {
+      "intro": {
+        "title": "1. Introduction",
+        "content": "This Privacy Policy explains how The Trading Diary collects, uses, and protects your personal information. We are committed to protecting your privacy and complying with applicable data protection laws, including GDPR."
+      },
+      "collection": {
+        "title": "2. Information We Collect",
+        "content": "We collect the following types of information:",
+        "items": {
+          "account": "Account information (name, email, country)",
+          "trading": "Trading data (trades, performance metrics, journal entries)",
+          "usage": "Usage data (pages visited, features used, time spent)",
+          "technical": "Technical data (IP address, browser type, device information)"
+        }
+      },
+      "usage": {
+        "title": "3. How We Use Your Information",
+        "items": {
+          "service": "To provide and improve our services",
+          "analytics": "To generate analytics and insights",
+          "improvements": "To develop new features and improvements",
+          "communication": "To send service updates and marketing communications (with consent)",
+          "compliance": "To comply with legal obligations"
+        }
+      },
+      "gdpr": {
+        "title": "4. GDPR Rights",
+        "content": "If you are in the European Union, you have the following rights:",
+        "rights": {
+          "access": "Right to access your personal data",
+          "rectification": "Right to rectify inaccurate data",
+          "erasure": "Right to erasure ('right to be forgotten')",
+          "portability": "Right to data portability",
+          "objection": "Right to object to processing"
+        }
+      },
+      "security": {
+        "title": "5. Data Security",
+        "content": "We implement industry-standard security measures to protect your data, including encryption, secure servers, and regular security audits. However, no method of transmission over the internet is 100% secure."
+      },
+      "sharing": {
+        "title": "6. Data Sharing",
+        "content": "We do not sell your personal data. We may share anonymized, aggregated data for analytical purposes. We may share data with service providers who assist us in operating our platform (e.g., hosting, analytics)."
+      },
+      "cookies": {
+        "title": "7. Cookies",
+        "content": "We use cookies and similar technologies to enhance your experience, analyze usage, and provide personalized content. You can control cookies through your browser settings."
+      },
+      "contact": {
+        "title": "8. Contact Us",
+        "content": "For privacy-related questions or to exercise your rights, please contact us at:"
+      }
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "network": "Network error. Please check your connection",
+    "notFound": "Page not found",
+    "unauthorized": "Unauthorized access",
+    "serverError": "Server error. Please try again later",
+    "validationError": "Please check your input",
+    "loadingFailed": "Failed to load data"
+  },
+  "success": {
+    "saved": "Saved successfully",
+    "updated": "Updated successfully",
+    "deleted": "Deleted successfully",
+    "created": "Created successfully",
+    "uploaded": "Uploaded successfully",
+    "exported": "Exported successfully"
+  },
+  "time": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This Week",
+    "lastWeek": "Last Week",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "thisYear": "This Year",
+    "custom": "Custom Range"
+  },
+  "keyboardShortcuts": {
+    "title": "Keyboard Shortcuts",
+    "subtitle": "Speed up your workflow with these keyboard shortcuts",
+    "footer": "anytime to view this help",
+    "footerPrefix": "Press",
+    "categories": {
+      "navigation": "Navigation",
+      "dashboardActions": "Dashboard Actions",
+      "aiAssistant": "AI Assistant",
+      "general": "General"
+    },
+    "shortcuts": {
+      "goToDashboard": "Go to Dashboard",
+      "goToUpload": "Go to Upload",
+      "goToForecast": "Go to Forecast",
+      "goToAnalytics": "Go to Analytics",
+      "goToTools": "Go to Tools",
+      "goToHome": "Go to Home",
+      "goToSettings": "Go to Settings",
+      "addNewTrade": "Add new trade",
+      "exportTrades": "Export trades",
+      "customizeDashboard": "Customize dashboard",
+      "navigateSections": "Navigate between sections",
+      "openAIAssistant": "Open AI Assistant",
+      "sendMessage": "Send message (in chat)",
+      "showShortcuts": "Show keyboard shortcuts",
+      "closeDialogs": "Close dialogs/modals",
+      "focusSearch": "Focus search",
+      "toggleSidebar": "Toggle sidebar"
+    }
+  },
+  "dateRange": {
+    "pickDateRange": "Pick a date range",
+    "quickSelect": "Quick Select",
+    "presets": {
+      "today": "Today",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "last90Days": "Last 90 days",
+      "thisMonth": "This Month"
+    },
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "showingData": "Showing data for"
+  },
+  "export": {
+    "title": "Export Trades",
+    "description": "Choose a format to export your",
+    "trade": "trade",
+    "trades": "trades",
+    "formats": {
+      "csv": {
+        "title": "CSV Format",
+        "description": "Compatible with Excel, Google Sheets, and other spreadsheets"
+      },
+      "csvWithSummary": {
+        "title": "CSV with Summary",
+        "description": "Includes performance summary at the top"
+      },
+      "json": {
+        "title": "JSON Format",
+        "description": "For developers and data analysis tools"
+      }
+    },
+    "success": {
+      "csv": "Trades exported as CSV",
+      "json": "Trades exported as JSON",
+      "summary": "Trades exported with summary"
+    },
+    "error": "Failed to export trades"
+  },
+  "userMenu": {
+    "hello": "Hello",
+    "myAccount": "My Account",
+    "changePassword": "Change Password",
+    "logout": "Logout",
+    "dialog": {
+      "title": "Change Password",
+      "description": "Choose how you'd like to change your password",
+      "changeNow": "Change Password Now",
+      "changeNowDescription": "Set a new password immediately",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "updating": "Updating...",
+      "updatePassword": "Update Password",
+      "or": "Or",
+      "sendResetEmail": "Send Reset Email",
+      "sendResetEmailDescription": "We'll send a password reset link to",
+      "sending": "Sending...",
+      "sendEmail": "Send Reset Email",
+      "success": "Password updated successfully! Please sign in again.",
+      "resetEmailSent": "Password reset email sent! Check your inbox.",
+      "error": "Failed to update password",
+      "resetError": "Failed to send reset email"
+    }
+  },
+  "feeAnalysis": {
+    "title": "Fee Analysis",
+    "subtitle": "Understand your true trading costs",
+    "totalFees": "Total Fees Paid",
+    "avgFeePercent": "Average Fee Rate",
+    "mostEfficient": "Most Efficient",
+    "leastEfficient": "Least Efficient",
+    "avgFee": "avg fee",
+    "feeImpact": "Fee impact",
+    "ofVolume": "of volume",
+    "rank": "Rank",
+    "exchange": "Exchange",
+    "totalVolume": "Total Volume",
+    "trades": "Trades",
+    "efficiency": "Efficiency",
+    "feeImpactOnPnL": "Fee Impact on P&L",
+    "exchangeComparison": "Exchange Comparison",
+    "tradeDetails": "Trade Details",
+    "pair": "Pair",
+    "margin": "Margin",
+    "leverage": "Leverage",
+    "grossPnLPercent": "Gross P&L %",
+    "totalFeesPercent": "Total Fees %",
+    "netPnLPercent": "Net P&L %",
+    "feeDollar": "Fee $",
+    "fundingDollar": "Funding $"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about The Trading Diary",
+    "questions": {
+      "whatIsJournal": {
+        "question": "What is a trading journal and why do I need one?",
+        "answer": "A trading journal is a record of all your trades, including entry/exit prices, profit/loss, emotions, and strategies used. It helps you identify patterns, improve decision-making, and track your progress over time."
+      },
+      "howHelps": {
+        "question": "How does The Trading Diary help me become a better trader?",
+        "answer": "The Trading Diary provides analytics, performance tracking, and insights from your trading history. By analyzing your wins and losses, emotional patterns, and strategy effectiveness, you can make data-driven improvements to your trading approach."
+      },
+      "assetTypes": {
+        "question": "Can I track both crypto and stock trades?",
+        "answer": "Yes! The Trading Diary supports all asset types including cryptocurrencies, stocks, forex, commodities, and more. Simply enter the asset name when logging your trade."
+      },
+      "security": {
+        "question": "Is my trading data secure?",
+        "answer": "Absolutely. We use bank-level encryption to protect your data. Your trading information is private and only accessible to you."
+      },
+      "metrics": {
+        "question": "What metrics does the dashboard show?",
+        "answer": "The dashboard displays key metrics including total P&L, win rate, average trade duration, ROI, and more. You can also see charts showing your performance over time and by different strategies."
+      }
+    }
+  },
+  "blog": {
+    "title": "Trading Blog",
+    "subtitle": "Expert insights, proven strategies, and practical tips to elevate your trading game",
+    "readTime": "min read"
+  },
+  "aiAssistant": {
+    "title": "AI Trading Assistant",
+    "greeting": "Hi! I'm your AI trading coach. Ask me anything about your trading performance, patterns, or strategies!",
+    "placeholder": "Ask about your trading performance...",
+    "error": "Sorry, I encountered an error. Please try again.",
+    "buttonLabel": "Open AI Assistant"
+  },
+  "taxReports": {
+    "title": "Tax Reports",
+    "subtitle": "Generate tax reports for your trading activity",
+    "exportCsv": "Export CSV",
+    "netPnL": "Net P&L",
+    "afterFeesAndLosses": "After fees and losses",
+    "totalGains": "Total Gains",
+    "grossProfitFromWins": "Gross profit from wins",
+    "totalLosses": "Total Losses",
+    "totalLossesDeductible": "Total losses deductible",
+    "totalFees": "Total Fees",
+    "deductibleExpenses": "Deductible expenses",
+    "summary": "Summary",
+    "shortTerm": "Short-term",
+    "longTerm": "Long-term",
+    "taxSummaryFor": "Tax Summary for {{year}}",
+    "overviewTradingActivity": "Overview of your trading activity for tax purposes",
+    "totalTrades": "Total Trades",
+    "shortTermGains": "Short-term Gains",
+    "longTermGains": "Long-term Gains",
+    "totalFeesPaid": "Total Fees Paid",
+    "disclaimer": "Disclaimer:",
+    "disclaimerText": "This report is for informational purposes only and should not be considered tax advice. Please consult with a qualified tax professional or accountant for accurate tax filing.",
+    "shortTermTrades": "Short-term Trades",
+    "shortTermDescription": "Positions held for 365 days or less (taxed as ordinary income)",
+    "longTermTrades": "Long-term Trades",
+    "longTermDescription": "Positions held for more than 365 days (preferential tax treatment)",
+    "dateClosed": "Date Closed",
+    "symbol": "Symbol",
+    "side": "Side",
+    "daysHeld": "Days Held"
+  },
+  "userGuide": {
+    "title": "User Guide",
+    "subtitle": "Everything you need to master The Trading Diary",
+    "quickStart": "Quick Start",
+    "searchGuide": "Search guide...",
+    "navigation": "Navigation",
+    "features": "Features",
+    "tips": "Tips",
+    "troubleshooting": "Troubleshooting",
+    "faq": "FAQ",
+    "thankYouFeedback": "Thank you for your feedback!"
+  },
+  "tour": {
+    "locale": {
+      "back": "Back",
+      "close": "Close",
+      "last": "Finish",
+      "next": "Next",
+      "skip": "Skip"
+    },
+    "welcome": {
+      "title": "Welcome to the Guided Tour",
+      "description": "We'll walk you through all the platform features so you can make the most of it."
+    },
+    "dashboardCustomization": {
+      "title": "Customize Your Dashboard",
+      "description": "Reorganize widgets, add new charts, and create a perfect view for your trading style."
+    },
+    "themeToggle": {
+      "title": "Light/Dark Mode and Colors",
+      "description": "Switch between light and dark themes, customize interface colors and adjust contrast for a perfect visual experience.",
+      "subtitle": "Choose from multiple color schemes and find the ideal look for your trading moment."
+    },
+    "portfolioGroup": {
+      "title": "Portfolio",
+      "description": "Manage your assets and accounts:",
+      "spotWallet": "View total balance, token distribution and asset allocation",
+      "exchanges": "Connect Binance, Bybit, OKX APIs for automatic synchronization",
+      "tradingAccounts": "Manage multiple accounts and track initial capital per account"
+    },
+    "tradesGroup": {
+      "title": "Trades",
+      "description": "Record and analyze your trades:",
+      "addTrade": "Import CSVs or add trades manually",
+      "tradeAnalysis": "Detailed performance analysis, win rate and trading patterns",
+      "feeAnalysis": "Track costs, fees and optimize operational efficiency",
+      "riskManagement": "Position size calculator, drawdown control and limits",
+      "tradingJournal": "Record observations, lessons learned and insights"
+    },
+    "analyticsGroup": {
+      "title": "Analytics",
+      "description": "Real-time data and insights:",
+      "marketData": "Real-time cryptocurrency data and market metrics",
+      "forecast": "AI-based projections and simulations to plan goals",
+      "economicCalendar": "Macroeconomic events and crypto market impacts",
+      "performanceAlerts": "Automatic notifications about metrics and thresholds"
+    },
+    "planningGroup": {
+      "title": "Planning",
+      "description": "Structure your trading strategy:",
+      "tradingPlan": "Define rules, strategies and entry/exit checklists",
+      "goals": "Set objectives, track progress and celebrate achievements",
+      "psychology": "Monitor emotional state, identify patterns and improve discipline"
+    },
+    "reportsGroup": {
+      "title": "Reports",
+      "description": "Documentation and performance analysis:",
+      "reports": "Generate monthly, weekly or custom reports automatically",
+      "taxReports": "Tax documentation, capital gains calculation and compliance",
+      "myMetrics": "Create custom KPIs and specific benchmarks for your style"
+    },
+    "communityGroup": {
+      "title": "Community",
+      "description": "Connect and evolve with other traders:",
+      "social": "Social feed to share strategies and results",
+      "leaderboard": "Performance rankings among platform traders",
+      "achievements": "Badges, achievements and gamification system",
+      "progressXP": "Level system, experience and rewards for consistency"
+    },
+    "userGuide": {
+      "title": "User Guide",
+      "description": "Access complete tutorials, documentation and platform usage tips.",
+      "subtitle": "Learn about each feature through step-by-step guides, explanatory videos and best usage practices. Always available for quick reference."
+    },
+    "marketDataWidget": {
+      "title": "Market Data",
+      "description": "Track real-time market data:",
+      "longShortRatio": "Institutional market sentiment",
+      "livePrices": "Updated quotes for BTC, ETH and major altcoins",
+      "openInterest": "Open futures contract volume",
+      "fearGreedIndex": "Overall market sentiment"
+    },
+    "livePrices": {
+      "title": "Live Prices — Customize Your Assets",
+      "description": "View real-time quotes of your favorite cryptocurrencies.",
+      "subtitle": "Click to add or remove assets from your watchlist, reorder according to your preference and track percentage changes, 24h volume and market cap instantly."
+    },
+    "settingsCapital": {
+      "title": "Configure Your Initial Capital",
+      "description": "Set your initial capital value for accurate ROI and performance calculations. This value can be edited at any time.",
+      "subtitle": "When adding more capital, the system will automatically calculate the weighted average considering deposit dates, ensuring metrics are always updated and proportional to your real investment."
+    },
+    "finish": {
+      "title": "Ready to Start",
+      "description": "You now know all the main platform features.",
+      "subtitle": "Explore and take your trading to the next level.",
+      "footer": "You can review this tour anytime in settings."
+    }
+  }
+}

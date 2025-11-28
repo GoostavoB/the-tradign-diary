@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Assets - The Trading Diary</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0f11 0%, #1a1a1f 50%, #0f0f11 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #9b87f5 0%, #7E69AB 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      color: #a0a0a0;
+      font-size: 1.1rem;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #ffffff;
+    }
+
+    .logo-preview {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .preview-box {
+      flex: 1;
+      min-width: 200px;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-transparent {
+      background: 
+        linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
+        linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
+        linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    .preview-white {
+      background: #ffffff;
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .download-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+    }
+
+    .download-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #9b87f5;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem 0.5rem 0.5rem 0;
+      background: linear-gradient(135deg, #9b87f5 0%, #7E69AB 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px -10px rgba(155, 135, 245, 0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .usage-note {
+      background: rgba(155, 135, 245, 0.1);
+      border: 1px solid rgba(155, 135, 245, 0.3);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 1rem;
+      color: #d0d0d0;
+      font-size: 0.9rem;
+    }
+
+    #logo-svg {
+      width: 120px;
+      height: 120px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Brand Assets</h1>
+      <p>Download The Trading Diary logo in various formats</p>
+    </div>
+
+    <div class="glass-card">
+      <h2 class="section-title">Logo Preview</h2>
+      <div class="logo-preview">
+        <div class="preview-box preview-transparent">
+          <svg id="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color: hsl(250, 80%, 75%); stop-opacity: 1" />
+                <stop offset="100%" style="stop-color: hsl(250, 80%, 75%); stop-opacity: 0.85" />
+              </linearGradient>
+            </defs>
+            <rect x="8" y="10" width="24" height="5" fill="url(#logoGradient)" />
+            <rect x="17" y="10" width="6" height="28" fill="url(#logoGradient)" />
+            <rect x="25" y="15" width="6" height="23" fill="url(#logoGradient)" />
+            <path d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z
+                   M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  fill="url(#logoGradient)" />
+            <rect x="7" y="9" width="36" height="30" rx="2" stroke="hsl(250, 80%, 75%)" stroke-width="0.5" fill="none" opacity="0.2" />
+          </svg>
+        </div>
+        <div class="preview-box preview-white">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 120px; height: 120px;">
+            <defs>
+              <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color: hsl(250, 80%, 75%); stop-opacity: 1" />
+                <stop offset="100%" style="stop-color: hsl(250, 80%, 75%); stop-opacity: 0.85" />
+              </linearGradient>
+            </defs>
+            <rect x="8" y="10" width="24" height="5" fill="url(#logoGradient2)" />
+            <rect x="17" y="10" width="6" height="28" fill="url(#logoGradient2)" />
+            <rect x="25" y="15" width="6" height="23" fill="url(#logoGradient2)" />
+            <path d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z
+                   M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  fill="url(#logoGradient2)" />
+            <rect x="7" y="9" width="36" height="30" rx="2" stroke="hsl(250, 80%, 75%)" stroke-width="0.5" fill="none" opacity="0.2" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="download-grid">
+      <div class="download-card">
+        <h3>Transparent Background</h3>
+        <p style="color: #a0a0a0; margin-bottom: 1rem;">Perfect for overlaying on any background</p>
+        <button class="btn" onclick="downloadLogo(192, 'transparent')">192×192 PNG</button>
+        <button class="btn" onclick="downloadLogo(512, 'transparent')">512×512 PNG</button>
+        <button class="btn" onclick="downloadLogo(1024, 'transparent')">1024×1024 PNG</button>
+        <div class="usage-note">
+          <strong>Use for:</strong> Website favicons, app icons, social media profiles
+        </div>
+      </div>
+
+      <div class="download-card">
+        <h3>White Background</h3>
+        <p style="color: #a0a0a0; margin-bottom: 1rem;">Clean look with solid white backdrop</p>
+        <button class="btn" onclick="downloadLogo(192, 'white')">192×192 PNG</button>
+        <button class="btn" onclick="downloadLogo(512, 'white')">512×512 PNG</button>
+        <button class="btn" onclick="downloadLogo(1024, 'white')">1024×1024 PNG</button>
+        <div class="usage-note">
+          <strong>Use for:</strong> Documents, presentations, print materials
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <h2 class="section-title">SVG Code</h2>
+      <p style="color: #a0a0a0; margin-bottom: 1rem;">Copy the raw SVG code for maximum flexibility</p>
+      <button class="btn btn-secondary" onclick="copySVG()">Copy SVG Code</button>
+    </div>
+  </div>
+
+  <script>
+    function downloadLogo(size, bgColor) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      // Background
+      if (bgColor === 'white') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
+      }
+
+      // Create SVG data
+      const svgData = `
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+          <defs>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color: hsl(250, 80%, 75%); stop-opacity: 1" />
+              <stop offset="100%" style="stop-color: hsl(250, 80%, 75%); stop-opacity: 0.85" />
+            </linearGradient>
+          </defs>
+          <rect x="8" y="10" width="24" height="5" fill="url(#logoGradient)" />
+          <rect x="17" y="10" width="6" height="28" fill="url(#logoGradient)" />
+          <rect x="25" y="15" width="6" height="23" fill="url(#logoGradient)" />
+           <path d="M 31 15 L 38 15 Q 42 15 42 19 L 42 34 Q 42 38 38 38 L 31 38 Z
+                   M 31 20 L 35 20 Q 37 20 37 22 L 37 31 Q 37 33 35 33 L 31 33 Z"
+                 fill-rule="evenodd"
+                 clip-rule="evenodd"
+                 fill="url(#logoGradient)" />
+          <rect x="7" y="9" width="36" height="30" rx="2" stroke="hsl(250, 80%, 75%)" stroke-width="0.5" fill="none" opacity="0.2" />
+        </svg>
+      `;
+
+      const img = new Image();
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(function(blob) {
+          const link = document.createElement('a');
+          link.download = `trading-diary-logo-${size}x${size}-${bgColor}.png`;
+          link.href = URL.createObjectURL(blob);
+          link.click();
+          URL.revokeObjectURL(url);
+        });
+      };
+
+      img.src = url;
+    }
+
+    function copySVG() {
+      const svgCode = document.getElementById('logo-svg').outerHTML;
+      navigator.clipboard.writeText(svgCode).then(() => {
+        alert('SVG code copied to clipboard!');
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Block dashboard and private pages from indexing
+Disallow: /dashboard
+Disallow: /upload
+Disallow: /analytics
+Disallow: /tools
+Disallow: /settings
+Disallow: /auth
+Disallow: /api/
+
+# Allow blog content (explicitly)
+Allow: /blog
+
+# Sitemap locations
+Sitemap: https://www.thetradingdiary.com/sitemap.xml
+Sitemap: https://www.thetradingdiary.com/image-sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Specific bot rules
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /

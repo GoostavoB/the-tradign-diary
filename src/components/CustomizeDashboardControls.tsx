@@ -1,0 +1,304 @@
+import { Button } from '@/components/ui/button';
+import { PremiumCard } from '@/components/ui/PremiumCard';
+import { useTranslation } from '@/hooks/useTranslation';
+import { Settings2, Save, X, RotateCcw, Eye, EyeOff, LayoutDashboard, Columns, Plus, Crown, Undo2, LayoutGrid, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { WidgetConfig } from '@/hooks/useDashboardLayout';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { TourButton } from '@/components/tour/TourButton';
+import { useUserTier } from '@/hooks/useUserTier';
+import { Label } from '@/components/ui/label';
+
+interface CustomizeDashboardControlsProps {
+  isCustomizing: boolean;
+  hasChanges: boolean;
+  onStartCustomize: () => void;
+  onSave: () => void;
+  onCancel: () => void;
+  onReset: () => void;
+  onAddWidget?: () => void;
+  widgets?: WidgetConfig[];
+  onToggleWidget?: (widgetId: string) => void;
+  columnCount?: number;
+  onColumnCountChange?: (count: number) => void;
+  widgetCount?: number;
+  canUndo?: boolean;
+  onUndoReset?: () => void;
+
+  onForceReset?: () => void;
+}
+
+export function CustomizeDashboardControls({
+  isCustomizing,
+  hasChanges,
+  onStartCustomize,
+  onSave,
+  onCancel,
+  onReset,
+  onAddWidget,
+  widgets = [],
+  onToggleWidget,
+  columnCount = 3,
+  onColumnCountChange,
+  widgetCount = 0,
+  canUndo = false,
+  onUndoReset,
+
+  onForceReset,
+}: CustomizeDashboardControlsProps) {
+  const { t } = useTranslation();
+  const { canCustomizeDashboard } = useUserTier();
+  const navigate = useNavigate();
+  const visibleCount = widgetCount || widgets.filter(w => w.visible).length;
+  const hiddenCount = widgets.filter(w => !w.visible).length;
+
+  console.log('[Controls] 🎛️ Render:', {
+    isCustomizing,
+    columnCount,
+    hasChanges,
+    visibleCount,
+    hiddenCount
+  });
+
+  const widgetLabels: Record<string, string> = {
+    totalBalance: t('widgets.totalBalance.title'),
+    stats: t('widgets.stats'),
+    portfolio: t('widgets.portfolio'),
+    topMovers: t('widgets.topMovers.title'),
+    quickActions: t('widgets.quickActions.title'),
+    recentTransactions: t('widgets.recentTransactions.title'),
+    premiumCTA: t('widgets.premiumCTA'),
+    insights: t('widgets.insights'),
+    streaks: t('widgets.streaks'),
+    heatmap: t('widgets.heatmap'),
+    charts: t('widgets.charts'),
+    longShortRatio: 'Long/Short Ratio',
+  };
+
+  return (
+    <AnimatePresence mode="wait">
+      {!isCustomizing ? (
+        <motion.div
+          key="start"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="flex items-center gap-2 flex-wrap"
+        >
+          <Button
+            onClick={onStartCustomize}
+            variant="outline"
+            className="gap-2 glass hover:glass-strong"
+          >
+            <LayoutDashboard className="w-4 h-4" />
+            {t('dashboard.customizeLayout')}
+            {!canCustomizeDashboard && (
+              <Crown className="w-3 h-3 text-amber-500 ml-1" />
+            )}
+          </Button>
+
+          <Button
+            onClick={() => navigate('/upload')}
+            variant="outline"
+            className="gap-2 glass hover:glass-strong"
+          >
+            <Plus className="w-4 h-4" />
+            Add Trade
+          </Button>
+
+          {/* Column count selector */}
+          {onColumnCountChange && (
+            <div className="flex items-center gap-2">
+              <Columns className="w-4 h-4 text-muted-foreground" />
+              <Select
+                value={columnCount.toString()}
+                onValueChange={(value) => {
+                  console.log('[Controls] 📏 Column count changed:', value);
+                  onColumnCountChange(parseInt(value, 10));
+                }}
+              >
+                <SelectTrigger className="w-[120px] glass">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">{t('dashboard.columns.one')}</SelectItem>
+                  <SelectItem value="2">{t('dashboard.columns.two')}</SelectItem>
+                  <SelectItem value="3">{t('dashboard.columns.three')}</SelectItem>
+                  <SelectItem value="4">{t('dashboard.columns.four')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Force Reset Button */}
+          {onForceReset && (
+            <Button
+              onClick={() => {
+                console.log('[Controls] 🔴 Force reset clicked');
+                onForceReset();
+              }}
+              variant="ghost"
+              size="sm"
+              className="gap-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Force Reset
+            </Button>
+          )}
+
+          {/* Tour Button */}
+          <TourButton />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="controls"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="space-y-4"
+        >
+          <PremiumCard className="p-4 glass-strong border-primary/30">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="p-2 rounded-xl bg-primary/10">
+                  <Settings2 className="w-5 h-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-sm flex items-center gap-2 flex-wrap">
+                    {t('dashboard.editMode')}
+                    <Badge variant="secondary" className="text-xs">
+                      {t('dashboard.visibleCount', { count: visibleCount })}
+                    </Badge>
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    {t('dashboard.dragInstructions')}
+                  </p>
+
+                  {/* Column Count Selector */}
+                  {onColumnCountChange && (
+                    <div className="flex items-center gap-2 mt-3">
+                      <Label className="text-xs text-muted-foreground">{t('dashboard.columns.label', 'Columns')}:</Label>
+                      <Select
+                        value={columnCount.toString()}
+                        onValueChange={(value) => onColumnCountChange(parseInt(value, 10))}
+                      >
+                        <SelectTrigger className="w-[100px] h-7 text-xs">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">{t('dashboard.columns.one')}</SelectItem>
+                          <SelectItem value="2">{t('dashboard.columns.two')}</SelectItem>
+                          <SelectItem value="3">{t('dashboard.columns.three')}</SelectItem>
+                          <SelectItem value="4">{t('dashboard.columns.four')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {onAddWidget && (
+                  <Button
+                    onClick={onAddWidget}
+                    variant="secondary"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    {t('dashboard.addWidget')}
+                  </Button>
+                )}
+                <Button
+                  onClick={onReset}
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2 hover:bg-destructive/10 hover:text-destructive"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  {t('dashboard.resetLayout')}
+                </Button>
+                {canUndo && onUndoReset && (
+                  <Button
+                    onClick={onUndoReset}
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2 hover:bg-primary/10 hover:text-primary"
+                  >
+                    <Undo2 className="w-4 h-4" />
+                    Undo Reset
+                  </Button>
+                )}
+                <Button
+                  onClick={onCancel}
+                  variant="outline"
+                  size="sm"
+                  className="gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  {t('common.cancel')}
+                </Button>
+                <Button
+                  onClick={onSave}
+                  disabled={!hasChanges}
+                  size="sm"
+                  className="gap-2"
+                >
+                  <Save className="w-4 h-4" />
+                  {t('dashboard.saveLayout')}
+                </Button>
+              </div>
+            </div>
+          </PremiumCard>
+
+          {/* Widget Visibility Panel */}
+          {hiddenCount > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <PremiumCard className="p-4 glass border-muted-foreground/20">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-muted">
+                    <EyeOff className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-sm mb-1 flex items-center gap-2">
+                      {t('dashboard.hiddenWidgets')}
+                      <Badge variant="outline" className="text-xs">
+                        {hiddenCount}
+                      </Badge>
+                    </h4>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      {t('dashboard.clickToShow')}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {widgets
+                        .filter(w => !w.visible)
+                        .map(widget => (
+                          <Button
+                            key={widget.id}
+                            variant="outline"
+                            size="sm"
+                            className="gap-2 hover:bg-primary/10 hover:border-primary/50"
+                            onClick={() => onToggleWidget?.(widget.id)}
+                          >
+                            <Eye className="w-3 h-3" />
+                            {widgetLabels[widget.id] || widget.id}
+                          </Button>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              </PremiumCard>
+            </motion.div>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}

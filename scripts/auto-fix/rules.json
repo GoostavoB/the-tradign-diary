@@ -1,0 +1,57 @@
+{
+    "spacing": {
+        "allowedValues": [
+            "0px",
+            "4px",
+            "8px",
+            "12px",
+            "16px",
+            "20px",
+            "24px",
+            "32px",
+            "40px",
+            "48px",
+            "64px",
+            "80px",
+            "96px",
+            "128px"
+        ],
+        "unit": "px"
+    },
+    "typography": {
+        "minFontSize": "12px",
+        "headers": {
+            "h1": {
+                "min": "24px",
+                "max": "48px",
+                "fontWeight": "700"
+            },
+            "h2": {
+                "min": "20px",
+                "max": "36px",
+                "fontWeight": "600"
+            },
+            "h3": {
+                "min": "18px",
+                "max": "30px",
+                "fontWeight": "600"
+            }
+        }
+    },
+    "colors": {
+        "palette": [
+            "rgb(255, 255, 255)",
+            "rgb(0, 0, 0)",
+            "transparent",
+            "rgba(0, 0, 0, 0)"
+        ],
+        "minContrastRatio": 4.5
+    },
+    "layout": {
+        "maxContentWidth": "1280px",
+        "gridColumns": 12
+    },
+    "zIndex": {
+        "max": 9999
+    }
+}
