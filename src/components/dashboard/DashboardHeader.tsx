@@ -17,8 +17,7 @@ interface DashboardHeaderProps {
     showUpgradePrompt: (show: boolean) => void;
     layoutMode?: 'adaptive' | 'fixed';
     onLayoutModeChange?: (mode: 'adaptive' | 'fixed') => void;
-    columnCount?: number;
-    onColumnCountChange?: (count: number) => void;
+    // columnCount removed - grid is always 3 columns
     canUndo?: boolean;
     onUndoReset?: () => void;
     onForceReset?: () => void;
@@ -38,8 +37,7 @@ export const DashboardHeader = ({
     showUpgradePrompt,
     layoutMode,
     onLayoutModeChange,
-    columnCount,
-    onColumnCountChange,
+    // columnCount removed
     canUndo,
     onUndoReset,
     onForceReset,
@@ -77,8 +75,7 @@ export const DashboardHeader = ({
                     onReset={onResetLayout}
                     layoutMode={layoutMode}
                     onLayoutModeChange={onLayoutModeChange}
-                    columnCount={columnCount}
-                    onColumnCountChange={onColumnCountChange}
+                    // columnCount removed
                     canUndo={canUndo}
                     onUndoReset={onUndoReset}
                     onForceReset={onForceReset}

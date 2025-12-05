@@ -142,7 +142,7 @@ function DashboardContent() {
   const {
     positions,
     order,
-    columnCount: selectedColumnCount,
+    // columnCount removed - grid is always 3 columns (responsive)
     isLoading: layoutLoading,
     isSaving: layoutSaving,
     saveLayout: saveGridLayout,
@@ -152,38 +152,13 @@ function DashboardContent() {
     removeWidget,
     resetLayout,
     undoReset,
-    canUndo,
-    updateColumnCount
+    canUndo
   } = useGridLayout(activeSubAccountId, availableWidgets);
 
   const [originalPositions, setOriginalPositions] = useState(positions);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const gridRef = useRef<HTMLDivElement>(null);
-  const [columnCount, setColumnCount] = useState(3);
-
-  useEffect(() => {
-    const el = gridRef.current;
-    if (!el) return;
-
-    const updateCols = () => {
-      const width = el.clientWidth;
-      if (width < 768) {
-        setColumnCount(1);
-      } else {
-        setColumnCount(selectedColumnCount);
-      }
-    };
-
-    updateCols();
-    const ro = new ResizeObserver(updateCols);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [selectedColumnCount]);
-
-  const handleColumnCountChange = useCallback((newCount: number) => {
-    updateColumnCount(newCount);
-  }, [updateColumnCount]);
 
   const activeWidgets = useMemo(() => {
     const widgets = positions.map(p => p.id);
@@ -253,11 +228,11 @@ function DashboardContent() {
   const handleSaveLayout = useCallback(async () => {
     setIsCustomizing(false);
     setOriginalPositions([]);
-    await saveGridLayout(positions, order, selectedColumnCount);
+    await saveGridLayout(positions, order);
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 100);
-  }, [positions, order, selectedColumnCount, saveGridLayout]);
+  }, [positions, order, saveGridLayout]);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -281,11 +256,11 @@ function DashboardContent() {
 
   const handleCancelCustomize = useCallback(() => {
     if (originalPositions.length > 0) {
-      saveGridLayout(originalPositions, order, columnCount);
+      saveGridLayout(originalPositions, order);
     }
     setIsCustomizing(false);
     setOriginalPositions([]);
-  }, [originalPositions, order, columnCount, saveGridLayout]);
+  }, [originalPositions, order, saveGridLayout]);
 
   const handleForceResetLayout = useCallback(async () => {
     if (!activeSubAccountId) {
@@ -351,7 +326,7 @@ function DashboardContent() {
       isEditMode: isCustomizing,
       isCompact: false,
       onRemove: () => removeWidget(widgetId),
-      onResize: (newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+      onResize: (newSize?: WidgetSize, newHeight?: 2 | 4 | 6) => {
         if (resizeWidget) {
           resizeWidget(widgetId, newSize, newHeight);
         }
@@ -622,8 +597,7 @@ function DashboardContent() {
                     onResetLayout={resetLayout}
                     canCustomizeDashboard={canCustomizeDashboard}
                     showUpgradePrompt={setShowUpgradePrompt}
-                    columnCount={selectedColumnCount}
-                    onColumnCountChange={handleColumnCountChange}
+                    // columnCount removed
                     canUndo={canUndo}
                     onUndoReset={undoReset}
                     onForceReset={handleForceResetLayout}

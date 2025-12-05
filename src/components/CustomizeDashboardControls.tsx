@@ -23,8 +23,7 @@ interface CustomizeDashboardControlsProps {
   onAddWidget?: () => void;
   widgets?: WidgetConfig[];
   onToggleWidget?: (widgetId: string) => void;
-  columnCount?: number;
-  onColumnCountChange?: (count: number) => void;
+  // columnCount removed - grid is always fixed to 3 columns
   widgetCount?: number;
   canUndo?: boolean;
   onUndoReset?: () => void;
@@ -43,8 +42,7 @@ export function CustomizeDashboardControls({
   onAddWidget,
   widgets = [],
   onToggleWidget,
-  columnCount = 3,
-  onColumnCountChange,
+  // columnCount removed
   widgetCount = 0,
   canUndo = false,
   onUndoReset,
@@ -60,7 +58,6 @@ export function CustomizeDashboardControls({
 
   console.log('[Controls] 🎛️ Render:', {
     isCustomizing,
-    columnCount,
     hasChanges,
     visibleCount,
     hiddenCount
@@ -112,29 +109,7 @@ export function CustomizeDashboardControls({
             Add Trade
           </Button>
 
-          {/* Column count selector */}
-          {onColumnCountChange && (
-            <div className="flex items-center gap-2">
-              <Columns className="w-4 h-4 text-muted-foreground" />
-              <Select
-                value={columnCount.toString()}
-                onValueChange={(value) => {
-                  console.log('[Controls] 📏 Column count changed:', value);
-                  onColumnCountChange(parseInt(value, 10));
-                }}
-              >
-                <SelectTrigger className="w-[120px] glass">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">{t('dashboard.columns.one')}</SelectItem>
-                  <SelectItem value="2">{t('dashboard.columns.two')}</SelectItem>
-                  <SelectItem value="3">{t('dashboard.columns.three')}</SelectItem>
-                  <SelectItem value="4">{t('dashboard.columns.four')}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+          {/* Column selector removed - grid is always 3 columns */}
 
           {/* Force Reset Button */}
           {onForceReset && (
@@ -180,26 +155,7 @@ export function CustomizeDashboardControls({
                     {t('dashboard.dragInstructions')}
                   </p>
 
-                  {/* Column Count Selector */}
-                  {onColumnCountChange && (
-                    <div className="flex items-center gap-2 mt-3">
-                      <Label className="text-xs text-muted-foreground">{t('dashboard.columns.label', 'Columns')}:</Label>
-                      <Select
-                        value={columnCount.toString()}
-                        onValueChange={(value) => onColumnCountChange(parseInt(value, 10))}
-                      >
-                        <SelectTrigger className="w-[100px] h-7 text-xs">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1">{t('dashboard.columns.one')}</SelectItem>
-                          <SelectItem value="2">{t('dashboard.columns.two')}</SelectItem>
-                          <SelectItem value="3">{t('dashboard.columns.three')}</SelectItem>
-                          <SelectItem value="4">{t('dashboard.columns.four')}</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
+                  {/* Column selector removed - grid is always 3 columns */}
                 </div>
               </div>
               <div className="flex items-center gap-2">
