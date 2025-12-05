@@ -1,15 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { WIDGET_SIZE_MAP } from '@/types/widget';
+import { WIDGET_SIZE_MAP, WIDGET_SIZE_TO_COLUMNS, type WidgetSize, migrateLegacySize } from '@/types/widget';
 import { toGridWidgets, resolveLayoutCollisions, GridWidget } from '@/utils/gridValidator';
 import { DEFAULT_DASHBOARD_LAYOUT, WIDGET_CATALOG } from '@/config/widgetCatalog';
 
 export interface WidgetPosition {
   id: string;
-  column: number; // 0-5 (6 subcolumns total)
+  column: number; // 0-2 (3 columns total)
   row: number;
-  size: 1 | 2 | 4 | 6; // Widget size in subcolumns
+  size: WidgetSize; // 'small' | 'medium' | 'large'
   height: 2 | 4 | 6; // Widget height in rows
 }
 
@@ -17,13 +17,14 @@ export interface LayoutData {
   mode: 'adaptive' | 'fixed';
   positions: WidgetPosition[];
   order: string[];
-  columnCount?: number;
   version?: number;
+  // columnCount is deprecated - always use 3 columns now
 }
 
 /**
  * Generate default positions dynamically from DEFAULT_DASHBOARD_LAYOUT
  * This ensures Force Reset always uses the latest widget configuration
+ * Now uses semantic sizes: small, medium, large
  */
 const generateDefaultPositions = (): WidgetPosition[] => {
   return DEFAULT_DASHBOARD_LAYOUT.map((widgetId, index) => {
@@ -35,27 +36,19 @@ const generateDefaultPositions = (): WidgetPosition[] => {
         id: widgetId,
         column: 0,
         row: index,
-        size: 4 as 1 | 2 | 4 | 6,
+        size: 'medium' as WidgetSize,
         height: 2 as 2 | 4 | 6,
       };
     }
 
-    const defaultSize = widget.defaultSize || 'medium';
-
-    // Convert size string to number (using 6-column grid)
-    const sizeMap: Record<string, 1 | 2 | 4 | 6> = {
-      tiny: 1,
-      small: 2,
-      medium: 4,
-      large: 6,
-      xlarge: 6,
-    };
+    // Get size from WIDGET_SIZE_MAP which now returns semantic sizes
+    const size: WidgetSize = WIDGET_SIZE_MAP[widgetId] || 'medium';
 
     return {
       id: widgetId,
-      column: 0, // Adaptive grid will auto-layout
+      column: 0, // Adaptive grid will auto-layout in 3 columns
       row: index,
-      size: sizeMap[defaultSize] || 4,
+      size,
       height: 2 as 2 | 4 | 6,
     };
   });
@@ -71,10 +64,10 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
   const mode = 'adaptive';
   const [positions, setPositions] = useState<WidgetPosition[]>(DEFAULT_POSITIONS);
   const [order, setOrder] = useState<string[]>(DEFAULT_POSITIONS.map(p => p.id));
-  const [columnCount, setColumnCount] = useState<number>(3);
+  // columnCount removed - grid is always fixed to 3 columns
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [previousLayout, setPreviousLayout] = useState<{ positions: WidgetPosition[], order: string[], columnCount: number } | null>(null);
+  const [previousLayout, setPreviousLayout] = useState<{ positions: WidgetPosition[], order: string[] } | null>(null);
 
   useEffect(() => {
     if (!subAccountId) {
@@ -103,14 +96,16 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
           // Always load into adaptive mode structure
           // CRITICAL: Check if positions array is NOT EMPTY before using it
           if (layoutData.positions && Array.isArray(layoutData.positions) && layoutData.positions.length > 0) {
-            setPositions(layoutData.positions);
-            // If order exists, use it. If not, derive from positions.
-            const loadedOrder = layoutData.order || layoutData.positions.map((p: any) => p.id);
-            setOrder(loadedOrder);
+            // Migrate old numeric sizes to new semantic sizes
+            const migratedPositions = layoutData.positions.map((p: any) => {
+              const size = typeof p.size === 'number' ? migrateLegacySize(p.size) : p.size;
+              return { ...p, size };
+            });
 
-            if (layoutData.columnCount) {
-              setColumnCount(layoutData.columnCount);
-            }
+            setPositions(migratedPositions);
+            // If order exists, use it. If not, derive from positions.
+            const loadedOrder = layoutData.order || migratedPositions.map((p: any) => p.id);
+            setOrder(loadedOrder);
           } else {
             // Empty or missing positions - use defaults
             console.log('[Dashboard] 📋 Empty layout detected, using DEFAULT_POSITIONS');
@@ -123,16 +118,20 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
           setOrder(DEFAULT_POSITIONS.map(p => p.id));
         }
       } catch (error) {
-        loadLayout();
-      }, [subAccountId]);
+        console.error('[Dashboard] ❌ Failed to load layout:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const saveLayout = useCallback(async (newPositions: WidgetPosition[], newOrder: string[], newColumnCount?: number) => {
+    loadLayout();
+  }, [subAccountId]);
+
+  const saveLayout = useCallback(async (newPositions: WidgetPosition[], newOrder: string[]) => {
     if (!subAccountId) {
       console.warn('[Dashboard] 💾 Cannot save: no subAccountId');
       return;
     }
-
-    const countToSave = newColumnCount ?? columnCount;
 
     // Validate before saving
     const uniqueIds = new Set(newPositions.map(p => p.id));
@@ -144,12 +143,11 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
 
     setIsSaving(true);
     try {
-      // Save in new format with fixed 'adaptive' mode
+      // Save in new format with fixed 'adaptive' mode and 3-column grid
       const layoutData: LayoutData = {
         mode: 'adaptive',
         positions: newPositions,
         order: newOrder,
-        columnCount: countToSave,
         version: CURRENT_OVERVIEW_LAYOUT_VERSION,
       };
 
@@ -168,9 +166,6 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
       // Update local state
       setPositions(newPositions);
       setOrder(newOrder);
-      if (newColumnCount !== undefined) {
-        setColumnCount(newColumnCount);
-      }
 
       console.log('[Dashboard] ✅ Layout saved successfully');
     } catch (error) {
@@ -179,33 +174,33 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
     } finally {
       setIsSaving(false);
     }
-  }, [subAccountId, columnCount]);
+  }, [subAccountId]);
 
-  const updatePosition = useCallback((widgetId: string, column: number, row: number, size?: 1 | 2 | 4 | 6) => {
+  const updatePosition = useCallback((widgetId: string, column: number, row: number, size?: WidgetSize) => {
     const newPositions = positions.map(p =>
       p.id === widgetId ? { ...p, column, row, ...(size && { size }) } : p
     );
-    saveLayout(newPositions, order, columnCount);
-  }, [positions, order, columnCount, saveLayout]);
+    saveLayout(newPositions, order);
+  }, [positions, order, saveLayout]);
 
-  const resizeWidget = useCallback(async (widgetId: string, newSize?: 1 | 2 | 4 | 6, newHeight?: 2 | 4 | 6) => {
+  const resizeWidget = useCallback(async (widgetId: string, newSize?: WidgetSize, newHeight?: 2 | 4 | 6) => {
     const newPositions = positions.map(p => {
       if (p.id === widgetId) {
         const updates: Partial<WidgetPosition> = {};
-        if (newSize !== undefined && p.size !== 1) updates.size = newSize;
-        if (newHeight !== undefined) updates.height = p.size === 1 ? 2 : newHeight;
+        if (newSize !== undefined && p.size !== 'small') updates.size = newSize;
+        if (newHeight !== undefined) updates.height = p.size === 'small' ? 2 : newHeight;
         return { ...p, ...updates };
       }
       return p;
     });
 
     try {
-      await saveLayout(newPositions, order, columnCount);
+      await saveLayout(newPositions, order);
       toast.success('Widget resized');
     } catch (error) {
       toast.error('Failed to resize widget');
     }
-  }, [positions, order, columnCount, saveLayout]);
+  }, [positions, order, saveLayout]);
 
   // Add widget to layout
   const addWidget = useCallback(async (widgetId: string) => {
@@ -216,11 +211,11 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
 
     const newOrder = [...order, widgetId];
     // Default position (will be handled by adaptive grid)
-    const newPositions = [...positions, {
+    const newPositions: WidgetPosition[] = [...positions, {
       id: widgetId,
       column: 0,
       row: 0,
-      size: WIDGET_SIZE_MAP[widgetId] || 2,
+      size: WIDGET_SIZE_MAP[widgetId] || 'medium',
       height: 2 as 2 | 4 | 6
     }];
 
@@ -228,14 +223,14 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
     setPositions(newPositions);
 
     try {
-      await saveLayout(newPositions, newOrder, columnCount);
+      await saveLayout(newPositions, newOrder);
       toast.success('Widget added');
     } catch (error) {
       setOrder(order);
       setPositions(positions);
       toast.error('Failed to add widget');
     }
-  }, [positions, order, columnCount, saveLayout]);
+  }, [positions, order, saveLayout]);
 
   const removeWidget = useCallback(async (widgetId: string) => {
     const newPositions = positions.filter(p => p.id !== widgetId);
@@ -245,51 +240,45 @@ export const useGridLayout = (subAccountId: string | undefined, availableWidgets
     setOrder(newOrder);
 
     try {
-      await saveLayout(newPositions, newOrder, columnCount);
+      await saveLayout(newPositions, newOrder);
       toast.success('Widget removed');
     } catch (error) {
       setPositions(positions);
       setOrder(order);
       toast.error('Failed to remove widget');
     }
-  }, [positions, order, columnCount, saveLayout]);
+  }, [positions, order, saveLayout]);
 
   const resetLayout = useCallback(() => {
-    setPreviousLayout({ positions: [...positions], order: [...order], columnCount });
+    setPreviousLayout({ positions: [...positions], order: [...order] });
     const defaultOrder = DEFAULT_POSITIONS.map(p => p.id);
     setPositions(DEFAULT_POSITIONS);
     setOrder(defaultOrder);
-    setColumnCount(3);
-    saveLayout(DEFAULT_POSITIONS, defaultOrder, 3);
+    saveLayout(DEFAULT_POSITIONS, defaultOrder);
     toast.success('Layout reset');
-  }, [saveLayout, positions, order, columnCount]);
+  }, [saveLayout, positions, order]);
 
   const undoReset = useCallback(() => {
     if (previousLayout) {
-      saveLayout(previousLayout.positions, previousLayout.order, previousLayout.columnCount);
+      saveLayout(previousLayout.positions, previousLayout.order);
       setPreviousLayout(null);
       toast.success('Layout restored');
     }
   }, [previousLayout, saveLayout]);
 
-  const updateColumnCount = useCallback((newCount: number) => {
-    if (newCount >= 1 && newCount <= 4) {
-      setColumnCount(newCount);
-      saveLayout(positions, order, newCount);
-    }
-  }, [positions, order, saveLayout]);
+  // updateColumnCount function removed - grid is always 3 columns
 
   return {
     mode,
     positions,
     order,
-    columnCount,
+    // columnCount removed - grid is always 3 columns
     isLoading,
     isSaving,
     updatePosition,
     resizeWidget,
     saveLayout,
-    updateColumnCount,
+    // updateColumnCount removed - grid is always 3 columns
     addWidget,
     removeWidget,
     resetLayout,

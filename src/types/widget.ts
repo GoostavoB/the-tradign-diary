@@ -1,13 +1,16 @@
 import { LucideIcon } from 'lucide-react';
 
-// Standardized widget sizes: 1, 2, 4, 6 (in subcolumns, total grid = 6 subcolumns)
-export type WidgetSize = 1 | 2 | 4 | 6;
+// Simplified widget sizes: small (1/3 width), medium (2/3 width), large (full width)
+export type WidgetSize = 'small' | 'medium' | 'large';
+
+// Legacy numeric sizes for migration
+export type LegacyWidgetSize = 1 | 2 | 4 | 6;
 
 // Widget height options: 2, 4, 6 (rows)
 export type WidgetHeight = 2 | 4 | 6;
 
-// Legacy size names for compatibility with existing config
-export type WidgetSizeName = 'small' | 'medium' | 'large' | 'xlarge';
+// Legacy size names for compatibility (deprecated)
+export type WidgetSizeName = 'small' | 'medium' | 'large' | 'xlarge' | 'tiny';
 
 export interface WidgetLayout {
   i: string; // widget ID
@@ -50,7 +53,7 @@ export interface WidgetProps {
   [key: string]: any;
 }
 
-export type WidgetCategory = 
+export type WidgetCategory =
   | 'trading'
   | 'market'
   | 'portfolio'
@@ -65,81 +68,96 @@ export interface UserWidgetLayout {
   updated_at: string;
 }
 
-// Size presets for common widget dimensions
-export const WIDGET_SIZES: Record<WidgetSize, Pick<WidgetLayout, 'w' | 'h'>> = {
-  1: { w: 2, h: 2 },    // 1 subcolumn
-  2: { w: 4, h: 3 },    // 1 full column (2 subcolumns)
-  4: { w: 8, h: 3 },    // 2 columns (4 subcolumns)
-  6: { w: 12, h: 4 },   // 3 columns (6 subcolumns)
+// Size presets mapping to grid columns (fixed 3-column grid)
+export const WIDGET_SIZE_TO_COLUMNS: Record<WidgetSize, number> = {
+  small: 1,   // 1/3 width
+  medium: 2,  //2/3 width
+  large: 3,   // Full width
 };
 
-// Default widget size configurations
+// Legacy size mapping for migration
+export const LEGACY_SIZE_TO_NEW: Record<LegacyWidgetSize, WidgetSize> = {
+  1: 'small',   // 1 subcolumn → small
+  2: 'small',   // 2 subcolumns → small
+  4: 'medium',  // 4 subcolumns → medium
+  6: 'large',   // 6 subcolumns → large
+};
+
+// Default widget size configurations (NEW: semantic sizes)
 export const WIDGET_SIZE_MAP: Record<string, WidgetSize> = {
-  // Size 1 widgets (occupy 1 subcolumn) - small metrics
-  'totalBalance': 1,
-  'winRate': 1,
-  'avgPnLPerDay': 1,
-  'currentROI': 1,
-  'avgPnLPerTrade': 1,
-  'spotWallet': 1,
-  'weightedAvgROI': 1,
-  'totalTrades': 1,
-  'simpleAvgROI': 1,
-  'avgROIPerTrade': 1,
-  'dailyLossLock': 1,
-  'simpleLeverage': 1,
-  'quickActions': 1,
-  
-  // Size 2 widgets (occupy 1 full column = 2 subcolumns)
-  'goals': 2,
-  'capitalGrowth': 2,
-  'topMovers': 2,
-  'behaviorAnalytics': 2,
-  'costEfficiency': 2,
-  'tradingQuality': 2,
-  'performanceHighlights': 2,
-  'portfolioOverview': 2,
-  'recentTransactions': 2,
-  'riskCalculator': 2,
-  'errorReflection': 2,
-  'heatmap': 2,
-  
-  // Size 4 widgets (occupy 2 columns = 4 subcolumns)
-  'combinedPnLROI': 4,
-  'aiInsights': 4,
-  'emotionMistakeCorrelation': 4,
-  
-  // Size 6 widgets (occupy 3 columns = 6 subcolumns, full width)
-  'rollingTarget': 6,
+  // Small widgets (1/3 width) - KPIs and metrics
+  'totalBalance': 'small',
+  'winRate': 'small',
+  'avgPnLPerDay': 'small',
+  'currentROI': 'small',
+  'avgPnLPerTrade': 'small',
+  'spotWallet': 'small',
+  'weightedAvgROI': 'small',
+  'totalTrades': 'small',
+  'simpleAvgROI': 'small',
+  'avgROIPerTrade': 'small',
+  'dailyLossLock': 'small',
+  'simpleLeverage': 'small',
+  'quickActions': 'small',
+
+  // Medium widgets (2/3 width) - Charts and tables
+  'goals': 'medium',
+  'capitalGrowth': 'medium',
+  'topMovers': 'medium',
+  'behaviorAnalytics': 'medium',
+  'costEfficiency': 'medium',
+  'tradingQuality': 'medium',
+  'performanceHighlights': 'medium',
+  'portfolioOverview': 'medium',
+  'recentTransactions': 'medium',
+  'riskCalculator': 'medium',
+  'errorReflection': 'medium',
+  'heatmap': 'medium',
+  'longShortRatio': 'medium',
+
+  // Large widgets (full width) - Wide layouts
+  'combinedPnLROI': 'large',
+  'aiInsights': 'large',
+  'emotionMistakeCorrelation': 'large',
+  'rollingTarget': 'large',
+  'compactPerformance': 'large',
 };
 
-// Trade Station widget sizes
+// Trade Station widget sizes (NEW: semantic)
 export const TRADE_STATION_WIDGET_SIZE_MAP: Record<string, WidgetSize> = {
-  'simpleLeverage': 2,
-  'riskCalculator': 2,
-  'errorReflection': 2,
-  'rollingTarget': 6,
+  'simpleLeverage': 'small',
+  'riskCalculator': 'medium',
+  'errorReflection': 'medium',
+  'rollingTarget': 'large',
 };
 
-// Helper functions for widget sizing during migration
+// Helper functions for widget sizing
 export function getDefaultSizeForWidget(widgetId: string, isTradeStation = false): WidgetSize {
   const sizeMap = isTradeStation ? TRADE_STATION_WIDGET_SIZE_MAP : WIDGET_SIZE_MAP;
-  return sizeMap[widgetId] || 2; // Default to size 2 if not found
+  return sizeMap[widgetId] || 'medium'; // Default to medium if not found
+}
+
+// Migration helper: convert old numeric sizes to new semantic sizes
+export function migrateLegacySize(legacySize: LegacyWidgetSize | number): WidgetSize {
+  if (legacySize === 1 || legacySize === 2) return 'small';
+  if (legacySize === 4) return 'medium';
+  if (legacySize === 6) return 'large';
+  return 'medium'; // Default fallback
 }
 
 export function getDefaultHeightForWidget(widgetId: string, size?: WidgetSize): WidgetHeight {
-  // Size 1 widgets always have height 2
+  // Small widgets always have height 2
   const widgetSize = size ?? getDefaultSizeForWidget(widgetId);
-  if (widgetSize === 1) {
+  if (widgetSize === 'small') {
     return 2;
   }
-  
+
   // Large widgets get height 4
   const largeWidgets = ['portfolioOverview', 'rollingTarget', 'behaviorAnalytics', 'aiInsights', 'emotionMistakeCorrelation'];
   if (largeWidgets.includes(widgetId)) {
     return 4;
   }
-  
-  // Default height
+
+  // Default height for medium widgets
   return 2;
 }
