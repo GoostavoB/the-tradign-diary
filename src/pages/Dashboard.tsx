@@ -37,6 +37,7 @@ import { useResponsiveLayout } from '@/hooks/useResponsiveLayout';
 import { formatCurrency } from '@/utils/formatNumber';
 import { calculateTradingDays } from '@/utils/tradingDays';
 import { useUserSettings } from '@/hooks/useUserSettings';
+import type { WidgetConfig, WidgetSize } from '@/types/widget';
 import type { Trade } from '@/types/trade';
 import type { CapitalLogEntry, CustomWidget, TradeStationControls } from '@/types/dashboard';
 import { WIDGET_CATALOG } from '@/config/widgetCatalog';
